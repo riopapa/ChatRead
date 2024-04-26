@@ -42,20 +42,16 @@ public class ReadyToday {
         if (!todayFolder.exists()) {
             if (todayFolder.mkdirs())
                 new Utils().deleteOldFiles();
-//            String new_day = "\n" + new SimpleDateFormat("MM-dd (EEE) HH:mm ", Locale.KOREA).format(new Date())
-//                    + " NEW DAY " + " **/\nNew Day" + "\n";
-//            logQue += new_day;
             sharedEditor.apply();
             FileIO.writeFile(tableFolder, "logStock.txt", logStock);
             FileIO.writeFile(tableFolder, "logQue.txt", logQue);
             FileIO.writeFile(tableFolder, "logWork.txt", logWork);
-            StringBuilder sb = new StringBuilder();
-            sb.append("\n\nkvCommon =\n").append(kvCommon.toString());
-            sb.append("\n\nkvSMS =\n").append(kvSMS.toString());
-            sb.append("\n\nkvTelegram =\n").append(kvTelegram.toString());
-            sb.append("\n\nkvStock =\n").append(kvStock.toString());
-            sb.append("\n\nkvKakao =\n").append(kvKakao.toString());
-            FileIO.writeFile(todayFolder, "keyVal.txt", sb.toString());
+            String sb = "\n\nkvCommon =\n" + kvCommon.toString() +
+                    "\n\nkvSMS =\n" + kvSMS.toString() +
+                    "\n\nkvTelegram =\n" + kvTelegram.toString() +
+                    "\n\nkvStock =\n" + kvStock.toString() +
+                    "\n\nkvKakao =\n" + kvKakao.toString();
+            FileIO.writeFile(todayFolder, "keyVal.txt", sb);
             kvCommon = new KeyVal();
             kvStock = new KeyVal();
             kvSMS = new KeyVal();

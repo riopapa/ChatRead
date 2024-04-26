@@ -2,17 +2,10 @@ package biz.riopapa.chatread;
 
 import static biz.riopapa.chatread.MainActivity.logQue;
 import static biz.riopapa.chatread.MainActivity.logSave;
-import static biz.riopapa.chatread.MainActivity.mActivity;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.sharedEditor;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-
 import android.text.Editable;
 import android.text.Selection;
 import android.text.SpannableString;
@@ -24,25 +17,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ScrollView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import biz.riopapa.chatread.func.LogSpan;
 import biz.riopapa.chatread.func.LogUpdate;
 import biz.riopapa.chatread.models.DelItem;
 
-public class HomeFragment extends Fragment {
+public class FragmentLog extends Fragment {
 
-    ScrollView scrollView1;
-    SpannableString ss, sv;
+    SpannableString ss;
     EditText etTable, etKeyword;
     ImageView ivFind, ivClear, ivNext, ivVolume;
     Menu mainMenu;
-    int logPos = -1;
     ActionBar aBar = null;
 
-
-    public HomeFragment() {
+    public FragmentLog() {
         // Required empty public constructor
     }
 
@@ -67,12 +61,7 @@ public class HomeFragment extends Fragment {
         ivVolume = thisView.findViewById(R.id.volumes);
 
         ss = new LogSpan().make(logQue, this.getContext());
-
         etTable.setText(ss);
-        etTable.setTextColor(0xff00cc);
-        etKeyword.setTextColor(0xFFcc00);
-        etKeyword.setText("KeyWord");
-
 
         return thisView;
     }
@@ -132,8 +121,6 @@ public class HomeFragment extends Fragment {
     }
 
     private void showNextQue(DelItem delItem) {
-//        InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(INPUT_METHOD_SERVICE);
-//        imm.hideSoftInputFromWindow(etTable.getWindowToken(), 0);
         logQue = delItem.logNow;
         sharedEditor.putString("logQue", logQue);
         sharedEditor.apply();

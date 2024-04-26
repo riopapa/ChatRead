@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
         toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-        getSupportFragmentManager().beginTransaction().replace(R.id.myFrame, new HomeFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.myFrame, new FragmentLog()).commit();
 
         //==================================================================
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -150,7 +150,11 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.home:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.myFrame, new HomeFragment()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.myFrame, new FragmentLog()).commit();
+                        drawerLayout.closeDrawer(GravityCompat.START);
+                        break;
+                    case R.id.stock:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.myFrame, new FragmentStock()).commit();
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
                     case R.id.exit:

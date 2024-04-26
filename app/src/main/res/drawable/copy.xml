@@ -3,7 +3,7 @@
     android:width="64dp" xmlns:android="http://schemas.android.com/apk/res/android">
     <path android:strokeLineCap="round"
         android:strokeLineJoin="round"
-        android:strokeColor="#FFF"
+        android:strokeColor="#111"
         android:strokeWidth="2"
         android:pathData="
         M3,19v-15l1,-1h12
