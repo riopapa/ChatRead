@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group>
+        <item
+            android:title="Accueil"
+            android:icon="@drawable/baseline_home_24"
+            android:id="@+id/home"
+            />
+        <item
+            android:title="Liste verticale"
+            android:icon="@drawable/baseline_list_24"
+            android:id="@+id/liste"
+            />
+        <item
+            android:title="Liste horizontale"
+            android:icon="@drawable/baseline_swap_horiz_24"
+            android:id="@+id/listH"
+            />
+        <item
+            android:title="Calculatrice"
+            android:icon="@drawable/baseline_calculate_24"
+            android:id="@+id/calc"
+            />
+        <item
+            android:title="Conversion"
+            android:icon="@drawable/baseline_published_with_changes_24"
+            android:id="@+id/conv"
+            />
+    </group>
+    <group>
+        <item
+            android:title="Info"
+            android:icon="@drawable/baseline_info_24"
+            android:id="@+id/info"
+            />
+        <item
+            android:title="Déconnecter"
+            android:icon="@drawable/baseline_exit_to_app_24"
+            android:id="@+id/exit"
+            />
+    </group>
+</menu>

@@ -1,0 +1,76 @@
+<resources>
+    <string name="app_name">Chat Read</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <!-- TODO: Remove or change this placeholder text -->
+
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    -
+    <string-array name="names_txt">
+
+        <item>Adam</item>
+
+        <item>Ahmed</item>
+
+        <item>Anastasia</item>
+
+        <item>Elba</item>
+
+        <item>Elena</item>
+
+        <item>Jad</item>
+
+        <item>Jennifer</item>
+
+        <item>Karim</item>
+
+        <item>Lela</item>
+
+        <item>Sam</item>
+
+    </string-array>
+
+
+    -
+    <string-array name="job_txt">
+
+        <item>Designer</item>
+
+        <item>Engineer</item>
+
+        <item>Engineer</item>
+
+        <item>Actor</item>
+
+        <item>Compositor</item>
+
+        <item>3D-Designer</item>
+
+        <item>Sound</item>
+
+        <item>Actor</item>
+
+        <item>Economist</item>
+
+        <item>Director</item>
+
+    </string-array>
+
+    <string name="regex_number_only">[0-9]|-()|\s</string>
+    <string name="todo">TODO</string>
+    <string name="web_sent">[Web발신]</string>
+    <string name="active_say_table_list">Active say Table List</string>
+    <string name="search">Search</string>
+    <string name="enter_search_key">Enter Search Key</string>
+    <string name = "chat_talk">Chat Talk</string>
+    <string name = "header">Header</string>
+    <string name = "body_nnext_line">body\nnext line</string>
+    <string name = "_09_99">09:99</string>
+    <string name="talk">Talk</string>
+
+
+</resources>
