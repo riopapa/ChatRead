@@ -6,10 +6,11 @@ import static biz.riopapa.chatread.MainActivity.mActivity;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.sharedEditor;
 
-import android.app.ActionBar;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.text.Editable;
@@ -46,9 +47,11 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+        aBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
+        aBar.setTitle("Log");
     }
 
     @Override
@@ -75,13 +78,10 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
         mainMenu = menu;
         inflater.inflate(R.menu.menu_home, menu);
         super.onCreateOptionsMenu(menu, inflater);
-        aBar = mActivity.getActionBar();
-        aBar.setTitle("Log");
-        aBar.setSubtitle(null);
     }
 
     @Override
@@ -138,17 +138,9 @@ public class HomeFragment extends Fragment {
         sharedEditor.putString("logQue", logQue);
         sharedEditor.apply();
         etTable.setText(delItem.ss);
-        scrollView1.post(() -> {
-//            new Timer().schedule(new TimerTask() {
-//                public void run() {
-            mActivity.runOnUiThread(() -> {
-                Editable etText = etTable.getText();
-                Selection.setSelection(etText, delItem.ps, delItem.pf);
-                etTable.requestFocus();
-            });
-//                }
-//            }, 50);
-        });
+        Editable etText = etTable.getText();
+        Selection.setSelection(etText, delItem.ps, delItem.pf);
+        etTable.requestFocus();
     }
 
 }
