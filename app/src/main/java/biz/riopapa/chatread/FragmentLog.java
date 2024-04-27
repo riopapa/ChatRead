@@ -6,9 +6,13 @@ import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.sharedEditor;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.Selection;
+import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.style.BackgroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,15 +31,18 @@ import androidx.fragment.app.Fragment;
 
 import biz.riopapa.chatread.func.LogSpan;
 import biz.riopapa.chatread.func.LogUpdate;
+import biz.riopapa.chatread.func.SnackBar;
+import biz.riopapa.chatread.func.VolumeIcon;
 import biz.riopapa.chatread.models.DelItem;
 
 public class FragmentLog extends Fragment {
 
-    SpannableString ss;
+    SpannableString ss, sv;
     EditText etTable, etKeyword;
     ImageView ivFind, ivClear, ivNext, ivVolume;
     Menu mainMenu;
     ActionBar aBar = null;
+    int logPos;
 
     public FragmentLog() {
         // Required empty public constructor
@@ -46,6 +54,7 @@ public class FragmentLog extends Fragment {
         setHasOptionsMenu(true);
         aBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
         aBar.setTitle("Log");
+        aBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.bar_log));
     }
 
     @Override
@@ -62,6 +71,58 @@ public class FragmentLog extends Fragment {
 
         ss = new LogSpan().make(logQue, this.getContext());
         etTable.setText(ss);
+
+        sv = ss;
+        ivNext.setVisibility(View.GONE);
+        logPos = -1;
+        ivFind.setOnClickListener(v -> {
+            String key = etKeyword.getText().toString();
+            if (key.length() < 2)
+                return;
+            int cnt = 0;
+            logPos = -1;
+            String fullText = etTable.getText().toString();
+            ss = sv;
+            int oEnd = fullText.indexOf(key);
+            for (int oStart = 0; oStart < fullText.length() && oEnd != -1; oStart = oEnd + 2) {
+                oEnd = fullText.indexOf(key, oStart);
+                if (oEnd > 0) {
+                    cnt++;
+                    if (logPos < 0)
+                        logPos = oEnd;
+                    ss.setSpan(new BackgroundColorSpan(0xFFFFFF00), oEnd, oEnd + key.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+            }
+            sv = ss;
+            etTable.setText(ss);
+            new SnackBar().show(key, cnt+" times Found");
+            Editable etText = etTable.getText();
+            if (logPos > 0) {
+                Selection.setSelection(etText, logPos);
+                etTable.requestFocus();
+                ivNext.setVisibility(View.VISIBLE);
+            }
+        });
+
+        ivNext.setOnClickListener(v -> {
+            String key = etKeyword.getText().toString();
+            if (key.length() < 2)
+                return;
+            Editable etText = etTable.getText();
+            String s = etText.toString();
+            logPos = s.indexOf(key, logPos+1);
+            if (logPos > 0) {
+                Selection.setSelection(etText, logPos);
+                etTable.requestFocus();
+            }
+        });
+
+        ivClear.setOnClickListener(v -> etKeyword.setText(""));
+        ScrollView scrollView1 = thisView.findViewById(R.id.scroll_log);
+        new Handler(Looper.getMainLooper()).post(() -> scrollView1.smoothScrollBy(0, 90000));
+        super.onResume();
+
+        ivVolume.setImageBitmap(VolumeIcon.draw());
 
         return thisView;
     }

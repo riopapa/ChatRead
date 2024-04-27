@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.AudioFocusRequest;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.MenuItem;
@@ -24,7 +25,15 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import biz.riopapa.chatread.adapters.AlertsAdapter;
+import biz.riopapa.chatread.alerts.AlertStock;
+import biz.riopapa.chatread.alerts.StockName;
 import biz.riopapa.chatread.func.FileIO;
+import biz.riopapa.chatread.func.LogUpdate;
+import biz.riopapa.chatread.func.PhoneVibrate;
+import biz.riopapa.chatread.func.Sounds;
+import biz.riopapa.chatread.func.TableListFile;
+import biz.riopapa.chatread.func.Utils;
 import biz.riopapa.chatread.models.AlertLine;
 import biz.riopapa.chatread.models.App;
 import biz.riopapa.chatread.models.KeyVal;
@@ -53,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static App sbnApp;
 
-//    public static TableListFile tableListFile = null;
+    public static TableListFile tableListFile = null;
 
     public static String[] ktGroupIgnores = null;
     public static String[] ktWhoIgnores = null;
@@ -67,20 +76,20 @@ public class MainActivity extends AppCompatActivity {
     public static String[][] aGroupWhos;     // [2] 이진홍, 김선수
     public static String[][][] aGroupWhoKey1, aGroupWhoKey2, aGroupWhoSkip, aGroupWhoPrev, aGroupWhoNext;
 
-    static String[] smsWhoIgnores = null;
-    static String[] smsTxtIgnores = null;
-    static String[] smsNoNumbers = null;
-    static String[] smsReplFrom = null;
-    static String[] smsReplTo = null;
+    public static String[] smsWhoIgnores = null;
+    public static String[] smsTxtIgnores = null;
+    public static String[] smsNoNumbers = null;
+    public static String[] smsReplFrom = null;
+    public static String[] smsReplTo = null;
 
-    static String[] ktNoNumbers = null;
-    static String[] ktTxtIgnores = null;
+    public static String[] ktNoNumbers = null;
+    public static String[] ktTxtIgnores = null;
 
-    static String[] shortWhoNames = null;
-    static String[] longWhoNames = null;
+    public static String[] shortWhoNames = null;
+    public static String[] longWhoNames = null;
 
-    static String[] whoNameFrom = null;
-    static String[] whoNameTo = null;
+    public static String[] whoNameFrom = null;
+    public static String[] whoNameTo = null;
 
     public static String nowFileName;
 
@@ -94,27 +103,27 @@ public class MainActivity extends AppCompatActivity {
     public static SharedPreferences.Editor sharedEditor;
 
 
-    static final int SHOW_MESSAGE = 1234;
-    static final int HIDE_STOP = 5678;
-    static final int STOP_SAY1 = 10011;
-    static final int RELOAD_APP = 2022;
+    public static final int SHOW_MESSAGE = 1234;
+    public static final int HIDE_STOP = 5678;
+    public static final int STOP_SAY1 = 10011;
+    public static final int RELOAD_APP = 2022;
 
     public static ActionBar aBar = null;
-    static AudioFocusRequest mFocusGain = null;
+    public static AudioFocusRequest mFocusGain = null;
 
     /* module list */
 //    static AlertWhoIndex alertWhoIndex = null;
 
-    static boolean isPhoneBusy = false;
+    public static boolean isPhoneBusy = false;
 
-//    public static AlertsAdapter alertsAdapter = null;
+    public static AlertsAdapter alertsAdapter = null;
     public static TabLayout topTabs = null;
     public static ViewPager2 viewPager2 = null;
     public static ArrayList<AlertLine> alertLines;
 
     public static ArrayList<App> apps;
-//    public static AppAdapter appAdapter;
-
+  /*  public static AppAdapter appAdapter;
+*/
     public static String chatGroup;
     public static final String lastChar = "힝";
     public static int alertPos = -1, appPos = -1;  // updated or duplicated recycler position
@@ -128,6 +137,17 @@ public class MainActivity extends AppCompatActivity {
     public static KeyVal kvSMS = null;
     public static KeyVal kvTelegram = null;
     public static KeyVal kvStock = null;
+
+    public static Sounds sounds;
+    public static Utils utils;
+    public static LogUpdate logUpdate;
+    public static AlertStock alertStock;
+    public static StockName stockName;
+
+    String head = "";
+
+    public static AudioManager audioManager = null;
+    public static PhoneVibrate phoneVibrate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

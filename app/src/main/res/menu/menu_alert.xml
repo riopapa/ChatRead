@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/reload_all_tables"
+        android:orderInCategory="100"
+        android:icon="@drawable/upload_file"
+        app:showAsAction="always"
+        android:title="@string/todo" />
+
+    <item
+        android:id="@+id/clear_matched_number"
+        android:orderInCategory="100"
+        android:icon="@drawable/clear"
+        app:showAsAction="always"
+        android:title="@string/todo" />
+
+    <item
+        android:id="@+id/log2save"
+        android:orderInCategory="100"
+        android:icon="@drawable/save"
+        app:showAsAction="always"
+        android:title="@string/todo" />
+
+</menu>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+    <item
+        android:id="@+id/stock2save"
+        android:orderInCategory="100"
+        android:icon="@drawable/copy"
+        app:showAsAction="always"
+        android:title="@string/todo" />
+
+    <item
+        android:id="@+id/de_work_many"
+        android:orderInCategory="100"
+        android:icon="@drawable/line_remove_many"
+        app:showAsAction="always"
+        android:title="@string/todo" />
+
+    <item
+        android:id="@+id/del_work_1_line"
+        android:orderInCategory="100"
+        android:icon="@drawable/line_remove1"
+        app:showAsAction="always"
+        android:title="@string/todo" />
+
+    <item
+        android:id="@+id/del_work_one_set"
+        android:orderInCategory="100"
+        android:icon="@drawable/line_remove3"
+        app:showAsAction="always"
+        android:title="@string/todo" />
+
+</menu>

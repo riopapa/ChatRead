@@ -1,0 +1,206 @@
+package biz.riopapa.chatread.func;
+
+import static biz.riopapa.chatread.MainActivity.ktGroupIgnores;
+import static biz.riopapa.chatread.MainActivity.ktNoNumbers;
+import static biz.riopapa.chatread.MainActivity.ktTxtIgnores;
+import static biz.riopapa.chatread.MainActivity.ktWhoIgnores;
+import static biz.riopapa.chatread.MainActivity.longWhoNames;
+import static biz.riopapa.chatread.MainActivity.mContext;
+import static biz.riopapa.chatread.MainActivity.replGroup;
+import static biz.riopapa.chatread.MainActivity.replGroupCnt;
+import static biz.riopapa.chatread.MainActivity.replLong;
+import static biz.riopapa.chatread.MainActivity.replShort;
+import static biz.riopapa.chatread.MainActivity.shortWhoNames;
+import static biz.riopapa.chatread.MainActivity.smsNoNumbers;
+import static biz.riopapa.chatread.MainActivity.smsReplFrom;
+import static biz.riopapa.chatread.MainActivity.smsReplTo;
+import static biz.riopapa.chatread.MainActivity.smsTxtIgnores;
+import static biz.riopapa.chatread.MainActivity.smsWhoIgnores;
+import static biz.riopapa.chatread.MainActivity.sounds;
+import static biz.riopapa.chatread.MainActivity.tableListFile;
+import static biz.riopapa.chatread.MainActivity.utils;
+import static biz.riopapa.chatread.MainActivity.whoNameFrom;
+import static biz.riopapa.chatread.MainActivity.whoNameTo;
+
+import android.widget.Toast;
+
+import java.util.ArrayList;
+
+import biz.riopapa.chatread.MainActivity;
+
+public class OptionTables {
+
+    public void readAll() {
+
+        if (tableListFile == null)
+            tableListFile = new TableListFile();
+        ktGroupIgnores = tableListFile.read("ktGrpIg");
+        ktWhoIgnores = tableListFile.read("ktWhoIg");
+        ktTxtIgnores = tableListFile.read("ktTxtIg");
+        ktNoNumbers = tableListFile.read("ktNoNum");
+
+        smsWhoIgnores =  tableListFile.read("smsWhoIg");
+        smsTxtIgnores =  tableListFile.read("smsTxtIg");
+        smsNoNumbers = tableListFile.read("smsNoNum");
+        smsNoNumbers = tableListFile.read("smsNoNum");
+
+        if (ktTxtIgnores == null || smsWhoIgnores == null) {
+            sounds.beepOnce(MainActivity.soundType.ERR.ordinal());
+            String s = "ktTxtIgnores || smsWhoIgnores is null";
+            Toast.makeText(mContext, s, Toast.LENGTH_LONG).show();
+            utils.logW("readAll",s);
+        }
+        readStrReplFile();
+        readSmsReplFile();
+        readTelegramGroup();
+        readWhoName();
+        new AppsTable().get();
+
+    }
+
+    private void readTelegramGroup() {
+        /* teleGrp.txt
+         * group ^ channel name
+         * 텔단타 ^ 오늘의단타
+         */
+        String [] lists =  tableListFile.read("teleGrp");
+
+        shortWhoNames = new String[lists.length];
+        longWhoNames = new String[lists.length];
+
+        for (int i = 0; i < lists.length; i++) {
+            String pLine = lists[i];
+            String [] strings = pLine.split("\\^");
+            if (strings.length < 2) {
+                new SnackBar().show("Telegram Table Error ", pLine);
+            } else {
+                shortWhoNames[i] = strings[0].trim();
+                longWhoNames[i] = strings[1].trim();
+            }
+        }
+    }
+
+    private void readWhoName() {
+        /*
+         * group ^ channel name
+         * 부자   ^ 부자 프로젝트
+         */
+        String [] lists =  tableListFile.read("whoName");
+
+        whoNameFrom = new String[lists.length];
+        whoNameTo = new String[lists.length];
+
+        for (int i = 0; i < lists.length; i++) {
+            String pLine = lists[i];
+            String [] strings = pLine.split("\\^");
+            if (strings.length < 2) {
+                new SnackBar().show("Who Name Table Error ", pLine);
+            } else {
+                whoNameTo[i] = strings[0].trim();
+                whoNameFrom[i] = strings[1].trim();
+            }
+        }
+    }
+
+    void readSmsReplFile() {
+        /*
+         * 0   ^  1
+         * 짧은 ^ 아주 긴 문장 ; comment
+         */
+        String[] lines = tableListFile.read("smsRepl");
+        ArrayList<String> sShort = new ArrayList<>();
+        ArrayList<String> sLong = new ArrayList<>();
+        for (String oneLine : lines) {
+            if (!oneLine.isEmpty()) {
+                String[] ones = oneLine.split("\\^");
+                if (ones.length < 2) {
+                    if (sounds == null)
+                        sounds = new Sounds();
+                    sounds.beepOnce(MainActivity.soundType.ERR.ordinal());
+                    String s = "SMS Repl ^^ Error : " + oneLine;
+                    Toast.makeText(mContext, s, Toast.LENGTH_LONG).show();
+                    utils.logW("readSMS", s);
+                } else {
+                    sShort.add(ones[0].trim());
+                    sLong.add(ones[1].trim());
+                }
+            }
+        }
+        if (!sShort.isEmpty()) {
+            smsReplFrom = new String[sShort.size()];
+            smsReplTo = new String[sShort.size()];
+            for (int i = 0; i < sShort.size(); i++) {
+                smsReplFrom[i] = sLong.get(i);
+                smsReplTo[i] = sShort.get(i);
+            }
+        }
+    }
+
+    void readStrReplFile() {
+        /*
+         * 0          1       2         3
+         * group ^ repl To ^ repl from
+         * 퍼플  ^ pp1   ^ $매수 하신분들 【 매수 】
+         */
+        class StrLong2Short {
+            final String grpName;
+            final ArrayList<String> grpLong;
+            final ArrayList<String> grpShort;
+
+            StrLong2Short(String grpName, ArrayList<String> grpLong, ArrayList<String> grpShort) {
+                this.grpName = grpName;
+                this.grpLong = grpLong;
+                this.grpShort = grpShort;
+            }
+        }
+        ArrayList<StrLong2Short> strLong2Shorts = new ArrayList<>();
+        String[] lines = tableListFile.read("strRepl");
+        String svGroup = "";
+        ArrayList<String> gLong = new ArrayList<>();
+        ArrayList<String> gShort = new ArrayList<>();
+        String prvLine = "";
+        for (String oneLine : lines) {
+            String[] ones = oneLine.split("\\^");
+            if (ones.length < 3) {
+                if (sounds == null)
+                    sounds = new Sounds();
+                sounds.beepOnce(MainActivity.soundType.ERR.ordinal());
+                String s = "StrRepl Caret missing : "+oneLine+"\nprv line : "+prvLine;
+                Toast.makeText(mContext,s,
+                        Toast.LENGTH_LONG).show();
+                utils.logW("strRead", s);
+                continue;
+            }
+            if (!svGroup.equals(ones[0])) {
+                if (!svGroup.isEmpty())
+                    strLong2Shorts.add(new StrLong2Short(svGroup, gLong, gShort));
+                svGroup = ones[0];
+                gShort = new ArrayList<>();
+                gLong = new ArrayList<>();
+            }
+            gShort.add(ones[1]);
+            gLong.add(ones[2]);
+            prvLine = oneLine;
+        }
+        if (!gLong.isEmpty())
+            strLong2Shorts.add(new StrLong2Short(svGroup, gLong, gShort));
+
+        replGroupCnt = strLong2Shorts.size();
+        replGroup = new String[replGroupCnt];
+        replLong = new String[replGroupCnt][];
+        replShort = new String[replGroupCnt][];
+
+        for (int i = 0; i < replGroupCnt; i++) {
+            StrLong2Short strLong2Short = strLong2Shorts.get(i);
+            replGroup[i] = strLong2Short.grpName;
+            String[] sLong = new String[strLong2Short.grpLong.size()];
+            String[] sShort = new String[strLong2Short.grpLong.size()];
+            for (int j = 0; j < strLong2Short.grpLong.size(); j++) {
+                sLong[j] = strLong2Short.grpLong.get(j);
+                sShort[j] = strLong2Short.grpShort.get(j);
+            }
+            replLong[i] = sLong;
+            replShort[i] = sShort;
+        }
+    }
+}

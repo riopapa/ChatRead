@@ -1,7 +1,7 @@
 package biz.riopapa.chatread;
 
 import static biz.riopapa.chatread.MainActivity.logSave;
-import static biz.riopapa.chatread.MainActivity.logStock;
+import static biz.riopapa.chatread.MainActivity.logWork;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.sharedEditor;
 
@@ -28,7 +28,7 @@ import biz.riopapa.chatread.func.LogSpan;
 import biz.riopapa.chatread.func.LogUpdate;
 import biz.riopapa.chatread.models.DelItem;
 
-public class FragmentStock extends Fragment {
+public class FragmentWork extends Fragment {
 
     SpannableString ss;
     EditText etTable, etKeyword;
@@ -36,7 +36,7 @@ public class FragmentStock extends Fragment {
     Menu mainMenu;
     ActionBar aBar = null;
 
-    public FragmentStock() {
+    public FragmentWork() {
         // Required empty public constructor
     }
 
@@ -46,21 +46,20 @@ public class FragmentStock extends Fragment {
         setHasOptionsMenu(true);
         aBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
         aBar.setTitle("Stock");
-        aBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.bar_stock));
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View thisView = inflater.inflate(R.layout.fragment_stock, container, false);
-        etTable = thisView.findViewById(R.id.text_stock);
-        etKeyword = thisView.findViewById(R.id.key_stock);
-        ivFind = thisView.findViewById(R.id.find_stock);
-        ivNext = thisView.findViewById(R.id.next_stock);
-        ivClear = thisView.findViewById(R.id.clear_stock);
+        View thisView = inflater.inflate(R.layout.fragment_work, container, false);
+        etTable = thisView.findViewById(R.id.text_work);
+        etKeyword = thisView.findViewById(R.id.key_work);
+        ivFind = thisView.findViewById(R.id.find_work);
+        ivNext = thisView.findViewById(R.id.next_work);
+        ivClear = thisView.findViewById(R.id.clear_work);
 
-        ss = new LogSpan().make(logStock, this.getContext());
+        ss = new LogSpan().make(logWork, this.getContext());
         etTable.setText(ss);
 
         return thisView;
@@ -69,29 +68,29 @@ public class FragmentStock extends Fragment {
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
         mainMenu = menu;
-        inflater.inflate(R.menu.menu_stock, menu);
+        inflater.inflate(R.menu.menu_work, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
-        if (item.getItemId() == R.id.del_stock_one_set) {
+        if (item.getItemId() == R.id.del_work_one_set) {
             showNextQue(new LogSpan().delOneSet(etTable.getText().toString(),
                     etTable.getSelectionStart(), mContext));
 
-        } else if (item.getItemId() == R.id.de_stock_many) {
+        } else if (item.getItemId() == R.id.de_work_many) {
             int currPos = etTable.getSelectionStart();
-            int logLen = logStock.length();
-            logStock = new LogUpdate(mContext).squeezeLog(logStock,"logQue");
+            int logLen = logWork.length();
+            logWork = new LogUpdate(mContext).squeezeLog(logWork,"logQue");
             if (currPos > 0)
-                currPos += logStock.length() - logLen;
-            ss = new LogSpan().make(logStock, mContext);
+                currPos += logWork.length() - logLen;
+            ss = new LogSpan().make(logWork, mContext);
             etTable.setText(ss);
             Selection.setSelection(ss, currPos, currPos + 1);
             etTable.requestFocus();
 
-        } else if (item.getItemId() == R.id.del_stock_1_line) {
+        } else if (item.getItemId() == R.id.del_work_1_line) {
             showNextQue(new LogSpan().delOneLine(etTable.getText().toString(),
                     etTable.getSelectionStart(), mContext));
 
@@ -121,8 +120,8 @@ public class FragmentStock extends Fragment {
     }
 
     private void showNextQue(DelItem delItem) {
-        logStock = delItem.logNow;
-        sharedEditor.putString("logStock", logStock);
+        logWork = delItem.logNow;
+        sharedEditor.putString("logWork", logWork);
         sharedEditor.apply();
         etTable.setText(delItem.ss);
         Editable etText = etTable.getText();

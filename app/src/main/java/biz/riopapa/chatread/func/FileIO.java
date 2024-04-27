@@ -1,11 +1,13 @@
 package biz.riopapa.chatread.func;
 
+import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.packageDirectory;
 import static biz.riopapa.chatread.MainActivity.toDay;
 import static biz.riopapa.chatread.MainActivity.todayFolder;
 
 import android.os.Environment;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -64,7 +66,7 @@ public class FileIO {
             if (!file.exists()) {
                 if (!file.createNewFile()) {
                     String s = "create file Error " + file;
-                    new SnackBar().show("append2File", s);
+                    Toast.makeText(mContext, s, Toast.LENGTH_SHORT).show();
                     Log.e("file " + file, s);
                 }
             }
@@ -94,7 +96,7 @@ public class FileIO {
             bufferedWriter.close();
         } catch (IOException ex) {
             new Utils().logE("editor", fileName + "'\n" + ex);
-            new SnackBar().show("writeTextFile", "Write table error " + fileName);
+            Toast.makeText(mContext, "writeTextFile" + fileName, Toast.LENGTH_LONG).show();
         }
     }
 
