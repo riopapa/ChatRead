@@ -1,4 +1,4 @@
-package biz.riopapa.chatread.func;
+package biz.riopapa.chatread.common;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
 import static biz.riopapa.chatread.MainActivity.mContext;

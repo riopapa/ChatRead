@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import biz.riopapa.chatread.common.SnackBar;
 import biz.riopapa.chatread.models.App;
 
 public class AppsTable {

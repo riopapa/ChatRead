@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 public class AlertToast {
 
-    public void show (Context context, Activity activity, String msg) {
+    public void show(Context context, Activity activity, String msg) {
         new Handler(Looper.getMainLooper()).post(() -> {
             if (isScreenOn(context) && activity != null) {
                     activity.runOnUiThread(() -> Toast.makeText(context, msg, Toast.LENGTH_LONG).show());

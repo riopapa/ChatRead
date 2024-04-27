@@ -1,4 +1,4 @@
-package biz.riopapa.chatread.func;
+package biz.riopapa.chatread.common;
 
 import static android.widget.Toast.LENGTH_SHORT;
 import static com.google.android.material.snackbar.Snackbar.make;

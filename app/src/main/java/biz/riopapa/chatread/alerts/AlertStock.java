@@ -8,6 +8,7 @@ import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.phoneVibrate;
 import static biz.riopapa.chatread.MainActivity.sounds;
 import static biz.riopapa.chatread.MainActivity.stockName;
+import static biz.riopapa.chatread.MainActivity.strUtil;
 import static biz.riopapa.chatread.MainActivity.utils;
 
 import android.content.Context;
@@ -20,11 +21,11 @@ import java.util.Date;
 import java.util.Locale;
 
 import biz.riopapa.chatread.MainActivity;
-import biz.riopapa.chatread.func.Copy2Clipboard;
+import biz.riopapa.chatread.common.Copy2Clipboard;
 import biz.riopapa.chatread.func.FileIO;
-import biz.riopapa.chatread.func.PhoneVibrate;
-import biz.riopapa.chatread.func.Sounds;
-import biz.riopapa.chatread.func.Utils;
+import biz.riopapa.chatread.common.PhoneVibrate;
+import biz.riopapa.chatread.common.Sounds;
+import biz.riopapa.chatread.common.Utils;
 import biz.riopapa.chatread.models.AlertLine;
 
 public class AlertStock {
@@ -47,7 +48,7 @@ public class AlertStock {
         if (stockName == null)
             stockName = new StockName();
         String [] sParse = stockName.get(al.prev, al.next, iText);
-        sParse[1] = utils.strShorten(iGroup, utils.removeSpecialChars(sParse[1]));
+        sParse[1] = strUtil.strShorten(iGroup, strUtil.removeSpecialChars(sParse[1]));
         String key12 = " {" + k1 + "." + k2 + "}";
 
         if (!sTalk.isEmpty()) {

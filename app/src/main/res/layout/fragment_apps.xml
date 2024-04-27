@@ -4,52 +4,48 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.FragmentLog"
+    android:id="@+id/frag_apps"
+    tools:context=".fragment.FragmentApps"
     >
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/color_tab_log_background"
-    android:orientation="vertical"
-    >
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <ImageButton
-            android:id="@+id/clear_stock"
+            android:id="@+id/clear_search"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_margin="4dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="0dp"
             android:layout_weight="2"
             android:background="#00000000"
             android:contentDescription="@string/search"
             android:src="@drawable/clear_text" />
 
         <EditText
-            android:id="@+id/key_stock"
+            android:id="@+id/search_key"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="0dp"
-            android:layout_weight="7"
+            android:layout_margin="0dp"
+            android:layout_weight="10"
             android:inputType="text"
-            android:text=""
-            android:textColor="#111"
+            android:hint="@string/enter_search_key"
             android:autofillHints="Enter Text to search" />
 
         <ImageButton
-            android:id="@+id/find_stock"
+            android:id="@+id/search"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_margin="0dp"
+            android:layout_marginStart="8dp"
             android:layout_weight="2"
             android:background="#00000000"
             android:contentDescription="@string/search"
             android:src="@drawable/search" />
 
         <ImageButton
-            android:id="@+id/next_stock"
+            android:id="@+id/searchNext"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_margin="4dp"
@@ -60,25 +56,13 @@
 
     </LinearLayout>
 
-    <ScrollView
-        android:id="@+id/scroll_stock"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycle_apps"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fastScrollEnabled="true"
-        android:scrollbars="vertical"
-        android:scrollbarSize="12dp"
-        style="@style/up_down_scroll_thumb"
+        android:layout_height="match_parent"
+        android:layout_margin="0dp"
         >
-        <EditText
-            android:id="@+id/text_stock"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:autofillHints="Table text"
-            android:inputType="text|textMultiLine"
-            android:text="@string/active_say_table_list"
-            android:textSize="14sp" />
-    </ScrollView>
-</LinearLayout>
+    </androidx.recyclerview.widget.RecyclerView>
+
 </FrameLayout>

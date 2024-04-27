@@ -1,4 +1,4 @@
-package biz.riopapa.chatread.func;
+package biz.riopapa.chatread.common;
 
 public class IgnoreThis {
 

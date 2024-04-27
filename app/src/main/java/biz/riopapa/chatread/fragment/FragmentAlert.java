@@ -1,8 +1,9 @@
-package biz.riopapa.chatread;
+package biz.riopapa.chatread.fragment;
 
 import static biz.riopapa.chatread.MainActivity.alertLines;
 import static biz.riopapa.chatread.MainActivity.alertPos;
 import static biz.riopapa.chatread.MainActivity.alertsAdapter;
+import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.todayFolder;
 
 import android.os.Bundle;
@@ -16,10 +17,12 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import biz.riopapa.chatread.R;
 import biz.riopapa.chatread.adapters.AlertsAdapter;
 import biz.riopapa.chatread.alerts.AlertSave;
 import biz.riopapa.chatread.alerts.AlertTableIO;
@@ -31,7 +34,6 @@ public class FragmentAlert extends Fragment {
 
     Menu mainMenu;
     ActionBar aBar = null;
-    ViewGroup rootView;
     RecyclerView recyclerView;
 
     public FragmentAlert() {
@@ -44,7 +46,7 @@ public class FragmentAlert extends Fragment {
         setHasOptionsMenu(true);
         aBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
         aBar.setTitle("Alert");
-        aBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.bar_alert));
+        aBar.setBackgroundDrawable( ContextCompat.getDrawable(mContext, R.drawable.bar_alert));
         if (alertsAdapter == null)
             alertsAdapter = new AlertsAdapter();
     }
@@ -53,8 +55,8 @@ public class FragmentAlert extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View thisView = inflater.inflate(R.layout.fragment_home, container, false);
-        recyclerView = rootView.findViewById(R.id.recycle_alerts);
+        View thisView = inflater.inflate(R.layout.fragment_alert, container, false);
+        recyclerView = thisView.findViewById(R.id.recycle_alerts);
         recyclerView.setAdapter(alertsAdapter);
         if (todayFolder == null)
             new ReadyToday();
@@ -73,7 +75,7 @@ public class FragmentAlert extends Fragment {
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
         mainMenu = menu;
-        inflater.inflate(R.menu.menu_home, menu);
+        inflater.inflate(R.menu.menu_alert, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 

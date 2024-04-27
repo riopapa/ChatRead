@@ -1,17 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group>
         <item
             android:title="Log"
             android:icon="@drawable/icon_log"
-            android:id="@+id/home"
+            android:id="@+id/log"
             />
         <item
             android:title="Stock"
             android:icon="@drawable/icon_stock"
             android:id="@+id/stock"
             />
+        <item
+            android:title="Work"
+            android:icon="@drawable/icon_work"
+            android:id="@+id/work"
+            />
+        <item
+            android:title="Alert"
+            android:icon="@drawable/icon_alert"
+            android:id="@+id/alert"
+            />
+        <item
+            android:title="Table"
+            android:icon="@drawable/icon_table"
+            android:id="@+id/table"
+            />
+        <item
+            android:title="Apps"
+            android:icon="@drawable/icon_apps"
+            android:id="@+id/apps"
+            />
+    </group>
+    <group>
         <item
             android:title="Liste verticale"
             android:icon="@drawable/baseline_list_24"
@@ -32,8 +55,6 @@
             android:icon="@drawable/baseline_published_with_changes_24"
             android:id="@+id/conv"
             />
-    </group>
-    <group>
         <item
             android:title="Info"
             android:icon="@drawable/baseline_info_24"

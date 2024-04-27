@@ -1,6 +1,7 @@
-package biz.riopapa.chatread;
+package biz.riopapa.chatread.fragment;
 
 import static biz.riopapa.chatread.MainActivity.logSave;
+import static biz.riopapa.chatread.MainActivity.logWork;
 import static biz.riopapa.chatread.MainActivity.logWork;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.sharedEditor;
@@ -22,8 +23,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import biz.riopapa.chatread.R;
 import biz.riopapa.chatread.func.LogSpan;
 import biz.riopapa.chatread.func.LogUpdate;
 import biz.riopapa.chatread.models.DelItem;
@@ -45,7 +48,8 @@ public class FragmentWork extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         aBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
-        aBar.setTitle("Stock");
+        aBar.setTitle("Work");
+        aBar.setBackgroundDrawable( ContextCompat.getDrawable(mContext, R.drawable.bar_work));
     }
 
     @Override
@@ -94,7 +98,7 @@ public class FragmentWork extends Fragment {
             showNextQue(new LogSpan().delOneLine(etTable.getText().toString(),
                     etTable.getSelectionStart(), mContext));
 
-        } else if (item.getItemId() == R.id.stock2save) {
+        } else if (item.getItemId() == R.id.work2save) {
             String logNow = etTable.getText().toString().trim() + "\n";
             int ps = logNow.lastIndexOf("\n", etTable.getSelectionStart() - 1);
             if (ps == -1)

@@ -1,4 +1,4 @@
-package biz.riopapa.chatread.func;
+package biz.riopapa.chatread.common;
 
 
 import android.util.Log;

@@ -1,4 +1,4 @@
-package biz.riopapa.chatread.func;
+package biz.riopapa.chatread.common;
 
 import static biz.riopapa.chatread.MainActivity.beepRawIds;
 import static biz.riopapa.chatread.MainActivity.isPhoneBusy;

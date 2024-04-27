@@ -1,39 +1,58 @@
 package biz.riopapa.chatread;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.media.AudioFocusRequest;
 import android.media.AudioManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.Settings;
+import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.tabs.TabLayout;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import biz.riopapa.chatread.adapters.AlertsAdapter;
+import biz.riopapa.chatread.adapters.AppsAdapter;
 import biz.riopapa.chatread.alerts.AlertStock;
 import biz.riopapa.chatread.alerts.StockName;
+import biz.riopapa.chatread.common.Permission;
+import biz.riopapa.chatread.fragment.FragmentAlert;
+import biz.riopapa.chatread.fragment.FragmentApps;
+import biz.riopapa.chatread.fragment.FragmentLog;
+import biz.riopapa.chatread.fragment.FragmentStock;
+import biz.riopapa.chatread.fragment.FragmentWork;
+import biz.riopapa.chatread.func.AppsTable;
 import biz.riopapa.chatread.func.FileIO;
 import biz.riopapa.chatread.func.LogUpdate;
-import biz.riopapa.chatread.func.PhoneVibrate;
-import biz.riopapa.chatread.func.Sounds;
+import biz.riopapa.chatread.common.PhoneVibrate;
+import biz.riopapa.chatread.func.ReadyToday;
+import biz.riopapa.chatread.common.Sounds;
+import biz.riopapa.chatread.func.StrUtil;
 import biz.riopapa.chatread.func.TableListFile;
-import biz.riopapa.chatread.func.Utils;
+import biz.riopapa.chatread.common.Utils;
 import biz.riopapa.chatread.models.AlertLine;
 import biz.riopapa.chatread.models.App;
 import biz.riopapa.chatread.models.KeyVal;
@@ -117,16 +136,14 @@ public class MainActivity extends AppCompatActivity {
     public static boolean isPhoneBusy = false;
 
     public static AlertsAdapter alertsAdapter = null;
-    public static TabLayout topTabs = null;
-    public static ViewPager2 viewPager2 = null;
-    public static ArrayList<AlertLine> alertLines;
+    public static ArrayList<AlertLine> alertLines = null;;
 
     public static ArrayList<App> apps;
-  /*  public static AppAdapter appAdapter;
-*/
+    public static AppsAdapter appsAdapter;
+
     public static String chatGroup;
     public static final String lastChar = "힝";
-    public static int alertPos = -1, appPos = -1;  // updated or duplicated recycler position
+    public static int alertPos = -1, appsPos = -1;  // updated or duplicated recycler position
 
     public enum soundType { PRE, POST, ERR, HI_TESLA, ONLY, STOCK, INFO, KAKAO}
     public static final int[] beepRawIds = { R.raw.pre, R.raw.post, R.raw.err,
@@ -138,16 +155,15 @@ public class MainActivity extends AppCompatActivity {
     public static KeyVal kvTelegram = null;
     public static KeyVal kvStock = null;
 
-    public static Sounds sounds;
-    public static Utils utils;
-    public static LogUpdate logUpdate;
-    public static AlertStock alertStock;
-    public static StockName stockName;
-
-    String head = "";
+    public static Sounds sounds = null;
+    public static Utils utils = null;
+    public static StrUtil strUtil = null;
+    public static LogUpdate logUpdate = null;
+    public static AlertStock alertStock = null;
+    public static StockName stockName = null;
 
     public static AudioManager audioManager = null;
-    public static PhoneVibrate phoneVibrate;
+    public static PhoneVibrate phoneVibrate = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,47 +185,111 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
-                    case R.id.home:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.myFrame, new FragmentLog()).commit();
+                    case R.id.log:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
+                                new FragmentLog()).commit();
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
                     case R.id.stock:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.myFrame, new FragmentStock()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
+                                new FragmentStock()).commit();
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
-                    case R.id.exit:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.myFrame, new ExitFragment()).commit();
+                    case R.id.work:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
+                                new FragmentWork()).commit();
+                        drawerLayout.closeDrawer(GravityCompat.START);
+                        break;
+                    case R.id.alert:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
+                                new FragmentAlert()).commit();
+                        drawerLayout.closeDrawer(GravityCompat.START);
+                        break;
+                    case R.id.apps:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
+                                new FragmentApps()).commit();
+                        drawerLayout.closeDrawer(GravityCompat.START);
+                        break;
+                    case R.id.table:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
+                                new ExitFragment()).commit();
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
                     case R.id.info:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.myFrame, new InfoFragment()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
+                                new InfoFragment()).commit();
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
                     case R.id.calc:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.myFrame, new CalcFragment()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
+                                new CalcFragment()).commit();
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
                     case R.id.liste:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.myFrame, new ListeFragment()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
+                                new ListeFragment()).commit();
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
                     case R.id.conv:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.myFrame, new ConvFragment()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
+                                new ConvFragment()).commit();
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
                     case R.id.listH:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.myFrame, new HorizontalFragment()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
+                                new HorizontalFragment()).commit();
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
                 }
                 return true;
             }
         });
-        Shared_get();
+
+
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo(getApplicationContext().getPackageName(),
+                    PackageManager.GET_PERMISSIONS);
+            Permission.ask(this, this, info);
+        } catch (Exception e) {
+            Log.e("Permission", "No Permission " + e);
+        }
+
+// If you have access to the external storage, do whatever you need
+        if (!Environment.isExternalStorageManager()) {
+            Intent intent = new Intent();
+            intent.setAction(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+            Uri uri = Uri.fromParts("package", this.getPackageName(), null);
+            intent.setData(uri);
+            startActivity(intent);
+        }
+
+//        if (!isNotificationAllowed(this.getPackageName())) {
+//            Toast.makeText(getApplicationContext(), "Allow permission on Android notification", Toast.LENGTH_LONG).show();
+//            Intent intListener = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+//            startActivity(intListener);
+//        }
+
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_SETTINGS) != PackageManager.PERMISSION_GRANTED) {
+            //permissions not granted -> request them
+            requestPermissions(new String[]{Manifest.permission.WRITE_SETTINGS}, 6562);
+        } else {
+            Toast.makeText(getApplicationContext(), " permission OK", Toast.LENGTH_LONG).show();
+            //permissions are granted - do your stuff here :)
+        }
+
+        /**
+        if (!NotificationManagerCompat.getEnabledListenerPackages(this).contains(getPackageName())) {        //ask for permission
+            Log.w("Permission","required "+getPackageName());
+            Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+            startActivity(intent);
+        }
+**/
+        getSharedValues();
         init_variables();
+        new AppsTable().get();
     }
 
-    void Shared_get() {
+    void getSharedValues() {
         sharePref = this.getSharedPreferences("sayText", MODE_PRIVATE);
         sharedEditor = sharePref.edit();
         logQue = sharePref.getString("logQue", "");
@@ -219,6 +299,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void init_variables() {
+        if (packageDirectory == null)
+            packageDirectory = new File(Environment.getExternalStorageDirectory(), "_ChatTalkLog");
         downloadFolder = new File(Environment.getExternalStorageDirectory(), "download");
         tableFolder = new File(downloadFolder, "_ChatTalk");
 //        new OptionTables().readAll();
@@ -230,6 +312,21 @@ public class MainActivity extends AppCompatActivity {
         kvCommon = new KeyVal();
         kvSMS = new KeyVal();
         kvStock = new KeyVal();
+        if (utils == null)
+            utils = new Utils();
+        if (strUtil == null)
+            strUtil = new StrUtil();
+        new ReadyToday();
 
     }
+    private boolean isNotificationAllowed(String packageName) {
+        Set<String> listenerSet = NotificationManagerCompat.getEnabledListenerPackages(this);
+
+        for (String pkg : listenerSet) {
+            if (pkg != null && pkg.equals(packageName))
+                return true;
+        }
+        return false;
+    }
+
 }

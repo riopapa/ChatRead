@@ -1,4 +1,4 @@
-package biz.riopapa.chatread.func;
+package biz.riopapa.chatread.common;
 
 import static biz.riopapa.chatread.MainActivity.packageDirectory;
 import static biz.riopapa.chatread.MainActivity.replGroup;
@@ -17,19 +17,17 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 import biz.riopapa.chatread.MainActivity;
+import biz.riopapa.chatread.func.FileIO;
 
 public class Utils {
 
     public Utils() {
-        if (packageDirectory == null)
-            packageDirectory = new File(Environment.getExternalStorageDirectory(), "_ChatTalkLog");
     }
     /*
         logW writes log on that day, and removed after a few days
         logE writes to download folder, removing by manual operation
      */
-    void logW(String tag, String text) {
-        new ReadyToday();
+    public void logW(String tag, String text) {
         StackTraceElement[] traces = Thread.currentThread().getStackTrace();
         String logText  =(traces.length>6) ? excludeName(traces[6].getMethodName()):"";
         logText += excludeName(traces[5].getMethodName()) + excludeName(traces[4].getMethodName()) +
@@ -65,7 +63,7 @@ public class Utils {
 
 
     /* delete old packageDirectory / files if storage is less than x days */
-    void deleteOldFiles() {
+    public void deleteOldFiles() {
         final SimpleDateFormat dateFormat = new SimpleDateFormat("yy-MM-dd", Locale.KOREA);
         String weekAgo = dateFormat.format(System.currentTimeMillis() - 3*24*60*60*1000L);
         File[] files = packageDirectory.listFiles();
@@ -80,7 +78,7 @@ public class Utils {
         }
     }
 
-    private void deleteFolder(File file) {
+    public void deleteFolder(File file) {
         String deleteCmd = "rm -r " + file.toString();
         Runtime runtime = Runtime.getRuntime();
         try {
@@ -88,44 +86,5 @@ public class Utils {
         } catch (IOException e) {
             //
         }
-    }
-
-    public String removeSpecialChars(String text) {
-        return text.replace("──", "").replace("==", "-")
-                .replace("=", "ￚ").replace("--", "-")
-        .replaceAll("[^\\da-zA-Z:|#().@,%/~가-힣\\s\\-+]", "")
-//                .replaceAll("[^\\da-zA-Z:|#().@,%/~ㄱ-ㅎ가-힣\\s\\-+]", "")
-        ;
-    }
-
-    public String strShorten(String groupOrWho, String text) {
-        for (int i = 0; i < replGroupCnt; i++) {
-            int compared = groupOrWho.compareTo(replGroup[i]);
-            if (compared == 0) {
-                for (int j = 0; j < replLong[i].length; j++)
-                    text = text.replace(replLong[i][j], replShort[i][j]);
-                return text;
-            }
-            if (compared < 0) {
-                return text;
-            }
-        }
-        return text;
-    }
-
-    String makeEtc (String s, int len) {
-        return (s.length() < len)? s : s.substring(0, len) + " 등등";
-    }
-
-    String replaceKKHH(String text) {
-        return text.replace("ㅇㅋ", " 오케이 ")
-                .replace("ㅊㅋ", " 축하 ")
-                .replace("ㅠㅠ", " 흑 ")
-                .replace("ㅠ", " 흑 ")
-                ;
-    }
-
-    String text2OneLine(String mText) {
-        return mText.replace("\n", "|").replace("\r", "").replace("||", "|").replace("||", "|");
     }
 }

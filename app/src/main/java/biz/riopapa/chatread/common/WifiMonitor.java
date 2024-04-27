@@ -1,6 +1,4 @@
-package biz.riopapa.chatread.func;
-
-import static biz.riopapa.chatread.func.WifiName.wifiName;
+package biz.riopapa.chatread.common;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -8,9 +6,6 @@ import android.net.Network;
 import android.net.NetworkCapabilities;
 
 import androidx.annotation.NonNull;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class WifiMonitor {
 

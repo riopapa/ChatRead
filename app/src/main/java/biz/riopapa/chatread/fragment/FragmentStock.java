@@ -1,4 +1,4 @@
-package biz.riopapa.chatread;
+package biz.riopapa.chatread.fragment;
 
 import static biz.riopapa.chatread.MainActivity.logSave;
 import static biz.riopapa.chatread.MainActivity.logStock;
@@ -22,8 +22,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import biz.riopapa.chatread.R;
 import biz.riopapa.chatread.func.LogSpan;
 import biz.riopapa.chatread.func.LogUpdate;
 import biz.riopapa.chatread.models.DelItem;
@@ -46,7 +48,7 @@ public class FragmentStock extends Fragment {
         setHasOptionsMenu(true);
         aBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
         aBar.setTitle("Stock");
-        aBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.bar_stock));
+        aBar.setBackgroundDrawable( ContextCompat.getDrawable(mContext, R.drawable.bar_stock));
     }
 
     @Override

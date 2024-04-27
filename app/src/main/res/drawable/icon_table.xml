@@ -8,15 +8,12 @@
         android:strokeWidth="1"
         android:strokeLineCap="round"
         android:pathData="
-            M4.5,1h12l4,4v16l-1,1h-14l-1,-1v-20
-            "/>
-
-    <path
-        android:strokeColor="#FFF"
-        android:strokeWidth="1"
-        android:pathData="
-        M7,6h6v12h-6v-12h2v12h2v-12
-        M7,9h11v9h-11v-3h11v-3h-11
+            M5,2h14v18h-14v-18
+            M5,6h14
+            M5,10h14
+            M5,13h14
+            M9,2v18
+            M13,2v18
             "/>
 
 </vector>

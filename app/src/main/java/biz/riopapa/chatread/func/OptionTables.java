@@ -27,6 +27,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import biz.riopapa.chatread.MainActivity;
+import biz.riopapa.chatread.common.SnackBar;
+import biz.riopapa.chatread.common.Sounds;
 
 public class OptionTables {
 
