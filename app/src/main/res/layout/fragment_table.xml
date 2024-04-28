@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+      android:layout_width = "match_parent"
+      android:layout_height = "match_parent"
+      android:background="@color/color_tab_table_background"
+      android:orientation = "vertical">
+
+    <LinearLayout
+        android:layout_width = "match_parent"
+        android:layout_height = "wrap_content"
+        android:layout_margin = "4dp"
+        android:background="@drawable/box_rounded"
+        android:gravity = "center"
+        android:orientation = "vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="0dp"
+            android:gravity="center"
+            android:text="SMS"
+            android:textSize="@dimen/table_font_size"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width = "match_parent"
+            android:layout_height = "wrap_content"
+            android:gravity = "center"
+            android:orientation = "horizontal">
+
+            <TextView
+                android:id = "@+id/sms_who_ignores"
+                android:layout_width = "0dp"
+                android:layout_height = "wrap_content"
+                android:layout_margin = "@dimen/button_margin_size"
+                android:layout_weight = "1"
+                android:background = "@drawable/rounded_button3"
+                android:gravity = "center"
+                android:padding = "@dimen/table_padding_size"
+                android:tag = "smsWhoIg"
+                android:text = "무시할 이름"
+                android:textSize = "@dimen/table_font_size"
+                android:textStyle = "bold" />
+
+            <TextView
+                android:id = "@+id/sms_text_ignores"
+                android:layout_width = "0dp"
+                android:layout_height = "wrap_content"
+                android:layout_margin = "@dimen/button_margin_size"
+                android:layout_weight = "1"
+                android:background = "@drawable/rounded_button3"
+                android:gravity = "center"
+                android:padding = "@dimen/table_padding_size"
+                android:tag = "smsTxtIg"
+                android:text = "무시 글짜"
+                android:textSize = "@dimen/table_font_size"
+                android:textStyle = "bold" />
+
+            <TextView
+                android:id = "@+id/sms_with_no_number"
+                android:layout_width = "0dp"
+                android:layout_height = "wrap_content"
+                android:layout_margin = "@dimen/button_margin_size"
+                android:layout_weight = "1"
+                android:background = "@drawable/rounded_button3"
+                android:gravity = "center"
+                android:padding = "@dimen/table_padding_size"
+                android:tag = "smsNoNum"
+                android:text = "숫자 무시"
+                android:textSize = "@dimen/table_font_size"
+                android:textStyle = "bold" />
+
+            <TextView
+                android:id = "@+id/sms_replace"
+                android:layout_width = "0dp"
+                android:layout_height = "wrap_content"
+                android:layout_margin = "@dimen/button_margin_size"
+                android:layout_weight = "1"
+                android:background = "@drawable/rounded_button3"
+                android:gravity = "center"
+                android:padding = "@dimen/table_padding_size"
+                android:tag = "smsRepl"
+                android:text = "글짜 짧게"
+                android:textSize = "@dimen/table_font_size"
+                android:textStyle = "bold" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width = "match_parent"
+        android:layout_height = "wrap_content"
+        android:layout_margin = "4dp"
+        android:background="@drawable/box_rounded"
+        android:gravity = "center"
+        android:orientation = "vertical">
+        <TextView
+            android:layout_width = "match_parent"
+            android:layout_height = "wrap_content"
+            android:gravity = "center"
+            android:text = "KakaoTalk"
+            android:textSize = "@dimen/table_font_size"
+            android:textStyle = "bold" />
+
+            <LinearLayout
+            android:layout_width = "match_parent"
+            android:layout_height = "wrap_content"
+            android:layout_marginStart = "8dp"
+            android:layout_marginEnd = "8dp"
+            android:gravity = "center"
+            android:orientation = "horizontal">
+
+            <TextView
+                android:id = "@+id/k_group_ignores"
+                android:layout_width = "0dp"
+                android:layout_height = "wrap_content"
+                android:layout_margin = "@dimen/button_margin_size"
+                android:layout_weight = "1"
+                android:background = "@drawable/rounded_button3"
+                android:gravity = "center"
+                android:padding = "@dimen/table_padding_size"
+                android:tag = "ktGrpIg"
+                android:text = "제외 그룹"
+                android:textSize = "@dimen/table_font_size"
+                android:textStyle = "bold" />
+
+            <TextView
+                android:id = "@+id/k_who_ignores"
+                android:layout_width = "0dp"
+                android:layout_height = "wrap_content"
+                android:layout_margin = "@dimen/button_margin_size"
+                android:layout_weight = "1"
+                android:background = "@drawable/rounded_button3"
+                android:gravity = "center"
+                android:padding = "@dimen/table_padding_size"
+                android:tag = "ktWhoIg"
+                android:text = "제외 사람"
+                android:textSize = "@dimen/table_font_size"
+                android:textStyle = "bold" />
+
+            <TextView
+                android:id = "@+id/k_text_ignores"
+                android:layout_width = "0dp"
+                android:layout_height = "wrap_content"
+                android:layout_margin = "@dimen/button_margin_size"
+                android:layout_weight = "1"
+                android:background = "@drawable/rounded_button3"
+                android:gravity = "center"
+                android:padding = "@dimen/table_padding_size"
+                android:tag = "ktTxtIg"
+                android:text = "무시 글짜"
+                android:textSize = "@dimen/table_font_size"
+                android:textStyle = "bold" />
+            <TextView
+                android:id = "@+id/kt_no_number"
+                android:layout_width = "0dp"
+                android:layout_height = "wrap_content"
+                android:layout_margin = "@dimen/button_margin_size"
+                android:layout_weight = "1"
+                android:background = "@drawable/rounded_button3"
+                android:gravity = "center"
+                android:padding = "@dimen/table_padding_size"
+                android:tag = "ktNoNum"
+                android:text = "숫자 무시"
+                android:textSize = "@dimen/table_font_size"
+                android:textStyle = "bold" />
+            </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width = "match_parent"
+        android:layout_height = "wrap_content"
+        android:layout_margin = "4dp"
+        android:background="@drawable/box_rounded"
+        android:gravity = "center"
+        android:orientation = "vertical">
+        <TextView
+            android:layout_width = "match_parent"
+            android:layout_height = "wrap_content"
+            android:layout_margin = "0dp"
+            android:gravity = "center"
+            android:text = "기타 설정"
+            android:textSize = "@dimen/table_font_size"
+            android:textStyle = "bold" />
+
+        <LinearLayout
+        android:layout_width = "match_parent"
+        android:layout_height = "wrap_content"
+        android:layout_marginStart = "8dp"
+        android:layout_marginEnd = "8dp"
+        android:gravity = "center"
+        android:orientation = "horizontal">
+
+        <TextView
+            android:id = "@+id/string_replace"
+            android:layout_width = "0dp"
+            android:layout_height = "wrap_content"
+            android:layout_margin = "@dimen/button_margin_size"
+            android:layout_weight = "1"
+            android:background = "@drawable/rounded_button2"
+            android:gravity = "center"
+            android:padding = "@dimen/table_padding_size"
+            android:tag = "strRepl"
+            android:text = "글짜 짧게"
+            android:textSize = "@dimen/table_font_size"
+            android:textStyle = "bold" />
+
+        <TextView
+            android:id = "@+id/group_telegrams"
+            android:layout_width = "0dp"
+            android:layout_height = "wrap_content"
+            android:layout_margin = "@dimen/button_margin_size"
+            android:layout_weight = "1"
+            android:background = "@drawable/rounded_button2"
+            android:gravity = "center"
+            android:padding = "@dimen/table_padding_size"
+            android:tag = "teleGrp"
+            android:text = "텔레 그룹"
+            android:textSize = "@dimen/table_font_size"
+            android:textStyle = "bold" />
+
+        <TextView
+            android:id = "@+id/who_names"
+            android:layout_width = "0dp"
+            android:layout_height = "wrap_content"
+            android:layout_margin = "@dimen/button_margin_size"
+            android:layout_weight = "1"
+            android:background = "@drawable/rounded_button2"
+            android:gravity = "center"
+            android:padding = "@dimen/table_padding_size"
+            android:tag = "whoName"
+            android:text = "이름 치환"
+            android:textSize = "@dimen/table_font_size"
+            android:textStyle = "bold" />
+
+        <TextView
+            android:id = "@+id/app_names"
+            android:layout_width = "0dp"
+            android:layout_height = "wrap_content"
+            android:layout_margin = "@dimen/button_margin_size"
+            android:layout_weight = "1"
+            android:background = "@drawable/rounded_button2"
+            android:gravity = "center"
+            android:padding = "@dimen/table_padding_size"
+            android:tag = "appNames"
+            android:text = "Apps"
+            android:textSize = "@dimen/table_font_size"
+            android:textStyle = "bold" />
+
+
+        </LinearLayout>
+    </LinearLayout>
+    <TextView
+        android:id = "@+id/tv_wifi_state"
+        android:layout_width = "wrap_content"
+        android:layout_height = "wrap_content"
+        android:layout_gravity = "center"
+        android:layout_marginTop = "24dp"
+        android:text = "WIFI"
+        android:textStyle = "bold" />
+
+</LinearLayout>

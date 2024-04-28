@@ -1,5 +1,6 @@
 package biz.riopapa.chatread.fragment;
 
+import static biz.riopapa.chatread.MainActivity.aBar;
 import static biz.riopapa.chatread.MainActivity.logQue;
 import static biz.riopapa.chatread.MainActivity.logSave;
 import static biz.riopapa.chatread.MainActivity.mContext;
@@ -43,7 +44,6 @@ public class FragmentLog extends Fragment {
     EditText etTable, etKeyword;
     ImageView ivFind, ivClear, ivNext, ivVolume;
     Menu mainMenu;
-    ActionBar aBar = null;
     int logPos;
 
     public FragmentLog() {
@@ -132,7 +132,7 @@ public class FragmentLog extends Fragment {
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
         mainMenu = menu;
-        inflater.inflate(R.menu.menu_log, menu);
+        inflater.inflate(R.menu.menu_frag_log, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 

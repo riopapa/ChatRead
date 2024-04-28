@@ -50,6 +50,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name = ".edit.ActivityEditTable"/>
+        <activity android:name = ".edit.ActivityEditApp"/>
+
     </application>
 
 </manifest>

@@ -3,16 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/delete_app"
+        android:id="@+id/reload_all_tables"
         android:orderInCategory="100"
-        android:icon="@drawable/delete"
-        app:showAsAction="always"
-        android:title="@string/todo" />
-
-    <item
-        android:id="@+id/apps_save"
-        android:orderInCategory="100"
-        android:icon="@drawable/confirm"
+        android:icon="@drawable/upload_file"
         app:showAsAction="always"
         android:title="@string/todo" />
 

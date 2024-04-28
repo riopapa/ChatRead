@@ -2,10 +2,12 @@ package biz.riopapa.chatread.adapters;
 
 import static biz.riopapa.chatread.MainActivity.appsPos;
 import static biz.riopapa.chatread.MainActivity.apps;
+import static biz.riopapa.chatread.MainActivity.mActivity;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.fragment.FragmentApps.fnd;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -20,6 +22,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import biz.riopapa.chatread.R;
+import biz.riopapa.chatread.edit.ActivityEditApp;
 import biz.riopapa.chatread.func.AppsTable;
 import biz.riopapa.chatread.models.App;
 
@@ -73,7 +76,7 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.ViewHolder> {
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.app_line, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.ine_apps, parent, false);
         return new ViewHolder(view);
     }
 
@@ -109,10 +112,9 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.ViewHolder> {
         holder.sNum.setTextColor((al.num)? colorT:colorF);
 
         holder.tLine.setOnClickListener(v -> {
-/**            appPos = holder.getAdapterPosition();
-            Intent intent = new Intent(holder.context, ActivityAppEdit.class);
+            appsPos = holder.getAdapterPosition();
+            Intent intent = new Intent(holder.context, ActivityEditApp.class);
             mActivity.startActivity(intent);
- **/
         });
     }
     private Drawable getPackageIcon(String packageName, PackageManager packageManager) {

@@ -1,9 +1,9 @@
 package biz.riopapa.chatread.fragment;
 
-import static biz.riopapa.chatread.MainActivity.alertsAdapter;
+import static biz.riopapa.chatread.MainActivity.aBar;
 import static biz.riopapa.chatread.MainActivity.apps;
-import static biz.riopapa.chatread.MainActivity.appsPos;
 import static biz.riopapa.chatread.MainActivity.appsAdapter;
+import static biz.riopapa.chatread.MainActivity.appsPos;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.todayFolder;
 
@@ -26,14 +26,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import biz.riopapa.chatread.R;
 import biz.riopapa.chatread.adapters.AppsAdapter;
+import biz.riopapa.chatread.edit.ActivityEditApp;
 import biz.riopapa.chatread.func.AppsTable;
 import biz.riopapa.chatread.func.ReadyToday;
 
 public class FragmentApps extends Fragment {
 
     Menu mainMenu;
-    ActionBar aBar = null;
-    RecyclerView recyclerView;
+    public static RecyclerView appsRecyclerView;
     public static boolean [] fnd;
 
     public FragmentApps() {
@@ -55,8 +55,8 @@ public class FragmentApps extends Fragment {
 
         View thisView = inflater.inflate(R.layout.fragment_apps, container, false);
         appsAdapter = new AppsAdapter();
-        recyclerView = thisView.findViewById(R.id.recycle_apps);
-        recyclerView.setAdapter(appsAdapter);
+        appsRecyclerView = thisView.findViewById(R.id.recycle_apps);
+        appsRecyclerView.setAdapter(appsAdapter);
         if (todayFolder == null)
             new ReadyToday();
 
@@ -64,7 +64,7 @@ public class FragmentApps extends Fragment {
         if (appsAdapter == null)
             appsAdapter = new AppsAdapter();
         if (appsPos > 0) {
-            LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView
+            LinearLayoutManager layoutManager = (LinearLayoutManager) appsRecyclerView
                     .getLayoutManager();
             assert layoutManager != null;
             layoutManager.scrollToPositionWithOffset(
@@ -77,7 +77,7 @@ public class FragmentApps extends Fragment {
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
         mainMenu = menu;
-        inflater.inflate(R.menu.menu_apps, menu);
+        inflater.inflate(R.menu.menu_frag_apps, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -85,17 +85,16 @@ public class FragmentApps extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         AppsTable appsTable = new AppsTable();
-        if (item.getItemId() == R.id.apps_reload) {
+        if (item.getItemId() == R.id.reload_apps) {
             appsTable.get();
             appsAdapter = new AppsAdapter();
-            recyclerView.setAdapter(appsAdapter);
+            appsRecyclerView.setAdapter(appsAdapter);
         } else if (item.getItemId() == R.id.apps_save) {
             appsTable.put();
-        } else if (item.getItemId() == R.id.apps_add) {
+        } else if (item.getItemId() == R.id.add_apps) {
             appsPos = -1;
-/**            Intent intent = new Intent(this, ActivityAppEdit.class);
+            Intent intent = new Intent(mContext, ActivityEditApp.class);
             startActivity(intent);
- **/
         }
         return super.onOptionsItemSelected(item);
 

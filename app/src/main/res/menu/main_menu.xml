@@ -2,31 +2,33 @@
 <menu
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group>
-        <item
-            android:title="Log"
-            android:icon="@drawable/icon_log"
-            android:id="@+id/log"
-            />
-        <item
-            android:title="Stock"
-            android:icon="@drawable/icon_stock"
-            android:id="@+id/stock"
-            />
-        <item
-            android:title="Work"
-            android:icon="@drawable/icon_work"
-            android:id="@+id/work"
-            />
+    <group android:id="@+id/group0">
+        <item android:title="Show / Edit Log"
+            android:enabled="false"
+            android:checkable="false">
+            <menu>
+                <item
+                    android:title="Log"
+                    android:icon="@drawable/icon_log"
+                    android:id="@+id/log"
+                    />
+                <item
+                    android:title="Stock"
+                    android:icon="@drawable/icon_stock"
+                    android:id="@+id/stock"
+                    />
+                <item
+                    android:title="Work"
+                    android:icon="@drawable/icon_work"
+                    android:id="@+id/work"
+                    />
+
+            </menu>
+        </item>
         <item
             android:title="Alert"
             android:icon="@drawable/icon_alert"
             android:id="@+id/alert"
-            />
-        <item
-            android:title="Table"
-            android:icon="@drawable/icon_table"
-            android:id="@+id/table"
             />
         <item
             android:title="Apps"
@@ -34,37 +36,87 @@
             android:id="@+id/apps"
             />
     </group>
-    <group>
-        <item
-            android:title="Liste verticale"
-            android:icon="@drawable/baseline_list_24"
-            android:id="@+id/liste"
-            />
-        <item
-            android:title="Liste horizontale"
-            android:icon="@drawable/baseline_swap_horiz_24"
-            android:id="@+id/listH"
-            />
-        <item
-            android:title="Calculatrice"
-            android:icon="@drawable/baseline_calculate_24"
-            android:id="@+id/calc"
-            />
-        <item
-            android:title="Conversion"
-            android:icon="@drawable/baseline_published_with_changes_24"
-            android:id="@+id/conv"
-            />
-        <item
-            android:title="Info"
-            android:icon="@drawable/baseline_info_24"
-            android:id="@+id/info"
-            />
-        <item
-            android:title="Déconnecter"
-            android:icon="@drawable/baseline_exit_to_app_24"
-            android:id="@+id/exit"
-            />
+    <group android:id="@+id/group2">
+        <item android:title="Edit Table Files"
+            android:enabled="false"
+            android:checkable="false">
+            <menu>
+                <item
+                    android:title="SMS : No Number"
+                    android:icon="@drawable/icon_table"
+                    android:id="@+id/table_sms_no_num"
+                    />
+                <item
+                    android:title="SMS : Replace"
+                    android:icon="@drawable/icon_table"
+                    android:id="@+id/table_sms_repl"
+                    />
+                <item
+                    android:title="SMS : Text Ignore"
+                    android:icon="@drawable/icon_table"
+                    android:id="@+id/table_sms_txt_ig"
+                    />
+                <item
+                    android:title="SMS : Who Ignore"
+                    android:icon="@drawable/icon_table"
+                    android:id="@+id/table_sms_who_ig"
+                    />
+                <item
+                    android:title="String : Replace"
+                    android:icon="@drawable/icon_table"
+                    android:id="@+id/table_str_repl"
+                    />
+                <item
+                    android:title="System : Ignore"
+                    android:icon="@drawable/icon_table"
+                    android:id="@+id/table_sys_ig"
+                    />
+                <item
+                    android:title="Telegram : Group Name"
+                    android:icon="@drawable/icon_table"
+                    android:id="@+id/table_tele_grp"
+                    />
+                <item
+                    android:title="Who : Name Replace"
+                    android:icon="@drawable/icon_table"
+                    android:id="@+id/table_who_name"
+                    />
+
+            </menu>
+        </item>
     </group>
+
+    <group android:id="@+id/groupkk">
+        <item android:title="Edit Kakao Table Files"
+            android:enabled="false"
+            android:checkable="false">
+            <menu>
+                <item
+                    android:title="katalk : Group Ignore"
+                    android:icon="@drawable/icon_chat"
+                    android:id="@+id/table_kt_grp_ig"
+                    />
+                <item
+                    android:title="katalk : No Number"
+                    android:icon="@drawable/icon_chat"
+                    android:id="@+id/table_kt_no_num"
+                    />
+                <item
+                    android:title="katalk : Text Ignore"
+                    android:icon="@drawable/icon_chat"
+                    android:id="@+id/table_kt_txt_ig"
+                    />
+                <item
+                    android:title="katalk : Who Ignore"
+                    android:icon="@drawable/icon_chat"
+                    android:id="@+id/table_kt_who_ig"
+                    />
+
+            </menu>
+
+
+        </item>
+    </group>
+
 
 </menu>

@@ -43,11 +43,13 @@ import biz.riopapa.chatread.fragment.FragmentAlert;
 import biz.riopapa.chatread.fragment.FragmentApps;
 import biz.riopapa.chatread.fragment.FragmentLog;
 import biz.riopapa.chatread.fragment.FragmentStock;
+import biz.riopapa.chatread.fragment.FragmentTable;
 import biz.riopapa.chatread.fragment.FragmentWork;
 import biz.riopapa.chatread.func.AppsTable;
 import biz.riopapa.chatread.func.FileIO;
 import biz.riopapa.chatread.func.LogUpdate;
 import biz.riopapa.chatread.common.PhoneVibrate;
+import biz.riopapa.chatread.func.OptionTables;
 import biz.riopapa.chatread.func.ReadyToday;
 import biz.riopapa.chatread.common.Sounds;
 import biz.riopapa.chatread.func.StrUtil;
@@ -164,6 +166,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static AudioManager audioManager = null;
     public static PhoneVibrate phoneVibrate = null;
+    public static int menu_selected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -210,36 +213,24 @@ public class MainActivity extends AppCompatActivity {
                                 new FragmentApps()).commit();
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
-                    case R.id.table:
+
+                    case R.id.table_sms_no_num:
+                    case R.id.table_sms_repl:
+                    case R.id.table_sms_txt_ig:
+                    case R.id.table_sms_who_ig:
+                    case R.id.table_str_repl:
+                    case R.id.table_sys_ig:
+                    case R.id.table_tele_grp:
+                    case R.id.table_kt_grp_ig:
+                    case R.id.table_kt_no_num:
+                    case R.id.table_kt_txt_ig:
+                    case R.id.table_kt_who_ig:
+                        menu_selected = item.getItemId();
                         getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
-                                new ExitFragment()).commit();
+                                new FragmentTable()).commit();
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
-                    case R.id.info:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
-                                new InfoFragment()).commit();
-                        drawerLayout.closeDrawer(GravityCompat.START);
-                        break;
-                    case R.id.calc:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
-                                new CalcFragment()).commit();
-                        drawerLayout.closeDrawer(GravityCompat.START);
-                        break;
-                    case R.id.liste:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
-                                new ListeFragment()).commit();
-                        drawerLayout.closeDrawer(GravityCompat.START);
-                        break;
-                    case R.id.conv:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
-                                new ConvFragment()).commit();
-                        drawerLayout.closeDrawer(GravityCompat.START);
-                        break;
-                    case R.id.listH:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
-                                new HorizontalFragment()).commit();
-                        drawerLayout.closeDrawer(GravityCompat.START);
-                        break;
+
                 }
                 return true;
             }
@@ -303,7 +294,7 @@ public class MainActivity extends AppCompatActivity {
             packageDirectory = new File(Environment.getExternalStorageDirectory(), "_ChatTalkLog");
         downloadFolder = new File(Environment.getExternalStorageDirectory(), "download");
         tableFolder = new File(downloadFolder, "_ChatTalk");
-//        new OptionTables().readAll();
+        new OptionTables().readAll();
         FileIO.readyPackageFolder();
 //        new AlertTableIO().get();
 

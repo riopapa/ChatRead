@@ -1,5 +1,6 @@
 package biz.riopapa.chatread.fragment;
 
+import static biz.riopapa.chatread.MainActivity.aBar;
 import static biz.riopapa.chatread.MainActivity.logSave;
 import static biz.riopapa.chatread.MainActivity.logStock;
 import static biz.riopapa.chatread.MainActivity.mContext;
@@ -36,7 +37,6 @@ public class FragmentStock extends Fragment {
     EditText etTable, etKeyword;
     ImageView ivFind, ivClear, ivNext;
     Menu mainMenu;
-    ActionBar aBar = null;
 
     public FragmentStock() {
         // Required empty public constructor
@@ -71,7 +71,7 @@ public class FragmentStock extends Fragment {
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
         mainMenu = menu;
-        inflater.inflate(R.menu.menu_stock, menu);
+        inflater.inflate(R.menu.menu_frag_stock, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 

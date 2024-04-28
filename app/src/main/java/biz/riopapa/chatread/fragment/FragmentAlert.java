@@ -1,5 +1,6 @@
 package biz.riopapa.chatread.fragment;
 
+import static biz.riopapa.chatread.MainActivity.aBar;
 import static biz.riopapa.chatread.MainActivity.alertLines;
 import static biz.riopapa.chatread.MainActivity.alertPos;
 import static biz.riopapa.chatread.MainActivity.alertsAdapter;
@@ -33,7 +34,6 @@ import biz.riopapa.chatread.models.AlertLine;
 public class FragmentAlert extends Fragment {
 
     Menu mainMenu;
-    ActionBar aBar = null;
     RecyclerView recyclerView;
 
     public FragmentAlert() {
@@ -75,7 +75,7 @@ public class FragmentAlert extends Fragment {
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
         mainMenu = menu;
-        inflater.inflate(R.menu.menu_alert, menu);
+        inflater.inflate(R.menu.menu_frag_alert, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 

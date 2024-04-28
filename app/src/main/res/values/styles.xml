@@ -30,11 +30,10 @@
 
 
 </style>
-    -<style name="circularImage">
-    <item name="cornerSize">50%</item>
-</style>
 
-
+    <style name="circularImage">
+        <item name="cornerSize">20%</item>
+    </style>
 
     <style name="up_down_scroll_thumb">
         <item name="android:scrollbarStyle">insideOverlay</item>
@@ -47,5 +46,21 @@
         <item name="android:width">38dp</item>
     </style>
 
+    <style name="NavigationDrawerStyle">
+
+        <item name="android:textSize">14sp</item><!-- text size in menu-->
+
+        <!-- item size in menu-->
+        <item name="android:listPreferredItemHeightSmall">24dp</item>
+        <item name="listPreferredItemHeightSmall">24dp</item>
+
+        <!-- item padding left in menu-->
+        <item name="android:listPreferredItemPaddingLeft">4dp</item>
+        <item name="listPreferredItemPaddingLeft">4dp</item>
+
+        <!-- item padding right in menu-->
+        <item name="android:listPreferredItemPaddingRight">8dp</item>
+        <item name="listPreferredItemPaddingRight">8dp</item>
+    </style>
 
 </resources>

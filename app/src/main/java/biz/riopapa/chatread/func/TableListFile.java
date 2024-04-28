@@ -39,7 +39,7 @@ public class TableListFile {
         return lines.toArray(new String[0]);
     }
 
-    String[] readRaw(File fullName) {
+    public String[] readRaw(File fullName) {
 
         List<String> lines = new ArrayList<>();
         try {
