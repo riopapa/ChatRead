@@ -1,10 +1,8 @@
 package biz.riopapa.chatread.adapters;
 
 import static biz.riopapa.chatread.MainActivity.alertLines;
-import static biz.riopapa.chatread.MainActivity.mActivity;
 import static biz.riopapa.chatread.MainActivity.mContext;
 
-import android.content.Intent;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +15,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import biz.riopapa.chatread.R;
-import biz.riopapa.chatread.alerts.AlertTableIO;
+import biz.riopapa.chatread.alerts.AlertTable;
 import biz.riopapa.chatread.models.AlertLine;
 
 public class AlertsAdapter extends RecyclerView.Adapter<AlertsAdapter.ViewHolder> {
@@ -25,7 +23,7 @@ public class AlertsAdapter extends RecyclerView.Adapter<AlertsAdapter.ViewHolder
     @Override
     public int getItemCount() {
         if (alertLines == null || alertLines.isEmpty()) {
-            new AlertTableIO().get();
+            new AlertTable().get();
         }
         return alertLines.size();
     }
@@ -54,7 +52,7 @@ public class AlertsAdapter extends RecyclerView.Adapter<AlertsAdapter.ViewHolder
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.alert_line, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.line_alert, parent, false);
         return new ViewHolder(view);
     }
 

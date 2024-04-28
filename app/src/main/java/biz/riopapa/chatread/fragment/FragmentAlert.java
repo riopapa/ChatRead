@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -26,7 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import biz.riopapa.chatread.R;
 import biz.riopapa.chatread.adapters.AlertsAdapter;
 import biz.riopapa.chatread.alerts.AlertSave;
-import biz.riopapa.chatread.alerts.AlertTableIO;
+import biz.riopapa.chatread.alerts.AlertTable;
 import biz.riopapa.chatread.func.OptionTables;
 import biz.riopapa.chatread.func.ReadyToday;
 import biz.riopapa.chatread.models.AlertLine;
@@ -84,7 +83,7 @@ public class FragmentAlert extends Fragment {
 
         if (item.getItemId() == R.id.reload_all_tables) {
             new OptionTables().readAll();
-            new AlertTableIO().get();
+            new AlertTable().get();
         } else if (item.getItemId() == R.id.clear_matched_number) {
             for (int i = 0; i < alertLines.size(); i++) {
                 AlertLine al = alertLines.get(i);

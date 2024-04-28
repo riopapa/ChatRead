@@ -32,7 +32,7 @@
 </style>
 
     <style name="circularImage">
-        <item name="cornerSize">20%</item>
+        <item name="cornerSize">50%</item>
     </style>
 
     <style name="up_down_scroll_thumb">

@@ -37,14 +37,15 @@ import java.util.Set;
 import biz.riopapa.chatread.adapters.AlertsAdapter;
 import biz.riopapa.chatread.adapters.AppsAdapter;
 import biz.riopapa.chatread.alerts.AlertStock;
+import biz.riopapa.chatread.alerts.AlertTable;
 import biz.riopapa.chatread.alerts.StockName;
 import biz.riopapa.chatread.common.Permission;
+import biz.riopapa.chatread.edit.ActivityEditStringReplace;
 import biz.riopapa.chatread.edit.ActivityEditTable;
 import biz.riopapa.chatread.fragment.FragmentAlert;
 import biz.riopapa.chatread.fragment.FragmentApps;
 import biz.riopapa.chatread.fragment.FragmentLog;
 import biz.riopapa.chatread.fragment.FragmentStock;
-import biz.riopapa.chatread.fragment.FragmentTable;
 import biz.riopapa.chatread.fragment.FragmentWork;
 import biz.riopapa.chatread.func.AppsTable;
 import biz.riopapa.chatread.func.FileIO;
@@ -216,10 +217,8 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.table_str_repl:
                         drawerLayout.closeDrawer(GravityCompat.START);
-/*        Intent intent = new Intent(mContext, ActivityStringReplace.class);
-        startActivity(intent);
-
- */
+                        Intent intent = new Intent(mContext, ActivityEditStringReplace.class);
+                        startActivity(intent);
                         break;
 
                     case R.id.table_sms_no_num:
@@ -234,7 +233,6 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.table_kt_who_ig:
                         menu_selected = item.getItemId();
                         drawerLayout.closeDrawer(GravityCompat.START);
-                        Intent intent;
                         intent = new Intent(mContext, ActivityEditTable.class);
                         startActivity(intent);
 
@@ -263,11 +261,11 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
 
-//        if (!isNotificationAllowed(this.getPackageName())) {
-//            Toast.makeText(getApplicationContext(), "Allow permission on Android notification", Toast.LENGTH_LONG).show();
-//            Intent intListener = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
-//            startActivity(intListener);
-//        }
+        if (!isNotificationAllowed(this.getPackageName())) {
+            Toast.makeText(getApplicationContext(), "Allow permission on Android notification", Toast.LENGTH_LONG).show();
+            Intent intListener = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+            startActivity(intListener);
+        }
 
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_SETTINGS) != PackageManager.PERMISSION_GRANTED) {
             //permissions not granted -> request them
@@ -277,16 +275,13 @@ public class MainActivity extends AppCompatActivity {
             //permissions are granted - do your stuff here :)
         }
 
-        /**
         if (!NotificationManagerCompat.getEnabledListenerPackages(this).contains(getPackageName())) {        //ask for permission
             Log.w("Permission","required "+getPackageName());
             Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
             startActivity(intent);
         }
-**/
         getSharedValues();
         init_variables();
-        new AppsTable().get();
     }
 
     void getSharedValues() {
@@ -299,13 +294,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void init_variables() {
-        if (packageDirectory == null)
-            packageDirectory = new File(Environment.getExternalStorageDirectory(), "_ChatTalkLog");
+        FileIO.readyPackageFolder();
         downloadFolder = new File(Environment.getExternalStorageDirectory(), "download");
         tableFolder = new File(downloadFolder, "_ChatTalk");
         new OptionTables().readAll();
-        FileIO.readyPackageFolder();
-//        new AlertTableIO().get();
+        new AppsTable().get();
+        new AlertTable().get();
 
         kvKakao = new KeyVal();
         kvTelegram = new KeyVal();

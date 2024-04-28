@@ -51,6 +51,7 @@
             </intent-filter>
         </activity>
 
+        <activity android:name = ".edit.ActivityEditStringReplace"/>
         <activity android:name = ".edit.ActivityEditTable"/>
         <activity android:name = ".edit.ActivityEditApp"/>
 

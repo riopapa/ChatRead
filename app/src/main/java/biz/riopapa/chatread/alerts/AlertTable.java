@@ -1,5 +1,6 @@
 package biz.riopapa.chatread.alerts;
 
+import static android.content.Context.MODE_PRIVATE;
 import static biz.riopapa.chatread.MainActivity.aAlertLineIdx;
 import static biz.riopapa.chatread.MainActivity.aGSkip1;
 import static biz.riopapa.chatread.MainActivity.aGSkip2;
@@ -15,11 +16,23 @@ import static biz.riopapa.chatread.MainActivity.aGroupWhos;
 import static biz.riopapa.chatread.MainActivity.aGroups;
 import static biz.riopapa.chatread.MainActivity.aGroupsPass;
 import static biz.riopapa.chatread.MainActivity.alertLines;
+import static biz.riopapa.chatread.MainActivity.downloadFolder;
+import static biz.riopapa.chatread.MainActivity.mContext;
+import static biz.riopapa.chatread.MainActivity.tableFolder;
 
+import android.content.SharedPreferences;
+import android.os.Environment;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.io.File;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import biz.riopapa.chatread.func.FileIO;
 import biz.riopapa.chatread.models.AlertLine;
 
 public class AlertTable {
@@ -38,6 +51,42 @@ public class AlertTable {
     static List<String> prvKey = new ArrayList<>();
     static List<String> nxtKey = new ArrayList<>();
     static int gIdx, gwIdx, svIdx;
+
+    public void get() {
+        if (tableFolder ==  null) {
+            downloadFolder = new File(Environment.getExternalStorageDirectory(), "download");
+            tableFolder = new File(downloadFolder, "_ChatTalk");
+        }
+
+        ArrayList<AlertLine> list;
+        Gson gson = new Gson();
+        String json = FileIO.readFile(tableFolder, "alertTable.json");
+        if (json.isEmpty()) {
+            list = new ArrayList<>();
+        } else {
+            Type type = new TypeToken<List<AlertLine>>() {
+            }.getType();
+            list = gson.fromJson(json, type);
+        }
+        alertLines = list;
+        updateMatched();
+        AlertTable.makeArrays();
+    }
+
+    void updateMatched() {
+        SharedPreferences sharePref = mContext.getSharedPreferences("alertLine", MODE_PRIVATE);
+        for (int i = 0; i < alertLines.size(); i++) {
+            AlertLine al = alertLines.get(i);
+            if (al.matched >= 0) {
+                String[] joins = new String[]{"matched", al.group, al.who, al.key1, al.key2 };
+                String keyVal = String.join("~~", joins);
+                int matchCount =  sharePref.getInt(keyVal, -3);
+                if (matchCount != -3)
+                    al.matched = matchCount;
+                alertLines.set(i, al);
+            }
+        }
+    }
 
     public static void makeArrays() {
 
