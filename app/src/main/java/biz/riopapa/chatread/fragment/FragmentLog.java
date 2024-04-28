@@ -26,7 +26,6 @@ import android.widget.ScrollView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -63,7 +62,7 @@ public class FragmentLog extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View thisView = inflater.inflate(R.layout.fragment_home, container, false);
+        View thisView = inflater.inflate(R.layout.fragment_log, container, false);
         etTable = thisView.findViewById(R.id.text_log);
         etKeyword = thisView.findViewById(R.id.key_log);
         ivFind = thisView.findViewById(R.id.find_log);

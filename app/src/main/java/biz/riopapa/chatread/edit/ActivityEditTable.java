@@ -1,5 +1,6 @@
 package biz.riopapa.chatread.edit;
 
+import static biz.riopapa.chatread.MainActivity.menu_selected;
 import static biz.riopapa.chatread.MainActivity.nowFileName;
 import static biz.riopapa.chatread.MainActivity.tableFolder;
 import static biz.riopapa.chatread.MainActivity.tableListFile;
@@ -22,6 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
@@ -35,13 +37,38 @@ public class ActivityEditTable extends AppCompatActivity {
     int pos = -1;
     EditText et;
     String key, fullText;
+    int [] menuId = { R.id.table_sms_no_num,   R.id.table_sms_repl,    R.id.table_sms_txt_ig,
+                        R.id.table_sms_who_ig,  R.id.table_sys_ig,      R.id.table_tele_grp,
+                        R.id.table_who_name,
+                        R.id.table_kt_grp_ig,   R.id.table_kt_no_num,   R.id.table_kt_txt_ig,
+                        R.id.table_kt_who_ig,
+    };
+    String [] fileId = {
+                        "smsNoNum",             "smsRepl",              "smsTxtIg",
+                        "smsWhoIg",             "sysIg",                "teleGrp",
+                        "whoName",
+                        "ktGrpIg",              "ktNoNum",              "ktTxtIg",
+                        "ktWhoIg",
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_table);
-        Toolbar toolbar = findViewById(R.id.toolbar_table);
+        nowFileName = "";
+        for (int i = 0; i < menuId.length; i++) {
+            if (menu_selected == menuId[i]) {
+                nowFileName = fileId[i];
+                break;
+            }
+        }
+        if (nowFileName == "") {
+            Toast.makeText(this, "Menu Resource Id not Found "+menu_selected,
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
 
+        Toolbar toolbar = findViewById(R.id.toolbar_table);
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(0xFFFFFF00);
         toolbar.setSubtitleTextColor(0xFF000000);

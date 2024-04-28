@@ -39,6 +39,7 @@ import biz.riopapa.chatread.adapters.AppsAdapter;
 import biz.riopapa.chatread.alerts.AlertStock;
 import biz.riopapa.chatread.alerts.StockName;
 import biz.riopapa.chatread.common.Permission;
+import biz.riopapa.chatread.edit.ActivityEditTable;
 import biz.riopapa.chatread.fragment.FragmentAlert;
 import biz.riopapa.chatread.fragment.FragmentApps;
 import biz.riopapa.chatread.fragment.FragmentLog;
@@ -213,12 +214,18 @@ public class MainActivity extends AppCompatActivity {
                                 new FragmentApps()).commit();
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
+                    case R.id.table_str_repl:
+                        drawerLayout.closeDrawer(GravityCompat.START);
+/*        Intent intent = new Intent(mContext, ActivityStringReplace.class);
+        startActivity(intent);
+
+ */
+                        break;
 
                     case R.id.table_sms_no_num:
                     case R.id.table_sms_repl:
                     case R.id.table_sms_txt_ig:
                     case R.id.table_sms_who_ig:
-                    case R.id.table_str_repl:
                     case R.id.table_sys_ig:
                     case R.id.table_tele_grp:
                     case R.id.table_kt_grp_ig:
@@ -226,9 +233,11 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.table_kt_txt_ig:
                     case R.id.table_kt_who_ig:
                         menu_selected = item.getItemId();
-                        getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
-                                new FragmentTable()).commit();
                         drawerLayout.closeDrawer(GravityCompat.START);
+                        Intent intent;
+                        intent = new Intent(mContext, ActivityEditTable.class);
+                        startActivity(intent);
+
                         break;
 
                 }

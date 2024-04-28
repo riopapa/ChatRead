@@ -25,16 +25,6 @@
 
             </menu>
         </item>
-        <item
-            android:title="Alert"
-            android:icon="@drawable/icon_alert"
-            android:id="@+id/alert"
-            />
-        <item
-            android:title="Apps"
-            android:icon="@drawable/icon_apps"
-            android:id="@+id/apps"
-            />
     </group>
     <group android:id="@+id/group2">
         <item android:title="Edit Table Files"
@@ -42,43 +32,54 @@
             android:checkable="false">
             <menu>
                 <item
+                    android:title="Alert"
+                    android:icon="@drawable/icon_alert"
+                    android:id="@+id/alert"
+                    />
+                <item
+                    android:title="Apps"
+                    android:icon="@drawable/icon_apps"
+                    android:id="@+id/apps"
+                    />
+                <item
+                    android:title="String : Replace"
+                    android:icon="@drawable/icon_str_replace"
+                    android:id="@+id/table_str_repl"
+                    />
+
+                <item
                     android:title="SMS : No Number"
-                    android:icon="@drawable/icon_table"
+                    android:icon="@drawable/icon_sms"
                     android:id="@+id/table_sms_no_num"
                     />
                 <item
                     android:title="SMS : Replace"
-                    android:icon="@drawable/icon_table"
+                    android:icon="@drawable/icon_sms"
                     android:id="@+id/table_sms_repl"
                     />
                 <item
                     android:title="SMS : Text Ignore"
-                    android:icon="@drawable/icon_table"
+                    android:icon="@drawable/icon_sms"
                     android:id="@+id/table_sms_txt_ig"
                     />
                 <item
                     android:title="SMS : Who Ignore"
-                    android:icon="@drawable/icon_table"
+                    android:icon="@drawable/icon_sms"
                     android:id="@+id/table_sms_who_ig"
                     />
                 <item
-                    android:title="String : Replace"
-                    android:icon="@drawable/icon_table"
-                    android:id="@+id/table_str_repl"
-                    />
-                <item
                     android:title="System : Ignore"
-                    android:icon="@drawable/icon_table"
+                    android:icon="@drawable/icon_android"
                     android:id="@+id/table_sys_ig"
                     />
                 <item
                     android:title="Telegram : Group Name"
-                    android:icon="@drawable/icon_table"
+                    android:icon="@drawable/icon_telegram"
                     android:id="@+id/table_tele_grp"
                     />
                 <item
                     android:title="Who : Name Replace"
-                    android:icon="@drawable/icon_table"
+                    android:icon="@drawable/icon_who"
                     android:id="@+id/table_who_name"
                     />
 
@@ -93,28 +94,25 @@
             <menu>
                 <item
                     android:title="katalk : Group Ignore"
-                    android:icon="@drawable/icon_chat"
+                    android:icon="@drawable/icon_kakaotalk"
                     android:id="@+id/table_kt_grp_ig"
                     />
                 <item
                     android:title="katalk : No Number"
-                    android:icon="@drawable/icon_chat"
+                    android:icon="@drawable/icon_kakaotalk"
                     android:id="@+id/table_kt_no_num"
                     />
                 <item
                     android:title="katalk : Text Ignore"
-                    android:icon="@drawable/icon_chat"
+                    android:icon="@drawable/icon_kakaotalk"
                     android:id="@+id/table_kt_txt_ig"
                     />
                 <item
                     android:title="katalk : Who Ignore"
-                    android:icon="@drawable/icon_chat"
+                    android:icon="@drawable/icon_kakaotalk"
                     android:id="@+id/table_kt_who_ig"
                     />
-
             </menu>
-
-
         </item>
     </group>
 
