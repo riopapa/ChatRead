@@ -46,7 +46,7 @@ public class StrUtil {
         return mText.replace("\n", "|").replace("\r", "").replace("||", "|").replace("||", "|");
     }
 
-    public String reMoveDigit(String str) {
+    public String removeDigit(String str) {
         return str.replaceAll("[\\d,:/]", "");
     }
 

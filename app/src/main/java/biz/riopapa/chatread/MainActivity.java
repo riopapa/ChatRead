@@ -38,6 +38,7 @@ import biz.riopapa.chatread.adapters.AlertsAdapter;
 import biz.riopapa.chatread.adapters.AppsAdapter;
 import biz.riopapa.chatread.alerts.AlertStock;
 import biz.riopapa.chatread.alerts.AlertTable;
+import biz.riopapa.chatread.alerts.AlertWhoIndex;
 import biz.riopapa.chatread.alerts.StockName;
 import biz.riopapa.chatread.common.Permission;
 import biz.riopapa.chatread.edit.ActivityEditStringReplace;
@@ -51,6 +52,9 @@ import biz.riopapa.chatread.func.AppsTable;
 import biz.riopapa.chatread.func.FileIO;
 import biz.riopapa.chatread.func.LogUpdate;
 import biz.riopapa.chatread.common.PhoneVibrate;
+import biz.riopapa.chatread.func.MsgKeyword;
+import biz.riopapa.chatread.func.MsgNamoo;
+import biz.riopapa.chatread.func.MsgSMS;
 import biz.riopapa.chatread.func.OptionTables;
 import biz.riopapa.chatread.func.ReadyToday;
 import biz.riopapa.chatread.common.Sounds;
@@ -144,6 +148,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static ArrayList<App> apps;
     public static AppsAdapter appsAdapter;
+    public static AlertWhoIndex alertWhoIndex = null;
 
     public static String chatGroup;
     public static final String lastChar = "힝";
@@ -169,6 +174,10 @@ public class MainActivity extends AppCompatActivity {
     public static AudioManager audioManager = null;
     public static PhoneVibrate phoneVibrate = null;
     public static int menu_selected;
+
+    public static MsgKeyword msgKeyword;
+    public static MsgSMS msgSMS;
+    public static MsgNamoo msgNamoo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -297,6 +306,7 @@ public class MainActivity extends AppCompatActivity {
         FileIO.readyPackageFolder();
         downloadFolder = new File(Environment.getExternalStorageDirectory(), "download");
         tableFolder = new File(downloadFolder, "_ChatTalk");
+        new ReadyToday();
         new OptionTables().readAll();
         new AppsTable().get();
         new AlertTable().get();
@@ -310,7 +320,10 @@ public class MainActivity extends AppCompatActivity {
             utils = new Utils();
         if (strUtil == null)
             strUtil = new StrUtil();
-        new ReadyToday();
+
+        msgKeyword = new MsgKeyword("main");
+        msgSMS = new MsgSMS();
+        msgNamoo = new MsgNamoo();
 
     }
     private boolean isNotificationAllowed(String packageName) {

@@ -7,9 +7,13 @@ import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.sharedEditor;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.Selection;
+import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.style.BackgroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -27,16 +32,18 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import biz.riopapa.chatread.R;
+import biz.riopapa.chatread.common.SnackBar;
 import biz.riopapa.chatread.func.LogSpan;
 import biz.riopapa.chatread.func.LogUpdate;
 import biz.riopapa.chatread.models.DelItem;
 
 public class FragmentWork extends Fragment {
 
-    SpannableString ss;
+    SpannableString ss,sv;
     EditText etTable, etKeyword;
     ImageView ivFind, ivClear, ivNext;
     Menu mainMenu;
+    int strPos;
 
     public FragmentWork() {
         // Required empty public constructor
@@ -65,6 +72,55 @@ public class FragmentWork extends Fragment {
         ss = new LogSpan().make(logWork, this.getContext());
         etTable.setText(ss);
 
+        sv = ss;
+        ivNext.setVisibility(View.GONE);
+        strPos = -1;
+        ivFind.setOnClickListener(v -> {
+            String key = etKeyword.getText().toString();
+            if (key.length() < 2)
+                return;
+            int cnt = 0;
+            strPos = -1;
+            String fullText = etTable.getText().toString();
+            ss = sv;
+            int oEnd = fullText.indexOf(key);
+            for (int oStart = 0; oStart < fullText.length() && oEnd != -1; oStart = oEnd + 2) {
+                oEnd = fullText.indexOf(key, oStart);
+                if (oEnd > 0) {
+                    cnt++;
+                    if (strPos < 0)
+                        strPos = oEnd;
+                    ss.setSpan(new BackgroundColorSpan(0xFFFFFF00), oEnd, oEnd + key.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+            }
+            sv = ss;
+            etTable.setText(ss);
+            new SnackBar().show(key, cnt+" times Found");
+            Editable etText = etTable.getText();
+            if (strPos > 0) {
+                Selection.setSelection(etText, strPos);
+                etTable.requestFocus();
+                ivNext.setVisibility(View.VISIBLE);
+            }
+        });
+
+        ivNext.setOnClickListener(v -> {
+            String key = etKeyword.getText().toString();
+            if (key.length() < 2)
+                return;
+            Editable etText = etTable.getText();
+            String s = etText.toString();
+            strPos = s.indexOf(key, strPos +1);
+            if (strPos > 0) {
+                Selection.setSelection(etText, strPos);
+                etTable.requestFocus();
+            }
+        });
+
+        ivClear.setOnClickListener(v -> etKeyword.setText(""));
+        ScrollView scrollView1 = thisView.findViewById(R.id.scroll_work);
+        new Handler(Looper.getMainLooper()).post(() -> scrollView1.smoothScrollBy(0, 90000));
+        super.onResume();
         return thisView;
     }
 

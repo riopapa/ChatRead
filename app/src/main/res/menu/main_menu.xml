@@ -53,12 +53,12 @@
     <group>
         <item
             android:title="SMS : No Number"
-            android:icon="@drawable/icon_sms"
+            android:icon="@drawable/icon_no_number"
             android:id="@+id/table_sms_no_num"
             />
         <item
             android:title="SMS : Replace"
-            android:icon="@drawable/icon_sms"
+            android:icon="@drawable/icon_str_replace"
             android:id="@+id/table_sms_repl"
             />
         <item
@@ -68,7 +68,7 @@
             />
         <item
             android:title="SMS : Who Ignore"
-            android:icon="@drawable/icon_sms"
+            android:icon="@drawable/icon_who"
             android:id="@+id/table_sms_who_ig"
             />
         <item
@@ -100,7 +100,7 @@
                     />
                 <item
                     android:title="katalk : No Number"
-                    android:icon="@drawable/icon_kakaotalk"
+                    android:icon="@drawable/icon_no_number"
                     android:id="@+id/table_kt_no_num"
                     />
                 <item

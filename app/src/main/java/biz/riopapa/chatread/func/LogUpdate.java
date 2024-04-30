@@ -32,7 +32,7 @@ public class LogUpdate {
     }
 
     final SimpleDateFormat TIME_INFO = new SimpleDateFormat("MM-dd HH:mm ", Locale.KOREA);
-    void addLog(String header, String text) {
+    public void addLog(String header, String text) {
         if (text.length() < 10)
             return;
 //        new ReadyToday();
@@ -50,7 +50,7 @@ public class LogUpdate {
         }
     }
 
-    void addWork(String header, String text) {
+    public void addWork(String header, String text) {
         logWork += "\n" + TIME_INFO.format(new Date()) + header + "\n" + text+"\n";
         if (logWork.length() > 24000) {
             Thread logThread = new Thread(() -> {

@@ -43,7 +43,7 @@ public class FragmentLog extends Fragment {
     EditText etTable, etKeyword;
     ImageView ivFind, ivClear, ivNext, ivVolume;
     Menu mainMenu;
-    int logPos;
+    int strPos;
 
     public FragmentLog() {
         // Required empty public constructor
@@ -75,13 +75,13 @@ public class FragmentLog extends Fragment {
 
         sv = ss;
         ivNext.setVisibility(View.GONE);
-        logPos = -1;
+        strPos = -1;
         ivFind.setOnClickListener(v -> {
             String key = etKeyword.getText().toString();
             if (key.length() < 2)
                 return;
             int cnt = 0;
-            logPos = -1;
+            strPos = -1;
             String fullText = etTable.getText().toString();
             ss = sv;
             int oEnd = fullText.indexOf(key);
@@ -89,8 +89,8 @@ public class FragmentLog extends Fragment {
                 oEnd = fullText.indexOf(key, oStart);
                 if (oEnd > 0) {
                     cnt++;
-                    if (logPos < 0)
-                        logPos = oEnd;
+                    if (strPos < 0)
+                        strPos = oEnd;
                     ss.setSpan(new BackgroundColorSpan(0xFFFFFF00), oEnd, oEnd + key.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 }
             }
@@ -98,8 +98,8 @@ public class FragmentLog extends Fragment {
             etTable.setText(ss);
             new SnackBar().show(key, cnt+" times Found");
             Editable etText = etTable.getText();
-            if (logPos > 0) {
-                Selection.setSelection(etText, logPos);
+            if (strPos > 0) {
+                Selection.setSelection(etText, strPos);
                 etTable.requestFocus();
                 ivNext.setVisibility(View.VISIBLE);
             }
@@ -111,9 +111,9 @@ public class FragmentLog extends Fragment {
                 return;
             Editable etText = etTable.getText();
             String s = etText.toString();
-            logPos = s.indexOf(key, logPos+1);
-            if (logPos > 0) {
-                Selection.setSelection(etText, logPos);
+            strPos = s.indexOf(key, strPos +1);
+            if (strPos > 0) {
+                Selection.setSelection(etText, strPos);
                 etTable.requestFocus();
             }
         });
