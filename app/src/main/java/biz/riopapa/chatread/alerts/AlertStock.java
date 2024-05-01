@@ -2,6 +2,7 @@ package biz.riopapa.chatread.alerts;
 
 import static android.content.Context.MODE_PRIVATE;
 import static biz.riopapa.chatread.MainActivity.alertLines;
+import static biz.riopapa.chatread.MainActivity.mAudioManager;
 import static biz.riopapa.chatread.MainActivity.logUpdate;
 import static biz.riopapa.chatread.MainActivity.mActivity;
 import static biz.riopapa.chatread.MainActivity.mContext;
@@ -114,7 +115,6 @@ public class AlertStock {
     }
 
     boolean isSilentNow() {
-        AudioManager mAudioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
         return (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_SILENT ||
                 mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE);
     }

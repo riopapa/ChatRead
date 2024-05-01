@@ -37,26 +37,21 @@ import java.util.Set;
 import biz.riopapa.chatread.adapters.AlertsAdapter;
 import biz.riopapa.chatread.adapters.AppsAdapter;
 import biz.riopapa.chatread.alerts.AlertStock;
-import biz.riopapa.chatread.alerts.AlertTable;
 import biz.riopapa.chatread.alerts.AlertWhoIndex;
 import biz.riopapa.chatread.alerts.StockName;
 import biz.riopapa.chatread.common.Permission;
-import biz.riopapa.chatread.edit.ActivityEditStringReplace;
+import biz.riopapa.chatread.edit.ActivityEditStrRepl;
 import biz.riopapa.chatread.edit.ActivityEditTable;
 import biz.riopapa.chatread.fragment.FragmentAlert;
 import biz.riopapa.chatread.fragment.FragmentApps;
 import biz.riopapa.chatread.fragment.FragmentLog;
 import biz.riopapa.chatread.fragment.FragmentStock;
 import biz.riopapa.chatread.fragment.FragmentWork;
-import biz.riopapa.chatread.func.AppsTable;
-import biz.riopapa.chatread.func.FileIO;
 import biz.riopapa.chatread.func.LogUpdate;
 import biz.riopapa.chatread.common.PhoneVibrate;
 import biz.riopapa.chatread.func.MsgKeyword;
 import biz.riopapa.chatread.func.MsgNamoo;
 import biz.riopapa.chatread.func.MsgSMS;
-import biz.riopapa.chatread.func.OptionTables;
-import biz.riopapa.chatread.func.ReadyToday;
 import biz.riopapa.chatread.common.Sounds;
 import biz.riopapa.chatread.func.StrUtil;
 import biz.riopapa.chatread.func.TableListFile;
@@ -148,6 +143,8 @@ public class MainActivity extends AppCompatActivity {
 
     public static ArrayList<App> apps;
     public static AppsAdapter appsAdapter;
+
+
     public static AlertWhoIndex alertWhoIndex = null;
 
     public static String chatGroup;
@@ -163,7 +160,9 @@ public class MainActivity extends AppCompatActivity {
     public static KeyVal kvSMS = null;
     public static KeyVal kvTelegram = null;
     public static KeyVal kvStock = null;
+    public static int menu_selected;
 
+    /** common modules **/
     public static Sounds sounds = null;
     public static Utils utils = null;
     public static StrUtil strUtil = null;
@@ -171,13 +170,12 @@ public class MainActivity extends AppCompatActivity {
     public static AlertStock alertStock = null;
     public static StockName stockName = null;
 
-    public static AudioManager audioManager = null;
+    public static AudioManager mAudioManager = null;
     public static PhoneVibrate phoneVibrate = null;
-    public static int menu_selected;
 
-    public static MsgKeyword msgKeyword;
-    public static MsgSMS msgSMS;
-    public static MsgNamoo msgNamoo;
+    public static MsgKeyword msgKeyword = null;
+    public static MsgSMS msgSMS = null;
+    public static MsgNamoo msgNamoo = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -226,7 +224,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.table_str_repl:
                         drawerLayout.closeDrawer(GravityCompat.START);
-                        Intent intent = new Intent(mContext, ActivityEditStringReplace.class);
+                        Intent intent = new Intent(mContext, ActivityEditStrRepl.class);
                         startActivity(intent);
                         break;
 
@@ -290,7 +288,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
         getSharedValues();
-        init_variables();
+        new SetVariables(this,"main");
     }
 
     void getSharedValues() {
@@ -302,30 +300,6 @@ public class MainActivity extends AppCompatActivity {
         logWork = sharePref.getString("logWork", "");
     }
 
-    void init_variables() {
-        FileIO.readyPackageFolder();
-        downloadFolder = new File(Environment.getExternalStorageDirectory(), "download");
-        tableFolder = new File(downloadFolder, "_ChatTalk");
-        new ReadyToday();
-        new OptionTables().readAll();
-        new AppsTable().get();
-        new AlertTable().get();
-
-        kvKakao = new KeyVal();
-        kvTelegram = new KeyVal();
-        kvCommon = new KeyVal();
-        kvSMS = new KeyVal();
-        kvStock = new KeyVal();
-        if (utils == null)
-            utils = new Utils();
-        if (strUtil == null)
-            strUtil = new StrUtil();
-
-        msgKeyword = new MsgKeyword("main");
-        msgSMS = new MsgSMS();
-        msgNamoo = new MsgNamoo();
-
-    }
     private boolean isNotificationAllowed(String packageName) {
         Set<String> listenerSet = NotificationManagerCompat.getEnabledListenerPackages(this);
 

@@ -21,7 +21,7 @@
         android:orientation="horizontal">
 
         <ImageButton
-            android:id="@+id/clear_search"
+            android:id="@+id/app_clear"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="12dp"
@@ -32,7 +32,7 @@
             android:src="@drawable/clear_text" />
 
         <EditText
-            android:id="@+id/search_key"
+            android:id="@+id/app_search_key"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="0dp"
@@ -42,7 +42,7 @@
             android:autofillHints="Enter Text to search" />
 
         <ImageButton
-            android:id="@+id/search"
+            android:id="@+id/app_search"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="8dp"
@@ -52,7 +52,7 @@
             android:src="@drawable/search" />
 
         <ImageButton
-            android:id="@+id/searchNext"
+            android:id="@+id/app_searchNext"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_margin="4dp"

@@ -5,7 +5,7 @@ import static biz.riopapa.chatread.MainActivity.appFullNames;
 import static biz.riopapa.chatread.MainActivity.appIgnores;
 import static biz.riopapa.chatread.MainActivity.appNameIdx;
 import static biz.riopapa.chatread.MainActivity.apps;
-import static biz.riopapa.chatread.MainActivity.audioManager;
+import static biz.riopapa.chatread.MainActivity.mAudioManager;
 import static biz.riopapa.chatread.MainActivity.ktGroupIgnores;
 import static biz.riopapa.chatread.MainActivity.ktNoNumbers;
 import static biz.riopapa.chatread.MainActivity.ktTxtIgnores;
@@ -78,8 +78,12 @@ public class NotificationListener extends NotificationListenerService {
 
         ctx = this.getApplicationContext();
 
+        if (kvCommon == null)
+            new SetVariables(this, "noty");
+
         if (isSbnNothing(sbn))
             return;
+
         switch (sbnAppType) {
 
             case KATALK:
@@ -144,6 +148,9 @@ public class NotificationListener extends NotificationListenerService {
 
             case APP:
 
+                if (kvCommon == null)
+                    Log.e("ivCommon"," is nothing");
+                Log.w("APP","nick "+sbnApp.nickName);
                 if (kvCommon.isDup(sbnApp.nickName, sbnText))
                     return;
                 if (sbnApp.igStr != null && hasIgnoreStr())
@@ -410,6 +417,9 @@ public class NotificationListener extends NotificationListenerService {
             Log.e("reloading", "apps is null new size=" + apps.size());
         }
 
+        Log.w("chat","sbnWho="+sbnWho+" text="+sbnText);
+
+
         switch (sbnAppName) {
 
             case "com.kakao.talk":
@@ -457,7 +467,7 @@ public class NotificationListener extends NotificationListenerService {
     }
 
     public static boolean isWorking() {
-        return audioManager.getStreamVolume(AudioManager.STREAM_MUSIC) < 6;
+        return mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC) < 6;
     }
 
 }

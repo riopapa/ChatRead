@@ -19,7 +19,6 @@ import android.util.Log;
 
 import biz.riopapa.chatread.adapters.AlertsAdapter;
 import biz.riopapa.chatread.alerts.AlertStock;
-import biz.riopapa.chatread.func.ReadyToday;
 
 public class MsgKeyword {
 

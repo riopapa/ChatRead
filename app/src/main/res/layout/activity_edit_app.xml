@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
     android:orientation="vertical"
-    android:background="#FFcccccc"
+    android:background="@color/color_tab_app_background"
     tools:context=".edit.ActivityEditApp">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_edit_app"
+        android:minHeight="?attr/actionBarSize"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:titleTextColor="@android:color/white"
+        android:background="?attr/colorPrimary"/>
 
     <EditText
         android:id="@+id/e_app_full_name"
@@ -150,6 +159,14 @@
             android:layout_height="wrap_content"
             />
     </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="ignores ^ "
+        android:textSize="12sp"
+        android:textColor="#000"
+        android:gravity="center"
+        />
     <EditText
         android:id="@+id/ignores"
         android:layout_width="match_parent"
@@ -161,9 +178,17 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:inputType="text|textMultiLine"
-        android:autofillHints="ignores ; "
+        android:autofillHints="ignores ^ "
         android:text=""
         android:textSize="15sp" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="inform ; talk"
+        android:textSize="12sp"
+        android:textColor="#000"
+        android:gravity="center"
+        />
     <EditText
         android:id="@+id/info_talk"
         android:layout_width="match_parent"
@@ -178,6 +203,14 @@
         android:autofillHints="inform ; talk"
         android:text=""
         android:textSize="15sp" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="replace from ; to"
+        android:textSize="12sp"
+        android:textColor="#000"
+        android:gravity="center"
+        />
     <EditText
         android:id="@+id/repl_from_to"
         android:layout_width="match_parent"

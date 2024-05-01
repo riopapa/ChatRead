@@ -29,11 +29,10 @@ import biz.riopapa.chatread.R;
 import biz.riopapa.chatread.func.FileIO;
 import biz.riopapa.chatread.func.OptionTables;
 
-public class ActivityEditStringReplace extends AppCompatActivity {
+public class ActivityEditStrRepl extends AppCompatActivity {
 
     final String dummyHead = "- [ ";
     int pos = -1;
-    EditText eKey;
     String key, fullText;
 
     @Override

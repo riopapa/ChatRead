@@ -1,5 +1,6 @@
 package biz.riopapa.chatread.fragment;
 
+import static android.content.Context.MODE_PRIVATE;
 import static biz.riopapa.chatread.MainActivity.aBar;
 import static biz.riopapa.chatread.MainActivity.apps;
 import static biz.riopapa.chatread.MainActivity.appsAdapter;
@@ -8,6 +9,7 @@ import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.todayFolder;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,6 +17,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -26,15 +31,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import biz.riopapa.chatread.R;
 import biz.riopapa.chatread.adapters.AppsAdapter;
+import biz.riopapa.chatread.databinding.FragmentAppsBinding;
 import biz.riopapa.chatread.edit.ActivityEditApp;
 import biz.riopapa.chatread.func.AppsTable;
 import biz.riopapa.chatread.func.ReadyToday;
+import biz.riopapa.chatread.models.App;
 
 public class FragmentApps extends Fragment {
 
     Menu mainMenu;
     public static RecyclerView appsRecyclerView;
     public static boolean [] fnd;
+    String key;
+    int appPos = -1;
 
     public FragmentApps() {
         // Required empty public constructor
@@ -54,6 +63,7 @@ public class FragmentApps extends Fragment {
                              Bundle savedInstanceState) {
 
         View thisView = inflater.inflate(R.layout.fragment_apps, container, false);
+
         appsAdapter = new AppsAdapter();
         appsRecyclerView = thisView.findViewById(R.id.recycle_apps);
         appsRecyclerView.setAdapter(appsAdapter);
@@ -70,8 +80,66 @@ public class FragmentApps extends Fragment {
             layoutManager.scrollToPositionWithOffset(
                     appsPos, (appsPos > 3) ? appsPos - 3 : appsPos - 2);
         }
+        SharedPreferences shPref = mContext.getSharedPreferences("searchKey", MODE_PRIVATE);
+        SharedPreferences.Editor shEditor = shPref.edit();
+        key = shPref.getString("key","");
+
+        EditText sKey = thisView.findViewById(R.id.app_search_key);
+        sKey.setText(key);
+
+//        binding.appSearchKey.setText(key);
+//        binding.appSearch.setOnClickListener(v -> {
+        ImageView iSearch = thisView.findViewById(R.id.app_search);
+
+        iSearch.setOnClickListener(v -> {
+            key = sKey.getText().toString();
+            if (key.length() > 1) {
+                shEditor.putString("key", key);
+                shEditor.apply();
+                searchApps(0);
+            }
+        });
+        ImageView iNext = thisView.findViewById(R.id.app_searchNext);
+        iNext.setOnClickListener(v -> {
+            key = sKey.getText().toString();
+            if (key.length() > 1) {
+                searchApps(appPos+2);
+            }
+        });
+        ImageView iClear = thisView.findViewById(R.id.app_clear);
+        iClear.setOnClickListener(v -> {
+            key = "";
+            sKey.setText(key);
+        });
 
         return thisView;
+    }
+
+    void searchApps(int startPos) {
+        appPos = -1;
+        if (startPos == 0)
+            fnd = new boolean[apps.size()];
+
+        String result = "";
+        for (int i = startPos; i < apps.size(); i++) {
+            App app = apps.get(i);
+            if (app.nickName.contains(key) || app.fullName.contains(key) ||
+                    app.memo.contains(key)) {
+                if (appPos == -1) {
+                    appPos = i;
+                    result = app.nickName + " " + app.fullName + " " + app.memo;
+                }
+                fnd[i] = true;
+                appsAdapter.notifyItemChanged(i);
+            }
+        }
+        if (appPos > 0) {
+            LinearLayoutManager layoutManager = (LinearLayoutManager) appsRecyclerView
+                    .getLayoutManager();
+            layoutManager.scrollToPositionWithOffset((appPos > 2) ? appPos-2:appPos, 10);
+            String str = key + " found " + result;
+            Toast.makeText(mContext, str, Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

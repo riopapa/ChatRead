@@ -22,7 +22,7 @@ public class LogUpdate {
 
     public LogUpdate(Context context) {
         if (sharePref == null) {
-            sharePref = mContext.getSharedPreferences("sayText", MODE_PRIVATE);
+            sharePref = context.getSharedPreferences("sayText", MODE_PRIVATE);
             sharedEditor = sharePref.edit();
         }
         logQue = sharePref.getString("logQue", "");

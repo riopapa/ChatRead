@@ -43,7 +43,7 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.ViewHolder> {
 
         Context context;
         View tLine;
-        TextView tFullName, tNickName, sSay, sLog, sGroup, sWho, sAddWho, sNum;
+        TextView tMemo, tNickName, sSay, sLog, sGroup, sWho, sAddWho, sNum;
         PackageManager pm;
         ImageView icon;
 
@@ -53,7 +53,7 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.ViewHolder> {
             icon = itemView.findViewById(R.id.app_icon);
 
             tLine = itemView.findViewById(R.id.app_layout);
-            tFullName = itemView.findViewById(R.id.app_full_name);
+            tMemo = itemView.findViewById(R.id.app_memo);
             tNickName = itemView.findViewById(R.id.app_nick_name);
 
             sSay = itemView.findViewById(R.id.app_say);
@@ -76,7 +76,7 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.ViewHolder> {
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.ine_apps, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.line_apps, parent, false);
         return new ViewHolder(view);
     }
 
@@ -89,18 +89,16 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.ViewHolder> {
 
         holder.tNickName.setText(al.nickName);
         holder.tNickName.setBackgroundColor((fnd[position]) ? Color.CYAN: Color.LTGRAY);
-        String merged = (!al.memo.isEmpty()) ? al.memo + " | "+al.fullName: " "+ al.fullName;
-        holder.tFullName.setText(merged);
-        holder.tFullName.setBackgroundColor((fnd[position]) ? Color.CYAN: Color.LTGRAY);
+        holder.tMemo.setText(al.memo);
 
         Drawable drawable = getPackageIcon(al.fullName, holder.pm);
         if (drawable == null ) {
             holder.icon.setImageDrawable(NotInstalled);
-            holder.tFullName.setTextColor(colorNone);
+            holder.tMemo.setTextColor(colorNone);
             holder.tNickName.setTextColor(colorNone);
         } else {
             holder.icon.setImageDrawable(drawable);
-            holder.tFullName.setTextColor(colorExist);
+            holder.tMemo.setTextColor(colorExist);
             holder.tNickName.setTextColor(colorExist);
         }
 

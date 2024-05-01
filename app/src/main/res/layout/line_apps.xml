@@ -31,7 +31,7 @@
             <TextView
                 android:id="@+id/app_nick_name"
                 android:layout_width="0dp"
-                android:layout_weight="4"
+                android:layout_weight="6"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="nick"
@@ -40,14 +40,25 @@
                 />
 
             <TextView
-                android:id="@+id/app_full_name"
+                android:id="@+id/app_memo"
                 android:layout_width="0dp"
-                android:layout_weight="16"
+                android:layout_weight="6"
                 android:layout_height="wrap_content"
                 android:gravity="left"
                 android:textColor="@color/textFore"
                 android:textSize="11sp"
-                android:text="app full name"
+                android:text="app memo"
+                />
+
+            <TextView
+                android:id="@+id/app_num"
+                android:layout_width="0dp"
+                android:layout_weight="4"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textColor="@color/textFore"
+                android:textSize="@dimen/app_line_font_size"
+                android:text="Num"
                 />
 
         </LinearLayout>
@@ -111,17 +122,6 @@
                 android:textColor="@color/textFore"
                 android:textSize="@dimen/app_line_font_size"
                 android:text="addWho"
-                />
-
-            <TextView
-                android:id="@+id/app_num"
-                android:layout_width="0dp"
-                android:layout_weight="3"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:textColor="@color/textFore"
-                android:textSize="@dimen/app_line_font_size"
-                android:text="Num"
                 />
         </LinearLayout>
     </LinearLayout>
