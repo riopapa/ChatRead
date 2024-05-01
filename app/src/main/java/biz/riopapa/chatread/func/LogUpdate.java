@@ -11,6 +11,7 @@ import static biz.riopapa.chatread.MainActivity.sharePref;
 import static biz.riopapa.chatread.MainActivity.sharedEditor;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -33,11 +34,11 @@ public class LogUpdate {
 
     final SimpleDateFormat TIME_INFO = new SimpleDateFormat("MM-dd HH:mm ", Locale.KOREA);
     public void addLog(String header, String text) {
-        if (text.length() < 10)
-            return;
+//        if (text.length() < 10)
+//            return;
 //        new ReadyToday();
         logQue += "\n" + TIME_INFO.format(new Date()) + header + "\n" + text+"\n";
-        if (logQue.length() > 32000) {
+        if (logQue.length() > 24000) {
             Thread logThread = new Thread(() -> {
                 logQue = squeezeLog(logQue, "logQue");
                 sharedEditor.putString("logQue", logQue);

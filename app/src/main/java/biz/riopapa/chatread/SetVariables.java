@@ -10,10 +10,13 @@ import static biz.riopapa.chatread.MainActivity.kvStock;
 import static biz.riopapa.chatread.MainActivity.kvTelegram;
 import static biz.riopapa.chatread.MainActivity.logUpdate;
 import static biz.riopapa.chatread.MainActivity.mAudioManager;
+import static biz.riopapa.chatread.MainActivity.mBackgroundServiceIntent;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.msgKeyword;
 import static biz.riopapa.chatread.MainActivity.msgNamoo;
 import static biz.riopapa.chatread.MainActivity.msgSMS;
+import static biz.riopapa.chatread.MainActivity.notificationBar;
+import static biz.riopapa.chatread.MainActivity.notificationService;
 import static biz.riopapa.chatread.MainActivity.phoneVibrate;
 import static biz.riopapa.chatread.MainActivity.sounds;
 import static biz.riopapa.chatread.MainActivity.stockName;
@@ -22,7 +25,9 @@ import static biz.riopapa.chatread.MainActivity.tableFolder;
 import static biz.riopapa.chatread.MainActivity.tableListFile;
 import static biz.riopapa.chatread.MainActivity.utils;
 
+import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Environment;
 import android.util.Log;
@@ -47,6 +52,8 @@ import biz.riopapa.chatread.func.ReadyToday;
 import biz.riopapa.chatread.func.StrUtil;
 import biz.riopapa.chatread.func.TableListFile;
 import biz.riopapa.chatread.models.KeyVal;
+import biz.riopapa.chatread.notification.NotificationBar;
+import biz.riopapa.chatread.notification.NotificationService;
 
 public class SetVariables {
     public SetVariables(Context context, String msg) {
@@ -82,7 +89,25 @@ public class SetVariables {
             msgKeyword = new MsgKeyword("main");
             msgSMS = new MsgSMS();
             msgNamoo = new MsgNamoo();
+            notificationService = new NotificationService();
+            notificationBar = new NotificationBar();
+            if (!isServiceRunning(mContext, notificationService.getClass())) {
+                mBackgroundServiceIntent = new Intent(mContext, notificationService.getClass());
+                mContext.startForegroundService(mBackgroundServiceIntent);
+//                mContext.startService(mBackgroundServiceIntent);
+            }
+
         }
     }
+    boolean isServiceRunning(Context context, Class serviceClass) {
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
 

@@ -52,7 +52,7 @@ public class MsgSMS {
                 mText = strUtil.removeDigit(mText);
             if (isWorking())
                 mText = strUtil.makeEtc(mText, 20);
-            sounds.speakAfterBeep(head+" 으로 부터 "+ mText);
+            sounds.speakAfterBeep(head+", "+ mText);
         }
     }
 

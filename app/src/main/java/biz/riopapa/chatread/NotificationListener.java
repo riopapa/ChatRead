@@ -202,7 +202,7 @@ public class NotificationListener extends NotificationListenerService {
                     String say = sbnAppNick + " ";
                     say += (sbnApp.grp) ? sbnGroup+" ": " ";
                     say += (sbnApp.who) ? sbnWho: "";
-                    say = say + " 로부터 ";
+                    say = say + ", ";
                     say = say + ((sbnApp.num) ? sbnText : strUtil.removeDigit(sbnText));
                     sounds.speakAfterBeep(strUtil.makeEtc(say, isWorking()? 20: 200));
                 }
@@ -288,7 +288,7 @@ public class NotificationListener extends NotificationListenerService {
 
         head = sbnAppNick + ((sbnApp.grp && !sbnGroup.isEmpty()) ? "."+sbnGroup: " ")
                 + ((sbnApp.who)? "." + sbnWho : "");
-        String say = head + " 로부터 " + sbnText;
+        String say = head + ", " + sbnText;
         sounds.speakAfterBeep(strUtil.makeEtc(say, 100));
 
         logUpdate.addWork(head, sbnText);
@@ -354,7 +354,7 @@ public class NotificationListener extends NotificationListenerService {
 /*        NotificationBar.update(sbnGroup + "|" + sbnWho, sbnText, true);
 
  */
-        sbnText = head + " 로 부터. " + sbnText;
+        sbnText = head + ", " + sbnText;
         sounds.speakAfterBeep(strUtil.makeEtc(sbnText, isWorking()? 20:150));
     }
 
@@ -385,7 +385,7 @@ public class NotificationListener extends NotificationListenerService {
 /*        NotificationBar.update(sbnAppNick, sbnText, true);
 
  */
-        sounds.speakAfterBeep("테스리로 부터 " + sbnText);
+        sounds.speakAfterBeep("테스리, " + sbnText);
     }
 
     boolean isSbnNothing(StatusBarNotification sbn) {
@@ -417,8 +417,7 @@ public class NotificationListener extends NotificationListenerService {
             Log.e("reloading", "apps is null new size=" + apps.size());
         }
 
-        Log.w("chat","sbnWho="+sbnWho+" text="+sbnText);
-
+        Log.w("chat","grp="+sbnGroup+", Who="+sbnWho+" text="+sbnText);
 
         switch (sbnAppName) {
 

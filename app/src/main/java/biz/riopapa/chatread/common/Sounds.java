@@ -2,7 +2,9 @@ package biz.riopapa.chatread.common;
 
 import static biz.riopapa.chatread.MainActivity.beepRawIds;
 import static biz.riopapa.chatread.MainActivity.isPhoneBusy;
+import static biz.riopapa.chatread.MainActivity.mAudioManager;
 import static biz.riopapa.chatread.MainActivity.mContext;
+import static biz.riopapa.chatread.MainActivity.mFocusGain;
 
 import android.content.Context;
 import android.media.AudioDeviceInfo;
@@ -23,14 +25,12 @@ public class Sounds {
     public static boolean isTalking = false;
     static TextToSpeech mTTS = null;
     static String TTSId = "";
-    AudioManager audioManager = null;
-    AudioFocusRequest mFocusGain = null;
 
-    void init() {
+    public Sounds() {
 
         stopTTS();
 
-        audioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+        mAudioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
         mFocusGain = new AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK)
                 .build();
         mTTS = null;
@@ -59,7 +59,7 @@ public class Sounds {
                 new Timer().schedule(new TimerTask() {
                     public void run () {
                         beepOnce(soundType.POST.ordinal());
-                        audioManager.abandonAudioFocusRequest(mFocusGain);
+                        mAudioManager.abandonAudioFocusRequest(mFocusGain);
                     }
                 }, 300);
             }
@@ -77,7 +77,7 @@ public class Sounds {
         }
     }
 
-    void stopTTS() {
+    public void stopTTS() {
         if (mTTS != null)
             mTTS.stop();
     }
@@ -100,14 +100,14 @@ public class Sounds {
 
     private void delayedSay(String text) {
         long delay = 150;
-        if (mTTS == null) {
-            init();
-            delay = 30;
-        }
+//        if (mTTS == null) {
+//            init();
+//            delay = 30;
+//        }
 
         if (isActive()) {
             isTalking = true;
-            audioManager.requestAudioFocus(mFocusGain);
+            mAudioManager.requestAudioFocus(mFocusGain);
             new Timer().schedule(new TimerTask() {
                 public void run() {
                     try {
@@ -135,7 +135,7 @@ public class Sounds {
             return;
         beepOnce(soundType.STOCK.ordinal());
         if (isActive()) {
-            audioManager.requestAudioFocus(mFocusGain);
+            mAudioManager.requestAudioFocus(mFocusGain);
             new Timer().schedule(new TimerTask() {
                 public void run() {
                     try {
@@ -173,11 +173,11 @@ public class Sounds {
     }
 
     public boolean isActive() {
-        if (audioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
+        if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
             return true;
         }
 
-        AudioDeviceInfo[] audioDevices = audioManager.getDevices(AudioManager.GET_DEVICES_INPUTS);
+        AudioDeviceInfo[] audioDevices = mAudioManager.getDevices(AudioManager.GET_DEVICES_INPUTS);
         for(AudioDeviceInfo deviceInfo : audioDevices){
             if (deviceInfo.getType() == AudioDeviceInfo.TYPE_BLUETOOTH_SCO     // 007
                     || deviceInfo.getType()==AudioDeviceInfo.TYPE_BLUETOOTH_A2DP    // 008
@@ -190,7 +190,7 @@ public class Sounds {
     }
 
     public boolean isSilent() {
-        return audioManager.getRingerMode() == AudioManager.RINGER_MODE_SILENT;
+        return mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_SILENT;
     }
 
 }

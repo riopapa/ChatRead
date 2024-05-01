@@ -59,6 +59,8 @@ import biz.riopapa.chatread.common.Utils;
 import biz.riopapa.chatread.models.AlertLine;
 import biz.riopapa.chatread.models.App;
 import biz.riopapa.chatread.models.KeyVal;
+import biz.riopapa.chatread.notification.NotificationBar;
+import biz.riopapa.chatread.notification.NotificationService;
 
 public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
@@ -132,6 +134,10 @@ public class MainActivity extends AppCompatActivity {
 
     public static ActionBar aBar = null;
     public static AudioFocusRequest mFocusGain = null;
+
+    public static NotificationService notificationService;
+    public static NotificationBar notificationBar;
+    public static Intent mBackgroundServiceIntent;
 
     /* module list */
 //    static AlertWhoIndex alertWhoIndex = null;
@@ -289,6 +295,11 @@ public class MainActivity extends AppCompatActivity {
         }
         getSharedValues();
         new SetVariables(this,"main");
+
+        Intent updateIntent = new Intent(this, NotificationService.class);
+        this.startForegroundService(updateIntent);
+        notificationBar.hideStop();
+
     }
 
     void getSharedValues() {
