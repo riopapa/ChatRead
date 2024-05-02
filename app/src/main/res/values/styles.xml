@@ -63,4 +63,14 @@
         <item name="listPreferredItemPaddingRight">8dp</item>
     </style>
 
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:actionButtonStyle">@style/MyActionButtonStyle</item>
+    </style>
+
+    <style name="MyActionButtonStyle" parent="AppTheme">
+        <item name="android:minWidth">6dp</item>
+        <item name="android:padding">2dp</item>
+    </style>
+
 </resources>

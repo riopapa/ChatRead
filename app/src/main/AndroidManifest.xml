@@ -54,6 +54,7 @@
         <activity android:name = ".edit.ActivityEditStrRepl"/>
         <activity android:name = ".edit.ActivityEditTable"/>
         <activity android:name = ".edit.ActivityEditApp"/>
+        <activity android:name = ".edit.ActivityEditAlert"/>
         <service
             android:name = ".NotificationListener"
             android:enabled="true"

@@ -4,7 +4,7 @@ import static android.content.Context.MODE_PRIVATE;
 import static biz.riopapa.chatread.MainActivity.aBar;
 import static biz.riopapa.chatread.MainActivity.apps;
 import static biz.riopapa.chatread.MainActivity.appsAdapter;
-import static biz.riopapa.chatread.MainActivity.appsPos;
+import static biz.riopapa.chatread.MainActivity.mAppsPos;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.todayFolder;
 
@@ -22,7 +22,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -31,7 +30,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import biz.riopapa.chatread.R;
 import biz.riopapa.chatread.adapters.AppsAdapter;
-import biz.riopapa.chatread.databinding.FragmentAppsBinding;
 import biz.riopapa.chatread.edit.ActivityEditApp;
 import biz.riopapa.chatread.func.AppsTable;
 import biz.riopapa.chatread.func.ReadyToday;
@@ -73,12 +71,12 @@ public class FragmentApps extends Fragment {
         fnd = new boolean[apps.size()];
         if (appsAdapter == null)
             appsAdapter = new AppsAdapter();
-        if (appsPos > 0) {
+        if (mAppsPos > 0) {
             LinearLayoutManager layoutManager = (LinearLayoutManager) appsRecyclerView
                     .getLayoutManager();
             assert layoutManager != null;
             layoutManager.scrollToPositionWithOffset(
-                    appsPos, (appsPos > 3) ? appsPos - 3 : appsPos - 2);
+                    mAppsPos, (mAppsPos > 3) ? mAppsPos - 3 : mAppsPos - 2);
         }
         SharedPreferences shPref = mContext.getSharedPreferences("searchKey", MODE_PRIVATE);
         SharedPreferences.Editor shEditor = shPref.edit();
@@ -102,7 +100,7 @@ public class FragmentApps extends Fragment {
         ImageView iNext = thisView.findViewById(R.id.app_searchNext);
         iNext.setOnClickListener(v -> {
             key = sKey.getText().toString();
-            if (key.length() > 1) {
+            if (!key.isEmpty()) {
                 searchApps(appPos+2);
             }
         });
@@ -157,10 +155,10 @@ public class FragmentApps extends Fragment {
             appsTable.get();
             appsAdapter = new AppsAdapter();
             appsRecyclerView.setAdapter(appsAdapter);
-        } else if (item.getItemId() == R.id.apps_save) {
+        } else if (item.getItemId() == R.id.save_apps) {
             appsTable.put();
         } else if (item.getItemId() == R.id.add_apps) {
-            appsPos = -1;
+            mAppsPos = -1;
             Intent intent = new Intent(mContext, ActivityEditApp.class);
             startActivity(intent);
         }

@@ -1,7 +1,8 @@
 package biz.riopapa.chatread.edit;
 
 import static biz.riopapa.chatread.MainActivity.aGroups;
-import static biz.riopapa.chatread.MainActivity.nowFileName;
+import static biz.riopapa.chatread.MainActivity.fileIO;
+import static biz.riopapa.chatread.MainActivity.mTableName;
 import static biz.riopapa.chatread.MainActivity.tableFolder;
 import static biz.riopapa.chatread.MainActivity.tableListFile;
 
@@ -26,7 +27,6 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import biz.riopapa.chatread.R;
-import biz.riopapa.chatread.func.FileIO;
 import biz.riopapa.chatread.func.OptionTables;
 
 public class ActivityEditStrRepl extends AppCompatActivity {
@@ -39,17 +39,17 @@ public class ActivityEditStrRepl extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_table);
-        nowFileName = "strRepl";
+        mTableName = "strRepl";
 
         Toolbar toolbar = findViewById(R.id.toolbar_table);
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(0xFFFFFF00);
         toolbar.setSubtitleTextColor(0xFF000000);
-        toolbar.setTitle(nowFileName);
-        toolbar.setSubtitle(nowFileName);
+        toolbar.setTitle(mTableName);
+        toolbar.setSubtitle(mTableName);
 
         EditText eTable = findViewById(R.id.text_table);
-        File file = new File(tableFolder, nowFileName + ".txt");
+        File file = new File(tableFolder, mTableName + ".txt");
         String[] lines = tableListFile.readRaw(file);
         String text;
         text = insertHeader(lines);
@@ -141,10 +141,10 @@ public class ActivityEditStrRepl extends AppCompatActivity {
         if (item.getItemId() == R.id.save_table) {
             TextView tv = findViewById(R.id.text_table);
             String s = tv.getText().toString();
-            FileIO.writeFile(tableFolder, nowFileName+".txt", removeHeader(s));
+            fileIO.writeFile(tableFolder, mTableName +".txt", removeHeader(s));
             new OptionTables().readAll();
             finish();
-        } else if (item.getItemId() == R.id.line_copy_add) {
+        } else if (item.getItemId() == R.id.add_alert_line) {
             EditText et = findViewById(R.id.text_table);
             String strNow = et.getText().toString();
             StringBuilder sb = new StringBuilder(strNow);

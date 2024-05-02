@@ -124,7 +124,6 @@ public class FragmentLog extends Fragment {
         super.onResume();
 
         ivVolume.setImageBitmap(VolumeIcon.draw());
-
         return thisView;
     }
 

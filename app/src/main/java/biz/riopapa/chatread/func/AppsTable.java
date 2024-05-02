@@ -5,7 +5,10 @@ import static biz.riopapa.chatread.MainActivity.appIgnores;
 import static biz.riopapa.chatread.MainActivity.appNameIdx;
 import static biz.riopapa.chatread.MainActivity.apps;
 import static biz.riopapa.chatread.MainActivity.downloadFolder;
+import static biz.riopapa.chatread.MainActivity.fileIO;
 import static biz.riopapa.chatread.MainActivity.tableFolder;
+import static biz.riopapa.chatread.MainActivity.teleApp;
+import static biz.riopapa.chatread.MainActivity.teleAppIdx;
 
 import android.os.Environment;
 
@@ -29,7 +32,7 @@ public class AppsTable {
             tableFolder = new File(downloadFolder, "_ChatTalk");
         }
         Gson gson = new Gson();
-        String json = FileIO.readFile(tableFolder ,"appTable.json");
+        String json = fileIO.readFile(tableFolder ,"appTable.json");
         if (json.isEmpty()) {
             apps = readPackageTable();
         } else {
@@ -52,7 +55,7 @@ public class AppsTable {
         Gson gson = new Gson();
         String json = gson.toJson(apps);
 //        FileIO.writeKR(new File(tableFolder, "appTable.json"), json);
-        FileIO.writeFile(tableFolder, "appTable.json", json);
+        fileIO.writeFile(tableFolder, "appTable.json", json);
     }
 
     public void makeTable() {
@@ -67,6 +70,10 @@ public class AppsTable {
             } else {
                 appFullNames.add(app.fullName);
                 appNameIdx.add(i);
+                if (app.fullName.equals("org.telegram.messenger")) {
+                    teleAppIdx = i;
+                    teleApp = app;
+                }
             }
         }
     }

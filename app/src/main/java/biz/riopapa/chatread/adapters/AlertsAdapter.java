@@ -1,8 +1,11 @@
 package biz.riopapa.chatread.adapters;
 
 import static biz.riopapa.chatread.MainActivity.alertLines;
+import static biz.riopapa.chatread.MainActivity.mAlertPos;
+import static biz.riopapa.chatread.MainActivity.mActivity;
 import static biz.riopapa.chatread.MainActivity.mContext;
 
+import android.content.Intent;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import biz.riopapa.chatread.R;
 import biz.riopapa.chatread.alerts.AlertTable;
+import biz.riopapa.chatread.edit.ActivityEditAlert;
 import biz.riopapa.chatread.models.AlertLine;
 
 public class AlertsAdapter extends RecyclerView.Adapter<AlertsAdapter.ViewHolder> {
@@ -115,13 +119,11 @@ public class AlertsAdapter extends RecyclerView.Adapter<AlertsAdapter.ViewHolder
         holder.tSkip.setTextColor(textColor);
         holder.tMore.setTextColor(textColor);
         holder.tTalk.setTextColor(textColor);
-/*
         holder.tLine.setOnClickListener(v -> {
-            Intent intent = new Intent(mContext, ActivityEditAlert.class);
-            alertPos = holder.getAdapterPosition();
-            mActivity.startActivity(intent);
+        Intent intent = new Intent(mContext, ActivityEditAlert.class);
+        mAlertPos = holder.getAdapterPosition();
+        mActivity.startActivity(intent);
         });
- */
     }
 
 }

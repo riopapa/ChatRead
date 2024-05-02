@@ -2,7 +2,7 @@ package biz.riopapa.chatread;
 
 import static biz.riopapa.chatread.MainActivity.alertStock;
 import static biz.riopapa.chatread.MainActivity.alertWhoIndex;
-import static biz.riopapa.chatread.MainActivity.downloadFolder;
+import static biz.riopapa.chatread.MainActivity.fileIO;
 import static biz.riopapa.chatread.MainActivity.kvCommon;
 import static biz.riopapa.chatread.MainActivity.kvKakao;
 import static biz.riopapa.chatread.MainActivity.kvSMS;
@@ -21,7 +21,6 @@ import static biz.riopapa.chatread.MainActivity.phoneVibrate;
 import static biz.riopapa.chatread.MainActivity.sounds;
 import static biz.riopapa.chatread.MainActivity.stockName;
 import static biz.riopapa.chatread.MainActivity.strUtil;
-import static biz.riopapa.chatread.MainActivity.tableFolder;
 import static biz.riopapa.chatread.MainActivity.tableListFile;
 import static biz.riopapa.chatread.MainActivity.utils;
 
@@ -29,10 +28,7 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
-import android.os.Environment;
 import android.util.Log;
-
-import java.io.File;
 
 import biz.riopapa.chatread.alerts.AlertStock;
 import biz.riopapa.chatread.alerts.AlertTable;
@@ -60,9 +56,9 @@ public class SetVariables {
         mContext = context;
         Log.e("SetVariables", "started " + msg);
 
-        FileIO.readyPackageFolder();
-        downloadFolder = new File(Environment.getExternalStorageDirectory(), "download");
-        tableFolder = new File(downloadFolder, "_ChatTalk");
+        if (fileIO == null)
+            fileIO = new FileIO();
+        fileIO.readyFolders();
 
         new ReadyToday();
         new OptionTables().readAll();
@@ -86,17 +82,16 @@ public class SetVariables {
             stockName = new StockName();
             mAudioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
             phoneVibrate = new PhoneVibrate();
-            msgKeyword = new MsgKeyword("main");
+            msgKeyword = new MsgKeyword(msg);
             msgSMS = new MsgSMS();
             msgNamoo = new MsgNamoo();
             notificationService = new NotificationService();
             notificationBar = new NotificationBar();
             if (!isServiceRunning(mContext, notificationService.getClass())) {
                 mBackgroundServiceIntent = new Intent(mContext, notificationService.getClass());
-                mContext.startForegroundService(mBackgroundServiceIntent);
-//                mContext.startService(mBackgroundServiceIntent);
+//                mContext.startForegroundService(mBackgroundServiceIntent);
+                mContext.startService(mBackgroundServiceIntent);
             }
-
         }
     }
     boolean isServiceRunning(Context context, Class serviceClass) {

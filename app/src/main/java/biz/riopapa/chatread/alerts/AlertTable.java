@@ -17,6 +17,7 @@ import static biz.riopapa.chatread.MainActivity.aGroups;
 import static biz.riopapa.chatread.MainActivity.aGroupsPass;
 import static biz.riopapa.chatread.MainActivity.alertLines;
 import static biz.riopapa.chatread.MainActivity.downloadFolder;
+import static biz.riopapa.chatread.MainActivity.fileIO;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.tableFolder;
 
@@ -60,7 +61,7 @@ public class AlertTable {
 
         ArrayList<AlertLine> list;
         Gson gson = new Gson();
-        String json = FileIO.readFile(tableFolder, "alertTable.json");
+        String json = fileIO.readFile(tableFolder, "alertTable.json");
         if (json.isEmpty()) {
             list = new ArrayList<>();
         } else {

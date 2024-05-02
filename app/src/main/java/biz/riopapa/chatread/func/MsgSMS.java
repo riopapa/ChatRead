@@ -1,9 +1,11 @@
 package biz.riopapa.chatread.func;
 
 import static biz.riopapa.chatread.MainActivity.aGroups;
+import static biz.riopapa.chatread.MainActivity.fileIO;
 import static biz.riopapa.chatread.MainActivity.lastChar;
 import static biz.riopapa.chatread.MainActivity.logUpdate;
 import static biz.riopapa.chatread.MainActivity.msgKeyword;
+import static biz.riopapa.chatread.MainActivity.notificationBar;
 import static biz.riopapa.chatread.MainActivity.sbnGroup;
 import static biz.riopapa.chatread.MainActivity.smsNoNumbers;
 import static biz.riopapa.chatread.MainActivity.sounds;
@@ -45,9 +47,7 @@ public class MsgSMS {
                 utils = new Utils();
             logUpdate.addLog(head, mText);
             mText = strUtil.makeEtc(mText, 150);
-/*            NotificationBar.update("sms "+mWho, mText, true);
-
- */
+            notificationBar.update("sms "+mWho, mText, true);
             if (IgnoreNumber.in(smsNoNumbers, mWho))
                 mText = strUtil.removeDigit(mText);
             if (isWorking())
@@ -75,11 +75,9 @@ public class MsgSMS {
                     String uPrice = words[4];
                     String sGroup = lastChar + trade;
                     String sayMsg = stockName + " " + amount + " " + uPrice + samPam;
-/*                    NotificationBar.update(samPam +":"+stockName, sayMsg, true);
-
- */
+                    notificationBar.update(samPam +":"+stockName, sayMsg, true);
                     logUpdate.addStock("sms>"+nhStock, sayMsg);
-                    FileIO.uploadStock(sGroup, mWho, samPam, stockName,
+                    fileIO.uploadStock(sGroup, mWho, samPam, stockName,
                             mText.replace(stockName, new StringBuffer(stockName).insert(1, ".").toString()), samPam,
                             new SimpleDateFormat("yy-MM-dd HH:mm", Locale.KOREA).format(new Date()));
                     sayMsg = stockName + samPam;
@@ -98,9 +96,7 @@ public class MsgSMS {
     private void sayNormal(String mWho, String mText) {
         String head = "[sms."+ mWho + "] ";
         mText = strUtil.strShorten("sms", mText);
-/*        NotificationBar.update(head, mText, true);
-
- */
+        notificationBar.update(head, mText, true);
         logUpdate.addLog(head, mText);
         if (utils == null)
             utils = new Utils();

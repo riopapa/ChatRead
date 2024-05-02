@@ -18,6 +18,7 @@ import static biz.riopapa.chatread.MainActivity.logUpdate;
 import static biz.riopapa.chatread.MainActivity.longWhoNames;
 import static biz.riopapa.chatread.MainActivity.msgKeyword;
 import static biz.riopapa.chatread.MainActivity.msgSMS;
+import static biz.riopapa.chatread.MainActivity.notificationBar;
 import static biz.riopapa.chatread.MainActivity.sbnApp;
 import static biz.riopapa.chatread.MainActivity.sbnAppIdx;
 import static biz.riopapa.chatread.MainActivity.sbnAppName;
@@ -33,6 +34,8 @@ import static biz.riopapa.chatread.MainActivity.smsTxtIgnores;
 import static biz.riopapa.chatread.MainActivity.smsWhoIgnores;
 import static biz.riopapa.chatread.MainActivity.sounds;
 import static biz.riopapa.chatread.MainActivity.strUtil;
+import static biz.riopapa.chatread.MainActivity.teleApp;
+import static biz.riopapa.chatread.MainActivity.teleAppIdx;
 import static biz.riopapa.chatread.MainActivity.utils;
 import static biz.riopapa.chatread.MainActivity.whoNameFrom;
 import static biz.riopapa.chatread.MainActivity.whoNameTo;
@@ -55,12 +58,14 @@ import biz.riopapa.chatread.func.AppsTable;
 import biz.riopapa.chatread.func.MsgKeyword;
 import biz.riopapa.chatread.func.MsgNamoo;
 import biz.riopapa.chatread.func.MsgSMS;
+import biz.riopapa.chatread.models.App;
 
 public class NotificationListener extends NotificationListenerService {
     final String SMS = "sms";
-    final String KATALK = "kk";
+    final String KK_TALK = "kk";
     final String TESRY = "테스리";
     final String ANDROID = "an";
+    final String TG = "tg";
     final String TELEGRAM = "텔레";
     final String APP = "app";   // general application
 
@@ -86,7 +91,7 @@ public class NotificationListener extends NotificationListenerService {
 
         switch (sbnAppType) {
 
-            case KATALK:
+            case KK_TALK:
 
                 if (IgnoreThis.contains(sbnText, ktTxtIgnores))
                     return;
@@ -99,9 +104,7 @@ public class NotificationListener extends NotificationListenerService {
                     if (kvKakao.isDup(sbnGroup, sbnText))
                         return;
                     sbnText = strUtil.strShorten(sbnWho, sbnText);
-/*                    NotificationBar.update("카톡!" + sbnWho, sbnText, true);
-
- */
+                    notificationBar.update("카톡!" + sbnWho, sbnText, true);
                     head = "{카톡!" + sbnWho + "} ";
                     logUpdate.addLog(head, sbnText);
                     if (IgnoreNumber.in(ktNoNumbers, sbnWho))
@@ -116,8 +119,8 @@ public class NotificationListener extends NotificationListenerService {
                     sbnText = strUtil.text2OneLine(sbnText);
                     if (kvKakao.isDup(sbnGroup, sbnText))
                         return;
-                    if (msgKeyword == null)
-                        msgKeyword = new MsgKeyword("by ka");
+//                    if (msgKeyword == null)
+//                        msgKeyword = new MsgKeyword("by ka");
 
                     int grpIdx = Collections.binarySearch(aGroups, sbnGroup);
 //                    Log.w("grpIdx check " + grpIdx, "grpIdx=" + grpIdx + " group=" + sbnGroup + " who=" + sbnWho);
@@ -134,9 +137,7 @@ public class NotificationListener extends NotificationListenerService {
                         return;
                     }
                     sbnText = strUtil.strShorten(sbnGroup, sbnText);
-/*                    NotificationBar.update("카톡!" + sbnGroup + "." + sbnWho, sbnText, true);
-
- */
+                    notificationBar.update("카톡!" + sbnGroup + "." + sbnWho, sbnText, true);
                     head = "{카톡!" + sbnGroup + "." + sbnWho + "} ";
                     logUpdate.addLog(head, sbnText);
                     if (IgnoreNumber.in(ktNoNumbers, sbnGroup))
@@ -146,14 +147,18 @@ public class NotificationListener extends NotificationListenerService {
                 }
                 break;
 
+            case TG:
+                sayTelegram();
+                break;
+
             case APP:
 
-                if (kvCommon == null)
-                    Log.e("ivCommon"," is nothing");
-                Log.w("APP","nick "+sbnApp.nickName);
+//                if (kvCommon == null)
+//                    Log.e("ivCommon"," is nothing");
+//                Log.w("APP","nick "+sbnApp.nickName);
                 if (kvCommon.isDup(sbnApp.nickName, sbnText))
                     return;
-                if (sbnApp.igStr != null && hasIgnoreStr())
+                if (sbnApp.igStr != null && hasIgnoreStr(sbnApp))
                     return;
 
                 sbnText = strUtil.text2OneLine(sbnText);
@@ -193,10 +198,6 @@ public class NotificationListener extends NotificationListenerService {
                     sayTesla();
                     return;
                 }
-                if (sbnAppNick.equals(TELEGRAM)) {
-                    sayTelegram();
-                    return;
-                }
 
                 if (sbnApp.say) {
                     String say = sbnAppNick + " ";
@@ -216,16 +217,14 @@ public class NotificationListener extends NotificationListenerService {
                 if (sbnApp.log) {
                     logUpdate.addLog(head, sbnText);
                 }
-/*                NotificationBar.update(head, sbnText, true);
-
- */
+                notificationBar.update(head, sbnText, true);
                 break;
 
             case ANDROID:
 
                 if (kvCommon.isDup(ANDROID, sbnText))
                     return;
-                if (hasIgnoreStr())
+                if (hasIgnoreStr(sbnApp))
                     return;
                 head = "< an > "+sbnWho;
                 logUpdate.addLog(head, sbnWho+" / "+sbnText);
@@ -241,8 +240,8 @@ public class NotificationListener extends NotificationListenerService {
                 sbnText = strUtil.text2OneLine(sbnText);
                 if (kvSMS.isDup(sbnWho, sbnText))
                     return;
-                if (msgSMS == null)
-                    msgSMS = new MsgSMS();
+//                if (msgSMS == null)
+//                    msgSMS = new MsgSMS();
                 sbnWho = sbnWho.replaceAll("[\\u200C-\\u206F]", "");
                 sbnText = sbnText.replace(ctx.getString(R.string.web_sent), "")
                         .replaceAll("[\\u200C-\\u206F]", "");
@@ -261,9 +260,7 @@ public class NotificationListener extends NotificationListenerService {
                 sounds.speakAfterBeep("새 앱 설치됨 " + sbnText);
                 sbnText = "새로운 앱이 설치됨,  group : " + sbnGroup + ", who : " + sbnWho +
                         ", text : " + sbnText;
-/*                NotificationBar.update(sbnAppName, sbnText, true);
-
- */
+                notificationBar.update(sbnAppName, sbnText, true);
                 new Copy2Clipboard(sbnAppName);
                 logUpdate.addLog("[ " + sbnAppName + " ]", sbnText);
                 break;
@@ -273,10 +270,6 @@ public class NotificationListener extends NotificationListenerService {
     private void sayWork() {
 
         utils.logW("work", "grp="+sbnGroup+", who="+sbnWho+", txt="+sbnText);
-        if (sbnApp.addWho) {
-            sbnText = sbnWho + "※" + sbnText;
-            sbnWho = "";
-        }
         if (sbnApp.replFrom != null) {
             for (int i = 0; i < sbnApp.replFrom.length; i++) {
                 if ((sbnText).contains(sbnApp.replFrom[i]))
@@ -285,16 +278,17 @@ public class NotificationListener extends NotificationListenerService {
                     sbnWho = sbnText.replace(sbnApp.replFrom[i], sbnApp.replTo[i]);
             }
         }
+        if (sbnApp.addWho) {
+            sbnText = sbnWho + "※" + sbnText;
+            sbnWho = "";
+        }
 
         head = sbnAppNick + ((sbnApp.grp && !sbnGroup.isEmpty()) ? "."+sbnGroup: " ")
                 + ((sbnApp.who)? "." + sbnWho : "");
+        logUpdate.addWork(head, sbnText);
+        notificationBar.update(head, sbnText, true);
         String say = head + ", " + sbnText;
         sounds.speakAfterBeep(strUtil.makeEtc(say, 100));
-
-        logUpdate.addWork(head, sbnText);
-/*        NotificationBar.update(head, sbnText, true);
-
- */
 
     }
 
@@ -302,12 +296,14 @@ public class NotificationListener extends NotificationListenerService {
 
         if (kvTelegram.isDup("tel", sbnText))
             return;
+        if (hasIgnoreStr(teleApp))
+            return;
         // longWhoName, shortWhoName [],  <= teleGrp.txt
         // 텔데봇 ^ DailyBOT
         // 텔투봄 ^ 투자의 봄
         // 텔오늘 ^ 오늘의단타 공식채널
         for (int i = 0; i < longWhoNames.length; i++) {
-            if (sbnWho.contains(longWhoNames[i])) { // 정확한 이름 다 찾지 않으려고 contains 씀
+            if (sbnWho.contains(longWhoNames[i])) { // 정확한 이름 다 찾지 않으려 contains 씀
                 if (sbnText.length() < 15)
                     return;
                 sbnText = strUtil.text2OneLine(sbnText);
@@ -319,6 +315,7 @@ public class NotificationListener extends NotificationListenerService {
 //                    sbnGroup = grpWho[0].trim();
                     sbnWho = grpWho[1].trim();
                 }
+
                 // whoNameFrom, to [] <= whoName
                 // Ai 매매비서 ^ ai
                 // 투바의 봄 ^ 투봄
@@ -333,8 +330,8 @@ public class NotificationListener extends NotificationListenerService {
                     utils.logW("종목/매수 " +sbnGroup, sbnWho + " > "
                                 + sbnText);
                 }
-                if (msgKeyword == null)
-                    msgKeyword = new MsgKeyword("by tele");
+//                if (msgKeyword == null)
+//                    msgKeyword = new MsgKeyword("by tele");
                 sbnText = strUtil.strShorten(sbnWho, sbnText);
                 int grpIdx = Collections.binarySearch(aGroups, sbnGroup);
                 if (grpIdx < 0)
@@ -348,22 +345,20 @@ public class NotificationListener extends NotificationListenerService {
             }
         }
         if (sbnGroup.contains("새로운 메시지"))
-            sbnGroup = "__";
+            sbnGroup = "_새_";
         head = "[텔레 " + sbnGroup + "|" + sbnWho + "]";
         logUpdate.addLog(head, sbnText);
-/*        NotificationBar.update(sbnGroup + "|" + sbnWho, sbnText, true);
-
- */
+        notificationBar.update(sbnGroup + "|" + sbnWho, sbnText, true);
         sbnText = head + ", " + sbnText;
         sounds.speakAfterBeep(strUtil.makeEtc(sbnText, isWorking()? 20:150));
     }
 
-    private boolean hasIgnoreStr() {
-        for (String t: sbnApp.igStr) {
+    private boolean hasIgnoreStr(App app) {
+        for (String t: app.igStr) {
             if (sbnWho.contains(t))
                 return true;
         }
-        for (String t: sbnApp.igStr) {
+        for (String t: app.igStr) {
             if (sbnText.contains(t))
                 return true;
         }
@@ -382,9 +377,7 @@ public class NotificationListener extends NotificationListenerService {
         if (kvCommon.isDup(TESRY, sbnText))
             return;
         logUpdate.addLog("[ 테스리 ]", sbnText);
-/*        NotificationBar.update(sbnAppNick, sbnText, true);
-
- */
+        notificationBar.update(sbnAppNick, sbnText, true);
         sounds.speakAfterBeep("테스리, " + sbnText);
     }
 
@@ -412,25 +405,28 @@ public class NotificationListener extends NotificationListenerService {
             new Utils().logW("sbn WHO Error", "no Who "+ sbnAppName +" "+sbnText);
             return true;
         }
-        if (apps == null || appIgnores == null) {
-            new AppsTable().get();
-            Log.e("reloading", "apps is null new size=" + apps.size());
-        }
-
-        Log.w("chat","grp="+sbnGroup+", Who="+sbnWho+" text="+sbnText);
+//        if (apps == null || appIgnores == null) {
+//            new AppsTable().get();
+//            Log.e("reloading", "apps is null new size=" + apps.size());
+//        }
 
         switch (sbnAppName) {
-
-            case "com.kakao.talk":
-                sbnAppNick = "카톡";
-                sbnAppType = "kk";
-                break;
 
             case "android":
                 sbnApp = apps.get(2);   // FIXED TO 2  0: header, 1: 1time mail
                 sbnAppNick = ANDROID;
                 sbnAppType = ANDROID;
                 return false;
+
+            case "com.kakao.talk":
+                sbnAppNick = "카톡";
+                sbnAppType = "kk";
+                break;
+
+            case "org.telegram.messenger":
+                sbnAppNick = TELEGRAM;
+                sbnAppType = TG;
+                break;
 
             case "com.samsung.android.messaging":
                 sbnAppNick = "문자";

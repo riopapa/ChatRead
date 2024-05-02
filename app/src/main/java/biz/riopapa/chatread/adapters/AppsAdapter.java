@@ -1,6 +1,6 @@
 package biz.riopapa.chatread.adapters;
 
-import static biz.riopapa.chatread.MainActivity.appsPos;
+import static biz.riopapa.chatread.MainActivity.mAppsPos;
 import static biz.riopapa.chatread.MainActivity.apps;
 import static biz.riopapa.chatread.MainActivity.mActivity;
 import static biz.riopapa.chatread.MainActivity.mContext;
@@ -83,9 +83,9 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
 
-        appsPos = holder.getAdapterPosition();
+        mAppsPos = holder.getAdapterPosition();
 
-        App al = apps.get(appsPos);
+        App al = apps.get(mAppsPos);
 
         holder.tNickName.setText(al.nickName);
         holder.tNickName.setBackgroundColor((fnd[position]) ? Color.CYAN: Color.LTGRAY);
@@ -110,7 +110,7 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.ViewHolder> {
         holder.sNum.setTextColor((al.num)? colorT:colorF);
 
         holder.tLine.setOnClickListener(v -> {
-            appsPos = holder.getAdapterPosition();
+            mAppsPos = holder.getAdapterPosition();
             Intent intent = new Intent(holder.context, ActivityEditApp.class);
             mActivity.startActivity(intent);
         });

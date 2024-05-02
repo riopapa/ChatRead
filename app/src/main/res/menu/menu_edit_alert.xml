@@ -3,23 +3,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/remove_this_line"
+        android:id="@+id/delete_alert"
         android:orderInCategory="100"
-        android:icon="@drawable/line_remove1"
+        android:icon="@drawable/delete"
+        app:showAsAction="always"
+        android:title="@string/todo" />
+
+    <item
+        android:id="@+id/duplicate_alert"
+        android:orderInCategory="100"
+        android:icon="@drawable/copy"
         app:showAsAction="always"
         android:title="@string/todo" />
 
     <item
         android:id="@+id/save_alert"
         android:orderInCategory="100"
-        android:icon="@drawable/save"
+        android:icon="@drawable/confirm"
         app:showAsAction="always"
         android:title="@string/todo" />
 
-    <item
-        android:id="@+id/line_copy_add"
-        android:orderInCategory="100"
-        android:icon="@drawable/paste"
-        app:showAsAction="always"
-        android:title="@string/todo" />
 </menu>

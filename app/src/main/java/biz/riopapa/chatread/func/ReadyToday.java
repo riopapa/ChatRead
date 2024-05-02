@@ -1,5 +1,6 @@
 package biz.riopapa.chatread.func;
 
+import static biz.riopapa.chatread.MainActivity.fileIO;
 import static biz.riopapa.chatread.MainActivity.kvCommon;
 import static biz.riopapa.chatread.MainActivity.kvKakao;
 import static biz.riopapa.chatread.MainActivity.kvSMS;
@@ -27,6 +28,7 @@ import biz.riopapa.chatread.models.KeyVal;
 
 public class ReadyToday {
     public ReadyToday() {
+
         String nowDay = new SimpleDateFormat("yy-MM-dd", Locale.KOREA).format(new Date());
         if (toDay.equals(nowDay))
             return;
@@ -44,15 +46,15 @@ public class ReadyToday {
             if (todayFolder.mkdirs())
                 new Utils().deleteOldFiles();
             sharedEditor.apply();
-            FileIO.writeFile(tableFolder, "logStock.txt", logStock);
-            FileIO.writeFile(tableFolder, "logQue.txt", logQue);
-            FileIO.writeFile(tableFolder, "logWork.txt", logWork);
+            fileIO.writeFile(tableFolder, "logStock.txt", logStock);
+            fileIO.writeFile(tableFolder, "logQue.txt", logQue);
+            fileIO.writeFile(tableFolder, "logWork.txt", logWork);
             String sb = "\n\nkvCommon =\n" + kvCommon.toString() +
                     "\n\nkvSMS =\n" + kvSMS.toString() +
                     "\n\nkvTelegram =\n" + kvTelegram.toString() +
                     "\n\nkvStock =\n" + kvStock.toString() +
                     "\n\nkvKakao =\n" + kvKakao.toString();
-            FileIO.writeFile(todayFolder, "keyVal.txt", sb);
+            fileIO.writeFile(todayFolder, "keyVal.txt", sb);
             kvCommon = new KeyVal();
             kvStock = new KeyVal();
             kvSMS = new KeyVal();

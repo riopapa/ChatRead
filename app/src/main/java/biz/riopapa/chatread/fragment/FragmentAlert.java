@@ -2,7 +2,7 @@ package biz.riopapa.chatread.fragment;
 
 import static biz.riopapa.chatread.MainActivity.aBar;
 import static biz.riopapa.chatread.MainActivity.alertLines;
-import static biz.riopapa.chatread.MainActivity.alertPos;
+import static biz.riopapa.chatread.MainActivity.mAlertPos;
 import static biz.riopapa.chatread.MainActivity.alertsAdapter;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.todayFolder;
@@ -60,12 +60,12 @@ public class FragmentAlert extends Fragment {
         if (todayFolder == null)
             new ReadyToday();
 
-        if (alertPos > 0) {
+        if (mAlertPos > 0) {
             LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView
                     .getLayoutManager();
             assert layoutManager != null;
             layoutManager.scrollToPositionWithOffset(
-                    alertPos, (alertPos > 3) ? alertPos - 3 : alertPos - 2);
+                    mAlertPos, (mAlertPos > 3) ? mAlertPos - 3 : mAlertPos - 2);
         }
 
         return thisView;

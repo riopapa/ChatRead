@@ -2,9 +2,8 @@ package biz.riopapa.chatread.edit;
 
 import static biz.riopapa.chatread.MainActivity.apps;
 import static biz.riopapa.chatread.MainActivity.appsAdapter;
-import static biz.riopapa.chatread.MainActivity.appsPos;
+import static biz.riopapa.chatread.MainActivity.mAppsPos;
 import static biz.riopapa.chatread.MainActivity.mContext;
-import static biz.riopapa.chatread.MainActivity.nowFileName;
 import static biz.riopapa.chatread.fragment.FragmentApps.appsRecyclerView;
 
 import android.content.ClipData;
@@ -14,10 +13,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
-import android.widget.Switch;
 import android.widget.Toast;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
@@ -27,7 +24,6 @@ import java.util.List;
 
 import biz.riopapa.chatread.R;
 import biz.riopapa.chatread.adapters.AppsAdapter;
-import biz.riopapa.chatread.databinding.ActivityEditAppBinding;
 import biz.riopapa.chatread.func.AppsTable;
 import biz.riopapa.chatread.models.App;
 
@@ -66,7 +62,7 @@ public class ActivityEditApp extends AppCompatActivity {
         replFromTo = findViewById(R.id.repl_from_to);
 
 
-        if (appsPos == -1) {
+        if (mAppsPos == -1) {
 //            actionBar.setTitle("Add App");
             app = new App();
             app.nickName = "@";
@@ -86,7 +82,7 @@ public class ActivityEditApp extends AppCompatActivity {
                 app.fullName = item.getText().toString();
             }
         } else {
-            app = apps.get(appsPos);
+            app = apps.get(mAppsPos);
 //            actionBar.setTitle("Edit App");
         }
         eFullName.setText(app.fullName);
@@ -160,8 +156,8 @@ public class ActivityEditApp extends AppCompatActivity {
     }
 
     private void deleteApp() {
-        if (appsPos != -1) {
-            apps.remove(appsPos);
+        if (mAppsPos != -1) {
+            apps.remove(mAppsPos);
             new AppsTable().put();
             appsAdapter = new AppsAdapter();
             appsRecyclerView.setAdapter(appsAdapter);
@@ -239,10 +235,10 @@ public class ActivityEditApp extends AppCompatActivity {
         } else
             app.replFrom = null;
 
-        if (appsPos == -1)
+        if (mAppsPos == -1)
             apps.add(app);
         else
-            apps.set(appsPos, app);
+            apps.set(mAppsPos, app);
         AppsTable appsTable = new AppsTable();
         appsTable.put();
         appsTable.makeTable();

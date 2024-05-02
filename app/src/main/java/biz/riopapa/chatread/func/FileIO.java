@@ -1,7 +1,9 @@
 package biz.riopapa.chatread.func;
 
+import static biz.riopapa.chatread.MainActivity.downloadFolder;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.packageDirectory;
+import static biz.riopapa.chatread.MainActivity.tableFolder;
 import static biz.riopapa.chatread.MainActivity.toDay;
 import static biz.riopapa.chatread.MainActivity.todayFolder;
 
@@ -29,7 +31,7 @@ import biz.riopapa.chatread.common.Utils;
 
 public class FileIO {
 
-    public static void readyPackageFolder() {
+    public void readyFolders() {
         if (packageDirectory == null)
             packageDirectory = new File(Environment.getExternalStorageDirectory(), "_ChatTalkLog");
 
@@ -41,16 +43,18 @@ public class FileIO {
                 Log.e("Exception", "Package Folder "+ packageDirectory.toString() + "_" + e);
             }
         }
+        downloadFolder = new File(Environment.getExternalStorageDirectory(), "download");
+        tableFolder = new File(downloadFolder, "_ChatTalk");
     }
 
-    public static void uploadStock(String group, String who, String percent, String talk,
+    public void uploadStock(String group, String who, String percent, String talk,
                                    String text, String key12, String timeStamp) {
         if (text.length() > 120)
             text = text.substring(0, 120);
 //        Upload2Google.add2Que(group, timeStamp, who, percent, talk, text, key12);
     }
 
-    public static void append2Today(String filename, String textLine) {
+    public void append2Today(String filename, String textLine) {
         if (todayFolder == null) {
             todayFolder = new File(packageDirectory, toDay);
         }
@@ -60,7 +64,7 @@ public class FileIO {
         append2File(file, timeInfo, textLine);
     }
 
-    public static void append2File(File file, String timeInfo, String textLine) {
+    public void append2File(File file, String timeInfo, String textLine) {
         new ReadyToday();
         BufferedWriter bw = null;
         FileWriter fw = null;
@@ -87,7 +91,7 @@ public class FileIO {
         }
     }
 
-    public static void writeFile(File targetFolder, String fileName, String outText) {
+    public void writeFile(File targetFolder, String fileName, String outText) {
         try {
             File targetFile = new File(targetFolder, fileName);
             FileWriter fileWriter = new FileWriter(targetFile, false);
@@ -102,7 +106,7 @@ public class FileIO {
         }
     }
 
-    public static String readFile(File targetFolder, String fileName) {
+    public String readFile(File targetFolder, String fileName) {
         File jFile = new File(targetFolder, fileName);
         StringBuilder sb = new StringBuilder();
         try {
@@ -122,7 +126,7 @@ public class FileIO {
         return sb.toString();
     }
 
-    public static String[] readKR(String filename) {
+    public String[] readKR(String filename) {
         final int BUFFER_SIZE = 81920;
         String code = "EUC-KR";
         BufferedReader bufferedReader = null;

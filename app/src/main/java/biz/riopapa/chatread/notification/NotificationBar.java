@@ -16,7 +16,7 @@ public class NotificationBar {
 
     public NotificationBar() {}
 
-    public static void update(String who, String msg, boolean stop_icon) {
+    public void update(String who, String msg, boolean stop_icon) {
 
         final String iMsg = (msg.length() > 250) ? msg.substring(0, 250)+".." : msg;
         Intent intent = new Intent(mContext, NotificationService.class);
@@ -45,7 +45,7 @@ public class NotificationBar {
         }
     }
 
-    public static void hideStop() {
+    public void hideStop() {
         if (mContext != null) {
             Intent intent = new Intent(mContext, NotificationService.class);
             intent.putExtra("operation", HIDE_STOP);

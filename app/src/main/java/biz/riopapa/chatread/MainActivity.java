@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -47,6 +48,7 @@ import biz.riopapa.chatread.fragment.FragmentApps;
 import biz.riopapa.chatread.fragment.FragmentLog;
 import biz.riopapa.chatread.fragment.FragmentStock;
 import biz.riopapa.chatread.fragment.FragmentWork;
+import biz.riopapa.chatread.func.FileIO;
 import biz.riopapa.chatread.func.LogUpdate;
 import biz.riopapa.chatread.common.PhoneVibrate;
 import biz.riopapa.chatread.func.MsgKeyword;
@@ -115,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
     public static String[] whoNameFrom = null;
     public static String[] whoNameTo = null;
 
-    public static String nowFileName;
+    public static String mTableName;
 
     public static int replGroupCnt = 0;
     public static String [] replGroup;
@@ -149,13 +151,13 @@ public class MainActivity extends AppCompatActivity {
 
     public static ArrayList<App> apps;
     public static AppsAdapter appsAdapter;
+    public static App teleApp;
 
 
     public static AlertWhoIndex alertWhoIndex = null;
 
-    public static String chatGroup;
     public static final String lastChar = "힝";
-    public static int alertPos = -1, appsPos = -1;  // updated or duplicated recycler position
+    public static int mAlertPos = -1, mAppsPos = -1;  // updated or duplicated recycler position
 
     public enum soundType { PRE, POST, ERR, HI_TESLA, ONLY, STOCK, INFO, KAKAO}
     public static final int[] beepRawIds = { R.raw.pre, R.raw.post, R.raw.err,
@@ -182,6 +184,10 @@ public class MainActivity extends AppCompatActivity {
     public static MsgKeyword msgKeyword = null;
     public static MsgSMS msgSMS = null;
     public static MsgNamoo msgNamoo = null;
+
+    public static FileIO fileIO;
+
+    public static int teleAppIdx;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -244,6 +250,7 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.table_kt_no_num:
                     case R.id.table_kt_txt_ig:
                     case R.id.table_kt_who_ig:
+                    case R.id.table_who_name:
                         menu_selected = item.getItemId();
                         drawerLayout.closeDrawer(GravityCompat.START);
                         intent = new Intent(mContext, ActivityEditTable.class);
@@ -300,6 +307,14 @@ public class MainActivity extends AppCompatActivity {
         this.startForegroundService(updateIntent);
         notificationBar.hideStop();
 
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                // Back is pressed... Ignore backPress
+//                finish();
+            }
+        });
+
     }
 
     void getSharedValues() {
@@ -320,5 +335,4 @@ public class MainActivity extends AppCompatActivity {
         }
         return false;
     }
-
 }

@@ -1,12 +1,11 @@
 package biz.riopapa.chatread.edit;
 
+import static biz.riopapa.chatread.MainActivity.fileIO;
 import static biz.riopapa.chatread.MainActivity.menu_selected;
-import static biz.riopapa.chatread.MainActivity.nowFileName;
+import static biz.riopapa.chatread.MainActivity.mTableName;
 import static biz.riopapa.chatread.MainActivity.tableFolder;
 import static biz.riopapa.chatread.MainActivity.tableListFile;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -18,17 +17,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
 import biz.riopapa.chatread.R;
-import biz.riopapa.chatread.func.FileIO;
 import biz.riopapa.chatread.func.OptionTables;
 
 
@@ -55,14 +51,14 @@ public class ActivityEditTable extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_table);
-        nowFileName = "";
+        mTableName = "";
         for (int i = 0; i < menuId.length; i++) {
             if (menu_selected == menuId[i]) {
-                nowFileName = fileId[i];
+                mTableName = fileId[i];
                 break;
             }
         }
-        if (nowFileName == "") {
+        if (mTableName == "") {
             Toast.makeText(this, "Menu Resource Id not Found "+menu_selected,
                     Toast.LENGTH_LONG).show();
             return;
@@ -72,11 +68,11 @@ public class ActivityEditTable extends AppCompatActivity {
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(0xFFFFFF00);
         toolbar.setSubtitleTextColor(0xFF000000);
-        toolbar.setTitle(nowFileName);
-        toolbar.setSubtitle(nowFileName);
+        toolbar.setTitle(mTableName);
+        toolbar.setSubtitle(mTableName);
 
         EditText eTable = findViewById(R.id.text_table);
-        File file = new File(tableFolder, nowFileName + ".txt");
+        File file = new File(tableFolder, mTableName + ".txt");
         String[] lines = tableListFile.readRaw(file);
         String text = Arrays.stream(lines).map(s -> s + "\n").collect(Collectors.joining()) + "\n";
         eTable.setText(text);
@@ -143,7 +139,7 @@ public class ActivityEditTable extends AppCompatActivity {
         if (item.getItemId() == R.id.save_table) {
             TextView tv = findViewById(R.id.text_table);
             String s = tv.getText().toString();
-            FileIO.writeFile(tableFolder, nowFileName+".txt", sortText(s));
+            fileIO.writeFile(tableFolder, mTableName +".txt", sortText(s));
             new OptionTables().readAll();
             finish();
         } else if (item.getItemId() == R.id.del_1_line_table) {

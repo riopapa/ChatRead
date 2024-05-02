@@ -1,5 +1,6 @@
 package biz.riopapa.chatread.common;
 
+import static biz.riopapa.chatread.MainActivity.fileIO;
 import static biz.riopapa.chatread.MainActivity.packageDirectory;
 import static biz.riopapa.chatread.MainActivity.replGroup;
 import static biz.riopapa.chatread.MainActivity.replGroupCnt;
@@ -18,6 +19,7 @@ import java.util.Locale;
 
 import biz.riopapa.chatread.MainActivity;
 import biz.riopapa.chatread.func.FileIO;
+import biz.riopapa.chatread.func.ReadyToday;
 
 public class Utils {
 
@@ -28,13 +30,14 @@ public class Utils {
         logE writes to download folder, removing by manual operation
      */
     public void logW(String tag, String text) {
+        new ReadyToday();
         StackTraceElement[] traces = Thread.currentThread().getStackTrace();
         String logText  =(traces.length>6) ? excludeName(traces[6].getMethodName()):"";
         logText += excludeName(traces[5].getMethodName()) + excludeName(traces[4].getMethodName()) +
                 excludeName(traceClassName(traces[3].getClassName()))+"> "+traces[3].getMethodName() +
                 "#" + traces[3].getLineNumber() + " {"+ tag + "} " + text;
         Log.w(tag, logText);
-        FileIO.append2Today("zLog"+toDay+tag+".txt", logText);
+        fileIO.append2Today("zLog"+toDay+tag+".txt", logText);
     }
 
     public void logE(String tag, String text) {
@@ -44,7 +47,7 @@ public class Utils {
                 excludeName(traceClassName(traces[3].getClassName()))+"> "+traces[3].getMethodName() +
                 "#" + traces[3].getLineNumber() + " {"+ tag + "} " + text;
         Log.e("<" + tag + ">" , logText);
-        FileIO.append2File(new File(packageDirectory, "zchatread.txt"), tag, logText);
+        fileIO.append2File(new File(packageDirectory, "zchatread.txt"), tag, logText);
 //        sounds.beepOnce(MainActivity.soundType.ERR.ordinal());   // error sound
     }
 

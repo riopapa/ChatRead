@@ -2,6 +2,7 @@ package biz.riopapa.chatread.alerts;
 
 import static android.content.Context.MODE_PRIVATE;
 import static biz.riopapa.chatread.MainActivity.alertLines;
+import static biz.riopapa.chatread.MainActivity.fileIO;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.tableFolder;
 import static biz.riopapa.chatread.MainActivity.todayFolder;
@@ -28,7 +29,7 @@ public class AlertSave {
         sharedEditor.putString("alertLine", json);
         json = json.replace("},{","},\n\n{")
                 .replace("\"next\":","\n\"next\":");
-        FileIO.writeFile( tableFolder,"alertTable.json",json);
+        fileIO.writeFile( tableFolder,"alertTable.json",json);
         AlertTable.makeArrays();
         for (int i = 0; i < alertLines.size(); i++) {
             AlertLine al = alertLines.get(i);
