@@ -3,7 +3,7 @@ package biz.riopapa.chatread.notification;
 import static biz.riopapa.chatread.MainActivity.HIDE_STOP;
 import static biz.riopapa.chatread.MainActivity.RELOAD_APP;
 import static biz.riopapa.chatread.MainActivity.SHOW_MESSAGE;
-import static biz.riopapa.chatread.MainActivity.STOP_SAY1;
+import static biz.riopapa.chatread.MainActivity.STOP_SAY;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.sharePref;
 import static biz.riopapa.chatread.MainActivity.sharedEditor;
@@ -71,7 +71,7 @@ public class NotificationService extends Service {
         if (operation == -1) {
             return START_NOT_STICKY;
         }
-        if (msg1.equals(""))
+        if (msg1.isEmpty())
             msgGet();
 
         switch (operation) {
@@ -94,7 +94,7 @@ public class NotificationService extends Service {
                 reload_App();
                 break;
 
-            case STOP_SAY1:
+            case STOP_SAY:
                 if (sounds != null)
                     sounds.stopTTS();
                 show_stop = false;
@@ -143,6 +143,7 @@ public class NotificationService extends Service {
 //                .setStyle(new NotificationCompat.BigTextStyle())
                 .setOngoing(true);
 
+
         Intent upIntent = new Intent(mContext, MainActivity.class);
         upIntent.putExtra("operation", RELOAD_APP);
         PendingIntent pendingUp = PendingIntent.getService(mContext, RELOAD_APP, upIntent,
@@ -161,12 +162,19 @@ public class NotificationService extends Service {
                 PendingIntent.getActivity(mContext, 0, lowIntent,
                         PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT));
 
-        Intent sIntent = new Intent(this, NotificationService.class);
-        sIntent.putExtra("operation", STOP_SAY1);
-        PendingIntent stopSay1Pi = PendingIntent.getService(mContext, STOP_SAY1, sIntent,
-            PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-        mBuilder.setContentIntent(stopSay1Pi);
-        mRemoteViews.setOnClickPendingIntent(R.id.stop_now1, stopSay1Pi);
+        Intent sIntent = new Intent(mContext, NotificationService.class);
+//        sIntent.setComponent(new ComponentName("biz.riopapa.chatread", "biz.riopapa.chatread.notification.NotificationListener"));
+//        bindService(sIntent, connection, Context.BIND_AUTO_CREATE);
+
+        sIntent.putExtra("operation", STOP_SAY);
+        PendingIntent pendingStop = PendingIntent.getService(mContext, STOP_SAY, sIntent,
+                PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+        mBuilder.setContentIntent(pendingStop);
+        mRemoteViews.setOnClickPendingIntent(R.id.stop_now, pendingStop);
+//        mRemoteViews.setOnClickPendingIntent(R.id.stop_now,
+//                PendingIntent.getActivity(mContext, 0, sIntent,
+//                        PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT));
+
     }
 
     private void updateRemoteViews() {
@@ -176,7 +184,7 @@ public class NotificationService extends Service {
         mRemoteViews.setTextViewText(R.id.msg_text1, msg1);
         mRemoteViews.setTextViewText(R.id.msg_time2, head2);
         mRemoteViews.setTextViewText(R.id.msg_text2, msg2);
-        mRemoteViews.setViewVisibility(R.id.stop_now1, (show_stop)? View.VISIBLE : View.GONE);
+        mRemoteViews.setViewVisibility(R.id.stop_now, (show_stop)? View.VISIBLE : View.GONE);
         mNotificationManager.notify(100,mBuilder.build());
         msgPut();
     }

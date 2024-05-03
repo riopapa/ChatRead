@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static final int SHOW_MESSAGE = 1234;
     public static final int HIDE_STOP = 5678;
-    public static final int STOP_SAY1 = 10011;
+    public static final int STOP_SAY = 10011;
     public static final int RELOAD_APP = 2022;
 
     public static ActionBar aBar = null;
@@ -334,5 +334,10 @@ public class MainActivity extends AppCompatActivity {
                 return true;
         }
         return false;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
     }
 }

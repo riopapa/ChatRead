@@ -275,16 +275,15 @@ public class NotificationListener extends NotificationListenerService {
                 if ((sbnText).contains(sbnApp.replFrom[i]))
                     sbnText = sbnText.replace(sbnApp.replFrom[i], sbnApp.replTo[i]);
                 if ((sbnWho).contains(sbnApp.replFrom[i]))
-                    sbnWho = sbnText.replace(sbnApp.replFrom[i], sbnApp.replTo[i]);
+                    sbnWho = sbnWho.replace(sbnApp.replFrom[i], sbnApp.replTo[i]);
             }
         }
-        if (sbnApp.addWho) {
-            sbnText = sbnWho + "※" + sbnText;
-            sbnWho = "";
-        }
+//        if (sbnApp.addWho) {
+//            sbnText = sbnWho + "※" + sbnText;
+//            sbnWho = "";
+//        }
 
-        head = sbnAppNick + ((sbnApp.grp && !sbnGroup.isEmpty()) ? "."+sbnGroup: " ")
-                + ((sbnApp.who)? "." + sbnWho : "");
+        head = sbnAppNick + "." + sbnWho;
         logUpdate.addWork(head, sbnText);
         notificationBar.update(head, sbnText, true);
         String say = head + ", " + sbnText;
