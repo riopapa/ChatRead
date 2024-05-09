@@ -22,6 +22,7 @@ import static biz.riopapa.chatread.MainActivity.sounds;
 import static biz.riopapa.chatread.MainActivity.stockName;
 import static biz.riopapa.chatread.MainActivity.strUtil;
 import static biz.riopapa.chatread.MainActivity.tableListFile;
+import static biz.riopapa.chatread.MainActivity.gSheetUpload;
 import static biz.riopapa.chatread.MainActivity.utils;
 
 import android.app.ActivityManager;
@@ -47,6 +48,7 @@ import biz.riopapa.chatread.func.OptionTables;
 import biz.riopapa.chatread.func.ReadyToday;
 import biz.riopapa.chatread.func.StrUtil;
 import biz.riopapa.chatread.func.TableListFile;
+import biz.riopapa.chatread.func.GSheetUpload;
 import biz.riopapa.chatread.models.KeyVal;
 import biz.riopapa.chatread.notification.NotificationBar;
 import biz.riopapa.chatread.notification.NotificationService;
@@ -92,6 +94,8 @@ public class SetVariables {
 //                mContext.startForegroundService(mBackgroundServiceIntent);
                 mContext.startService(mBackgroundServiceIntent);
             }
+            gSheetUpload = new GSheetUpload();
+//            gSheetUpload.initSheetQue();
         }
     }
 

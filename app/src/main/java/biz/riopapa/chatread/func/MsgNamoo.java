@@ -46,7 +46,7 @@ public class MsgNamoo {
  */
             logUpdate.addStock(naMoo +"."+stkName, sText);
             String timeStamp = new SimpleDateFormat("yy-MM-dd HH:mm", Locale.KOREA).format(new Date());
-            fileIO.uploadStock("힝체결", naMoo, words[1], stkName, words[5]+" "+words[2], words[4], timeStamp);
+            fileIO.uploadStockXX("힝체결", naMoo, words[1], stkName, words[5]+" "+words[2], words[4], timeStamp);
 
         } else {
             logUpdate.addStock("[NH나무App]", text);

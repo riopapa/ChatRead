@@ -7,6 +7,7 @@ import static biz.riopapa.chatread.MainActivity.appsAdapter;
 import static biz.riopapa.chatread.MainActivity.mAppsPos;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.todayFolder;
+import static biz.riopapa.chatread.MainActivity.toolbar;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -51,9 +52,8 @@ public class FragmentApps extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        aBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
-        aBar.setTitle("Apps");
-        aBar.setBackgroundDrawable( ContextCompat.getDrawable(mContext, R.drawable.bar_apps));
+        toolbar.setTitle("Apps");
+        toolbar.setBackgroundDrawable( ContextCompat.getDrawable(mContext, R.drawable.bar_apps));
     }
 
     @Override

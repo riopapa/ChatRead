@@ -1,6 +1,6 @@
 package biz.riopapa.chatread.notification;
 
-import static biz.riopapa.chatread.MainActivity.HIDE_STOP;
+import static biz.riopapa.chatread.MainActivity.SHOW_NOTIFICATION_BAR;
 import static biz.riopapa.chatread.MainActivity.RELOAD_APP;
 import static biz.riopapa.chatread.MainActivity.SHOW_MESSAGE;
 import static biz.riopapa.chatread.MainActivity.STOP_SAY;
@@ -38,10 +38,10 @@ public class NotificationService extends Service {
     NotificationManager mNotificationManager;
     NotificationChannel mNotificationChannel = null;
 
-    String pkgName;
     private RemoteViews mRemoteViews;
     static String msg1 = "", head1 = "00:99";
     static String msg2 = "", head2 = "00:99";
+    static String msg3 = "", head3 = "00:99";
     static boolean show_stop = false;
 
     public NotificationService() {}
@@ -49,8 +49,7 @@ public class NotificationService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        mContext = this;
-        pkgName = mContext.getPackageName();
+//        mContext = this;
         mRemoteViews = new RemoteViews(mContext.getPackageName(), R.layout.notification_bar);
     }
 
@@ -71,16 +70,20 @@ public class NotificationService extends Service {
         if (operation == -1) {
             return START_NOT_STICKY;
         }
+//        Log.w("onStartCommand", "operation = "+operation+ " " + OPERATION[operation-1000]);
         if (msg1.isEmpty())
             msgGet();
 
         switch (operation) {
 
             case SHOW_MESSAGE:
+
+                msg3 = msg2;
+                head3 = head2;
                 msg2 = msg1;
                 head2 = head1;
 
-                msg1 = strUtil.makeEtc(Objects.requireNonNull(intent.getStringExtra("msg")), 120)
+                msg1 = strUtil.makeEtc(Objects.requireNonNull(intent.getStringExtra("msg")), 100)
                         .replace(" ", "\u2008"); // Punctuation Space
                 head1 = new SimpleDateFormat("HH:mm", Locale.KOREA).format(new Date())
                         + "\u00A0" + Objects.requireNonNull(intent.getStringExtra("who"))
@@ -95,12 +98,14 @@ public class NotificationService extends Service {
                 break;
 
             case STOP_SAY:
+
                 if (sounds != null)
                     sounds.stopTTS();
                 show_stop = false;
                 break;
 
-            case HIDE_STOP:
+            case SHOW_NOTIFICATION_BAR:
+
                 show_stop = false;
                 break;
 
@@ -144,21 +149,12 @@ public class NotificationService extends Service {
                 .setOngoing(true);
 
 
-        Intent upIntent = new Intent(mContext, MainActivity.class);
-        upIntent.putExtra("operation", RELOAD_APP);
-        PendingIntent pendingUp = PendingIntent.getService(mContext, RELOAD_APP, upIntent,
-                PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-        mBuilder.setContentIntent(pendingUp);
-        mRemoteViews.setOnClickPendingIntent(R.id.line_upper,
-                PendingIntent.getActivity(mContext, 0, upIntent,
-                        PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT));
-
         Intent lowIntent = new Intent(mContext, MainActivity.class);
         lowIntent.putExtra("operation", RELOAD_APP);
         PendingIntent pendingLow = PendingIntent.getService(mContext, RELOAD_APP, lowIntent,
                 PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
         mBuilder.setContentIntent(pendingLow);
-        mRemoteViews.setOnClickPendingIntent(R.id.line_lower,
+        mRemoteViews.setOnClickPendingIntent(R.id.line_2,
                 PendingIntent.getActivity(mContext, 0, lowIntent,
                         PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT));
 
@@ -175,6 +171,16 @@ public class NotificationService extends Service {
 //                PendingIntent.getActivity(mContext, 0, sIntent,
 //                        PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT));
 
+        Intent upIntent = new Intent(mContext, MainActivity.class);
+        upIntent.putExtra("operation", RELOAD_APP);
+        PendingIntent pendingUp = PendingIntent.getService(mContext, RELOAD_APP, upIntent,
+                PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+        mBuilder.setContentIntent(pendingUp);
+        mRemoteViews.setOnClickPendingIntent(R.id.line_upper,
+                PendingIntent.getActivity(mContext, 0, upIntent,
+                        PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT));
+
+
     }
 
     private void updateRemoteViews() {
@@ -184,6 +190,8 @@ public class NotificationService extends Service {
         mRemoteViews.setTextViewText(R.id.msg_text1, msg1);
         mRemoteViews.setTextViewText(R.id.msg_time2, head2);
         mRemoteViews.setTextViewText(R.id.msg_text2, msg2);
+        mRemoteViews.setTextViewText(R.id.msg_time3, head3);
+        mRemoteViews.setTextViewText(R.id.msg_text3, msg3);
         mRemoteViews.setViewVisibility(R.id.stop_now, (show_stop)? View.VISIBLE : View.GONE);
         mNotificationManager.notify(100,mBuilder.build());
         msgPut();
@@ -193,14 +201,18 @@ public class NotificationService extends Service {
 
         msg1 = sharePref.getString("msg1", "None 1");
         msg2 = sharePref.getString("msg2", "None 2");
+        msg3 = sharePref.getString("msg3", "None 3");
         head1 = sharePref.getString("head1","00:59");
         head2 = sharePref.getString("head2","00:59");
+        head3 = sharePref.getString("head3","00:53");
     }
     public static void msgPut() {
         sharedEditor.putString("msg1", msg1);
         sharedEditor.putString("msg2", msg2);
+        sharedEditor.putString("msg3", msg3);
         sharedEditor.putString("head1", head1);
         sharedEditor.putString("head2", head2);
+        sharedEditor.putString("head3", head3);
         sharedEditor.apply();
     }
 

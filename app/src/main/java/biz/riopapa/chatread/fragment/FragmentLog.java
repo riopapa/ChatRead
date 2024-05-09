@@ -5,6 +5,7 @@ import static biz.riopapa.chatread.MainActivity.logQue;
 import static biz.riopapa.chatread.MainActivity.logSave;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.sharedEditor;
+import static biz.riopapa.chatread.MainActivity.toolbar;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -53,9 +54,8 @@ public class FragmentLog extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        aBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
-        aBar.setTitle("Log");
-        aBar.setBackgroundDrawable( ContextCompat.getDrawable(mContext, R.drawable.bar_log));
+        toolbar.setTitle("Log");
+        toolbar.setBackgroundDrawable( ContextCompat.getDrawable(mContext, R.drawable.bar_log));
     }
 
     @Override

@@ -3,6 +3,7 @@ package biz.riopapa.chatread.alerts;
 import static android.content.Context.MODE_PRIVATE;
 import static biz.riopapa.chatread.MainActivity.alertLines;
 import static biz.riopapa.chatread.MainActivity.fileIO;
+import static biz.riopapa.chatread.MainActivity.gSheetUpload;
 import static biz.riopapa.chatread.MainActivity.mAudioManager;
 import static biz.riopapa.chatread.MainActivity.logUpdate;
 import static biz.riopapa.chatread.MainActivity.mActivity;
@@ -25,7 +26,6 @@ import java.util.Locale;
 
 import biz.riopapa.chatread.MainActivity;
 import biz.riopapa.chatread.common.Copy2Clipboard;
-import biz.riopapa.chatread.func.FileIO;
 import biz.riopapa.chatread.common.PhoneVibrate;
 import biz.riopapa.chatread.common.Sounds;
 import biz.riopapa.chatread.common.Utils;
@@ -96,7 +96,7 @@ public class AlertStock {
         save(al, mContext);
 
         String timeStamp = new SimpleDateFormat("yy-MM-dd HH:mm", Locale.KOREA).format(new Date());
-        fileIO.uploadStock(iGroup, who, percent, sParse[0], sParse[1], key12+sTalk, timeStamp);
+        gSheetUpload.add2Stock(iGroup, timeStamp, who, percent, sParse[0], sParse[1], key12);
 
     }
 

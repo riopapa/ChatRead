@@ -29,15 +29,19 @@
     <color name="color_tab_chat_background">#CDCFB0</color>
     <color name="color_tab_work_background">#F3E5C0</color>
 
-    <color name="barLine0">#81375BCF</color>
+    <color name="notification_bar">#81375BCF</color>
 
-    <color name="upper_line">#E1201C4A</color>
-    <color name="barLine1a">#E1534CAA</color>
+    <color name="line_1">#E1201C4A</color>
+    <color name="line1back">#E1534CAA</color>
     <color name="textLine1">#FFFFFF</color>
 
-    <color name="lower_line">#06332F</color>
+    <color name="line_2">#06332F</color>
     <color name="line2Back">#0C534D</color>
     <color name="textLine2">#FFFFFF</color>
+
+    <color name="line_3">#E1201C4A</color>
+    <color name="line3back">#E1534CAA</color>
+    <color name="textLine3">#FFFFFF</color>
 
     <color name="snackBarBack">#AAAAAA</color>
     <color name="snackBarTitle">#FF354DE3</color>

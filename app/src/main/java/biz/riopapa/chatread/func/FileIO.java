@@ -1,6 +1,7 @@
 package biz.riopapa.chatread.func;
 
 import static biz.riopapa.chatread.MainActivity.downloadFolder;
+import static biz.riopapa.chatread.MainActivity.gSheetUpload;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.packageDirectory;
 import static biz.riopapa.chatread.MainActivity.tableFolder;
@@ -47,11 +48,9 @@ public class FileIO {
         tableFolder = new File(downloadFolder, "_ChatTalk");
     }
 
-    public void uploadStock(String group, String who, String percent, String talk,
-                                   String text, String key12, String timeStamp) {
-        if (text.length() > 120)
-            text = text.substring(0, 120);
-//        Upload2Google.add2Que(group, timeStamp, who, percent, talk, text, key12);
+    public void uploadStockXX(String group, String who, String percent, String talk,
+                              String text, String key12, String timeStamp) {
+        gSheetUpload.add2Stock(group, timeStamp, who, percent, talk, text, key12);
     }
 
     public void append2Today(String filename, String textLine) {
@@ -61,6 +60,7 @@ public class FileIO {
         final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss", Locale.KOREA);
         File file = new File(todayFolder, filename);
         String timeInfo = timeFormat.format(new Date()) + " ";
+        Log.e("append2Today", file.toString()+" time="+timeInfo);
         append2File(file, timeInfo, textLine);
     }
 

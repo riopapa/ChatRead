@@ -6,6 +6,7 @@ import static biz.riopapa.chatread.MainActivity.mAlertPos;
 import static biz.riopapa.chatread.MainActivity.alertsAdapter;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.todayFolder;
+import static biz.riopapa.chatread.MainActivity.toolbar;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -43,9 +44,8 @@ public class FragmentAlert extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        aBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
-        aBar.setTitle("Alert");
-        aBar.setBackgroundDrawable( ContextCompat.getDrawable(mContext, R.drawable.bar_alert));
+        toolbar.setTitle("Alert");
+        toolbar.setBackgroundDrawable( ContextCompat.getDrawable(mContext, R.drawable.bar_alert));
         if (alertsAdapter == null)
             alertsAdapter = new AlertsAdapter();
     }

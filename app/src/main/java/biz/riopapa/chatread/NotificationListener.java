@@ -101,7 +101,7 @@ public class NotificationListener extends NotificationListenerService {
                     if (IgnoreThis.contains(sbnWho, ktWhoIgnores))
                         return;
                     sbnText = strUtil.text2OneLine(sbnText);
-                    if (kvKakao.isDup(sbnGroup, sbnText))
+                    if (kvKakao.isDup(sbnWho, sbnText))
                         return;
                     sbnText = strUtil.strShorten(sbnWho, sbnText);
                     notificationBar.update("카톡!" + sbnWho, sbnText, true);
@@ -326,7 +326,7 @@ public class NotificationListener extends NotificationListenerService {
                 }
 
                 if (sbnText.contains("종목") && sbnText.contains("매수")) {
-                    utils.logW("종목/매수 " +sbnGroup, sbnWho + " > "
+                    utils.logW(sbnGroup, "종목,매수 " + sbnWho + " > "
                                 + sbnText);
                 }
 //                if (msgKeyword == null)

@@ -129,7 +129,7 @@ public class ActivityEditAlert extends AppCompatActivity {
             alertsAdapter.notifyItemRemoved(mAlertPos);
             mStatement =makeGroupMemo();
         }
-//        Upload2Google.uploadGroupInfo(mGroup, mWho, mPercent, "", mStatement);
+//        GSheetUpload.uploadGroupInfo(mGroup, mWho, mPercent, "", mStatement);
         new AlertSave("Delete "+info);
         remove(alertLines, mContext);
         finish();
@@ -211,7 +211,7 @@ public class ActivityEditAlert extends AppCompatActivity {
                 ("Save "+eGroup.getText().toString() + " : " + eWho.getText().toString()));
         mStatement = makeGroupMemo();
 //        mTalk = new SimpleDateFormat("yy/MM/dd\nHH:mm", Locale.KOREA).format(new Date());
-//        Upload2Google.uploadGroupInfo(mGroup, mWho, mPercent, mTalk, mStatement);
+//        GSheetUpload.uploadGroupInfo(mGroup, mWho, mPercent, mTalk, mStatement);
         AlertTable.makeArrays();
         alertsAdapter.notifyDataSetChanged();
         finish();

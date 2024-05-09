@@ -190,7 +190,9 @@ public class Sounds {
     }
 
     public boolean isSilent() {
-        return mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_SILENT;
+
+        return (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_SILENT ||
+                mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC) < 5);
     }
 
 }

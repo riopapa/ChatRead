@@ -49,6 +49,7 @@ import biz.riopapa.chatread.fragment.FragmentLog;
 import biz.riopapa.chatread.fragment.FragmentStock;
 import biz.riopapa.chatread.fragment.FragmentWork;
 import biz.riopapa.chatread.func.FileIO;
+import biz.riopapa.chatread.func.GSheetUpload;
 import biz.riopapa.chatread.func.LogUpdate;
 import biz.riopapa.chatread.common.PhoneVibrate;
 import biz.riopapa.chatread.func.MsgKeyword;
@@ -65,13 +66,15 @@ import biz.riopapa.chatread.notification.NotificationBar;
 import biz.riopapa.chatread.notification.NotificationService;
 
 public class MainActivity extends AppCompatActivity {
-    private Toolbar toolbar;
+
+    public static Toolbar toolbar;
+    public static Context mContext;
+    public static Activity mActivity;
+
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private ActionBarDrawerToggle toggle;
 
-    public static Context mContext;
-    public static Activity mActivity;
     public static File packageDirectory = null;
     public static File tableFolder = null;
     public static File downloadFolder = null;
@@ -129,10 +132,11 @@ public class MainActivity extends AppCompatActivity {
     public static SharedPreferences.Editor sharedEditor;
 
 
-    public static final int SHOW_MESSAGE = 1234;
-    public static final int HIDE_STOP = 5678;
-    public static final int STOP_SAY = 10011;
-    public static final int RELOAD_APP = 2022;
+    public static final String [] OPERATION = {"Show Message","start","stop say", "reload app"};
+    public static final int SHOW_MESSAGE = 1000;
+    public static final int SHOW_NOTIFICATION_BAR = 1001;
+    public static final int STOP_SAY = 1002;
+    public static final int RELOAD_APP = 1003;
 
     public static ActionBar aBar = null;
     public static AudioFocusRequest mFocusGain = null;
@@ -140,9 +144,6 @@ public class MainActivity extends AppCompatActivity {
     public static NotificationService notificationService;
     public static NotificationBar notificationBar;
     public static Intent mBackgroundServiceIntent;
-
-    /* module list */
-//    static AlertWhoIndex alertWhoIndex = null;
 
     public static boolean isPhoneBusy = false;
 
@@ -185,6 +186,7 @@ public class MainActivity extends AppCompatActivity {
     public static MsgSMS msgSMS = null;
     public static MsgNamoo msgNamoo = null;
 
+    public static GSheetUpload gSheetUpload = null;
     public static FileIO fileIO;
 
     public static int teleAppIdx;
@@ -193,10 +195,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        toolbar = findViewById(R.id.myToolBar);
-        setSupportActionBar(toolbar);
         mContext = this;
         mActivity = this;
+        toolbar = findViewById(R.id.myToolBar);
+        setSupportActionBar(toolbar);
+        toolbar.setTitle("Main");
+
         drawerLayout = findViewById(R.id.myDrawer);
         navigationView = findViewById(R.id.myNav);
         toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
@@ -303,9 +307,9 @@ public class MainActivity extends AppCompatActivity {
         getSharedValues();
         new SetVariables(this,"main");
 
-        Intent updateIntent = new Intent(this, NotificationService.class);
-        this.startForegroundService(updateIntent);
-        notificationBar.hideStop();
+//        Intent updateIntent = new Intent(this, NotificationService.class);
+//        this.startForegroundService(updateIntent);
+        notificationBar.startShow();
 
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override

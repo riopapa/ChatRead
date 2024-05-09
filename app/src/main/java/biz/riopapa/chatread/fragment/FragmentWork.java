@@ -5,6 +5,7 @@ import static biz.riopapa.chatread.MainActivity.logSave;
 import static biz.riopapa.chatread.MainActivity.logWork;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.sharedEditor;
+import static biz.riopapa.chatread.MainActivity.toolbar;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -53,9 +54,9 @@ public class FragmentWork extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        aBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
-        aBar.setTitle("Work");
-        aBar.setBackgroundDrawable( ContextCompat.getDrawable(mContext, R.drawable.bar_work));
+//        aBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
+        toolbar.setTitle("Work");
+        toolbar.setBackgroundDrawable( ContextCompat.getDrawable(mContext, R.drawable.bar_work));
     }
 
     @Override

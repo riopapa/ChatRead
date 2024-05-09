@@ -77,7 +77,7 @@ public class MsgSMS {
                     String sayMsg = stockName + " " + amount + " " + uPrice + samPam;
                     notificationBar.update(samPam +":"+stockName, sayMsg, true);
                     logUpdate.addStock("sms>"+nhStock, sayMsg);
-                    fileIO.uploadStock(sGroup, mWho, samPam, stockName,
+                    fileIO.uploadStockXX(sGroup, mWho, samPam, stockName,
                             mText.replace(stockName, new StringBuffer(stockName).insert(1, ".").toString()), samPam,
                             new SimpleDateFormat("yy-MM-dd HH:mm", Locale.KOREA).format(new Date()));
                     sayMsg = stockName + samPam;
