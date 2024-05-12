@@ -49,12 +49,14 @@ public class ReadyToday {
             fileIO.writeFile(tableFolder, "logStock.txt", logStock);
             fileIO.writeFile(tableFolder, "logQue.txt", logQue);
             fileIO.writeFile(tableFolder, "logWork.txt", logWork);
-            String sb = "\n\nkvCommon =\n" + kvCommon.toString() +
-                    "\n\nkvSMS =\n" + kvSMS.toString() +
-                    "\n\nkvTelegram =\n" + kvTelegram.toString() +
-                    "\n\nkvStock =\n" + kvStock.toString() +
-                    "\n\nkvKakao =\n" + kvKakao.toString();
-            fileIO.writeFile(todayFolder, "keyVal.txt", sb);
+            if (kvCommon != null) {
+                String sb = "\nkvCommon =\n" + kvCommon.toString() +
+                        "\nkvSMS =\n" + kvSMS.toString() +
+                        "\nkvTelegram =\n" + kvTelegram.toString() +
+                        "\nkvStock =\n" + kvStock.toString() +
+                        "\nkvKakao =\n" + kvKakao.toString();
+                fileIO.writeFile(todayFolder, "keyVal.txt", sb);
+            }
             kvCommon = new KeyVal();
             kvStock = new KeyVal();
             kvSMS = new KeyVal();

@@ -337,7 +337,7 @@ public class NotificationListener extends NotificationListenerService {
                     utils.logE("tele", "grpIdx " + grpIdx + " err " + sbnGroup + " > " + sbnWho
                             + " > " + sbnText);
                 else {
-//                    utils.logW("tel " + sbnGroup, sbnWho + " : " + sbnText);
+                    utils.logW("keyword " + sbnGroup, sbnWho + " : " + sbnText);
                     msgKeyword.say(sbnGroup, sbnWho, sbnText, grpIdx);
                 }
                 return;

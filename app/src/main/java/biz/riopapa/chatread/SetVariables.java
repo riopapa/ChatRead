@@ -2,6 +2,7 @@ package biz.riopapa.chatread;
 
 import static biz.riopapa.chatread.MainActivity.alertStock;
 import static biz.riopapa.chatread.MainActivity.alertWhoIndex;
+import static biz.riopapa.chatread.MainActivity.downloadFolder;
 import static biz.riopapa.chatread.MainActivity.fileIO;
 import static biz.riopapa.chatread.MainActivity.kvCommon;
 import static biz.riopapa.chatread.MainActivity.kvKakao;
@@ -17,19 +18,26 @@ import static biz.riopapa.chatread.MainActivity.msgNamoo;
 import static biz.riopapa.chatread.MainActivity.msgSMS;
 import static biz.riopapa.chatread.MainActivity.notificationBar;
 import static biz.riopapa.chatread.MainActivity.notificationService;
+import static biz.riopapa.chatread.MainActivity.packageDirectory;
 import static biz.riopapa.chatread.MainActivity.phoneVibrate;
 import static biz.riopapa.chatread.MainActivity.sounds;
 import static biz.riopapa.chatread.MainActivity.stockName;
 import static biz.riopapa.chatread.MainActivity.strUtil;
+import static biz.riopapa.chatread.MainActivity.tableFolder;
 import static biz.riopapa.chatread.MainActivity.tableListFile;
 import static biz.riopapa.chatread.MainActivity.gSheetUpload;
+import static biz.riopapa.chatread.MainActivity.toDay;
+import static biz.riopapa.chatread.MainActivity.todayFolder;
 import static biz.riopapa.chatread.MainActivity.utils;
 
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
+import android.os.Environment;
 import android.util.Log;
+
+import java.io.File;
 
 import biz.riopapa.chatread.alerts.AlertStock;
 import biz.riopapa.chatread.alerts.AlertTable;
@@ -58,12 +66,22 @@ public class SetVariables {
         mContext = context;
         Log.e("SetVariables", "started " + msg);
 
+        if (packageDirectory == null)
+            packageDirectory = new File(Environment.getExternalStorageDirectory(), "_ChatTalkLog");
+        if (tableFolder ==  null) {
+            downloadFolder = new File(Environment.getExternalStorageDirectory(), "download");
+            tableFolder = new File(downloadFolder, "_ChatTalk");
+        }
+        if (todayFolder == null) {
+            todayFolder = new File(packageDirectory, toDay);
+        }
+
         if (fileIO == null)
             fileIO = new FileIO();
         fileIO.readyFolders();
 
         new ReadyToday();
-        new OptionTables().readAll();
+        new OptionTables();
         new AppsTable().get();
         new AlertTable().get();
         alertWhoIndex = new AlertWhoIndex();

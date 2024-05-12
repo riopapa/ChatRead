@@ -267,7 +267,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         try {
             PackageInfo info = getPackageManager().getPackageInfo(getApplicationContext().getPackageName(),
                     PackageManager.GET_PERMISSIONS);

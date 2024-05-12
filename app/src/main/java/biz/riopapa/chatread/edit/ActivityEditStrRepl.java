@@ -142,7 +142,7 @@ public class ActivityEditStrRepl extends AppCompatActivity {
             TextView tv = findViewById(R.id.text_table);
             String s = tv.getText().toString();
             fileIO.writeFile(tableFolder, mTableName +".txt", removeHeader(s));
-            new OptionTables().readAll();
+            new OptionTables();
             finish();
         } else if (item.getItemId() == R.id.add_alert_line) {
             EditText et = findViewById(R.id.text_table);

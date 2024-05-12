@@ -140,7 +140,7 @@ public class ActivityEditTable extends AppCompatActivity {
             TextView tv = findViewById(R.id.text_table);
             String s = tv.getText().toString();
             fileIO.writeFile(tableFolder, mTableName +".txt", sortText(s));
-            new OptionTables().readAll();
+            new OptionTables();
             finish();
         } else if (item.getItemId() == R.id.del_1_line_table) {
             EditText et = findViewById(R.id.text_table);

@@ -32,7 +32,7 @@ import biz.riopapa.chatread.common.Sounds;
 
 public class OptionTables {
 
-    public void readAll() {
+    public OptionTables() {
 
         if (tableListFile == null)
             tableListFile = new TableListFile();

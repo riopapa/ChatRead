@@ -82,7 +82,7 @@ public class FragmentAlert extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         if (item.getItemId() == R.id.reload_all_tables) {
-            new OptionTables().readAll();
+            new OptionTables();
             new AlertTable().get();
         } else if (item.getItemId() == R.id.clear_matched_number) {
             for (int i = 0; i < alertLines.size(); i++) {
