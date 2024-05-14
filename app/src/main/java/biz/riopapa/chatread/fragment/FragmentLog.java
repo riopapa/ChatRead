@@ -105,7 +105,7 @@ public class FragmentLog extends Fragment {
                     new LogSpan().delOneSet(etTable.getText().toString(),
                             etTable.getSelectionStart(), mContext));
 
-        } else if (item.getItemId() == R.id.de_log_many) {
+        } else if (item.getItemId() == R.id.del_log_many) {
             int currPos = etTable.getSelectionStart();
             int logLen = logQue.length();
             logQue = new LogUpdate(mContext).squeezeLog(logQue,logName);

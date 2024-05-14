@@ -98,7 +98,7 @@ public class FragmentStock extends Fragment {
                     new LogSpan().delOneSet(etTable.getText().toString(),
                             etTable.getSelectionStart(), mContext));
 
-        } else if (item.getItemId() == R.id.de_stock_many) {
+        } else if (item.getItemId() == R.id.del_stock_many) {
             int currPos = etTable.getSelectionStart();
             int logLen = logStock.length();
             logStock = new LogUpdate(mContext).squeezeLog(logStock,logName);

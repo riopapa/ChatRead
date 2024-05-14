@@ -11,7 +11,7 @@
         android:title="@string/todo" />
 
     <item
-        android:id="@+id/de_log_many"
+        android:id="@+id/del_log_many"
         android:orderInCategory="100"
         android:icon="@drawable/line_remove_many"
         app:showAsAction="always"

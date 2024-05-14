@@ -34,11 +34,10 @@ import biz.riopapa.chatread.func.ScrollUp;
 
 public class FragmentWork extends Fragment {
 
-    SpannableString ss,sv;
+    SpannableString ss;
     EditText etTable, etKeyword;
     ImageView ivFind, ivClear, ivNext;
     Menu mainMenu;
-    int strPos;
     ScrollView scrollView;
     final String logName = "logWork";
 
@@ -99,7 +98,7 @@ public class FragmentWork extends Fragment {
                     new LogSpan().delOneSet(etTable.getText().toString(),
                             etTable.getSelectionStart(), mContext));
 
-        } else if (item.getItemId() == R.id.de_work_many) {
+        } else if (item.getItemId() == R.id.del_work_many) {
             int currPos = etTable.getSelectionStart();
             int logLen = logWork.length();
             logWork = new LogUpdate(mContext).squeezeLog(logWork,logName);

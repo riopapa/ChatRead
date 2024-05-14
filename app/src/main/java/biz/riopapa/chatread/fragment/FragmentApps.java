@@ -90,8 +90,6 @@ public class FragmentApps extends Fragment {
         EditText sKey = thisView.findViewById(R.id.app_search_key);
         sKey.setText(key);
 
-//        binding.appSearchKey.setText(key);
-//        binding.appSearch.setOnClickListener(v -> {
         ImageView iSearch = thisView.findViewById(R.id.app_search);
 
         iSearch.setOnClickListener(v -> {
