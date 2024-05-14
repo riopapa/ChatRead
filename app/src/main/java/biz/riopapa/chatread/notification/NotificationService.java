@@ -31,6 +31,7 @@ import java.util.Objects;
 
 import biz.riopapa.chatread.MainActivity;
 import biz.riopapa.chatread.R;
+import biz.riopapa.chatread.SetVariables;
 
 public class NotificationService extends Service {
 
@@ -198,8 +199,10 @@ public class NotificationService extends Service {
         msgPut();
     }
 
-    public static void msgGet() {
+    public void msgGet() {
 
+        if (sharePref == null)
+            new SetVariables(this, "notiSvc");
         msg1 = sharePref.getString("msg1", "None 1");
         msg2 = sharePref.getString("msg2", "None 2");
         msg3 = sharePref.getString("msg3", "None 3");

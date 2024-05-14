@@ -98,8 +98,9 @@ public class Sounds {
         delayedSay(text);
     }
 
-    private void delayedSay(String text) {
-        long delay = 150;
+    private void delayedSay(String text2Speak) {
+        final String[] text = {onlySpeakable(text2Speak)};
+        long delay = 100;
 //        if (mTTS == null) {
 //            init();
 //            delay = 30;
@@ -110,13 +111,27 @@ public class Sounds {
             mAudioManager.requestAudioFocus(mFocusGain);
             new Timer().schedule(new TimerTask() {
                 public void run() {
-                    try {
-                        mTTS.speak(onlySpeakable(text), TextToSpeech.QUEUE_ADD, null, TTSId);
-                    } catch (Exception e) {
-                        new Utils().logE("Sound", "TTS Error:" + e);
+                    while(text[0].length() > 30) {
+                        String txt = text[0].substring(0,30);
+                        int p = txt.lastIndexOf(" ");
+                        if (p == -1)
+                            p = 30;
+                        txt = txt.substring(0, p);
+                        ttsSpeak(txt);
+                        text[0] = text[0].substring(p+1);
                     }
+                    if (!text[0].isEmpty())
+                        ttsSpeak(text[0]);
                 }
             }, delay);
+        }
+    }
+
+    private void ttsSpeak(String txt) {
+        try {
+            mTTS.speak(txt, TextToSpeech.QUEUE_ADD, null, TTSId);
+        } catch (Exception e) {
+            new Utils().logE("Sound", "TTS Error:" + e);
         }
     }
 
@@ -145,7 +160,7 @@ public class Sounds {
                         new Utils().logE("Sound", "TTS Error:" + e);
                     }
                 }
-            }, 50);
+            }, 100);
         }
     }
 

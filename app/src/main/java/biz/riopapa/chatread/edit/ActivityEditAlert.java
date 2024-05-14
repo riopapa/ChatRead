@@ -1,6 +1,7 @@
 package biz.riopapa.chatread.edit;
 
 import static biz.riopapa.chatread.MainActivity.alertLines;
+import static biz.riopapa.chatread.MainActivity.gSheetUpload;
 import static biz.riopapa.chatread.MainActivity.mAlertPos;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.alertsAdapter;
@@ -129,13 +130,14 @@ public class ActivityEditAlert extends AppCompatActivity {
             alertsAdapter.notifyItemRemoved(mAlertPos);
             mStatement =makeGroupMemo();
         }
-//        GSheetUpload.uploadGroupInfo(mGroup, mWho, mPercent, "", mStatement);
+        gSheetUpload.uploadGroupInfo(mGroup, "timeStamp", mWho, mPercent,
+                "talk", mStatement, "key12");
         new AlertSave("Delete "+info);
-        remove(alertLines, mContext);
+        removeMatched(alertLines, mContext);
         finish();
     }
 
-    void remove(ArrayList<AlertLine> alertLines, Context context) {
+    void removeMatched(ArrayList<AlertLine> alertLines, Context context) {
 
         SharedPreferences sharePref = context.getSharedPreferences("alertLine", MODE_PRIVATE);
         SharedPreferences.Editor sharedEditor = sharePref.edit();
@@ -210,8 +212,10 @@ public class ActivityEditAlert extends AppCompatActivity {
         new AlertSave((al.matched == -1)? ("Save Group "+eGroup.getText().toString()):
                 ("Save "+eGroup.getText().toString() + " : " + eWho.getText().toString()));
         mStatement = makeGroupMemo();
-//        mTalk = new SimpleDateFormat("yy/MM/dd\nHH:mm", Locale.KOREA).format(new Date());
-//        GSheetUpload.uploadGroupInfo(mGroup, mWho, mPercent, mTalk, mStatement);
+        mTalk = new SimpleDateFormat("yy/MM/dd\nHH:mm", Locale.KOREA).format(new Date());
+        gSheetUpload.uploadGroupInfo(mGroup, ")_(", mWho, mPercent,
+                mTalk, mStatement, "key12");
+
         AlertTable.makeArrays();
         alertsAdapter.notifyDataSetChanged();
         finish();
