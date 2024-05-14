@@ -1,6 +1,7 @@
 package biz.riopapa.chatread.fragment;
 
 import static android.content.Context.MODE_PRIVATE;
+import static androidx.core.content.ContextCompat.getSystemService;
 import static biz.riopapa.chatread.MainActivity.aBar;
 import static biz.riopapa.chatread.MainActivity.apps;
 import static biz.riopapa.chatread.MainActivity.appsAdapter;
@@ -9,15 +10,18 @@ import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.todayFolder;
 import static biz.riopapa.chatread.MainActivity.toolbar;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Selection;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -31,6 +35,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import biz.riopapa.chatread.R;
 import biz.riopapa.chatread.adapters.AppsAdapter;
+import biz.riopapa.chatread.common.SetFocused;
 import biz.riopapa.chatread.edit.ActivityEditApp;
 import biz.riopapa.chatread.func.AppsTable;
 import biz.riopapa.chatread.func.ReadyToday;
@@ -91,7 +96,7 @@ public class FragmentApps extends Fragment {
 
         iSearch.setOnClickListener(v -> {
             key = sKey.getText().toString();
-            if (key.length() > 1) {
+            if (!key.isEmpty()) {
                 shEditor.putString("key", key);
                 shEditor.apply();
                 searchApps(0);
@@ -106,12 +111,12 @@ public class FragmentApps extends Fragment {
         });
         ImageView iClear = thisView.findViewById(R.id.app_clear);
         iClear.setOnClickListener(v -> {
-            key = "";
-            sKey.setText(key);
+            new SetFocused(sKey);
         });
 
         return thisView;
     }
+
 
     void searchApps(int startPos) {
         appPos = -1;

@@ -49,7 +49,8 @@ public class NotificationService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-//        mContext = this;
+        if (mContext == null)
+            mContext = this;
         mRemoteViews = new RemoteViews(mContext.getPackageName(), R.layout.notification_bar);
     }
 

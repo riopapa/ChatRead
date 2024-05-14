@@ -1,5 +1,6 @@
 package biz.riopapa.chatread;
 
+import static android.content.Context.MODE_PRIVATE;
 import static biz.riopapa.chatread.MainActivity.alertStock;
 import static biz.riopapa.chatread.MainActivity.alertWhoIndex;
 import static biz.riopapa.chatread.MainActivity.downloadFolder;
@@ -9,7 +10,11 @@ import static biz.riopapa.chatread.MainActivity.kvKakao;
 import static biz.riopapa.chatread.MainActivity.kvSMS;
 import static biz.riopapa.chatread.MainActivity.kvStock;
 import static biz.riopapa.chatread.MainActivity.kvTelegram;
+import static biz.riopapa.chatread.MainActivity.logQue;
+import static biz.riopapa.chatread.MainActivity.logSave;
+import static biz.riopapa.chatread.MainActivity.logStock;
 import static biz.riopapa.chatread.MainActivity.logUpdate;
+import static biz.riopapa.chatread.MainActivity.logWork;
 import static biz.riopapa.chatread.MainActivity.mAudioManager;
 import static biz.riopapa.chatread.MainActivity.mBackgroundServiceIntent;
 import static biz.riopapa.chatread.MainActivity.mContext;
@@ -20,6 +25,8 @@ import static biz.riopapa.chatread.MainActivity.notificationBar;
 import static biz.riopapa.chatread.MainActivity.notificationService;
 import static biz.riopapa.chatread.MainActivity.packageDirectory;
 import static biz.riopapa.chatread.MainActivity.phoneVibrate;
+import static biz.riopapa.chatread.MainActivity.sharePref;
+import static biz.riopapa.chatread.MainActivity.sharedEditor;
 import static biz.riopapa.chatread.MainActivity.sounds;
 import static biz.riopapa.chatread.MainActivity.stockName;
 import static biz.riopapa.chatread.MainActivity.strUtil;
@@ -65,6 +72,16 @@ public class SetVariables {
     public SetVariables(Context context, String msg) {
         mContext = context;
         Log.e("SetVariables", "started " + msg);
+        if (sharePref ==  null) {
+            sharePref = context.getSharedPreferences("sayText", MODE_PRIVATE);
+            sharedEditor = sharePref.edit();
+        }
+        if (logQue == null) {
+            logQue = sharePref.getString("logQue", "");
+            logStock = sharePref.getString("logStock", "");
+            logSave = sharePref.getString("logSave", "");
+            logWork = sharePref.getString("logWork", "");
+        }
 
         if (packageDirectory == null)
             packageDirectory = new File(Environment.getExternalStorageDirectory(), "_ChatTalkLog");
@@ -113,7 +130,6 @@ public class SetVariables {
                 mContext.startService(mBackgroundServiceIntent);
             }
             gSheetUpload = new GSheetUpload();
-//            gSheetUpload.initSheetQue();
         }
     }
 

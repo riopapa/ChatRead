@@ -34,7 +34,7 @@ public class OptionTables {
 
     public OptionTables() {
 
-        if (tableListFile == null)
+//        if (tableListFile == null)
             tableListFile = new TableListFile();
         ktGroupIgnores = tableListFile.read("ktGrpIg");
         ktWhoIgnores = tableListFile.read("ktWhoIg");

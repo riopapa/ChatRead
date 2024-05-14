@@ -303,7 +303,6 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
             startActivity(intent);
         }
-        getSharedValues();
         new SetVariables(this,"main");
 
 //        Intent updateIntent = new Intent(this, NotificationService.class);
@@ -318,15 +317,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-    }
-
-    void getSharedValues() {
-        sharePref = this.getSharedPreferences("sayText", MODE_PRIVATE);
-        sharedEditor = sharePref.edit();
-        logQue = sharePref.getString("logQue", "");
-        logStock = sharePref.getString("logStock", "");
-        logSave = sharePref.getString("logSave", "");
-        logWork = sharePref.getString("logWork", "");
     }
 
     private boolean isNotificationAllowed(String packageName) {

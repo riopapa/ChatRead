@@ -1,5 +1,9 @@
 package biz.riopapa.chatread.func;
 
+import static biz.riopapa.chatread.MainActivity.logQue;
+import static biz.riopapa.chatread.MainActivity.sharedEditor;
+import static biz.riopapa.chatread.MainActivity.utils;
+
 import android.content.res.Resources;
 import android.util.Log;
 
@@ -22,6 +26,9 @@ import okhttp3.Response;
 
 public class GSheetUpload {
 
+    public GSheetUpload() {
+        sheetQues = new ArrayList<>();
+    }
     static class SheetQue {
 
         String group, timeStamp, who, percent, talk, statement, key12;
@@ -46,21 +53,27 @@ public class GSheetUpload {
         uploadStock();
     }
     public void uploadStock() {
-        if (sheetQues.isEmpty() || nowUploading ) //  || WifiMonitor.wifiName.equals(none))
+//        if (sheetQues.isEmpty() || nowUploading ) //  || WifiMonitor.wifiName.equals(none))
+//            return;
+//        nowUploading = true;
+        if (sheetQues.isEmpty())
             return;
-        nowUploading = true;
-        SheetQue que = sheetQues.get(0);
-        sheetQues.remove(0);
-        String action = "stock";
-        String group = que.group, timeStamp = que.timeStamp, who = que.who;
-        String percent = que.percent; //  + "Q"+hourMinFormat.format(System.currentTimeMillis());
-        String talk = que.talk; String statement = que.statement; String key12 = que.key12;
-        JSONObject valueRange = new JSONObject();
-        JSONArray values = new JSONArray();
-        values.put(new JSONArray().put(action).put(group).put(timeStamp).put(who)
-                .put(percent).put(talk).put(statement).put(key12)
-        );
-        post2GSheet(valueRange);
+        Thread thread = new Thread(() -> {
+            SheetQue que = sheetQues.get(0);
+            sheetQues.remove(0);
+            String action = "stock";
+            String group = que.group, timeStamp = que.timeStamp, who = que.who;
+            String percent = que.percent; //  + "Q"+hourMinFormat.format(System.currentTimeMillis());
+            String talk = que.talk; String statement = que.statement; String key12 = que.key12;
+            JSONObject valueRange = new JSONObject();
+            JSONArray values = new JSONArray();
+            values.put(new JSONArray().put(action).put(group).put(timeStamp).put(who)
+                    .put(percent).put(talk).put(statement).put(key12)
+            );
+            post2GSheet(valueRange);
+        });
+        thread.start();
+
     }
 
     public void uploadGroupInfo(String group, String who, String percent, String talk, String statement) {
@@ -82,19 +95,20 @@ public class GSheetUpload {
                 .url(SPREADSHEET_ID)
                 .post(requestBody)
                 .build();
-
+        utils.logW("post2GSheet","uploading "+jsonBody);
         // Execute request asynchronously
         client.newCall(request).enqueue(new Callback() {
 
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                Log.e("gSheet","stock Upload Fail "+e);
+                String errStr = "stock Upload Fail "+ jsonBody + "\n"+e;
+                utils.logE("gSheet",errStr);
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
-                    Log.d("SheetsWriter", "Data written successfully!");
+                    utils.logW("gSheet Done",jsonBody);
                 } else {
                     Log.e("SheetsWriter", "Error writing data: " + response.body().string());
                 }

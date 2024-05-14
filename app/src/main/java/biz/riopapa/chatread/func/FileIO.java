@@ -47,11 +47,11 @@ public class FileIO {
         downloadFolder = new File(Environment.getExternalStorageDirectory(), "download");
         tableFolder = new File(downloadFolder, "_ChatTalk");
     }
-
-    public void uploadStockXX(String group, String who, String percent, String talk,
-                              String text, String key12, String timeStamp) {
-        gSheetUpload.add2Stock(group, timeStamp, who, percent, talk, text, key12);
-    }
+//
+//    public void uploadStockXX(String group, String who, String percent, String talk,
+//                              String text, String key12, String timeStamp) {
+//        gSheetUpload.add2Stock(group, timeStamp, who, percent, talk, text, key12);
+//    }
 
     public void append2Today(String filename, String textLine) {
         if (todayFolder == null) {
@@ -60,7 +60,6 @@ public class FileIO {
         final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss", Locale.KOREA);
         File file = new File(todayFolder, filename);
         String timeInfo = timeFormat.format(new Date()) + " ";
-        Log.e("append2Today", file.toString()+" time="+timeInfo);
         append2File(file, timeInfo, textLine);
     }
 

@@ -36,10 +36,14 @@ public class AlertStock {
 
         String sTalk, who;
 
-        if (utils == null)
+        if (utils == null) {
+            utils.logW("sayNlog", "utils null");
             utils = new Utils();
-        if (sounds == null)
+        }
+        if (sounds == null) {
+            utils.logW("sayNlog", "sounds null");
             sounds = new Sounds();
+        }
 
         AlertLine al = alertLines.get(aIdx);
         al.matched++;

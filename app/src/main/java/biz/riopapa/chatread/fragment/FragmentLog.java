@@ -32,6 +32,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import biz.riopapa.chatread.R;
+import biz.riopapa.chatread.common.SetFocused;
 import biz.riopapa.chatread.func.LogSpan;
 import biz.riopapa.chatread.func.LogUpdate;
 import biz.riopapa.chatread.common.SnackBar;
@@ -118,7 +119,9 @@ public class FragmentLog extends Fragment {
             }
         });
 
-        ivClear.setOnClickListener(v -> etKeyword.setText(""));
+        ivClear.setOnClickListener(v -> {
+            new SetFocused(etKeyword);
+        });
         ScrollView scrollView1 = thisView.findViewById(R.id.scroll_log);
         new Handler(Looper.getMainLooper()).post(() -> scrollView1.smoothScrollBy(0, 90000));
         super.onResume();

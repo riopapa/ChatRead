@@ -5,7 +5,6 @@ import static biz.riopapa.chatread.MainActivity.appFullNames;
 import static biz.riopapa.chatread.MainActivity.appIgnores;
 import static biz.riopapa.chatread.MainActivity.appNameIdx;
 import static biz.riopapa.chatread.MainActivity.apps;
-import static biz.riopapa.chatread.MainActivity.mAudioManager;
 import static biz.riopapa.chatread.MainActivity.ktGroupIgnores;
 import static biz.riopapa.chatread.MainActivity.ktNoNumbers;
 import static biz.riopapa.chatread.MainActivity.ktTxtIgnores;
@@ -16,6 +15,7 @@ import static biz.riopapa.chatread.MainActivity.kvSMS;
 import static biz.riopapa.chatread.MainActivity.kvTelegram;
 import static biz.riopapa.chatread.MainActivity.logUpdate;
 import static biz.riopapa.chatread.MainActivity.longWhoNames;
+import static biz.riopapa.chatread.MainActivity.mAudioManager;
 import static biz.riopapa.chatread.MainActivity.msgKeyword;
 import static biz.riopapa.chatread.MainActivity.msgSMS;
 import static biz.riopapa.chatread.MainActivity.notificationBar;
@@ -35,7 +35,6 @@ import static biz.riopapa.chatread.MainActivity.smsWhoIgnores;
 import static biz.riopapa.chatread.MainActivity.sounds;
 import static biz.riopapa.chatread.MainActivity.strUtil;
 import static biz.riopapa.chatread.MainActivity.teleApp;
-import static biz.riopapa.chatread.MainActivity.teleAppIdx;
 import static biz.riopapa.chatread.MainActivity.utils;
 import static biz.riopapa.chatread.MainActivity.whoNameFrom;
 import static biz.riopapa.chatread.MainActivity.whoNameTo;
@@ -46,7 +45,6 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
-import android.util.Log;
 
 import java.util.Collections;
 
@@ -54,10 +52,7 @@ import biz.riopapa.chatread.common.Copy2Clipboard;
 import biz.riopapa.chatread.common.IgnoreNumber;
 import biz.riopapa.chatread.common.IgnoreThis;
 import biz.riopapa.chatread.common.Utils;
-import biz.riopapa.chatread.func.AppsTable;
-import biz.riopapa.chatread.func.MsgKeyword;
 import biz.riopapa.chatread.func.MsgNamoo;
-import biz.riopapa.chatread.func.MsgSMS;
 import biz.riopapa.chatread.models.App;
 
 public class NotificationListener extends NotificationListenerService {
@@ -153,9 +148,6 @@ public class NotificationListener extends NotificationListenerService {
 
             case APP:
 
-//                if (kvCommon == null)
-//                    Log.e("ivCommon"," is nothing");
-//                Log.w("APP","nick "+sbnApp.nickName);
                 if (kvCommon.isDup(sbnApp.nickName, sbnText))
                     return;
                 if (sbnApp.igStr != null && hasIgnoreStr(sbnApp))
@@ -307,6 +299,8 @@ public class NotificationListener extends NotificationListenerService {
                     return;
                 sbnText = strUtil.text2OneLine(sbnText);
                 sbnGroup = shortWhoNames[i];
+                if (kvTelegram.isDup(sbnGroup, sbnText))
+                    return;
                 String []grpWho = sbnWho.split(":");
                 // 'Ai 데일리 봇' 은 group 12메시 있음 : who 형태임
                 // '투자의 봄' 은 group 없이 who 만 존재
@@ -337,7 +331,7 @@ public class NotificationListener extends NotificationListenerService {
                     utils.logE("tele", "grpIdx " + grpIdx + " err " + sbnGroup + " > " + sbnWho
                             + " > " + sbnText);
                 else {
-                    utils.logW("keyword " + sbnGroup, sbnWho + " : " + sbnText);
+//                    utils.logW("keyword " + sbnGroup, sbnWho + " : " + sbnText);
                     msgKeyword.say(sbnGroup, sbnWho, sbnText, grpIdx);
                 }
                 return;

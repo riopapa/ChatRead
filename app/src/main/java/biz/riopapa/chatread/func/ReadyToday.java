@@ -45,7 +45,7 @@ public class ReadyToday {
         if (!todayFolder.exists()) {
             if (todayFolder.mkdirs())
                 new Utils().deleteOldFiles();
-            sharedEditor.apply();
+//            sharedEditor.apply();
             fileIO.writeFile(tableFolder, "logStock.txt", logStock);
             fileIO.writeFile(tableFolder, "logQue.txt", logQue);
             fileIO.writeFile(tableFolder, "logWork.txt", logWork);
@@ -57,12 +57,11 @@ public class ReadyToday {
                         "\nkvKakao =\n" + kvKakao.toString();
                 fileIO.writeFile(todayFolder, "keyVal.txt", sb);
             }
-            kvCommon = new KeyVal();
-            kvStock = new KeyVal();
-            kvSMS = new KeyVal();
-            kvTelegram = new KeyVal();
-            kvKakao = new KeyVal();
         }
-
+        kvCommon = new KeyVal();
+        kvStock = new KeyVal();
+        kvSMS = new KeyVal();
+        kvTelegram = new KeyVal();
+        kvKakao = new KeyVal();
     }
 }

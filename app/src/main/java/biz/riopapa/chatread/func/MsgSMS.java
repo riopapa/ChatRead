@@ -2,6 +2,7 @@ package biz.riopapa.chatread.func;
 
 import static biz.riopapa.chatread.MainActivity.aGroups;
 import static biz.riopapa.chatread.MainActivity.fileIO;
+import static biz.riopapa.chatread.MainActivity.gSheetUpload;
 import static biz.riopapa.chatread.MainActivity.lastChar;
 import static biz.riopapa.chatread.MainActivity.logUpdate;
 import static biz.riopapa.chatread.MainActivity.msgKeyword;
@@ -77,7 +78,7 @@ public class MsgSMS {
                     String sayMsg = stockName + " " + amount + " " + uPrice + samPam;
                     notificationBar.update(samPam +":"+stockName, sayMsg, true);
                     logUpdate.addStock("sms>"+nhStock, sayMsg);
-                    fileIO.uploadStockXX(sGroup, mWho, samPam, stockName,
+                    gSheetUpload.add2Stock(sGroup, mWho, samPam, stockName,
                             mText.replace(stockName, new StringBuffer(stockName).insert(1, ".").toString()), samPam,
                             new SimpleDateFormat("yy-MM-dd HH:mm", Locale.KOREA).format(new Date()));
                     sayMsg = stockName + samPam;
