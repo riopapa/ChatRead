@@ -1,20 +1,14 @@
 package biz.riopapa.chatread.fragment;
 
-import static biz.riopapa.chatread.MainActivity.aBar;
 import static biz.riopapa.chatread.MainActivity.logQue;
-import static biz.riopapa.chatread.MainActivity.logSave;
 import static biz.riopapa.chatread.MainActivity.mContext;
-import static biz.riopapa.chatread.MainActivity.sharedEditor;
 import static biz.riopapa.chatread.MainActivity.toolbar;
 
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.text.Editable;
 import android.text.Selection;
-import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.style.BackgroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,28 +18,29 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ScrollView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import biz.riopapa.chatread.R;
 import biz.riopapa.chatread.common.SetFocused;
+import biz.riopapa.chatread.func.Copy2Save;
+import biz.riopapa.chatread.func.KeyStringFind;
+import biz.riopapa.chatread.func.KeyStringNext;
 import biz.riopapa.chatread.func.LogSpan;
 import biz.riopapa.chatread.func.LogUpdate;
-import biz.riopapa.chatread.common.SnackBar;
+import biz.riopapa.chatread.func.ScrollUp;
 import biz.riopapa.chatread.func.VolumeIcon;
-import biz.riopapa.chatread.models.DelItem;
 
 public class FragmentLog extends Fragment {
 
-    SpannableString ss, sv;
+    SpannableString ss;
     EditText etTable, etKeyword;
     ImageView ivFind, ivClear, ivNext, ivVolume;
     Menu mainMenu;
-    int strPos;
+    ScrollView scrollView;
+    final String logName = "logQue";
 
     public FragmentLog() {
         // Required empty public constructor
@@ -55,7 +50,7 @@ public class FragmentLog extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        toolbar.setTitle("Log");
+        toolbar.setTitle(logName);
         toolbar.setBackgroundDrawable( ContextCompat.getDrawable(mContext, R.drawable.bar_log));
     }
 
@@ -74,56 +69,21 @@ public class FragmentLog extends Fragment {
         ss = new LogSpan().make(logQue, this.getContext());
         etTable.setText(ss);
 
-        sv = ss;
         ivNext.setVisibility(View.GONE);
-        strPos = -1;
+
         ivFind.setOnClickListener(v -> {
-            String key = etKeyword.getText().toString();
-            if (key.length() < 2)
-                return;
-            int cnt = 0;
-            strPos = -1;
-            String fullText = etTable.getText().toString();
-            ss = sv;
-            int oEnd = fullText.indexOf(key);
-            for (int oStart = 0; oStart < fullText.length() && oEnd != -1; oStart = oEnd + 2) {
-                oEnd = fullText.indexOf(key, oStart);
-                if (oEnd > 0) {
-                    cnt++;
-                    if (strPos < 0)
-                        strPos = oEnd;
-                    ss.setSpan(new BackgroundColorSpan(0xFFFFFF00), oEnd, oEnd + key.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                }
-            }
-            sv = ss;
-            etTable.setText(ss);
-            new SnackBar().show(key, cnt+" times Found");
-            Editable etText = etTable.getText();
-            if (strPos > 0) {
-                Selection.setSelection(etText, strPos);
-                etTable.requestFocus();
-                ivNext.setVisibility(View.VISIBLE);
-            }
+            new KeyStringFind(etKeyword, etTable, ss, ivNext);
         });
 
         ivNext.setOnClickListener(v -> {
-            String key = etKeyword.getText().toString();
-            if (key.length() < 2)
-                return;
-            Editable etText = etTable.getText();
-            String s = etText.toString();
-            strPos = s.indexOf(key, strPos +1);
-            if (strPos > 0) {
-                Selection.setSelection(etText, strPos);
-                etTable.requestFocus();
-            }
+            new KeyStringNext(etKeyword, etTable);
         });
 
         ivClear.setOnClickListener(v -> {
             new SetFocused(etKeyword);
         });
-        ScrollView scrollView1 = thisView.findViewById(R.id.scroll_log);
-        new Handler(Looper.getMainLooper()).post(() -> scrollView1.smoothScrollBy(0, 90000));
+        scrollView = thisView.findViewById(R.id.scroll_log);
+        new Handler(Looper.getMainLooper()).post(() -> scrollView.smoothScrollBy(0, 90000));
         super.onResume();
 
         ivVolume.setImageBitmap(VolumeIcon.draw());
@@ -141,13 +101,14 @@ public class FragmentLog extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         if (item.getItemId() == R.id.del_log_one_set) {
-            showNextQue(new LogSpan().delOneSet(etTable.getText().toString(),
-                    etTable.getSelectionStart(), mContext));
+            new ScrollUp(etTable, scrollView, logName,
+                    new LogSpan().delOneSet(etTable.getText().toString(),
+                            etTable.getSelectionStart(), mContext));
 
         } else if (item.getItemId() == R.id.de_log_many) {
             int currPos = etTable.getSelectionStart();
             int logLen = logQue.length();
-            logQue = new LogUpdate(mContext).squeezeLog(logQue,"logQue");
+            logQue = new LogUpdate(mContext).squeezeLog(logQue,logName);
             if (currPos > 0)
                 currPos += logQue.length() - logLen;
             ss = new LogSpan().make(logQue, mContext);
@@ -156,42 +117,15 @@ public class FragmentLog extends Fragment {
             etTable.requestFocus();
 
         } else if (item.getItemId() == R.id.del_log_1_line) {
-            showNextQue(new LogSpan().delOneLine(etTable.getText().toString(),
-                    etTable.getSelectionStart(), mContext));
+            new ScrollUp(etTable, scrollView, logName,
+                    new LogSpan().delOneLine(etTable.getText().toString(),
+                            etTable.getSelectionStart(), mContext));
 
         } else if (item.getItemId() == R.id.log2save) {
-            String logNow = etTable.getText().toString().trim() + "\n";
-            int ps = logNow.lastIndexOf("\n", etTable.getSelectionStart() - 1);
-            if (ps == -1)
-                ps = 0;
-            int pf = logNow.indexOf("\n", ps + 1);
-            if (pf == -1)
-                pf = logNow.length();
-
-            ps = logNow.lastIndexOf("\n", ps - 1);
-            if (ps == -1)
-                ps = 0;
-            else
-                ps = logNow.lastIndexOf("\n", ps - 1);
-
-            String copied = logNow.substring(ps+1, pf);
-            logSave += "\n" + copied;
-            sharedEditor.putString("logSave", logSave);
-            sharedEditor.apply();
-            copied = copied.replace("\n", " ▶️ ");
-            Toast.makeText(mContext, "que copied " + copied, Toast.LENGTH_SHORT).show();
+            new Copy2Save(etTable.getText().toString().trim() + "\n", etTable.getSelectionStart());
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void showNextQue(DelItem delItem) {
-        logQue = delItem.logNow;
-        sharedEditor.putString("logQue", logQue);
-        sharedEditor.apply();
-        etTable.setText(delItem.ss);
-        Editable etText = etTable.getText();
-        Selection.setSelection(etText, delItem.ps, delItem.pf);
-        etTable.requestFocus();
-    }
 
 }

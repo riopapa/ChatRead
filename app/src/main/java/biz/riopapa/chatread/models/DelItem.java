@@ -4,12 +4,14 @@ import android.text.SpannableString;
 
 public class DelItem {
     public String logNow;
-    public int ps;
-    public int pf;
+    public int pStart;  // new start position
+    public int pFinish;  // new end position
+    public int pOld; // old position
     public SpannableString ss;
-    public DelItem(String logNow, int ps, int pf, SpannableString ss) {
+    public DelItem(String logNow, int pStart, int pFinish, int pOld, SpannableString ss) {
         this.logNow = logNow;
-        this.ps = ps; this.pf = pf;
+        this.pStart = pStart; this.pFinish = pFinish;
         this.ss = ss;
+        this.pOld = pOld;
     }
 }

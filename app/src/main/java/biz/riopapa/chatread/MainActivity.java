@@ -46,6 +46,7 @@ import biz.riopapa.chatread.edit.ActivityEditTable;
 import biz.riopapa.chatread.fragment.FragmentAlert;
 import biz.riopapa.chatread.fragment.FragmentApps;
 import biz.riopapa.chatread.fragment.FragmentLog;
+import biz.riopapa.chatread.fragment.FragmentSave;
 import biz.riopapa.chatread.fragment.FragmentStock;
 import biz.riopapa.chatread.fragment.FragmentWork;
 import biz.riopapa.chatread.func.FileIO;
@@ -226,6 +227,11 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.work:
                         getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
                                 new FragmentWork()).commit();
+                        drawerLayout.closeDrawer(GravityCompat.START);
+                        break;
+                    case R.id.save:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
+                                new FragmentSave()).commit();
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
                     case R.id.alert:

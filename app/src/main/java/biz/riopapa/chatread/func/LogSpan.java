@@ -87,59 +87,59 @@ public class LogSpan {
         return ss;
     }
 
-    public DelItem delOneSet(String logNow, int ps, Context context) {
-        ps = logNow.lastIndexOf("\n", ps - 1);
-        int pf = logNow.indexOf("\n", ps+1);
-        if (pf == -1) {
-            pf = logNow.length();
+    public DelItem delOneSet(String logNow, int pCurr, Context context) {
+        int pStart  = logNow.lastIndexOf("\n", pCurr - 1);
+        int pFinish = logNow.indexOf("\n", pStart+1);
+        if (pFinish == -1) {
+            pFinish = logNow.length();
             logNow += "\n";
         }
-        ps = logNow.lastIndexOf("\n", ps - 1);
-        if (ps < 2)
-            ps = 1;
-        if (logNow.charAt(ps - 1) == '\n')
-            logNow = logNow.substring(0, ps - 1) + logNow.substring(pf);
+        pStart = logNow.lastIndexOf("\n", pStart - 1);
+        if (pStart < 2)
+            pStart = 1;
+        if (logNow.charAt(pStart - 1) == '\n')
+            logNow = logNow.substring(0, pStart - 1) + logNow.substring(pFinish);
         else
-            logNow = logNow.substring(0, ps) + logNow.substring(pf);
+            logNow = logNow.substring(0, pStart) + logNow.substring(pFinish);
         // positioned 2 lines deleted and now to skip if \n
         if (logNow.charAt(0) == '\n')
             logNow = logNow.substring(1);
         if (logNow.charAt(0) == '\n')
             logNow = logNow.substring(1);
-        if (ps >= logNow.length())
-            ps = logNow.length() - 2;
-        ps = logNow.lastIndexOf("\n", ps - 2) + 1;
-        pf = logNow.indexOf("\n", ps);
-        if (ps > logNow.length())
-            ps = logNow.lastIndexOf("\n") - 1;
-        if (pf > logNow.length() || pf == -1)
-            pf = logNow.length();
+        if (pStart >= logNow.length())
+            pStart = logNow.length() - 2;
+        pStart = logNow.lastIndexOf("\n", pStart - 2) + 1;
+        pFinish = logNow.indexOf("\n", pStart);
+        if (pStart > logNow.length())
+            pStart = logNow.lastIndexOf("\n") - 1;
+        if (pFinish > logNow.length() || pFinish == -1)
+            pFinish = logNow.length();
         SpannableString ss = make(logNow, context);
-        ss.setSpan(new StyleSpan(Typeface.ITALIC), ps, pf, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        ss.setSpan(new UnderlineSpan(), ps, pf,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        return new DelItem(logNow, ps, pf, ss);
+        ss.setSpan(new StyleSpan(Typeface.ITALIC), pStart, pFinish, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ss.setSpan(new UnderlineSpan(), pStart, pFinish,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return new DelItem(logNow, pStart, pFinish, pCurr, ss);
     }
 
-    public DelItem delOneLine(String logStr, int ps, Context context) {
-        ps = logStr.lastIndexOf("\n", ps -1);
-        if (ps == -1)
-            ps = 0;
-        int pf = logStr.indexOf("\n", ps+1);
-        if (pf == -1)
-            pf = logStr.length();
-        logStr = logStr.substring(0, ps) + logStr.substring(pf);
+    public DelItem delOneLine(String logStr, int pCurr, Context context) {
+        int pStart = logStr.lastIndexOf("\n", pCurr -1);
+        if (pStart == -1)
+            pStart = 0;
+        int pFinish = logStr.indexOf("\n", pStart+1);
+        if (pFinish == -1)
+            pFinish = logStr.length();
+        logStr = logStr.substring(0, pStart) + logStr.substring(pFinish);
         SpannableString ss = make(logStr, context);
-        if (ps > 1) {
-            ps = logStr.lastIndexOf("\n", ps - 1) + 1;
-            pf = logStr.indexOf("\n", ps) - 1;
-            if (pf < ps) {
-                if (ps > 0)
-                    ps--;
-                pf = ps + 1;
+        if (pStart > 1) {
+            pStart = logStr.lastIndexOf("\n", pStart - 1) + 1;
+            pFinish = logStr.indexOf("\n", pStart) - 1;
+            if (pFinish < pStart) {
+                if (pStart > 0)
+                    pStart--;
+                pFinish = pStart + 1;
             }
         }
-        ss.setSpan(new StyleSpan(Typeface.ITALIC), ps, pf, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        ss.setSpan(new UnderlineSpan(), ps, pf,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        return new DelItem(logStr, ps, pf, ss);
+        ss.setSpan(new StyleSpan(Typeface.ITALIC), pStart, pFinish, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ss.setSpan(new UnderlineSpan(), pStart, pFinish,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return new DelItem(logStr, pStart, pFinish, pCurr, ss);
     }
 }
