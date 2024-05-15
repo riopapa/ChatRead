@@ -1,7 +1,6 @@
 package biz.riopapa.chatread.func;
 
 import static biz.riopapa.chatread.MainActivity.aGroups;
-import static biz.riopapa.chatread.MainActivity.fileIO;
 import static biz.riopapa.chatread.MainActivity.gSheetUpload;
 import static biz.riopapa.chatread.MainActivity.lastChar;
 import static biz.riopapa.chatread.MainActivity.logUpdate;

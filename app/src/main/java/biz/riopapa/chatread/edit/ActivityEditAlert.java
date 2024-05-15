@@ -58,7 +58,7 @@ public class ActivityEditAlert extends AppCompatActivity {
         eKey1 = findViewById(R.id.e_key1); eKey1.setText(al.key1);
         eKey2 = findViewById(R.id.e_key2); eKey2.setText(al.key2);
         eTalk = findViewById(R.id.e_talk);  eTalk.setText(al.talk);
-        eMatched = findViewById(R.id.e_matched);  eMatched.setText(""+al.matched);
+        eMatched = findViewById(R.id.e_matched);  eMatched.setText(String.format("%d", al.matched));
         eSkip = findViewById(R.id.e_skip); eSkip.setText(al.skip);
         eMore = findViewById(R.id.e_more); eMore.setText(al.more);
         ePrev = findViewById(R.id.e_prev); ePrev.setText(al.prev);
@@ -155,7 +155,6 @@ public class ActivityEditAlert extends AppCompatActivity {
                     }
                 }
                 if (idx == -1) {
-//                    Log.w("sharedPref","removing ... " +entry.getKey());
                     sharedEditor.remove(entry.getKey());
                 }
             }
@@ -228,7 +227,7 @@ public class ActivityEditAlert extends AppCompatActivity {
             if (al.group.equals(mGroup)) {
                 if (al.matched == -1) {
                     mWho = al.who;
-                    mPercent = "s("+al.key1+", "+al.key2+"\n"+al.talk+", "+al.skip+"\n"+al.prev+", "+al.next+")";
+                    mPercent = "s(k1:"+al.key1+",k2:"+al.key2+",t:"+al.talk+",s:"+al.skip+",pn:"+al.prev+","+al.next+")";
                 } else {
                     if (sb.length() > 1)
                         sb.append("\n");

@@ -2,13 +2,8 @@ package biz.riopapa.chatread.common;
 
 import static biz.riopapa.chatread.MainActivity.fileIO;
 import static biz.riopapa.chatread.MainActivity.packageDirectory;
-import static biz.riopapa.chatread.MainActivity.replGroup;
-import static biz.riopapa.chatread.MainActivity.replGroupCnt;
-import static biz.riopapa.chatread.MainActivity.replLong;
-import static biz.riopapa.chatread.MainActivity.replShort;
 import static biz.riopapa.chatread.MainActivity.toDay;
 
-import android.os.Environment;
 import android.util.Log;
 
 import java.io.File;
@@ -17,8 +12,6 @@ import java.text.Collator;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
-import biz.riopapa.chatread.MainActivity;
-import biz.riopapa.chatread.func.FileIO;
 import biz.riopapa.chatread.func.ReadyToday;
 
 public class Utils {

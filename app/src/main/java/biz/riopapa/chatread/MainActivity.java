@@ -14,11 +14,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
 import android.util.Log;
-import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -41,6 +39,9 @@ import biz.riopapa.chatread.alerts.AlertStock;
 import biz.riopapa.chatread.alerts.AlertWhoIndex;
 import biz.riopapa.chatread.alerts.StockName;
 import biz.riopapa.chatread.common.Permission;
+import biz.riopapa.chatread.common.PhoneVibrate;
+import biz.riopapa.chatread.common.Sounds;
+import biz.riopapa.chatread.common.Utils;
 import biz.riopapa.chatread.edit.ActivityEditStrRepl;
 import biz.riopapa.chatread.edit.ActivityEditTable;
 import biz.riopapa.chatread.fragment.FragmentAlert;
@@ -52,14 +53,11 @@ import biz.riopapa.chatread.fragment.FragmentWork;
 import biz.riopapa.chatread.func.FileIO;
 import biz.riopapa.chatread.func.GSheetUpload;
 import biz.riopapa.chatread.func.LogUpdate;
-import biz.riopapa.chatread.common.PhoneVibrate;
 import biz.riopapa.chatread.func.MsgKeyword;
 import biz.riopapa.chatread.func.MsgNamoo;
 import biz.riopapa.chatread.func.MsgSMS;
-import biz.riopapa.chatread.common.Sounds;
 import biz.riopapa.chatread.func.StrUtil;
 import biz.riopapa.chatread.func.TableListFile;
-import biz.riopapa.chatread.common.Utils;
 import biz.riopapa.chatread.models.AlertLine;
 import biz.riopapa.chatread.models.App;
 import biz.riopapa.chatread.models.KeyVal;
@@ -73,8 +71,6 @@ public class MainActivity extends AppCompatActivity {
     public static Activity mActivity;
 
     private DrawerLayout drawerLayout;
-    private NavigationView navigationView;
-    private ActionBarDrawerToggle toggle;
 
     public static File packageDirectory = null;
     public static File tableFolder = null;
@@ -132,8 +128,7 @@ public class MainActivity extends AppCompatActivity {
     public static SharedPreferences sharePref;
     public static SharedPreferences.Editor sharedEditor;
 
-
-    public static final String [] OPERATION = {"Show Message","start","stop say", "reload app"};
+//    public static final String [] OPERATION = {"Show Message","start","stop say", "reload app"};
     public static final int SHOW_MESSAGE = 1000;
     public static final int SHOW_NOTIFICATION_BAR = 1001;
     public static final int STOP_SAY = 1002;
@@ -149,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
     public static boolean isPhoneBusy = false;
 
     public static AlertsAdapter alertsAdapter = null;
-    public static ArrayList<AlertLine> alertLines = null;;
+    public static ArrayList<AlertLine> alertLines = null;
 
     public static ArrayList<App> apps;
     public static AppsAdapter appsAdapter;
@@ -203,74 +198,73 @@ public class MainActivity extends AppCompatActivity {
         toolbar.setTitle("Main");
 
         drawerLayout = findViewById(R.id.myDrawer);
-        navigationView = findViewById(R.id.myNav);
-        toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
+        NavigationView navigationView = findViewById(R.id.myNav);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
         getSupportFragmentManager().beginTransaction().replace(R.id.myFrame, new FragmentLog()).commit();
 
         //==================================================================
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.log:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
-                                new FragmentLog()).commit();
-                        drawerLayout.closeDrawer(GravityCompat.START);
-                        break;
-                    case R.id.stock:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
-                                new FragmentStock()).commit();
-                        drawerLayout.closeDrawer(GravityCompat.START);
-                        break;
-                    case R.id.work:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
-                                new FragmentWork()).commit();
-                        drawerLayout.closeDrawer(GravityCompat.START);
-                        break;
-                    case R.id.save:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
-                                new FragmentSave()).commit();
-                        drawerLayout.closeDrawer(GravityCompat.START);
-                        break;
-                    case R.id.alert:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
-                                new FragmentAlert()).commit();
-                        drawerLayout.closeDrawer(GravityCompat.START);
-                        break;
-                    case R.id.apps:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
-                                new FragmentApps()).commit();
-                        drawerLayout.closeDrawer(GravityCompat.START);
-                        break;
-                    case R.id.table_str_repl:
-                        drawerLayout.closeDrawer(GravityCompat.START);
-                        Intent intent = new Intent(mContext, ActivityEditStrRepl.class);
-                        startActivity(intent);
-                        break;
+        navigationView.setNavigationItemSelectedListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.log:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
+                            new FragmentLog()).commit();
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                    break;
+                case R.id.stock:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
+                            new FragmentStock()).commit();
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                    break;
+                case R.id.work:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
+                            new FragmentWork()).commit();
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                    break;
+                case R.id.save:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
+                            new FragmentSave()).commit();
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                    break;
+                case R.id.alert:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
+                            new FragmentAlert()).commit();
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                    break;
+                case R.id.apps:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
+                            new FragmentApps()).commit();
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                    break;
+                case R.id.table_str_repl:
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                    Intent intent = new Intent(mContext, ActivityEditStrRepl.class);
+                    startActivity(intent);
+                    break;
 
-                    case R.id.table_sms_no_num:
-                    case R.id.table_sms_repl:
-                    case R.id.table_sms_txt_ig:
-                    case R.id.table_sms_who_ig:
-                    case R.id.table_sys_ig:
-                    case R.id.table_tele_grp:
-                    case R.id.table_kt_grp_ig:
-                    case R.id.table_kt_no_num:
-                    case R.id.table_kt_txt_ig:
-                    case R.id.table_kt_who_ig:
-                    case R.id.table_who_name:
-                        menu_selected = item.getItemId();
-                        drawerLayout.closeDrawer(GravityCompat.START);
-                        intent = new Intent(mContext, ActivityEditTable.class);
-                        startActivity(intent);
+                case R.id.table_sms_no_num:
+                case R.id.table_sms_repl:
+                case R.id.table_sms_txt_ig:
+                case R.id.table_sms_who_ig:
+                case R.id.table_sys_ig:
+                case R.id.table_tele_grp:
+                case R.id.table_kt_grp_ig:
+                case R.id.table_kt_no_num:
+                case R.id.table_kt_txt_ig:
+                case R.id.table_kt_who_ig:
+                case R.id.table_who_name:
+                    menu_selected = item.getItemId();
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                    intent = new Intent(mContext, ActivityEditTable.class);
+                    startActivity(intent);
 
-                        break;
+                    break;
 
-                }
-                return true;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + item.getItemId());
             }
+            return true;
         });
 
         try {
@@ -296,7 +290,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intListener);
         }
 
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_SETTINGS) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_SETTINGS) != PackageManager.PERMISSION_GRANTED) {
             //permissions not granted -> request them
             requestPermissions(new String[]{Manifest.permission.WRITE_SETTINGS}, 6562);
         } else {
@@ -311,8 +305,6 @@ public class MainActivity extends AppCompatActivity {
         }
         new SetVariables(this,"main");
 
-//        Intent updateIntent = new Intent(this, NotificationService.class);
-//        this.startForegroundService(updateIntent);
         notificationBar.startShow();
 
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {

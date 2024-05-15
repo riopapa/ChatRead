@@ -1,17 +1,11 @@
 package biz.riopapa.chatread.func;
 
-import static biz.riopapa.chatread.MainActivity.logQue;
 import static biz.riopapa.chatread.MainActivity.mContext;
-import static biz.riopapa.chatread.MainActivity.sharedEditor;
 import static biz.riopapa.chatread.MainActivity.utils;
 
-import android.content.res.Resources;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,7 +14,6 @@ import biz.riopapa.chatread.R;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
-import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -42,10 +35,6 @@ public class GSheetUpload {
     }
 
     static ArrayList<SheetQue> sheetQues = null;
-    static boolean nowUploading = false;
-    public void initSheetQue() {
-        sheetQues = new ArrayList<>();
-    }
 
     public void add2Stock(String group, String timeStamp, String who, String percent,
                           String talk, String statement, String key12) {

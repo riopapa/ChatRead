@@ -101,7 +101,7 @@ public class FragmentWork extends Fragment {
         } else if (item.getItemId() == R.id.del_work_many) {
             int currPos = etTable.getSelectionStart();
             int logLen = logWork.length();
-            logWork = new LogUpdate(mContext).squeezeLog(logWork,logName);
+            logWork = new LogUpdate(mContext).squeezeLog(logWork);
             if (currPos > 0)
                 currPos += logWork.length() - logLen;
             ss = new LogSpan().make(logWork, mContext);

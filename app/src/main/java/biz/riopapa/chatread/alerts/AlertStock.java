@@ -2,11 +2,10 @@ package biz.riopapa.chatread.alerts;
 
 import static android.content.Context.MODE_PRIVATE;
 import static biz.riopapa.chatread.MainActivity.alertLines;
-import static biz.riopapa.chatread.MainActivity.fileIO;
 import static biz.riopapa.chatread.MainActivity.gSheetUpload;
-import static biz.riopapa.chatread.MainActivity.mAudioManager;
 import static biz.riopapa.chatread.MainActivity.logUpdate;
 import static biz.riopapa.chatread.MainActivity.mActivity;
+import static biz.riopapa.chatread.MainActivity.mAudioManager;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.notificationBar;
 import static biz.riopapa.chatread.MainActivity.phoneVibrate;

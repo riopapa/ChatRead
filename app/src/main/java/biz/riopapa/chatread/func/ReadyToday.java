@@ -10,7 +10,6 @@ import static biz.riopapa.chatread.MainActivity.logQue;
 import static biz.riopapa.chatread.MainActivity.logStock;
 import static biz.riopapa.chatread.MainActivity.logWork;
 import static biz.riopapa.chatread.MainActivity.packageDirectory;
-import static biz.riopapa.chatread.MainActivity.sharedEditor;
 import static biz.riopapa.chatread.MainActivity.tableFolder;
 import static biz.riopapa.chatread.MainActivity.timeBegin;
 import static biz.riopapa.chatread.MainActivity.timeEnd;
@@ -50,7 +49,7 @@ public class ReadyToday {
             fileIO.writeFile(tableFolder, "logQue.txt", logQue);
             fileIO.writeFile(tableFolder, "logWork.txt", logWork);
             if (kvCommon != null) {
-                String sb = "\nkvCommon =\n" + kvCommon.toString() +
+                String sb = "\nkvCommon =\n" + kvCommon +
                         "\nkvSMS =\n" + kvSMS.toString() +
                         "\nkvTelegram =\n" + kvTelegram.toString() +
                         "\nkvStock =\n" + kvStock.toString() +

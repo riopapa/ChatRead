@@ -11,9 +11,8 @@ import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
 
-import biz.riopapa.chatread.func.FileIO;
-import biz.riopapa.chatread.func.ReadyToday;
 import biz.riopapa.chatread.common.SnackBar;
+import biz.riopapa.chatread.func.ReadyToday;
 import biz.riopapa.chatread.models.AlertLine;
 
 public class AlertSave {

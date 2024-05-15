@@ -100,7 +100,7 @@ public class FragmentSave extends Fragment {
         } else if (item.getItemId() == R.id.del_save_many) {
             int currPos = etTable.getSelectionStart();
             int logLen = logSave.length();
-            logSave = new LogUpdate(mContext).squeezeLog(logSave,logName);
+            logSave = new LogUpdate(mContext).squeezeLog(logSave);
             if (currPos > 0)
                 currPos += logSave.length() - logLen;
             ss = new LogSpan().make(logSave, mContext);

@@ -31,7 +31,6 @@ import biz.riopapa.chatread.func.OptionTables;
 public class ActivityEditTable extends AppCompatActivity {
 
     int pos = -1;
-    EditText et;
     String key, fullText;
     int [] menuId = { R.id.table_sms_no_num,   R.id.table_sms_repl,    R.id.table_sms_txt_ig,
                         R.id.table_sms_who_ig,  R.id.table_sys_ig,      R.id.table_tele_grp,
@@ -58,7 +57,7 @@ public class ActivityEditTable extends AppCompatActivity {
                 break;
             }
         }
-        if (mTableName == "") {
+        if (mTableName.isEmpty()) {
             Toast.makeText(this, "Menu Resource Id not Found "+menu_selected,
                     Toast.LENGTH_LONG).show();
             return;
@@ -85,11 +84,10 @@ public class ActivityEditTable extends AppCompatActivity {
         EditText eKey = findViewById(R.id.key_table);
         eKey.setTextColor(0xFF000000);
 
-        ImageView iv = findViewById(R.id.search_table);
-        iv.setOnClickListener(v -> {
+        ImageView ivSearch = findViewById(R.id.search_table);
+        ivSearch.setOnClickListener(v -> {
             int cnt = 0;
-            et = findViewById(R.id.key_table);
-            key = et.getText().toString();           // .replace(" ","\u00A0");
+            key = eKey.getText().toString();           // .replace(" ","\u00A0");
             fullText = eTable.getText().toString();
             eTable.setText(fullText);   // reset previous searched color
             Spannable Word2Span = new SpannableString( eTable.getText() );

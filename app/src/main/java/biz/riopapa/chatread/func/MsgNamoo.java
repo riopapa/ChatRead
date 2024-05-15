@@ -1,7 +1,6 @@
 package biz.riopapa.chatread.func;
 
 
-import static biz.riopapa.chatread.MainActivity.fileIO;
 import static biz.riopapa.chatread.MainActivity.gSheetUpload;
 import static biz.riopapa.chatread.MainActivity.logUpdate;
 import static biz.riopapa.chatread.MainActivity.sounds;
@@ -23,7 +22,7 @@ public class MsgNamoo {
                 return;
         }
         if (text.contains("체결")) {
-            String sText = "";
+            String sText;
             String stkName = "";
             /*
             // [나무] 매도 전량체결 기산텔레콤(035460) 100주 3,370원 주문No.125378

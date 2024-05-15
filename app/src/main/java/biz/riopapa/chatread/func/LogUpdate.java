@@ -1,17 +1,14 @@
 package biz.riopapa.chatread.func;
 
 import static android.content.Context.MODE_PRIVATE;
-
 import static biz.riopapa.chatread.MainActivity.logQue;
 import static biz.riopapa.chatread.MainActivity.logSave;
 import static biz.riopapa.chatread.MainActivity.logStock;
 import static biz.riopapa.chatread.MainActivity.logWork;
-import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.sharePref;
 import static biz.riopapa.chatread.MainActivity.sharedEditor;
 
 import android.content.Context;
-import android.util.Log;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -34,13 +31,10 @@ public class LogUpdate {
 
     final SimpleDateFormat TIME_INFO = new SimpleDateFormat("MM-dd HH:mm ", Locale.KOREA);
     public void addLog(String header, String text) {
-//        if (text.length() < 10)
-//            return;
-//        new ReadyToday();
         logQue += "\n" + TIME_INFO.format(new Date()) + header + "\n" + text+"\n";
         if (logQue.length() > 24000) {
             Thread logThread = new Thread(() -> {
-                logQue = squeezeLog(logQue, "logQue");
+                logQue = squeezeLog(logQue);
                 sharedEditor.putString("logQue", logQue);
                 sharedEditor.apply();
             });
@@ -55,7 +49,7 @@ public class LogUpdate {
         logWork += "\n" + TIME_INFO.format(new Date()) + header + "\n" + text+"\n";
         if (logWork.length() > 24000) {
             Thread logThread = new Thread(() -> {
-                logWork = squeezeLog(logWork, "logWork");
+                logWork = squeezeLog(logWork);
                 sharedEditor.putString("logWork", logWork);
                 sharedEditor.apply();
             });
@@ -71,7 +65,7 @@ public class LogUpdate {
         logStock += "\n" + TIME_INFO.format(new Date()) + header + "\n" + text+"\n";
         if (logStock.length() > 12000) {
             Thread stockThread = new Thread(() -> {
-                logStock = squeezeLog(logStock, "logStock");
+                logStock = squeezeLog(logStock);
                 sharedEditor.putString("logStock", logStock);
                 sharedEditor.apply();
             });
@@ -85,7 +79,7 @@ public class LogUpdate {
     /*
         Remove upper lines, then 3/4 is without \n
      */
-    public String squeezeLog(String logStr, String queName) {
+    public String squeezeLog(String logStr) {
         logStr = logStr.replace("    ","")
                         .replace("\n\n","\n");
         String [] sLog = logStr.split("\n");

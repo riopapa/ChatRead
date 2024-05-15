@@ -108,7 +108,7 @@ public class FragmentLog extends Fragment {
         } else if (item.getItemId() == R.id.del_log_many) {
             int currPos = etTable.getSelectionStart();
             int logLen = logQue.length();
-            logQue = new LogUpdate(mContext).squeezeLog(logQue,logName);
+            logQue = new LogUpdate(mContext).squeezeLog(logQue);
             if (currPos > 0)
                 currPos += logQue.length() - logLen;
             ss = new LogSpan().make(logQue, mContext);

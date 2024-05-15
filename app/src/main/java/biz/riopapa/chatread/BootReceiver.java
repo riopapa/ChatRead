@@ -2,14 +2,14 @@ package biz.riopapa.chatread;
 
 
 import static biz.riopapa.chatread.MainActivity.notificationBar;
-import biz.riopapa.chatread.notification.NotificationService;
 
-import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
+
+import biz.riopapa.chatread.notification.NotificationService;
 
 
 public class BootReceiver extends BroadcastReceiver {

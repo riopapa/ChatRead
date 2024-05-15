@@ -1,7 +1,6 @@
 package biz.riopapa.chatread.func;
 
 import static biz.riopapa.chatread.MainActivity.downloadFolder;
-import static biz.riopapa.chatread.MainActivity.gSheetUpload;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.packageDirectory;
 import static biz.riopapa.chatread.MainActivity.tableFolder;

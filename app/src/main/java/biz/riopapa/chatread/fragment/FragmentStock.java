@@ -101,7 +101,7 @@ public class FragmentStock extends Fragment {
         } else if (item.getItemId() == R.id.del_stock_many) {
             int currPos = etTable.getSelectionStart();
             int logLen = logStock.length();
-            logStock = new LogUpdate(mContext).squeezeLog(logStock,logName);
+            logStock = new LogUpdate(mContext).squeezeLog(logStock);
             if (currPos > 0)
                 currPos += logStock.length() - logLen;
             ss = new LogSpan().make(logStock, mContext);
