@@ -19,7 +19,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -115,14 +114,14 @@ public class FragmentApps extends Fragment {
         if (startPos == 0)
             fnd = new boolean[apps.size()];
 
-        String result = "";
+//        String result = "";
         for (int i = startPos; i < apps.size(); i++) {
             App app = apps.get(i);
             if (app.nickName.contains(key) || app.fullName.contains(key) ||
                     app.memo.contains(key)) {
                 if (appPos == -1) {
                     appPos = i;
-                    result = app.nickName + " " + app.fullName + " " + app.memo;
+//                    result = app.nickName + " " + app.fullName + " " + app.memo;
                 }
                 fnd[i] = true;
                 appsAdapter.notifyItemChanged(i);
@@ -132,8 +131,8 @@ public class FragmentApps extends Fragment {
             LinearLayoutManager layoutManager = (LinearLayoutManager) appsRecyclerView
                     .getLayoutManager();
             layoutManager.scrollToPositionWithOffset((appPos > 2) ? appPos-2:appPos, 10);
-            String str = key + " found " + result;
-            Toast.makeText(mContext, str, Toast.LENGTH_SHORT).show();
+//            String str = key + " found " + result;
+//            Toast.makeText(mContext, str, Toast.LENGTH_SHORT).show();
         }
     }
 

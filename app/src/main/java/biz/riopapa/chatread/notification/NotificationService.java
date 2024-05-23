@@ -1,5 +1,6 @@
 package biz.riopapa.chatread.notification;
 
+import static biz.riopapa.chatread.MainActivity.HIDE_STOP;
 import static biz.riopapa.chatread.MainActivity.SHOW_NOTIFICATION_BAR;
 import static biz.riopapa.chatread.MainActivity.RELOAD_APP;
 import static biz.riopapa.chatread.MainActivity.SHOW_MESSAGE;
@@ -107,9 +108,10 @@ public class NotificationService extends Service {
                 break;
 
             case SHOW_NOTIFICATION_BAR:
-
+            case HIDE_STOP:
                 show_stop = false;
                 break;
+
 
             default:
                 Log.e("NotifiSVC","Case Error "+operation);
@@ -150,14 +152,13 @@ public class NotificationService extends Service {
 //                .setStyle(new NotificationCompat.BigTextStyle())
                 .setOngoing(true);
 
-
-        Intent lowIntent = new Intent(mContext, MainActivity.class);
-        lowIntent.putExtra("operation", RELOAD_APP);
-        PendingIntent pendingLow = PendingIntent.getService(mContext, RELOAD_APP, lowIntent,
+        Intent int1 = new Intent(mContext, MainActivity.class);
+        int1.putExtra("operation", RELOAD_APP);
+        PendingIntent pending1 = PendingIntent.getService(mContext, RELOAD_APP, int1,
                 PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-        mBuilder.setContentIntent(pendingLow);
-        mRemoteViews.setOnClickPendingIntent(R.id.line_2,
-                PendingIntent.getActivity(mContext, 0, lowIntent,
+        mBuilder.setContentIntent(pending1);
+        mRemoteViews.setOnClickPendingIntent(R.id.line_1,
+                PendingIntent.getActivity(mContext, 0, int1,
                         PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT));
 
         Intent sIntent = new Intent(mContext, NotificationService.class);
@@ -173,15 +174,23 @@ public class NotificationService extends Service {
 //                PendingIntent.getActivity(mContext, 0, sIntent,
 //                        PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT));
 
-        Intent upIntent = new Intent(mContext, MainActivity.class);
-        upIntent.putExtra("operation", RELOAD_APP);
-        PendingIntent pendingUp = PendingIntent.getService(mContext, RELOAD_APP, upIntent,
+        Intent int2 = new Intent(mContext, MainActivity.class);
+        int2.putExtra("operation", RELOAD_APP);
+        PendingIntent pending2 = PendingIntent.getService(mContext, RELOAD_APP, int2,
                 PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-        mBuilder.setContentIntent(pendingUp);
-        mRemoteViews.setOnClickPendingIntent(R.id.line_upper,
-                PendingIntent.getActivity(mContext, 0, upIntent,
+        mBuilder.setContentIntent(pending2);
+        mRemoteViews.setOnClickPendingIntent(R.id.line_2,
+                PendingIntent.getActivity(mContext, 0, int2,
                         PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT));
 
+        Intent int3 = new Intent(mContext, MainActivity.class);
+        int3.putExtra("operation", RELOAD_APP);
+        PendingIntent pending3 = PendingIntent.getService(mContext, RELOAD_APP, int3,
+                PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+        mBuilder.setContentIntent(pending3);
+        mRemoteViews.setOnClickPendingIntent(R.id.line_3,
+                PendingIntent.getActivity(mContext, 0, int3,
+                        PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT));
 
     }
 

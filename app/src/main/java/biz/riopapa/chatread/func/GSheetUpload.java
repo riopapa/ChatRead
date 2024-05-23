@@ -81,7 +81,7 @@ public class GSheetUpload {
                 .url(SPREADSHEET_ID)
                 .post(requestBody)
                 .build();
-        utils.logW("post2GSheet","uploading "+formBuilder);
+//        utils.logW("post2GSheet","uploading "+formBuilder);
         // Execute request asynchronously
         client.newCall(request).enqueue(new Callback() {
 
@@ -93,10 +93,8 @@ public class GSheetUpload {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    utils.logW("gSheet Done",response.message());
-                } else {
-                    Log.e("SheetsWriter", "Error writing data: " + response.body().string());
+                if (!response.isSuccessful()){
+                    Log.e("SheetsWriter", "Error writing data: " + response.body());
                 }
             }
         });

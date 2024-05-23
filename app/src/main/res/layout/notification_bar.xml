@@ -8,7 +8,7 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/line_upper"
+        android:id="@+id/line_1"
         android:background="@color/line_1"
         android:layout_margin="1dp"
         android:layout_width="match_parent"

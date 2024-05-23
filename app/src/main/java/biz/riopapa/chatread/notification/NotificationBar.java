@@ -1,5 +1,6 @@
 package biz.riopapa.chatread.notification;
 
+import static biz.riopapa.chatread.MainActivity.HIDE_STOP;
 import static biz.riopapa.chatread.MainActivity.SHOW_NOTIFICATION_BAR;
 import static biz.riopapa.chatread.MainActivity.SHOW_MESSAGE;
 import static biz.riopapa.chatread.MainActivity.mContext;
@@ -50,6 +51,22 @@ public class NotificationBar {
             Log.e("NotificationBar","intent Error \n"+e);
         }
     }
+
+    public static void hideStop() {
+        if (mContext != null) {
+            Intent intent = new Intent(mContext, NotificationService.class);
+            intent.putExtra("operation", HIDE_STOP);
+            intent.putExtra("who", "None");
+            intent.putExtra("msg", "none");
+            intent.putExtra("stop", false);
+            try {
+                mContext.startService(intent);
+            } catch (Exception e) {
+                Log.e("NotificationBar","intent Error \n"+e);
+            }
+        }
+    }
+
 
     boolean isMyServiceRunning(Class<?> serviceClass) {
         final String svc = serviceClass.getName();

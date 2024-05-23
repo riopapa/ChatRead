@@ -133,8 +133,8 @@ public class MainActivity extends AppCompatActivity {
     public static final int SHOW_NOTIFICATION_BAR = 1001;
     public static final int STOP_SAY = 1002;
     public static final int RELOAD_APP = 1003;
+    public static final int HIDE_STOP = 1004;
 
-    public static ActionBar aBar = null;
     public static AudioFocusRequest mFocusGain = null;
 
     public static NotificationService notificationService;
@@ -190,6 +190,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         mContext = this;
         mActivity = this;

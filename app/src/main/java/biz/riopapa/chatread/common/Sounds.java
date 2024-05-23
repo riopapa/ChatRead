@@ -5,6 +5,7 @@ import static biz.riopapa.chatread.MainActivity.isPhoneBusy;
 import static biz.riopapa.chatread.MainActivity.mAudioManager;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.mFocusGain;
+import static biz.riopapa.chatread.MainActivity.notificationBar;
 
 import android.content.Context;
 import android.media.AudioDeviceInfo;
@@ -54,14 +55,14 @@ public class Sounds {
             public void onDone(String utteranceId) {
                 if (mTTS.isSpeaking())
                     return;
-/*                NotificationBar.hideStop(); */
+                notificationBar.hideStop();
                 isTalking = false;
                 new Timer().schedule(new TimerTask() {
                     public void run () {
                         beepOnce(soundType.POST.ordinal());
                         mAudioManager.abandonAudioFocusRequest(mFocusGain);
                     }
-                }, 300);
+                }, 100);
             }
 
             @Override
@@ -99,7 +100,6 @@ public class Sounds {
     }
 
     private void delayedSay(String text2Speak) {
-        final String[] text = {onlySpeakable(text2Speak)};
         long delay = 100;
 //        if (mTTS == null) {
 //            init();
@@ -111,27 +111,13 @@ public class Sounds {
             mAudioManager.requestAudioFocus(mFocusGain);
             new Timer().schedule(new TimerTask() {
                 public void run() {
-                    while(text[0].length() > 30) {
-                        String txt = text[0].substring(0,30);
-                        int p = txt.lastIndexOf(" ");
-                        if (p == -1)
-                            p = 30;
-                        txt = txt.substring(0, p);
-                        ttsSpeak(txt);
-                        text[0] = text[0].substring(p+1);
+                    try {
+                        mTTS.speak(text2Speak, TextToSpeech.QUEUE_ADD, null, TTSId);
+                    } catch (Exception e) {
+                        new Utils().logE("Sound", "TTS Error:" + e);
                     }
-                    if (!text[0].isEmpty())
-                        ttsSpeak(text[0]);
                 }
             }, delay);
-        }
-    }
-
-    private void ttsSpeak(String txt) {
-        try {
-            mTTS.speak(txt, TextToSpeech.QUEUE_ADD, null, TTSId);
-        } catch (Exception e) {
-            new Utils().logE("Sound", "TTS Error:" + e);
         }
     }
 
@@ -169,7 +155,6 @@ public class Sounds {
         int idx = text.indexOf("http");
         if (idx > 0)
             text = text.substring(0, idx) + " 링크 있음";
-//        final String match = "[^\uAC00-\uD7A3\u3131-\u314E\\da-zA-Z.,\\-]";     // 가~힣 ㄱ~ㅎ
         final String match = "[^가-힣\\da-zA-Z.,\\-]";
         return text.replaceAll(match, " ");
     }
@@ -211,3 +196,4 @@ public class Sounds {
     }
 
 }
+// final String match = "[^\uAC00-\uD7A3\u3131-\u314E\\da-zA-Z.,\\-]";     // 가~힣 ㄱ~ㅎ

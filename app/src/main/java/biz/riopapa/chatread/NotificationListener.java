@@ -261,7 +261,7 @@ public class NotificationListener extends NotificationListenerService {
 
     private void sayWork() {
 
-        utils.logW("work", "grp="+sbnGroup+", who="+sbnWho+", txt="+sbnText);
+//        utils.logW("work", "grp="+sbnGroup+", who="+sbnWho+", txt="+sbnText);
         if (sbnApp.replFrom != null) {
             for (int i = 0; i < sbnApp.replFrom.length; i++) {
                 if ((sbnText).contains(sbnApp.replFrom[i]))
