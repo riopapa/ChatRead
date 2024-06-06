@@ -15,10 +15,10 @@ import biz.riopapa.chatread.common.SnackBar;
 import biz.riopapa.chatread.func.ReadyToday;
 import biz.riopapa.chatread.models.Alert;
 
-public class AlertSave {
-    public AlertSave(String msg) {
-        new SnackBar().show("Alert Table", msg);
-        AlertTable.sort();
+public class GroupSave {
+    public GroupSave(String msg) {
+        new SnackBar().show("Group Table", msg);
+//        GroupTable.sort();
         if (todayFolder == null)
             new ReadyToday();
         SharedPreferences sharePref = mContext.getSharedPreferences("alertLine", MODE_PRIVATE);

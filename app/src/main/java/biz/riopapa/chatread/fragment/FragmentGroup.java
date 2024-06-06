@@ -1,9 +1,9 @@
 package biz.riopapa.chatread.fragment;
 
-import static biz.riopapa.chatread.MainActivity.alerts;
-import static biz.riopapa.chatread.MainActivity.alertsAdapter;
-import static biz.riopapa.chatread.MainActivity.mAlertPos;
+import static biz.riopapa.chatread.MainActivity.groupStocks;
+import static biz.riopapa.chatread.MainActivity.groupsAdapter;
 import static biz.riopapa.chatread.MainActivity.mContext;
+import static biz.riopapa.chatread.MainActivity.mGroupPos;
 import static biz.riopapa.chatread.MainActivity.todayFolder;
 import static biz.riopapa.chatread.MainActivity.toolbar;
 
@@ -22,19 +22,21 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import biz.riopapa.chatread.R;
-import biz.riopapa.chatread.adapters.AlertsAdapter;
+import biz.riopapa.chatread.adapters.GroupAdapter;
 import biz.riopapa.chatread.alerts.AlertSave;
 import biz.riopapa.chatread.alerts.AlertTable;
+import biz.riopapa.chatread.alerts.GroupSave;
 import biz.riopapa.chatread.func.OptionTables;
 import biz.riopapa.chatread.func.ReadyToday;
-import biz.riopapa.chatread.models.Alert;
+import biz.riopapa.chatread.models.GroupStock;
+import biz.riopapa.chatread.models.Stock;
 
-public class FragmentAlert extends Fragment {
+public class FragmentGroup extends Fragment {
 
     Menu mainMenu;
     RecyclerView recyclerView;
 
-    public FragmentAlert() {
+    public FragmentGroup() {
         // Required empty public constructor
     }
 
@@ -42,28 +44,28 @@ public class FragmentAlert extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        toolbar.setTitle("Alert");
+        toolbar.setTitle("Group");
         toolbar.setBackgroundDrawable( ContextCompat.getDrawable(mContext, R.drawable.bar_group));
-        if (alertsAdapter == null)
-            alertsAdapter = new AlertsAdapter();
+        if (groupsAdapter == null)
+            groupsAdapter = new GroupAdapter();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View thisView = inflater.inflate(R.layout.fragment_alert, container, false);
-        recyclerView = thisView.findViewById(R.id.recycle_alerts);
-        recyclerView.setAdapter(alertsAdapter);
+        View thisView = inflater.inflate(R.layout.fragment_group, container, false);
+        recyclerView = thisView.findViewById(R.id.recycle_groups);
+        recyclerView.setAdapter(groupsAdapter);
         if (todayFolder == null)
             new ReadyToday();
 
-        if (mAlertPos > 0) {
+        if (mGroupPos > 0) {
             LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView
                     .getLayoutManager();
             assert layoutManager != null;
             layoutManager.scrollToPositionWithOffset(
-                    mAlertPos, (mAlertPos > 3) ? mAlertPos - 3 : mAlertPos - 2);
+                    mGroupPos, (mGroupPos > 3) ? mGroupPos - 3 : mGroupPos - 2);
         }
 
         return thisView;
@@ -83,22 +85,23 @@ public class FragmentAlert extends Fragment {
             new OptionTables();
             new AlertTable().get();
         } else if (item.getItemId() == R.id.clear_matched_number) {
-            for (int i = 0; i < alerts.size(); i++) {
-                Alert al = alerts.get(i);
-                if (al.matched != -1) {
-
-                    if (!al.quiet)
-                        al.matched = (al.matched+99) / 100  * 100;
-                    else
-                        al.matched = 1000;
-                }
-                alerts.set(i, al);
+            for (int i = 0; i < groupStocks.size(); i++) {
+                GroupStock groupStock = groupStocks.get(i);
+//                for (int j = 0; j < groupStock.stocks.size(); j++) {
+//                    Stock stock = groupStock.stocks.get(j);
+//                    if (stock.quiet)
+//                        stock.count = 1000;
+//                    else
+//                        stock.count = (stock.count+99)/100 * 100;
+//                    groupStock.stocks.set(j, stock);
+//                }
+                groupStocks.set(i, groupStock);
             }
-            new AlertSave("Clear Matches");
+            new GroupSave("clear matches");
         } else if (item.getItemId() == R.id.log2save) {
             new AlertSave("Copy");
         }
-        alertsAdapter.notifyDataSetChanged();
+        groupsAdapter.notifyDataSetChanged();
         return super.onOptionsItemSelected(item);
     }
 }

@@ -1,8 +1,8 @@
 package biz.riopapa.chatread.adapters;
 
 import static biz.riopapa.chatread.MainActivity.alerts;
-import static biz.riopapa.chatread.MainActivity.mAlertPos;
 import static biz.riopapa.chatread.MainActivity.mActivity;
+import static biz.riopapa.chatread.MainActivity.mAlertPos;
 import static biz.riopapa.chatread.MainActivity.mContext;
 
 import android.content.Intent;
@@ -22,7 +22,7 @@ import biz.riopapa.chatread.alerts.AlertTable;
 import biz.riopapa.chatread.edit.ActivityEditAlert;
 import biz.riopapa.chatread.models.Alert;
 
-public class AlertsAdapter extends RecyclerView.Adapter<AlertsAdapter.ViewHolder> {
+public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {

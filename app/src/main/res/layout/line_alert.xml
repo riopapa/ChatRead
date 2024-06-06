@@ -98,23 +98,24 @@
             />
 
         <TextView
+            android:id="@+id/one_quiet"
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="  quiet "
+            android:textColor="@color/textFore"
+            android:textSize="@dimen/app_line_font_size"
+            />
+
+
+        <TextView
             android:id="@+id/one_talk"
             android:layout_width="0dp"
             android:layout_weight="6"
             android:layout_height="match_parent"
             android:gravity="center"
             android:text="talk"
-            android:textColor="@color/textFore"
-            android:textSize="@dimen/app_line_font_size"
-            />
-
-        <TextView
-            android:id="@+id/one_memo"
-            android:layout_width="0dp"
-            android:layout_weight="6"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="memo"
             android:textColor="@color/textFore"
             android:textSize="@dimen/app_line_font_size"
             />

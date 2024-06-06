@@ -5,7 +5,6 @@ import static biz.riopapa.chatread.MainActivity.aAlertLineIdx;
 import static biz.riopapa.chatread.MainActivity.aGSkip1;
 import static biz.riopapa.chatread.MainActivity.aGSkip2;
 import static biz.riopapa.chatread.MainActivity.aGSkip3;
-import static biz.riopapa.chatread.MainActivity.aGSkip4;
 import static biz.riopapa.chatread.MainActivity.aGroupSaid;
 import static biz.riopapa.chatread.MainActivity.aGroupWhoKey1;
 import static biz.riopapa.chatread.MainActivity.aGroupWhoKey2;
@@ -14,8 +13,8 @@ import static biz.riopapa.chatread.MainActivity.aGroupWhoPrev;
 import static biz.riopapa.chatread.MainActivity.aGroupWhoSkip;
 import static biz.riopapa.chatread.MainActivity.aGroupWhos;
 import static biz.riopapa.chatread.MainActivity.aGroups;
-import static biz.riopapa.chatread.MainActivity.aGroupsPass;
-import static biz.riopapa.chatread.MainActivity.alertLines;
+import static biz.riopapa.chatread.MainActivity.aGroupQuiets;
+import static biz.riopapa.chatread.MainActivity.alerts;
 import static biz.riopapa.chatread.MainActivity.downloadFolder;
 import static biz.riopapa.chatread.MainActivity.fileIO;
 import static biz.riopapa.chatread.MainActivity.mContext;
@@ -33,7 +32,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import biz.riopapa.chatread.models.AlertLine;
+import biz.riopapa.chatread.models.Alert;
 
 public class AlertTable {
 
@@ -45,6 +44,7 @@ public class AlertTable {
 
     static ArrayList<String> gSkip1 = new ArrayList<>(), gSkip2 = new ArrayList<>(),
             gSkip3 = new ArrayList<>(), gSkip4 = new ArrayList<>();
+
     static List<String> chkKey1 = new ArrayList<>();
     static List<String> chkKey2 = new ArrayList<>();
     static List<String> chkSkip = new ArrayList<>();
@@ -58,32 +58,32 @@ public class AlertTable {
             tableFolder = new File(downloadFolder, "_ChatTalk");
         }
 
-        ArrayList<AlertLine> list;
+        ArrayList<Alert> list;
         Gson gson = new Gson();
         String json = fileIO.readFile(tableFolder, "alertTable.json");
         if (json.isEmpty()) {
             list = new ArrayList<>();
         } else {
-            Type type = new TypeToken<List<AlertLine>>() {
+            Type type = new TypeToken<List<Alert>>() {
             }.getType();
             list = gson.fromJson(json, type);
         }
-        alertLines = list;
+        alerts = list;
         updateMatched();
         AlertTable.makeArrays();
     }
 
     void updateMatched() {
         SharedPreferences sharePref = mContext.getSharedPreferences("alertLine", MODE_PRIVATE);
-        for (int i = 0; i < alertLines.size(); i++) {
-            AlertLine al = alertLines.get(i);
+        for (int i = 0; i < alerts.size(); i++) {
+            Alert al = alerts.get(i);
             if (al.matched >= 0) {
                 String[] joins = new String[]{"matched", al.group, al.who, al.key1, al.key2 };
                 String keyVal = String.join("~~", joins);
                 int matchCount =  sharePref.getInt(keyVal, -3);
                 if (matchCount != -3)
                     al.matched = matchCount;
-                alertLines.set(i, al);
+                alerts.set(i, al);
             }
         }
     }
@@ -91,19 +91,18 @@ public class AlertTable {
     public static void makeArrays() {
 
         String svGroup = "x", svWho = "x";
-        int alertSize = alertLines.size();
+        int alertSize = alerts.size();
         aGroups = new ArrayList<>();
-        aGroupsPass = new ArrayList<>();
+        aGroupQuiets = new ArrayList<>();
 
-        for (AlertLine al: alertLines) {
+        for (Alert al: alerts) {
             if (!svGroup.equals(al.group)) {
                 aGroups.add(al.group);
-                aGroupsPass.add(!al.more.isEmpty());
+                aGroupQuiets.add(al.quiet);
                 String key;
                 key = al.key1; if (key.isEmpty()) key = "NotFnd"; gSkip1.add(key);
                 key = al.key2; if (key.isEmpty()) key = "NotFnd"; gSkip2.add(key);
                 key = al.talk; if (key.isEmpty()) key = "NotFnd"; gSkip3.add(key);
-                key = al.skip; if (key.isEmpty()) key = "NotFnd"; gSkip4.add(key);
                 svGroup = al.group;
             }
         }
@@ -111,7 +110,6 @@ public class AlertTable {
         aGSkip1 = gSkip1.toArray(new String[groupCnt]);
         aGSkip2 = gSkip2.toArray(new String[groupCnt]);
         aGSkip3 = gSkip3.toArray(new String[groupCnt]);
-        aGSkip4 = gSkip4.toArray(new String[groupCnt]);
         aGroupWhos = new String[groupCnt][];
         aGroupWhoKey1 = new String[groupCnt][][];
         aGroupWhoKey2 = new String[groupCnt][][];
@@ -125,7 +123,7 @@ public class AlertTable {
 
         gIdx = 0; gwIdx = 0;
         ArrayList<String> whoList = new ArrayList<>();
-        for (AlertLine al: alertLines) {
+        for (Alert al: alerts) {
             if (al.matched == -1) {    // this means group
                 int sz = whoList.size();
                 if (sz > 0) {    // save Prev Group
@@ -152,7 +150,7 @@ public class AlertTable {
         svIdx = 2;
         svWho = "x";
         for (int i = 0; i < alertSize; i++) {
-            AlertLine al = alertLines.get(i);
+            Alert al = alerts.get(i);
             if (al.matched == -1) {    // this means group
                 if (!chkKey1.isEmpty()) {
                     makeAGroupWho();
@@ -202,7 +200,7 @@ public class AlertTable {
     }
     static void sort() {
         // group asc, who asc, matched desc
-        alertLines.sort(Comparator.comparing(obj -> (obj.group + " " + ((obj.matched == -1)? " ": obj.who + (9999-obj.matched)))));
+        alerts.sort(Comparator.comparing(obj -> (obj.group + " " + ((obj.matched == -1)? " ": obj.who + (9999-obj.matched)))));
     }
 
 //    static final String del = String.copyValueOf(new char[]{(char) Byte.parseByte("7F", 16)});

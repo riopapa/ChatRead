@@ -1,6 +1,6 @@
 package biz.riopapa.chatread.edit;
 
-import static biz.riopapa.chatread.MainActivity.alertLines;
+import static biz.riopapa.chatread.MainActivity.alerts;
 import static biz.riopapa.chatread.MainActivity.gSheetUpload;
 import static biz.riopapa.chatread.MainActivity.mAlertPos;
 import static biz.riopapa.chatread.MainActivity.mContext;
@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 
 import java.text.SimpleDateFormat;
@@ -30,13 +31,14 @@ import java.util.Map;
 import biz.riopapa.chatread.R;
 import biz.riopapa.chatread.alerts.AlertSave;
 import biz.riopapa.chatread.alerts.AlertTable;
-import biz.riopapa.chatread.models.AlertLine;
+import biz.riopapa.chatread.models.Alert;
 
 public class ActivityEditAlert extends AppCompatActivity {
 
-    AlertLine al;
-    EditText eGroup, eWho, eKey1, eKey2, eTalk, eMatched, eSkip, eMore, ePrev, eNext;
+    Alert al;
+    EditText eGroup, eWho, eKey1, eKey2, eTalk, eMatched, eSkip, ePrev, eNext;
     TextView tGroup, tWho, tTalk, tKey1, tPrev;
+    SwitchCompat sQuiet;
     String mGroup, mWho, mPercent, mStatement;
     View deleteMenu;
     boolean newGroup = false;
@@ -52,7 +54,7 @@ public class ActivityEditAlert extends AppCompatActivity {
         toolbar.setSubtitle("Alert Table Edit");
 
         newGroup = false;
-        al = alertLines.get(mAlertPos);
+        al = alerts.get(mAlertPos);
         eGroup = findViewById(R.id.e_group); eGroup.setText(al.group);
         eWho = findViewById(R.id.e_who); eWho.setText(al.who);
         eKey1 = findViewById(R.id.e_key1); eKey1.setText(al.key1);
@@ -60,27 +62,27 @@ public class ActivityEditAlert extends AppCompatActivity {
         eTalk = findViewById(R.id.e_talk);  eTalk.setText(al.talk);
         eMatched = findViewById(R.id.e_matched);  eMatched.setText(String.format("%d", al.matched));
         eSkip = findViewById(R.id.e_skip); eSkip.setText(al.skip);
-        eMore = findViewById(R.id.e_more); eMore.setText(al.more);
         ePrev = findViewById(R.id.e_prev); ePrev.setText(al.prev);
         eNext = findViewById(R.id.e_next); eNext.setText(al.next);
+        sQuiet = findViewById(R.id.s_quiet); sQuiet.setChecked(al.quiet);
         tGroup = findViewById(R.id.t_group); tWho = findViewById(R.id.t_who);
         tKey1 = findViewById(R.id.t_key1);
         tTalk = findViewById(R.id.t_talk);
         tPrev = findViewById(R.id.t_prev);
         if (al.matched == -1) { // group line
-            tGroup.setText("Group"); tWho.setText("Grp Info");
+            tGroup.setText("Group"); tWho.setText("Info");
             tKey1.setText("Skip 1,2");
             eKey1.setHint("Skip 1"); eKey2.setHint("Skip 2");
             eTalk.setHint("Skip 3"); eSkip.setHint("Skip 4");
             tTalk.setText("SKip3, 4");
             tPrev.setText("의미 없음");
         } else {
-            tGroup.setText("Group Name"); tWho.setText("Who");
+            tGroup.setText("Group"); tWho.setText("Who");
             tKey1.setText("Key 1,2");
             eKey1.setHint("Key 1"); eKey2.setHint("Key 2");
             tTalk.setText("Talk,SKip");
             eTalk.setHint("Talk"); eSkip.setHint("Skip");
-            tPrev.setText("Prev/Next");
+            tPrev.setText("Prv/Nxt");
         }
     }
 
@@ -106,18 +108,18 @@ public class ActivityEditAlert extends AppCompatActivity {
 
     private void deleteAlert() {
         String info;
-        if (alertLines.get(mAlertPos).matched == -1) {    // group delete
-            info = alertLines.get(mAlertPos).group;
+        if (alerts.get(mAlertPos).matched == -1) {    // group delete
+            info = alerts.get(mAlertPos).group;
             mStatement = makeGroupMemo();
             mWho = "\n삭제됨\n" + mWho + "\n"
                     + new SimpleDateFormat(".MM/dd HH:mm", Locale.KOREA).format(new Date())
                     + "\n삭제됨\n";
             mPercent += "\n삭제\n" +mPercent+"\n"
                     + new SimpleDateFormat(".MM/dd HH:mm", Locale.KOREA).format(new Date());
-            int alertSize = alertLines.size();
+            int alertSize = alerts.size();
             for (int i = 0; i < alertSize;) {
-                if (alertLines.get(i).group.equals(mGroup)) {
-                    alertLines.remove(i);
+                if (alerts.get(i).group.equals(mGroup)) {
+                    alerts.remove(i);
                     alertsAdapter.notifyItemRemoved(i);
                     alertSize--;
                 }
@@ -125,19 +127,19 @@ public class ActivityEditAlert extends AppCompatActivity {
                     i++;
             }
         } else {
-            info = alertLines.get(mAlertPos).group+" "+ alertLines.get(mAlertPos).who;
-            alertLines.remove(mAlertPos);
+            info = alerts.get(mAlertPos).group+" "+ alerts.get(mAlertPos).who;
+            alerts.remove(mAlertPos);
             alertsAdapter.notifyItemRemoved(mAlertPos);
             mStatement =makeGroupMemo();
         }
         gSheetUpload.uploadGroupInfo(mGroup, "timeStamp", mWho, mPercent,
                 "talk", mStatement, "key12");
         new AlertSave("Delete "+info);
-        removeMatched(alertLines, mContext);
+        removeMatched(alerts, mContext);
         finish();
     }
 
-    void removeMatched(ArrayList<AlertLine> alertLines, Context context) {
+    void removeMatched(ArrayList<Alert> alerts, Context context) {
 
         SharedPreferences sharePref = context.getSharedPreferences("alertLine", MODE_PRIVATE);
         SharedPreferences.Editor sharedEditor = sharePref.edit();
@@ -146,8 +148,8 @@ public class ActivityEditAlert extends AppCompatActivity {
             String [] grpWho = entry.getKey().split("~~");
             if (grpWho[0].equals("matched")) {
                 int idx = -1;
-                for (int i = 0; i < alertLines.size(); i++) {
-                    AlertLine al = alertLines.get(i);
+                for (int i = 0; i < alerts.size(); i++) {
+                    Alert al = alerts.get(i);
                     if (al.group.equals(grpWho[1]) && al.who.equals(grpWho[2]) &&
                             al.key1.equals(grpWho[3]) && al.key2.equals(grpWho[4])) {
                         idx = i;
@@ -178,7 +180,7 @@ public class ActivityEditAlert extends AppCompatActivity {
 
     private void duplicateAlert() {
         mAlertPos++;
-        alertLines.add(mAlertPos, al);
+        alerts.add(mAlertPos, al);
         alertsAdapter.notifyItemInserted(mAlertPos);
         Toast.makeText(mContext,"Duplicated "+ al.group+" / " + al.who, Toast.LENGTH_SHORT).show();
         if (al.matched == -1)
@@ -192,19 +194,19 @@ public class ActivityEditAlert extends AppCompatActivity {
         String key2 = eKey2.getText().toString().trim();
         String matchStr = eMatched.getText().toString();
         int matchInt = matchStr.isEmpty() ? 0: Integer.parseInt(matchStr);
-        String more = eMore.getText().toString();
         String mTalk = eTalk.getText().toString();
         String skip = eSkip.getText().toString();
         String prev = ePrev.getText().toString();
         String next = eNext.getText().toString();
-        al = new AlertLine(group, who, key1, key2, mTalk, matchInt, skip, more,
-                prev, next);
-        alertLines.set(mAlertPos, al);
+        boolean quiet = sQuiet.isChecked();
+        al = new Alert(group, who, key1, key2, mTalk, matchInt, skip,
+                prev, next, quiet);
+        alerts.set(mAlertPos, al);
         if (al.matched == -1 && newGroup) { // add new group dummy line
-            al = new AlertLine(group, group+"누군가",
+            al = new Alert(group, group+"누군가",
                     "종목명", "매수가", "", 0, "","",
-                    "종목명","매수가");
-            alertLines.add(al);
+                    "종목명", false);
+            alerts.add(al);
 //                alertsAdapter.notifyItemInserted(alertPos);
             newGroup = false;
         }
@@ -223,7 +225,7 @@ public class ActivityEditAlert extends AppCompatActivity {
     String makeGroupMemo() {
         mGroup = al.group;
         StringBuilder sb = new StringBuilder();
-        for (AlertLine al: alertLines) {
+        for (Alert al: alerts) {
             if (al.group.equals(mGroup)) {
                 if (al.matched == -1) {
                     mWho = al.who;
@@ -237,7 +239,7 @@ public class ActivityEditAlert extends AppCompatActivity {
                         .append(al.matched).append(" ")
                         .append((al.talk.length()>1)? " t("+al.talk+") ":"")
                         .append((al.skip.length()>1)? " s("+al.skip+") ":"")
-                        .append((al.more.length()>1)? ", "+al.more:"")
+                        .append((al.quiet) ? "quiet": "")
                         .append(" pn<").append(al.prev).append(",").append(al.next)
                         .append(">");
                 }

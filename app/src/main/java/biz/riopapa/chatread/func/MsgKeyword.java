@@ -8,7 +8,7 @@ import static biz.riopapa.chatread.MainActivity.aGroupSaid;
 import static biz.riopapa.chatread.MainActivity.aGroupWhoKey1;
 import static biz.riopapa.chatread.MainActivity.aGroupWhoKey2;
 import static biz.riopapa.chatread.MainActivity.aGroupWhoSkip;
-import static biz.riopapa.chatread.MainActivity.aGroupsPass;
+import static biz.riopapa.chatread.MainActivity.aGroupQuiets;
 import static biz.riopapa.chatread.MainActivity.alertStock;
 import static biz.riopapa.chatread.MainActivity.alertWhoIndex;
 import static biz.riopapa.chatread.MainActivity.alertsAdapter;
@@ -34,7 +34,7 @@ public class MsgKeyword {
         if (nowTime < timeBegin || nowTime > timeEnd) {
             return;
         }
-        if (text.length() < 14 || aGroupsPass.get(grpIdx) || aGroupSaid[grpIdx].equals(text))
+        if (aGroupQuiets.get(grpIdx) || aGroupSaid[grpIdx].equals(text))
             return;
         aGroupSaid[grpIdx] = text;
         if (text.contains(aGSkip1[grpIdx]) || text.contains(aGSkip2[grpIdx]) ||
@@ -51,16 +51,15 @@ public class MsgKeyword {
                 continue;
             if (text.contains(aGroupWhoSkip[grpIdx][gWhoIdx][i]))
                 continue;
+
             if (alertStock == null)
                 alertStock = new AlertStock();
-
             alertStock.sayNlog(group, text, aAlertLineIdx[grpIdx][gWhoIdx][i]);
             if (alertsAdapter == null)
                 alertsAdapter = new AlertsAdapter();
             else {
                 alertsAdapter.notifyItemChanged(aAlertLineIdx[grpIdx][gWhoIdx][i]);
             }
-            return;
         }
     }
 }

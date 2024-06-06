@@ -17,10 +17,10 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.Group;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.view.GravityCompat;
@@ -35,8 +35,10 @@ import java.util.Set;
 
 import biz.riopapa.chatread.adapters.AlertsAdapter;
 import biz.riopapa.chatread.adapters.AppsAdapter;
+import biz.riopapa.chatread.adapters.GroupAdapter;
 import biz.riopapa.chatread.alerts.AlertStock;
 import biz.riopapa.chatread.alerts.AlertWhoIndex;
+import biz.riopapa.chatread.alerts.GroupTable;
 import biz.riopapa.chatread.alerts.StockName;
 import biz.riopapa.chatread.common.Permission;
 import biz.riopapa.chatread.common.PhoneVibrate;
@@ -58,8 +60,9 @@ import biz.riopapa.chatread.func.MsgNamoo;
 import biz.riopapa.chatread.func.MsgSMS;
 import biz.riopapa.chatread.func.StrUtil;
 import biz.riopapa.chatread.func.TableListFile;
-import biz.riopapa.chatread.models.AlertLine;
+import biz.riopapa.chatread.models.Alert;
 import biz.riopapa.chatread.models.App;
+import biz.riopapa.chatread.models.GroupStock;
 import biz.riopapa.chatread.models.KeyVal;
 import biz.riopapa.chatread.notification.NotificationBar;
 import biz.riopapa.chatread.notification.NotificationService;
@@ -97,8 +100,8 @@ public class MainActivity extends AppCompatActivity {
     public static int [][][] aAlertLineIdx;
 
     public static List<String> aGroups;    // {고선, 텔레, 힐}
-    public static List<Boolean> aGroupsPass;
-    public static String[] aGSkip1, aGSkip2, aGSkip3, aGSkip4;
+    public static List<Boolean> aGroupQuiets;
+    public static String[] aGSkip1, aGSkip2, aGSkip3;
     public static String[][] aGroupWhos;     // [2] 이진홍, 김선수
     public static String[][][] aGroupWhoKey1, aGroupWhoKey2, aGroupWhoSkip, aGroupWhoPrev, aGroupWhoNext;
 
@@ -144,7 +147,10 @@ public class MainActivity extends AppCompatActivity {
     public static boolean isPhoneBusy = false;
 
     public static AlertsAdapter alertsAdapter = null;
-    public static ArrayList<AlertLine> alertLines = null;
+    public static ArrayList<Alert> alerts = null;
+
+    public static GroupAdapter groupsAdapter = null;
+    public static ArrayList<GroupStock> groupStocks = null;
 
     public static ArrayList<App> apps;
     public static AppsAdapter appsAdapter;
@@ -154,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
     public static AlertWhoIndex alertWhoIndex = null;
 
     public static final String lastChar = "힝";
-    public static int mAlertPos = -1, mAppsPos = -1;  // updated or duplicated recycler position
+    public static int mGroupPos = -1, mAlertPos = -1, mAppsPos = -1;  // updated or duplicated recycler position
 
     public enum soundType { PRE, POST, ERR, HI_TESLA, ONLY, STOCK, INFO, KAKAO}
     public static final int[] beepRawIds = { R.raw.pre, R.raw.post, R.raw.err,
@@ -316,6 +322,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+//        new GroupTable().convert();
+//        new GroupTable().get();
+//        new GroupTable().put("put");
     }
 
     private boolean isNotificationAllowed(String packageName) {

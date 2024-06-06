@@ -52,6 +52,7 @@
     <color name="textFore">#222233</color>
     <color name="alertBack">#ADDCBB</color>
     <color name="alertTalk">#7E1E8F</color>
+    <color name="quietTalk">#494207</color>
 
     <color name="appBack">#CCDFB7</color>
     <color name="appHint">#139F18</color>

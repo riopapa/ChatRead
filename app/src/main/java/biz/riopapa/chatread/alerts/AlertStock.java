@@ -1,7 +1,7 @@
 package biz.riopapa.chatread.alerts;
 
 import static android.content.Context.MODE_PRIVATE;
-import static biz.riopapa.chatread.MainActivity.alertLines;
+import static biz.riopapa.chatread.MainActivity.alerts;
 import static biz.riopapa.chatread.MainActivity.gSheetUpload;
 import static biz.riopapa.chatread.MainActivity.logUpdate;
 import static biz.riopapa.chatread.MainActivity.mActivity;
@@ -28,7 +28,7 @@ import biz.riopapa.chatread.common.Copy2Clipboard;
 import biz.riopapa.chatread.common.PhoneVibrate;
 import biz.riopapa.chatread.common.Sounds;
 import biz.riopapa.chatread.common.Utils;
-import biz.riopapa.chatread.models.AlertLine;
+import biz.riopapa.chatread.models.Alert;
 
 public class AlertStock {
     public void sayNlog(String iGroup, String iText, int aIdx) {
@@ -44,9 +44,9 @@ public class AlertStock {
             sounds = new Sounds();
         }
 
-        AlertLine al = alertLines.get(aIdx);
+        Alert al = alerts.get(aIdx);
         al.matched++;
-        alertLines.set(aIdx, al);
+        alerts.set(aIdx, al);
         String k1 = al.key1, k2 = al.key2;
         who = al.who;
         sTalk = al.talk;
@@ -103,7 +103,7 @@ public class AlertStock {
 
     }
 
-    private void save(AlertLine al, Context context) {
+    private void save(Alert al, Context context) {
 
         SharedPreferences sharePref = context.getSharedPreferences("alertLine", MODE_PRIVATE);
         SharedPreferences.Editor sharedEditor = sharePref.edit();

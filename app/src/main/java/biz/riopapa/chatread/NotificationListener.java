@@ -319,10 +319,10 @@ public class NotificationListener extends NotificationListenerService {
                     }
                 }
 
-                if (sbnText.contains("종목") && sbnText.contains("매수")) {
-                    utils.logW(sbnGroup, "종목,매수 " + sbnWho + " > "
-                                + sbnText);
-                }
+//                if (sbnText.contains("종목") && sbnText.contains("매수")) {
+//                    utils.logW(sbnGroup, "종목,매수 " + sbnWho + " > "
+//                                + sbnText);
+//                }
 //                if (msgKeyword == null)
 //                    msgKeyword = new MsgKeyword("by tele");
                 sbnText = strUtil.strShorten(sbnWho, sbnText);
