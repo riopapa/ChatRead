@@ -20,7 +20,6 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.widget.Group;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.view.GravityCompat;
@@ -36,9 +35,10 @@ import java.util.Set;
 import biz.riopapa.chatread.adapters.AlertsAdapter;
 import biz.riopapa.chatread.adapters.AppsAdapter;
 import biz.riopapa.chatread.adapters.GroupAdapter;
-import biz.riopapa.chatread.alerts.AlertStock;
+import biz.riopapa.chatread.alerts.StockGetPut;
+import biz.riopapa.chatread.alerts.StockInform;
 import biz.riopapa.chatread.alerts.AlertWhoIndex;
-import biz.riopapa.chatread.alerts.GroupTable;
+import biz.riopapa.chatread.alerts.StockCheck;
 import biz.riopapa.chatread.alerts.StockName;
 import biz.riopapa.chatread.common.Permission;
 import biz.riopapa.chatread.common.PhoneVibrate;
@@ -62,7 +62,7 @@ import biz.riopapa.chatread.func.StrUtil;
 import biz.riopapa.chatread.func.TableListFile;
 import biz.riopapa.chatread.models.Alert;
 import biz.riopapa.chatread.models.App;
-import biz.riopapa.chatread.models.GroupStock;
+import biz.riopapa.chatread.models.StockGroup;
 import biz.riopapa.chatread.models.KeyVal;
 import biz.riopapa.chatread.notification.NotificationBar;
 import biz.riopapa.chatread.notification.NotificationService;
@@ -149,8 +149,15 @@ public class MainActivity extends AppCompatActivity {
     public static AlertsAdapter alertsAdapter = null;
     public static ArrayList<Alert> alerts = null;
 
+    /* Stock variables */
     public static GroupAdapter groupsAdapter = null;
-    public static ArrayList<GroupStock> groupStocks = null;
+    public static ArrayList<StockGroup> stockGroups = null;
+    public static StockGetPut stockGetPut = null;
+    public static StockCheck stockCheck = null;
+    public static int gIdx, wIdx, sIdx;
+    public static int [] stockCounts;
+
+
 
     public static ArrayList<App> apps;
     public static AppsAdapter appsAdapter;
@@ -178,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
     public static Utils utils = null;
     public static StrUtil strUtil = null;
     public static LogUpdate logUpdate = null;
-    public static AlertStock alertStock = null;
+    public static StockInform stockInform = null;
     public static StockName stockName = null;
 
     public static AudioManager mAudioManager = null;
@@ -322,9 +329,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        new GroupTable().convert();
-//        new GroupTable().get();
-//        new GroupTable().put("put");
+//        new StockGetPut().convert();
+        new StockGetPut().get();
+//        new StockGetPut().put("put");
     }
 
     private boolean isNotificationAllowed(String packageName) {

@@ -1,7 +1,7 @@
 package biz.riopapa.chatread;
 
 import static android.content.Context.MODE_PRIVATE;
-import static biz.riopapa.chatread.MainActivity.alertStock;
+import static biz.riopapa.chatread.MainActivity.stockInform;
 import static biz.riopapa.chatread.MainActivity.alertWhoIndex;
 import static biz.riopapa.chatread.MainActivity.downloadFolder;
 import static biz.riopapa.chatread.MainActivity.fileIO;
@@ -28,7 +28,9 @@ import static biz.riopapa.chatread.MainActivity.phoneVibrate;
 import static biz.riopapa.chatread.MainActivity.sharePref;
 import static biz.riopapa.chatread.MainActivity.sharedEditor;
 import static biz.riopapa.chatread.MainActivity.sounds;
+import static biz.riopapa.chatread.MainActivity.stockCheck;
 import static biz.riopapa.chatread.MainActivity.stockName;
+import static biz.riopapa.chatread.MainActivity.stockGetPut;
 import static biz.riopapa.chatread.MainActivity.strUtil;
 import static biz.riopapa.chatread.MainActivity.tableFolder;
 import static biz.riopapa.chatread.MainActivity.tableListFile;
@@ -46,10 +48,12 @@ import android.util.Log;
 
 import java.io.File;
 
-import biz.riopapa.chatread.alerts.AlertStock;
+import biz.riopapa.chatread.alerts.StockInform;
 import biz.riopapa.chatread.alerts.AlertTable;
 import biz.riopapa.chatread.alerts.AlertWhoIndex;
+import biz.riopapa.chatread.alerts.StockCheck;
 import biz.riopapa.chatread.alerts.StockName;
+import biz.riopapa.chatread.alerts.StockGetPut;
 import biz.riopapa.chatread.common.PhoneVibrate;
 import biz.riopapa.chatread.common.Sounds;
 import biz.riopapa.chatread.common.Utils;
@@ -115,8 +119,11 @@ public class SetVariables {
             utils = new Utils();
             strUtil = new StrUtil();
             logUpdate = new LogUpdate(mContext);
-            alertStock = new AlertStock();
+            stockInform = new StockInform();
             stockName = new StockName();
+            stockGetPut = new StockGetPut();
+            stockCheck = new StockCheck();
+
             mAudioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
             phoneVibrate = new PhoneVibrate();
             msgKeyword = new MsgKeyword(msg);

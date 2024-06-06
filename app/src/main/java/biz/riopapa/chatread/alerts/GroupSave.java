@@ -18,7 +18,7 @@ import biz.riopapa.chatread.models.Alert;
 public class GroupSave {
     public GroupSave(String msg) {
         new SnackBar().show("Group Table", msg);
-//        GroupTable.sort();
+//        StockGetPut.sort();
         if (todayFolder == null)
             new ReadyToday();
         SharedPreferences sharePref = mContext.getSharedPreferences("alertLine", MODE_PRIVATE);

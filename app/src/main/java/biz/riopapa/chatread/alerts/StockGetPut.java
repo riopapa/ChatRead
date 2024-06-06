@@ -4,7 +4,8 @@ import static android.content.Context.MODE_PRIVATE;
 import static biz.riopapa.chatread.MainActivity.alerts;
 import static biz.riopapa.chatread.MainActivity.downloadFolder;
 import static biz.riopapa.chatread.MainActivity.fileIO;
-import static biz.riopapa.chatread.MainActivity.groupStocks;
+import static biz.riopapa.chatread.MainActivity.stockCounts;
+import static biz.riopapa.chatread.MainActivity.stockGroups;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.tableFolder;
 import static biz.riopapa.chatread.MainActivity.todayFolder;
@@ -24,13 +25,13 @@ import java.util.List;
 import biz.riopapa.chatread.common.SnackBar;
 import biz.riopapa.chatread.func.ReadyToday;
 import biz.riopapa.chatread.models.Alert;
-import biz.riopapa.chatread.models.GroupStock;
+import biz.riopapa.chatread.models.StockGroup;
 import biz.riopapa.chatread.models.Stock;
 import biz.riopapa.chatread.models.Who;
 
-public class GroupTable {
+public class StockGetPut {
 
-    final static String GROUP_TABLE = "GroupTable";
+    final static String STOCK_TABLE = "StockGetPut";
     final static String COUNTS_ONLY = "GroupCounts";
 
 //   group^ group name  ^     skip1  ^  skip2    ^ skip3 ^  -1  ^ skip4    ^ sayMore
@@ -50,55 +51,64 @@ public class GroupTable {
 //    static int gIdx, gwIdx, svIdx;
 
     public void get() {
+        SharedPreferences shareGroup = mContext.getSharedPreferences(STOCK_TABLE, MODE_PRIVATE);
+        String json = shareGroup.getString(STOCK_TABLE, "");
+        Gson gson = new Gson();
+        Type type = new TypeToken<List<StockGroup>>() {
+        }.getType();
+        if (json.isEmpty())
+            getFromFile();
+        else
+            stockGroups = gson.fromJson(json, type);
+        setStockCounts();
+    }
+
+    public void getFromFile() {
         if (tableFolder ==  null) {
             downloadFolder = new File(Environment.getExternalStorageDirectory(), "download");
             tableFolder = new File(downloadFolder, "_ChatTalk");
         }
-        ArrayList<GroupStock> list;
+        ArrayList<StockGroup> list;
         Gson gson = new Gson();
-        String json = fileIO.readFile(tableFolder, GROUP_TABLE +".json");
+        String json = fileIO.readFile(tableFolder, STOCK_TABLE +".json");
         if (json.isEmpty()) {
             list = new ArrayList<>();
         } else {
-            Type type = new TypeToken<List<GroupStock>>() {
+            Type type = new TypeToken<List<StockGroup>>() {
             }.getType();
             list = gson.fromJson(json, type);
         }
-        groupStocks = list;
-        refreshCounts();
-//        GroupTable.makeArrays();
+        stockGroups = list;
     }
 
-    void refreshCounts() {
-        SharedPreferences shareCount = mContext.getSharedPreferences(COUNTS_ONLY, MODE_PRIVATE);
-        for (int g = 0; g < groupStocks.size(); g++) {
-            GroupStock grp = groupStocks.get(g);
+    void setStockCounts() {
+        int idx = 0;
+        stockCounts = new int[100];
+        for (int g = 0; g < stockGroups.size(); g++) {
+            StockGroup grp = stockGroups.get(g);
             for (int w = 0; w < grp.whos.size(); w++) {
                 Who who = grp.whos.get(w);
                 for (int s = 0; s < who.stocks.size(); s++) {
-                    Stock sto = who.stocks.get(s);
-                    String[] joins = new String[]{"m", grp.grp, who.who, sto.key1, sto.key2};
-                    String keyVal = String.join("~", joins);
-                    int matchCount = shareCount.getInt(keyVal, -3);
-                    if (matchCount != -3)
-                        sto.count = matchCount;
-                    who.stocks.set(s, sto);
+                    Stock stock = who.stocks.get(s);
+                    stock.idx = idx;
+                    stockCounts[idx] = stock.count;
+                    who.stocks.set(s, stock);
+                    idx++;
                 }
                 grp.whos.set(w, who);
             }
-            groupStocks.set(g, grp);
+            stockGroups.set(g, grp);
         }
     }
 
     public void put(String msg) {
-        new SnackBar().show(GROUP_TABLE +".json", msg);
-        if (todayFolder == null)
-            new ReadyToday();
-        SharedPreferences shareGroup = mContext.getSharedPreferences(GROUP_TABLE, MODE_PRIVATE);
+        new SnackBar().show(STOCK_TABLE +".json", msg);
+        applyStockCounts();
+        SharedPreferences shareGroup = mContext.getSharedPreferences(STOCK_TABLE, MODE_PRIVATE);
         SharedPreferences.Editor sg = shareGroup.edit();
         Gson gson = new Gson();
-        String json = gson.toJson(groupStocks);
-        sg.putString(GROUP_TABLE, json);
+        String json = gson.toJson(stockGroups);
+        sg.putString(STOCK_TABLE, json);
         sg.apply();
         json = json.replace("{\"grp\"","\n\n{\"grp\"")
                 .replace("{\"count\"","\n\n{\"count\"")
@@ -109,12 +119,34 @@ public class GroupTable {
                 .replace("}],", "}\n],\n")
                 .replace(",", ", ")
         ;
-        fileIO.writeFile(tableFolder, GROUP_TABLE +".json", json);
+        if (todayFolder == null)
+            new ReadyToday();
+        fileIO.writeFile(tableFolder, STOCK_TABLE +".json", json);
+    }
 
+    void applyStockCounts() {
+        for (int g = 0; g < stockGroups.size(); g++) {
+            StockGroup grp = stockGroups.get(g);
+            for (int w = 0; w < grp.whos.size(); w++) {
+                Who who = grp.whos.get(w);
+                for (int s = 0; s < who.stocks.size(); s++) {
+                    Stock stock = who.stocks.get(s);
+                    stock.count = stockCounts[stock.idx];
+                    who.stocks.set(s, stock);
+                }
+                grp.whos.set(w, who);
+            }
+            stockGroups.set(g, grp);
+        }
+    }
+
+    void save_counts() {
         SharedPreferences shareCount = mContext.getSharedPreferences(COUNTS_ONLY, MODE_PRIVATE);
         SharedPreferences.Editor sc = shareCount.edit();
-        for (int g = 0; g < groupStocks.size(); g++) {
-            GroupStock grp = groupStocks.get(g);
+        sc.clear();
+        sc.apply();
+        for (int g = 0; g < stockGroups.size(); g++) {
+            StockGroup grp = stockGroups.get(g);
             for (int w = 0; w < grp.whos.size(); w++) {
                 Who who = grp.whos.get(w);
                 for (int s = 0; s < who.stocks.size(); s++) {
@@ -129,8 +161,8 @@ public class GroupTable {
     }
 
     public void convert() {
-        groupStocks = new ArrayList<>();
-        GroupStock grp = new GroupStock();
+        stockGroups = new ArrayList<>();
+        StockGroup grp = new StockGroup();
         Stock stock = new Stock();
         grp.whos = new ArrayList<>();
         Who who = new Who();
@@ -144,7 +176,7 @@ public class GroupTable {
                     stock.key1 = al.key1;
                     stock.key2 = al.key2;
                     stock.count = al.matched;
-                    stock.quiet = al.quiet;
+                    stock.talk = "";
                     stock.prv = al.prev;
                     stock.nxt = al.next;
                     stock.skip1 = al.skip;
@@ -162,7 +194,7 @@ public class GroupTable {
                     stock.key1 = al.key1;
                     stock.key2 = al.key2;
                     stock.count = al.matched;
-                    stock.quiet = al.quiet;
+                    stock.talk = "";
                     stock.prv = al.prev;
                     stock.nxt = al.next;
                     stock.skip1 = al.skip;
@@ -171,15 +203,15 @@ public class GroupTable {
             } else {
                 if (!svG.equals("group")) {
                     grp.whos.add(who);
-                    groupStocks.add(grp);
+                    stockGroups.add(grp);
                     who = new Who();
                     who.stocks = new ArrayList<>();
-                    grp = new GroupStock();
+                    grp = new StockGroup();
                     grp.whos = new ArrayList<>();
                 }
                 svG = al.group;
                 svWho = "w";
-                grp = new GroupStock();
+                grp = new StockGroup();
                 grp.whos = new ArrayList<>();
                 grp.grp = al.group;
                 grp.grpF = al.who;
@@ -191,10 +223,14 @@ public class GroupTable {
                 who = new Who();
             }
         }
-        groupStocks.add(grp);
+        stockGroups.add(grp);
         put("convert");
     }
 
+    public void makeStockTable() {
+
+
+    }
 //    public static void makeArrays() {
 //
 //        String svGroup = "x", svWho = "x";
@@ -307,15 +343,15 @@ public class GroupTable {
 //    }
     public void sort() {
         // group asc, who asc, matched desc
-        groupStocks.sort(Comparator.comparing(obj -> (obj.grp)));
-        for (int g = 0; g < groupStocks.size(); g++) {
-            GroupStock grp = groupStocks.get(g);
+        stockGroups.sort(Comparator.comparing(obj -> (obj.grp)));
+        for (int g = 0; g < stockGroups.size(); g++) {
+            StockGroup grp = stockGroups.get(g);
             for (int w = 0; w < grp.whos.size(); w++) {
                 Who who = grp.whos.get(w);
                 who.stocks.sort(Comparator.comparing(obj -> (-obj.count)));
                 grp.whos.set(w, who);
             }
-            groupStocks.set(g, grp);
+            stockGroups.set(g, grp);
         }
 
     }

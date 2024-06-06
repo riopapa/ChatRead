@@ -5,6 +5,9 @@ import static biz.riopapa.chatread.MainActivity.appFullNames;
 import static biz.riopapa.chatread.MainActivity.appIgnores;
 import static biz.riopapa.chatread.MainActivity.appNameIdx;
 import static biz.riopapa.chatread.MainActivity.apps;
+import static biz.riopapa.chatread.MainActivity.gIdx;
+import static biz.riopapa.chatread.MainActivity.stockCheck;
+import static biz.riopapa.chatread.MainActivity.stockGroups;
 import static biz.riopapa.chatread.MainActivity.ktGroupIgnores;
 import static biz.riopapa.chatread.MainActivity.ktNoNumbers;
 import static biz.riopapa.chatread.MainActivity.ktTxtIgnores;
@@ -36,6 +39,7 @@ import static biz.riopapa.chatread.MainActivity.sounds;
 import static biz.riopapa.chatread.MainActivity.strUtil;
 import static biz.riopapa.chatread.MainActivity.teleApp;
 import static biz.riopapa.chatread.MainActivity.utils;
+import static biz.riopapa.chatread.MainActivity.wIdx;
 import static biz.riopapa.chatread.MainActivity.whoNameFrom;
 import static biz.riopapa.chatread.MainActivity.whoNameTo;
 
@@ -143,7 +147,8 @@ public class NotificationListener extends NotificationListenerService {
                 break;
 
             case TG:
-                sayTelegram();
+//                sayTelegram();
+                talkTelegram();
                 break;
 
             case APP:
@@ -346,6 +351,58 @@ public class NotificationListener extends NotificationListenerService {
         sounds.speakAfterBeep(strUtil.makeEtc(sbnText, isWorking()? 20:150));
     }
 
+    private void talkTelegram() {
+
+        if (hasIgnoreStr(teleApp))
+            return;
+        // longWhoName, shortWhoName [],  <= teleGrp.txt
+        // 텔데봇 ^ DailyBOT
+        // 텔투봄 ^ 투자의 봄
+        // 텔오늘 ^ 오늘의단타 공식채널
+
+        boolean goBack = false;
+        for (gIdx = 1; gIdx < stockGroups.size() - 1; gIdx++) {
+            if (sbnGroup.contains(stockGroups.get(gIdx).grpF)) {
+                if (sbnText.length() < 15 || kvTelegram.isDup(sbnGroup, sbnText)) {
+                    goBack = true;
+                    break;
+                }
+                sbnGroup = stockGroups.get(gIdx).grp;  // replace with short group
+                sbnText = strUtil.text2OneLine(sbnText);
+                String[] grpWho = sbnWho.split(":");
+                // 'Ai 데일리 봇' 은 group 12메시 있음 : who 형태임
+                // '투자의 봄' 은 group 없이 who 만 존재
+                if (grpWho.length > 1) {
+                    sbnWho = grpWho[1].trim();
+                }
+                for (wIdx = 0; wIdx < stockGroups.get(gIdx).whos.size(); wIdx++) {
+                    if (sbnWho.contains(stockGroups.get(gIdx).whos.get(wIdx).whoF)) {
+                        // if stock Group then check skip keywords and then continue;
+                        if (sbnText.contains(stockGroups.get(gIdx).skip1) ||
+                                sbnText.contains(stockGroups.get(gIdx).skip2)) {
+                            break;
+                        }
+                        sbnWho = stockGroups.get(gIdx).whos.get(wIdx).who;        // replace with short who
+                        sbnText = strUtil.strShorten(sbnWho, sbnText);
+                        stockCheck.check(stockGroups.get(gIdx).whos.get(wIdx).stocks);
+                        break;
+                    }
+                }
+                goBack = true;
+                break;
+            }
+        }
+        if (goBack)
+            return;
+        if (sbnGroup.contains("새로운 메시지"))
+            sbnGroup = "_새_";
+        head = "[텔레 " + sbnGroup + "|" + sbnWho + "]";
+        logUpdate.addLog(head, sbnText);
+        notificationBar.update(sbnGroup + "|" + sbnWho, sbnText, true);
+        sbnText = head + ", " + sbnText;
+        sounds.speakAfterBeep(strUtil.makeEtc(sbnText, isWorking() ? 20 : 150));
+
+    }
     private boolean hasIgnoreStr(App app) {
         for (String t: app.igStr) {
             if (sbnWho.contains(t))

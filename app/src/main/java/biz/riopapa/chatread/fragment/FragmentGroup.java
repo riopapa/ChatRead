@@ -1,6 +1,6 @@
 package biz.riopapa.chatread.fragment;
 
-import static biz.riopapa.chatread.MainActivity.groupStocks;
+import static biz.riopapa.chatread.MainActivity.stockGroups;
 import static biz.riopapa.chatread.MainActivity.groupsAdapter;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.mGroupPos;
@@ -28,8 +28,7 @@ import biz.riopapa.chatread.alerts.AlertTable;
 import biz.riopapa.chatread.alerts.GroupSave;
 import biz.riopapa.chatread.func.OptionTables;
 import biz.riopapa.chatread.func.ReadyToday;
-import biz.riopapa.chatread.models.GroupStock;
-import biz.riopapa.chatread.models.Stock;
+import biz.riopapa.chatread.models.StockGroup;
 
 public class FragmentGroup extends Fragment {
 
@@ -85,17 +84,17 @@ public class FragmentGroup extends Fragment {
             new OptionTables();
             new AlertTable().get();
         } else if (item.getItemId() == R.id.clear_matched_number) {
-            for (int i = 0; i < groupStocks.size(); i++) {
-                GroupStock groupStock = groupStocks.get(i);
-//                for (int j = 0; j < groupStock.stocks.size(); j++) {
-//                    Stock stock = groupStock.stocks.get(j);
+            for (int i = 0; i < stockGroups.size(); i++) {
+                StockGroup stockGroup = stockGroups.get(i);
+//                for (int j = 0; j < stockGroup.stocks.size(); j++) {
+//                    Stock stock = stockGroup.stocks.get(j);
 //                    if (stock.quiet)
 //                        stock.count = 1000;
 //                    else
 //                        stock.count = (stock.count+99)/100 * 100;
-//                    groupStock.stocks.set(j, stock);
+//                    stockGroup.stocks.set(j, stock);
 //                }
-                groupStocks.set(i, groupStock);
+                stockGroups.set(i, stockGroup);
             }
             new GroupSave("clear matches");
         } else if (item.getItemId() == R.id.log2save) {
