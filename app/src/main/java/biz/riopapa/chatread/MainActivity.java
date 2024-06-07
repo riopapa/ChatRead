@@ -34,12 +34,12 @@ import java.util.Set;
 
 import biz.riopapa.chatread.adapters.AlertsAdapter;
 import biz.riopapa.chatread.adapters.AppsAdapter;
-import biz.riopapa.chatread.adapters.GroupAdapter;
-import biz.riopapa.chatread.alerts.StockGetPut;
-import biz.riopapa.chatread.alerts.StockInform;
-import biz.riopapa.chatread.alerts.AlertWhoIndex;
-import biz.riopapa.chatread.alerts.StockCheck;
-import biz.riopapa.chatread.alerts.StockName;
+import biz.riopapa.chatread.adapters.StockGroupAdapter;
+import biz.riopapa.chatread.stocks.StockGetPut;
+import biz.riopapa.chatread.stocks.StockInform;
+import biz.riopapa.chatread.stocks.AlertWhoIndex;
+import biz.riopapa.chatread.stocks.StockCheck;
+import biz.riopapa.chatread.stocks.StockName;
 import biz.riopapa.chatread.common.Permission;
 import biz.riopapa.chatread.common.PhoneVibrate;
 import biz.riopapa.chatread.common.Sounds;
@@ -47,11 +47,12 @@ import biz.riopapa.chatread.common.Utils;
 import biz.riopapa.chatread.edit.ActivityEditStrRepl;
 import biz.riopapa.chatread.edit.ActivityEditTable;
 import biz.riopapa.chatread.fragment.FragmentAlert;
-import biz.riopapa.chatread.fragment.FragmentApps;
-import biz.riopapa.chatread.fragment.FragmentLog;
+import biz.riopapa.chatread.fragment.FragmentAppsList;
+import biz.riopapa.chatread.fragment.FragmentLogNorm;
 import biz.riopapa.chatread.fragment.FragmentSave;
-import biz.riopapa.chatread.fragment.FragmentStock;
-import biz.riopapa.chatread.fragment.FragmentWork;
+import biz.riopapa.chatread.fragment.FragmentLogStock;
+import biz.riopapa.chatread.fragment.FragmentLogWork;
+import biz.riopapa.chatread.fragment.FragmentStockList;
 import biz.riopapa.chatread.func.FileIO;
 import biz.riopapa.chatread.func.GSheetUpload;
 import biz.riopapa.chatread.func.LogUpdate;
@@ -150,11 +151,11 @@ public class MainActivity extends AppCompatActivity {
     public static ArrayList<Alert> alerts = null;
 
     /* Stock variables */
-    public static GroupAdapter groupsAdapter = null;
+    public static StockGroupAdapter stockGroupsAdapter = null;
     public static ArrayList<StockGroup> stockGroups = null;
     public static StockGetPut stockGetPut = null;
     public static StockCheck stockCheck = null;
-    public static int gIdx, wIdx, sIdx;
+    public static int gIdx, wIdx, sIdx, gPos, wPos, sPos;
     public static int [] stockCounts;
 
 
@@ -167,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
     public static AlertWhoIndex alertWhoIndex = null;
 
     public static final String lastChar = "힝";
-    public static int mGroupPos = -1, mAlertPos = -1, mAppsPos = -1;  // updated or duplicated recycler position
+    public static int mStockGroupPos = -1, mAlertPos = -1, mAppsPos = -1;  // updated or duplicated recycler position
 
     public enum soundType { PRE, POST, ERR, HI_TESLA, ONLY, STOCK, INFO, KAKAO}
     public static final int[] beepRawIds = { R.raw.pre, R.raw.post, R.raw.err,
@@ -216,24 +217,24 @@ public class MainActivity extends AppCompatActivity {
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-        getSupportFragmentManager().beginTransaction().replace(R.id.myFrame, new FragmentLog()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.myFrame, new FragmentLogNorm()).commit();
 
         //==================================================================
         navigationView.setNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
                 case R.id.log:
                     getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
-                            new FragmentLog()).commit();
+                            new FragmentLogNorm()).commit();
                     drawerLayout.closeDrawer(GravityCompat.START);
                     break;
                 case R.id.stock:
                     getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
-                            new FragmentStock()).commit();
+                            new FragmentLogStock()).commit();
                     drawerLayout.closeDrawer(GravityCompat.START);
                     break;
                 case R.id.work:
                     getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
-                            new FragmentWork()).commit();
+                            new FragmentLogWork()).commit();
                     drawerLayout.closeDrawer(GravityCompat.START);
                     break;
                 case R.id.save:
@@ -248,7 +249,12 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.apps:
                     getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
-                            new FragmentApps()).commit();
+                            new FragmentAppsList()).commit();
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                    break;
+                case R.id.group:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
+                            new FragmentStockList()).commit();
                     drawerLayout.closeDrawer(GravityCompat.START);
                     break;
                 case R.id.table_str_repl:
@@ -330,7 +336,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 //        new StockGetPut().convert();
-        new StockGetPut().get();
+//        new StockGetPut().get();
 //        new StockGetPut().put("put");
     }
 

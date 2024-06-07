@@ -1,4 +1,4 @@
-package biz.riopapa.chatread.alerts;
+package biz.riopapa.chatread.stocks;
 
 public class StockName {
 

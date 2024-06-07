@@ -4,7 +4,7 @@ import static biz.riopapa.chatread.MainActivity.apps;
 import static biz.riopapa.chatread.MainActivity.appsAdapter;
 import static biz.riopapa.chatread.MainActivity.mAppsPos;
 import static biz.riopapa.chatread.MainActivity.mContext;
-import static biz.riopapa.chatread.fragment.FragmentApps.appsRecyclerView;
+import static biz.riopapa.chatread.fragment.FragmentAppsList.appsRecyclerView;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;

@@ -23,8 +23,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import biz.riopapa.chatread.R;
 import biz.riopapa.chatread.adapters.AlertsAdapter;
-import biz.riopapa.chatread.alerts.AlertSave;
-import biz.riopapa.chatread.alerts.AlertTable;
+import biz.riopapa.chatread.stocks.AlertSave;
+import biz.riopapa.chatread.stocks.AlertTable;
 import biz.riopapa.chatread.func.OptionTables;
 import biz.riopapa.chatread.func.ReadyToday;
 import biz.riopapa.chatread.models.Alert;
@@ -43,7 +43,7 @@ public class FragmentAlert extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         toolbar.setTitle("Alert");
-        toolbar.setBackgroundDrawable( ContextCompat.getDrawable(mContext, R.drawable.bar_group));
+        toolbar.setBackgroundDrawable( ContextCompat.getDrawable(mContext, R.drawable.bar_stock_group));
         if (alertsAdapter == null)
             alertsAdapter = new AlertsAdapter();
     }

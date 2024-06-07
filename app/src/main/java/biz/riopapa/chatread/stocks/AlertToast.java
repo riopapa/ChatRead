@@ -1,4 +1,4 @@
-package biz.riopapa.chatread.alerts;
+package biz.riopapa.chatread.stocks;
 
 import android.app.Activity;
 import android.content.Context;

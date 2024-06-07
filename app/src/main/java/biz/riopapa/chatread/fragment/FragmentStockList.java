@@ -1,9 +1,9 @@
 package biz.riopapa.chatread.fragment;
 
 import static biz.riopapa.chatread.MainActivity.stockGroups;
-import static biz.riopapa.chatread.MainActivity.groupsAdapter;
+import static biz.riopapa.chatread.MainActivity.stockGroupsAdapter;
 import static biz.riopapa.chatread.MainActivity.mContext;
-import static biz.riopapa.chatread.MainActivity.mGroupPos;
+import static biz.riopapa.chatread.MainActivity.mStockGroupPos;
 import static biz.riopapa.chatread.MainActivity.todayFolder;
 import static biz.riopapa.chatread.MainActivity.toolbar;
 
@@ -22,20 +22,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import biz.riopapa.chatread.R;
-import biz.riopapa.chatread.adapters.GroupAdapter;
-import biz.riopapa.chatread.alerts.AlertSave;
-import biz.riopapa.chatread.alerts.AlertTable;
-import biz.riopapa.chatread.alerts.GroupSave;
+import biz.riopapa.chatread.adapters.StockGroupAdapter;
+import biz.riopapa.chatread.stocks.StockGetPut;
 import biz.riopapa.chatread.func.OptionTables;
 import biz.riopapa.chatread.func.ReadyToday;
 import biz.riopapa.chatread.models.StockGroup;
 
-public class FragmentGroup extends Fragment {
+public class FragmentStockList extends Fragment {
 
     Menu mainMenu;
     RecyclerView recyclerView;
 
-    public FragmentGroup() {
+    public FragmentStockList() {
         // Required empty public constructor
     }
 
@@ -43,28 +41,28 @@ public class FragmentGroup extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        toolbar.setTitle("Group");
-        toolbar.setBackgroundDrawable( ContextCompat.getDrawable(mContext, R.drawable.bar_group));
-        if (groupsAdapter == null)
-            groupsAdapter = new GroupAdapter();
+        toolbar.setTitle("Stock Group");
+        toolbar.setBackgroundDrawable( ContextCompat.getDrawable(mContext, R.drawable.bar_stock_group));
+        if (stockGroupsAdapter == null)
+            stockGroupsAdapter = new StockGroupAdapter();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View thisView = inflater.inflate(R.layout.fragment_group, container, false);
-        recyclerView = thisView.findViewById(R.id.recycle_groups);
-        recyclerView.setAdapter(groupsAdapter);
+        View thisView = inflater.inflate(R.layout.fragment_stock_group, container, false);
+        recyclerView = thisView.findViewById(R.id.recycle_stock_group);
+        recyclerView.setAdapter(stockGroupsAdapter);
         if (todayFolder == null)
             new ReadyToday();
 
-        if (mGroupPos > 0) {
+        if (mStockGroupPos > 0) {
             LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView
                     .getLayoutManager();
             assert layoutManager != null;
             layoutManager.scrollToPositionWithOffset(
-                    mGroupPos, (mGroupPos > 3) ? mGroupPos - 3 : mGroupPos - 2);
+                    mStockGroupPos, (mStockGroupPos > 3) ? mStockGroupPos - 3 : mStockGroupPos - 2);
         }
 
         return thisView;
@@ -82,7 +80,7 @@ public class FragmentGroup extends Fragment {
 
         if (item.getItemId() == R.id.reload_all_tables) {
             new OptionTables();
-            new AlertTable().get();
+            new StockGetPut().get();
         } else if (item.getItemId() == R.id.clear_matched_number) {
             for (int i = 0; i < stockGroups.size(); i++) {
                 StockGroup stockGroup = stockGroups.get(i);
@@ -96,11 +94,8 @@ public class FragmentGroup extends Fragment {
 //                }
                 stockGroups.set(i, stockGroup);
             }
-            new GroupSave("clear matches");
-        } else if (item.getItemId() == R.id.log2save) {
-            new AlertSave("Copy");
         }
-        groupsAdapter.notifyDataSetChanged();
+        stockGroupsAdapter.notifyDataSetChanged();
         return super.onOptionsItemSelected(item);
     }
 }

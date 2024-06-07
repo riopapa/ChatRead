@@ -1,4 +1,4 @@
-package biz.riopapa.chatread.alerts;
+package biz.riopapa.chatread.stocks;
 
 import static biz.riopapa.chatread.MainActivity.aGSkip1;
 import static biz.riopapa.chatread.MainActivity.aGSkip2;

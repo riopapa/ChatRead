@@ -18,7 +18,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import biz.riopapa.chatread.R;
-import biz.riopapa.chatread.alerts.AlertTable;
+import biz.riopapa.chatread.stocks.AlertTable;
 import biz.riopapa.chatread.edit.ActivityEditAlert;
 import biz.riopapa.chatread.models.Alert;
 

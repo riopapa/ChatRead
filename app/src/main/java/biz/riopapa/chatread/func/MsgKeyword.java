@@ -18,7 +18,7 @@ import static biz.riopapa.chatread.MainActivity.timeEnd;
 import android.util.Log;
 
 import biz.riopapa.chatread.adapters.AlertsAdapter;
-import biz.riopapa.chatread.alerts.StockInform;
+import biz.riopapa.chatread.stocks.StockInform;
 import biz.riopapa.chatread.models.Stock;
 
 public class MsgKeyword {

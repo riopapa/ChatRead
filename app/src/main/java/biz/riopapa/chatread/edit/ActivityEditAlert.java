@@ -29,8 +29,8 @@ import java.util.Locale;
 import java.util.Map;
 
 import biz.riopapa.chatread.R;
-import biz.riopapa.chatread.alerts.AlertSave;
-import biz.riopapa.chatread.alerts.AlertTable;
+import biz.riopapa.chatread.stocks.AlertSave;
+import biz.riopapa.chatread.stocks.AlertTable;
 import biz.riopapa.chatread.models.Alert;
 
 public class ActivityEditAlert extends AppCompatActivity {

@@ -48,12 +48,12 @@ import android.util.Log;
 
 import java.io.File;
 
-import biz.riopapa.chatread.alerts.StockInform;
-import biz.riopapa.chatread.alerts.AlertTable;
-import biz.riopapa.chatread.alerts.AlertWhoIndex;
-import biz.riopapa.chatread.alerts.StockCheck;
-import biz.riopapa.chatread.alerts.StockName;
-import biz.riopapa.chatread.alerts.StockGetPut;
+import biz.riopapa.chatread.stocks.StockInform;
+import biz.riopapa.chatread.stocks.AlertTable;
+import biz.riopapa.chatread.stocks.AlertWhoIndex;
+import biz.riopapa.chatread.stocks.StockCheck;
+import biz.riopapa.chatread.stocks.StockName;
+import biz.riopapa.chatread.stocks.StockGetPut;
 import biz.riopapa.chatread.common.PhoneVibrate;
 import biz.riopapa.chatread.common.Sounds;
 import biz.riopapa.chatread.common.Utils;

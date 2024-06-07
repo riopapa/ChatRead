@@ -27,7 +27,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import biz.riopapa.chatread.MainActivity;
-import biz.riopapa.chatread.alerts.StockGetPut;
+import biz.riopapa.chatread.stocks.StockGetPut;
 import biz.riopapa.chatread.common.SnackBar;
 import biz.riopapa.chatread.common.Sounds;
 

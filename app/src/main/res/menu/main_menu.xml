@@ -27,6 +27,11 @@
                     android:icon="@drawable/save"
                     android:id="@+id/save"
                     />
+                <item
+                    android:title="Stock Group"
+                    android:icon="@drawable/icon_stock"
+                    android:id="@+id/group"
+                    />
 
             </menu>
         </item>

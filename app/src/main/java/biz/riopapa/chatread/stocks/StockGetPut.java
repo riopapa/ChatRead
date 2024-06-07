@@ -1,4 +1,4 @@
-package biz.riopapa.chatread.alerts;
+package biz.riopapa.chatread.stocks;
 
 import static android.content.Context.MODE_PRIVATE;
 import static biz.riopapa.chatread.MainActivity.alerts;
@@ -31,7 +31,7 @@ import biz.riopapa.chatread.models.Who;
 
 public class StockGetPut {
 
-    final static String STOCK_TABLE = "StockGetPut";
+    final static String STOCK_TABLE = "StockTable";
     final static String COUNTS_ONLY = "GroupCounts";
 
 //   group^ group name  ^     skip1  ^  skip2    ^ skip3 ^  -1  ^ skip4    ^ sayMore

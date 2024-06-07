@@ -4,11 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#EEE"
     android:id="@+id/frag_group"
-    tools:context=".fragment.FragmentGroup"
+    tools:context=".fragment.FragmentStockList"
     >
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycle_groups"
+        android:id="@+id/recycle_stock_group"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -49,6 +49,7 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
+import android.util.Log;
 
 import java.util.Collections;
 
@@ -362,19 +363,34 @@ public class NotificationListener extends NotificationListenerService {
 
         boolean goBack = false;
         for (gIdx = 1; gIdx < stockGroups.size() - 1; gIdx++) {
-            if (sbnGroup.contains(stockGroups.get(gIdx).grpF)) {
+            if (sbnWho.contains(stockGroups.get(gIdx).grpF)) {
+                goBack = true;
                 if (sbnText.length() < 15 || kvTelegram.isDup(sbnGroup, sbnText)) {
-                    goBack = true;
                     break;
                 }
                 sbnGroup = stockGroups.get(gIdx).grp;  // replace with short group
                 sbnText = strUtil.text2OneLine(sbnText);
+//                Log.w(sbnGroup, sbnWho + " >> " + sbnText);
                 String[] grpWho = sbnWho.split(":");
                 // 'Ai 데일리 봇' 은 group 12메시 있음 : who 형태임
                 // '투자의 봄' 은 group 없이 who 만 존재
+                // 어떤 경우는 이름이 text 맨 앞에
                 if (grpWho.length > 1) {
                     sbnWho = grpWho[1].trim();
+                } else {
+                    int p = sbnText.indexOf(":");
+                    if (p > 0) {
+                        sbnWho = sbnText.substring(0,p);
+                        sbnText = sbnText.substring(p+1);
+                    }
                 }
+//                Log.w(sbnGroup+"2", sbnWho + " >> " + sbnText);
+                if (kvTelegram.isDup(sbnGroup,sbnText))
+                    break;
+                Log.w(sbnGroup+"3", sbnWho + " >> " + sbnText);
+                // whoNameFrom, to [] <= whoName
+                // Ai 매매비서 ^ ai
+                // 투바의 봄 ^ 투봄
                 for (wIdx = 0; wIdx < stockGroups.get(gIdx).whos.size(); wIdx++) {
                     if (sbnWho.contains(stockGroups.get(gIdx).whos.get(wIdx).whoF)) {
                         // if stock Group then check skip keywords and then continue;
@@ -388,7 +404,6 @@ public class NotificationListener extends NotificationListenerService {
                         break;
                     }
                 }
-                goBack = true;
                 break;
             }
         }
@@ -440,7 +455,7 @@ public class NotificationListener extends NotificationListenerService {
         Bundle extras = mNotification.extras;
         // get eText //
         try {
-            sbnText = ""+extras.get(Notification.EXTRA_TEXT);
+            sbnText = extras.getString(Notification.EXTRA_TEXT);
             if (sbnText.isEmpty() || sbnText.equals("null"))
                 return true;
         } catch (Exception e) {
@@ -448,7 +463,7 @@ public class NotificationListener extends NotificationListenerService {
         }
         // get eWho //
         try {
-            sbnWho = ""+extras.get(Notification.EXTRA_TITLE);
+            sbnWho = extras.getString(Notification.EXTRA_TITLE);
             if (sbnWho.equals("null"))
                 sbnWho = "";
         } catch (Exception e) {

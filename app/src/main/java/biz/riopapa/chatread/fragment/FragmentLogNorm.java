@@ -33,7 +33,7 @@ import biz.riopapa.chatread.func.LogUpdate;
 import biz.riopapa.chatread.func.ScrollUp;
 import biz.riopapa.chatread.func.VolumeIcon;
 
-public class FragmentLog extends Fragment {
+public class FragmentLogNorm extends Fragment {
 
     SpannableString ss;
     EditText etTable, etKeyword;
@@ -42,7 +42,7 @@ public class FragmentLog extends Fragment {
     ScrollView scrollView;
     final String logName = "logQue";
 
-    public FragmentLog() {
+    public FragmentLogNorm() {
         // Required empty public constructor
     }
 

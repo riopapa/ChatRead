@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#80AAAAAA"
     android:id="@+id/frag_apps"
-    tools:context=".fragment.FragmentApps"
+    tools:context=".fragment.FragmentAppsList"
     >
 
     <LinearLayout

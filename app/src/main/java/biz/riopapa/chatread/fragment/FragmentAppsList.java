@@ -34,7 +34,7 @@ import biz.riopapa.chatread.func.AppsTable;
 import biz.riopapa.chatread.func.ReadyToday;
 import biz.riopapa.chatread.models.App;
 
-public class FragmentApps extends Fragment {
+public class FragmentAppsList extends Fragment {
 
     Menu mainMenu;
     public static RecyclerView appsRecyclerView;
@@ -42,7 +42,7 @@ public class FragmentApps extends Fragment {
     String key;
     int appPos = -1;
 
-    public FragmentApps() {
+    public FragmentAppsList() {
         // Required empty public constructor
     }
 

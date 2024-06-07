@@ -4,7 +4,7 @@ import static biz.riopapa.chatread.MainActivity.mAppsPos;
 import static biz.riopapa.chatread.MainActivity.apps;
 import static biz.riopapa.chatread.MainActivity.mActivity;
 import static biz.riopapa.chatread.MainActivity.mContext;
-import static biz.riopapa.chatread.fragment.FragmentApps.fnd;
+import static biz.riopapa.chatread.fragment.FragmentAppsList.fnd;
 
 import android.content.Context;
 import android.content.Intent;

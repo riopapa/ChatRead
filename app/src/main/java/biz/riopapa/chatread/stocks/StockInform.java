@@ -1,4 +1,4 @@
-package biz.riopapa.chatread.alerts;
+package biz.riopapa.chatread.stocks;
 
 import static android.content.Context.MODE_PRIVATE;
 import static biz.riopapa.chatread.MainActivity.alerts;
