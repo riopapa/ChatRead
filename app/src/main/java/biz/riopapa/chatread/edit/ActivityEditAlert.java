@@ -77,7 +77,7 @@ public class ActivityEditAlert extends AppCompatActivity {
             tTalk.setText("SKip3, 4");
             tPrev.setText("의미 없음");
         } else {
-            tGroup.setText("Group"); tWho.setText("Who");
+            tGroup.setText("Group"); tWho.setText("SWho");
             tKey1.setText("Key 1,2");
             eKey1.setHint("Key 1"); eKey2.setHint("Key 2");
             tTalk.setText("Talk,SKip");

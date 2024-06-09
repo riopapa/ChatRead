@@ -44,9 +44,9 @@ public class GSheetUpload {
         uploadStock();
     }
     public void uploadStock() {
-        if (sheetQues.isEmpty())
-            return;
-        Thread thread = new Thread(() -> {
+//        if (sheetQues.isEmpty())
+//            return;
+//        Thread thread = new Thread(() -> {
             SheetQue que = sheetQues.get(0);
             FormBody.Builder formBuilder = new FormBody.Builder();
             formBuilder.add("action", que.action);
@@ -61,8 +61,8 @@ public class GSheetUpload {
             sheetQues.remove(0);
             if (!sheetQues.isEmpty())
                 uploadStock();
-        });
-        thread.start();
+//        });
+//        thread.start();
 
     }
 

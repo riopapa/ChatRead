@@ -35,7 +35,7 @@ public class ReadyToday {
         Calendar c = Calendar.getInstance();
         c.setTimeInMillis(System.currentTimeMillis());
         c.set(Calendar.HOUR_OF_DAY, 8);
-        c.set(Calendar.MINUTE, 30);
+        c.set(Calendar.MINUTE, 40);
         timeBegin =c.getTimeInMillis();
         c.set(Calendar.HOUR_OF_DAY, 15);
         timeEnd = c.getTimeInMillis();

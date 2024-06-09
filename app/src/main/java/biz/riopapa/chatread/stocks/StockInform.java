@@ -33,7 +33,7 @@ import biz.riopapa.chatread.common.PhoneVibrate;
 import biz.riopapa.chatread.common.Sounds;
 import biz.riopapa.chatread.common.Utils;
 import biz.riopapa.chatread.models.Alert;
-import biz.riopapa.chatread.models.Stock;
+import biz.riopapa.chatread.models.SStock;
 
 public class StockInform {
     public void sayNlog(String iGroup, String iText, int aIdx) {
@@ -108,7 +108,7 @@ public class StockInform {
 
     }
 
-    public void talkNlog(Stock stock) {
+    public void talkNlog(SStock SStock) {
 
         if (utils == null) {
             utils = new Utils();
@@ -119,17 +119,17 @@ public class StockInform {
             utils.logW("sayNlog", "sounds null");
         }
 
-        stockCounts[stock.idx]++;
+        stockCounts[SStock.idx]++;
 
         String percent = (!sbnText.contains("매수") && (sbnText.contains("매도") || sbnText.contains("익절")))? "1.9"
-                :stock.talk;
+                : SStock.talk;
         if (stockName == null)
             stockName = new StockName();
-        String [] sParse = stockName.get(stock.prv, stock.nxt, sbnText);
+        String [] sParse = stockName.get(SStock.prv, SStock.nxt, sbnText);
         String shortText = strUtil.strShorten(sbnGroup, strUtil.removeSpecialChars(sParse[1]));
-        String key12 = " {" + stock.key1 + "." + stock.key2 + "}";
+        String key12 = " {" + SStock.key1 + "." + SStock.key2 + "}";
 
-        if (!stock.talk.isEmpty()) {
+        if (!SStock.talk.isEmpty()) {
             String [] joins;
             String won = "";
             // 매수가 가 있으면 금액 말하기
@@ -138,7 +138,7 @@ public class StockInform {
                 int p = ss[1].indexOf("원");
                 won = (p > 0) ? ss[1].substring(2,p) :ss[1].substring(0,7);
             }
-            joins = new String[]{sbnGroup, sbnWho, sParse[0], stock.talk, won};
+            joins = new String[]{sbnGroup, sbnWho, sParse[0], SStock.talk, won};
             sounds.speakBuyStock(String.join(" , ", joins));
             String netStr = won + " " + ((shortText.length() > 50) ? shortText.substring(0, 50) : shortText);
             Log.w(sbnGroup, netStr);

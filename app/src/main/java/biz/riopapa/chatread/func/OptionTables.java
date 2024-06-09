@@ -17,6 +17,7 @@ import static biz.riopapa.chatread.MainActivity.smsReplTo;
 import static biz.riopapa.chatread.MainActivity.smsTxtIgnores;
 import static biz.riopapa.chatread.MainActivity.smsWhoIgnores;
 import static biz.riopapa.chatread.MainActivity.sounds;
+import static biz.riopapa.chatread.MainActivity.stockGetPut;
 import static biz.riopapa.chatread.MainActivity.tableListFile;
 import static biz.riopapa.chatread.MainActivity.utils;
 import static biz.riopapa.chatread.MainActivity.whoNameFrom;
@@ -58,7 +59,7 @@ public class OptionTables {
         readTelegramGroup();
         readWhoName();
         new AppsTable().get();
-        new StockGetPut().get();
+        stockGetPut.get();
 
     }
 
@@ -98,7 +99,7 @@ public class OptionTables {
             String pLine = lists[i];
             String [] strings = pLine.split("\\^");
             if (strings.length < 2) {
-                new SnackBar().show("Who Name Table Error ", pLine);
+                new SnackBar().show("SWho Name Table Error ", pLine);
             } else {
                 whoNameTo[i] = strings[0].trim();
                 whoNameFrom[i] = strings[1].trim();

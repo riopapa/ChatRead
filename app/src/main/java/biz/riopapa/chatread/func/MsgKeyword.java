@@ -19,7 +19,7 @@ import android.util.Log;
 
 import biz.riopapa.chatread.adapters.AlertsAdapter;
 import biz.riopapa.chatread.stocks.StockInform;
-import biz.riopapa.chatread.models.Stock;
+import biz.riopapa.chatread.models.SStock;
 
 public class MsgKeyword {
 
@@ -64,17 +64,11 @@ public class MsgKeyword {
         }
     }
 
-    public void talk(Stock stock) {
+    public void talk(SStock SStock) {
 
-        if (timeBegin == 0)
-            new ReadyToday();
-        long nowTime = System.currentTimeMillis();
-        if (nowTime < timeBegin || nowTime > timeEnd) {
-            return;
-        }
         if (stockInform == null)
             stockInform = new StockInform();
-        stockInform.talkNlog(stock);
+        stockInform.talkNlog(SStock);
 //            if (alertsAdapter == null)
 //                alertsAdapter = new AlertsAdapter();
 //            else {

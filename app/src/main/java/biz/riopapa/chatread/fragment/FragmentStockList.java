@@ -1,6 +1,9 @@
 package biz.riopapa.chatread.fragment;
 
-import static biz.riopapa.chatread.MainActivity.stockGroups;
+import static biz.riopapa.chatread.MainActivity.gIdx;
+import static biz.riopapa.chatread.MainActivity.mActivity;
+import static biz.riopapa.chatread.MainActivity.sGroups;
+import static biz.riopapa.chatread.MainActivity.stockGetPut;
 import static biz.riopapa.chatread.MainActivity.stockGroupsAdapter;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.mStockGroupPos;
@@ -26,7 +29,7 @@ import biz.riopapa.chatread.adapters.StockGroupAdapter;
 import biz.riopapa.chatread.stocks.StockGetPut;
 import biz.riopapa.chatread.func.OptionTables;
 import biz.riopapa.chatread.func.ReadyToday;
-import biz.riopapa.chatread.models.StockGroup;
+import biz.riopapa.chatread.models.SGroup;
 
 public class FragmentStockList extends Fragment {
 
@@ -41,8 +44,10 @@ public class FragmentStockList extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        toolbar.setTitle("Stock Group");
-        toolbar.setBackgroundDrawable( ContextCompat.getDrawable(mContext, R.drawable.bar_stock_group));
+        if (toolbar != null) {
+            toolbar.setTitle("Stock Group");
+            toolbar.setBackgroundDrawable(ContextCompat.getDrawable(mContext, R.drawable.bar_stock_group));
+        }
         if (stockGroupsAdapter == null)
             stockGroupsAdapter = new StockGroupAdapter();
     }
@@ -80,19 +85,11 @@ public class FragmentStockList extends Fragment {
 
         if (item.getItemId() == R.id.reload_all_tables) {
             new OptionTables();
-            new StockGetPut().get();
+            stockGetPut.get();
         } else if (item.getItemId() == R.id.clear_matched_number) {
-            for (int i = 0; i < stockGroups.size(); i++) {
-                StockGroup stockGroup = stockGroups.get(i);
-//                for (int j = 0; j < stockGroup.stocks.size(); j++) {
-//                    Stock stock = stockGroup.stocks.get(j);
-//                    if (stock.quiet)
-//                        stock.count = 1000;
-//                    else
-//                        stock.count = (stock.count+99)/100 * 100;
-//                    stockGroup.stocks.set(j, stock);
-//                }
-                stockGroups.set(i, stockGroup);
+            for (int i = 0; i < sGroups.size(); i++) {
+                SGroup sGroup = sGroups.get(i);
+                sGroups.set(i, sGroup);
             }
         }
         stockGroupsAdapter.notifyDataSetChanged();

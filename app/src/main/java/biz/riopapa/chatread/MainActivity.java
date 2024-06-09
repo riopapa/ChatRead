@@ -12,8 +12,12 @@ import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
@@ -35,6 +39,9 @@ import java.util.Set;
 import biz.riopapa.chatread.adapters.AlertsAdapter;
 import biz.riopapa.chatread.adapters.AppsAdapter;
 import biz.riopapa.chatread.adapters.StockGroupAdapter;
+import biz.riopapa.chatread.models.SGroup;
+import biz.riopapa.chatread.models.SStock;
+import biz.riopapa.chatread.models.SWho;
 import biz.riopapa.chatread.stocks.StockGetPut;
 import biz.riopapa.chatread.stocks.StockInform;
 import biz.riopapa.chatread.stocks.AlertWhoIndex;
@@ -63,7 +70,6 @@ import biz.riopapa.chatread.func.StrUtil;
 import biz.riopapa.chatread.func.TableListFile;
 import biz.riopapa.chatread.models.Alert;
 import biz.riopapa.chatread.models.App;
-import biz.riopapa.chatread.models.StockGroup;
 import biz.riopapa.chatread.models.KeyVal;
 import biz.riopapa.chatread.notification.NotificationBar;
 import biz.riopapa.chatread.notification.NotificationService;
@@ -150,16 +156,18 @@ public class MainActivity extends AppCompatActivity {
     public static AlertsAdapter alertsAdapter = null;
     public static ArrayList<Alert> alerts = null;
 
-    /* Stock variables */
+    /* SStock variables */
     public static StockGroupAdapter stockGroupsAdapter = null;
-    public static ArrayList<StockGroup> stockGroups = null;
+    public static ArrayList<SGroup> sGroups = null;
     public static StockGetPut stockGetPut = null;
     public static StockCheck stockCheck = null;
-    public static int gIdx, wIdx, sIdx, gPos, wPos, sPos;
+    public static int gIdx, wIdx, sIdx;
+    public static SGroup nowSGroup;
+    public static SWho nowSWho;
+    public static SStock nowSStock;
     public static int [] stockCounts;
-
-
-
+    public static String [] stockTelGroupNameTbl, stockKaGroupNameTbl, stockTelWhoTbl, stockStockTbl;
+    public static int [] stockTelGroupNameIdx, stockKaGroupNameIdx, stockTelWhoIdx, stockStockIdx;
     public static ArrayList<App> apps;
     public static AppsAdapter appsAdapter;
     public static App teleApp;
@@ -200,7 +208,7 @@ public class MainActivity extends AppCompatActivity {
     public static FileIO fileIO;
 
     public static int teleAppIdx;
-
+    public static Menu menu = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

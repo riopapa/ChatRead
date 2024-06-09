@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/grp_line_group_who"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginTop="0dp"
+    android:padding="2dp" >
+
+    <LinearLayout
+        android:layout_width = "match_parent"
+        android:layout_height = "wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/grp_who"
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textColor="@color/textFore"
+            android:textSize="@dimen/app_line_font_size"
+            android:text="Who"
+            android:maxLines="1"
+            />
+
+        <TextView
+            android:id="@+id/grp_who_full"
+            android:layout_width="0dp"
+            android:layout_weight="12"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textColor="@color/textFore"
+            android:textSize="@dimen/app_line_font_size"
+            android:text="Who Full"
+            android:maxLines="1"
+            />
+
+        <TextView
+            android:id="@+id/grp_who_stocks"
+            android:layout_width="0dp"
+            android:layout_weight="8"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textColor="@color/textFore"
+            android:textSize="@dimen/app_line_font_size"
+            android:text="Stocks"
+            />
+
+    </LinearLayout>
+</LinearLayout>
+
+<!--    android:maxLines="1"-->
+<!--    android:ellipsize="end"-->

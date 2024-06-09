@@ -1,12 +1,14 @@
 package biz.riopapa.chatread.adapters;
 
-import static biz.riopapa.chatread.MainActivity.alerts;
-import static biz.riopapa.chatread.MainActivity.gPos;
+import static biz.riopapa.chatread.MainActivity.gIdx;
 import static biz.riopapa.chatread.MainActivity.mActivity;
 import static biz.riopapa.chatread.MainActivity.mContext;
-import static biz.riopapa.chatread.MainActivity.stockGroups;
+import static biz.riopapa.chatread.MainActivity.nowSGroup;
+import static biz.riopapa.chatread.MainActivity.sGroups;
+import static biz.riopapa.chatread.MainActivity.stockGetPut;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,23 +18,23 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import biz.riopapa.chatread.R;
-import biz.riopapa.chatread.stocks.StockGetPut;
-import biz.riopapa.chatread.edit.ActivityEditAlert;
-import biz.riopapa.chatread.models.StockGroup;
+import biz.riopapa.chatread.edit.ActivityEditStockGroup;
+import biz.riopapa.chatread.models.SWho;
+import biz.riopapa.chatread.models.SGroup;
 
 public class StockGroupAdapter extends RecyclerView.Adapter<StockGroupAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        if (alerts == null || alerts.isEmpty()) {
-            new StockGetPut().get();
+        if (sGroups.isEmpty()) {
+            stockGetPut.get();
         }
-        return stockGroups.size();
+        return sGroups.size();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tGroup, tGroupF, tSkip1, tSkip2, tSkip3, tIgnore, tTelegram;
+        TextView tGroup, tGroupF, tWhos, tSkip1, tSkip2, tSkip3, tIgnore, tTelegram;
         View tLine;
 
         ViewHolder(final View itemView) {
@@ -40,6 +42,7 @@ public class StockGroupAdapter extends RecyclerView.Adapter<StockGroupAdapter.Vi
             tLine = itemView.findViewById(R.id.one_line_group);
             tGroup = itemView.findViewById(R.id.one_group);
             tGroupF = itemView.findViewById(R.id.one_group_full);
+            tWhos = itemView.findViewById(R.id.one_group_whos);
             tSkip1  = itemView.findViewById(R.id.one_group_skip1);
             tSkip2  = itemView.findViewById(R.id.one_group_skip2);
             tSkip3  = itemView.findViewById(R.id.one_group_skip3);
@@ -58,19 +61,29 @@ public class StockGroupAdapter extends RecyclerView.Adapter<StockGroupAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
 
-        StockGroup sg = stockGroups.get(position);
+        SGroup sg = sGroups.get(position);
         holder.tGroup.setText(sg.grp);
         holder.tGroupF.setText(sg.grpF);
+        String whos = "";
+        for (SWho w : sg.whos) {
+            whos += w.who + " ";
+        }
+        holder.tWhos.setText(whos);
         holder.tSkip1.setText(sg.skip1);
         holder.tSkip2.setText(sg.skip2);
         holder.tSkip3.setText(sg.skip3);
+        holder.tTelegram.setText((sg.telKa == 't') ? "텔레" : "  ");
         holder.tIgnore.setText((sg.ignore) ? "무시" : "  ");
-        holder.tTelegram.setText((sg.telGrp) ? "텔레" : "  ");
+
+        holder.tLine.setBackgroundColor(mContext.getResources().getColor(
+                (gIdx == position)? R.color.line_now : R.color.line_default));
 
         holder.tLine.setOnClickListener(v -> {
-            Intent intent = new Intent(mContext, ActivityEditAlert.class);
-            gPos = holder.getAdapterPosition();
+            gIdx = holder.getAdapterPosition();
+            nowSGroup = sGroups.get(gIdx);
+            Intent intent = new Intent(mContext, ActivityEditStockGroup.class);
             mActivity.startActivity(intent);
+            Log.e("onBindViewHolder"," group returned");
         });
     }
 

@@ -101,13 +101,6 @@ public class SetVariables {
             fileIO = new FileIO();
         fileIO.readyFolders();
 
-        new ReadyToday();
-        new OptionTables();
-        new AppsTable().get();
-        new AlertTable().get();
-        alertWhoIndex = new AlertWhoIndex();
-        tableListFile = new TableListFile();
-
         kvKakao = new KeyVal();
         kvTelegram = new KeyVal();
         kvCommon = new KeyVal();
@@ -123,6 +116,7 @@ public class SetVariables {
             stockName = new StockName();
             stockGetPut = new StockGetPut();
             stockCheck = new StockCheck();
+            gSheetUpload = new GSheetUpload();
 
             mAudioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
             phoneVibrate = new PhoneVibrate();
@@ -136,8 +130,14 @@ public class SetVariables {
 //                mContext.startForegroundService(mBackgroundServiceIntent);
                 mContext.startService(mBackgroundServiceIntent);
             }
-            gSheetUpload = new GSheetUpload();
         }
+        new ReadyToday();
+        new OptionTables();
+        new AppsTable().get();
+        new AlertTable().get();
+        alertWhoIndex = new AlertWhoIndex();
+        tableListFile = new TableListFile();
+
     }
 
     boolean isServiceRunning(Context context, Class serviceClass) {

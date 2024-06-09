@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:layout_height="wrap_content"
+            android:text="Key 1, 2"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/e_key1"
+            android:layout_width="0dp"
+            android:layout_weight="5"
+            android:layout_height="wrap_content"
+            android:autofillHints="Key1"
+            android:hint="Key 1"
+            android:inputType="text"
+            />
+
+        <EditText
+            android:id="@+id/e_key2"
+            android:layout_width="0dp"
+            android:layout_weight="5"
+            android:layout_height="wrap_content"
+            android:autofillHints="Key1"
+            android:hint="Key 2"
+            android:inputType="text"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:layout_height="wrap_content"
+            android:text="Prv, Nxt"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/e_prv"
+            android:layout_width="0dp"
+            android:layout_weight="5"
+            android:layout_height="wrap_content"
+            android:autofillHints="Prev"
+            android:hint="Prev"
+            android:inputType="text"
+            />
+
+        <EditText
+            android:id="@+id/e_nxt"
+            android:layout_width="0dp"
+            android:layout_weight="5"
+            android:layout_height="wrap_content"
+            android:autofillHints="Next"
+            android:hint="Next"
+            android:inputType="text"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="5"
+            android:layout_height="wrap_content"
+            android:text="Talk,Skip,Cnt"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/e_talk"
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:layout_height="wrap_content"
+            android:autofillHints="Talk"
+            android:hint="Talk"
+            android:inputType="text"
+            />
+
+        <EditText
+            android:id="@+id/e_skip"
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:layout_height="wrap_content"
+            android:autofillHints="Skip"
+            android:hint="Skip"
+            android:inputType="text"
+            />
+
+        <EditText
+            android:id="@+id/e_count"
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:layout_height="wrap_content"
+            android:autofillHints="Prev"
+            android:hint="Count"
+            android:inputType="numberSigned"
+            />
+
+    </LinearLayout>
+
+</LinearLayout>
