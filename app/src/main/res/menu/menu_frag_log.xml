@@ -6,6 +6,8 @@
     <item
         android:id="@+id/log2save"
         android:orderInCategory="100"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:icon="@drawable/copy"
         app:showAsAction="always"
         android:title="@string/todo" />
@@ -14,6 +16,8 @@
         android:id="@+id/del_log_many"
         android:orderInCategory="100"
         android:icon="@drawable/line_remove_many"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
         app:showAsAction="always"
         android:title="@string/todo" />
 
@@ -21,6 +25,8 @@
         android:id="@+id/del_log_1_line"
         android:orderInCategory="100"
         android:icon="@drawable/line_remove1"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         app:showAsAction="always"
         android:title="@string/todo" />
 

@@ -5,6 +5,7 @@ import static biz.riopapa.chatread.MainActivity.gSheetUpload;
 import static biz.riopapa.chatread.MainActivity.mAlertPos;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.alertsAdapter;
+import static biz.riopapa.chatread.MainActivity.toolbar;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -20,7 +21,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
-import androidx.appcompat.widget.Toolbar;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -47,7 +47,7 @@ public class ActivityEditAlert extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_alert);
-        Toolbar toolbar = findViewById(R.id.toolbar_edit_alert);
+//        Toolbar toolbar = findViewById(R.id.toolbar_edit_alert);
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(0xFFFFFF00);
         toolbar.setSubtitleTextColor(0xFF000000);
@@ -65,7 +65,7 @@ public class ActivityEditAlert extends AppCompatActivity {
         ePrev = findViewById(R.id.e_prev); ePrev.setText(al.prev);
         eNext = findViewById(R.id.e_next); eNext.setText(al.next);
         sQuiet = findViewById(R.id.s_quiet); sQuiet.setChecked(al.quiet);
-        tGroup = findViewById(R.id.t_group); tWho = findViewById(R.id.t_who);
+        tGroup = findViewById(R.id.who_group); tWho = findViewById(R.id.who_who);
         tKey1 = findViewById(R.id.t_key1);
         tTalk = findViewById(R.id.t_talk);
         tPrev = findViewById(R.id.t_prev);

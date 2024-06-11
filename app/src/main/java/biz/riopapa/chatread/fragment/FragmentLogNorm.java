@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.Selection;
 import android.text.SpannableString;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -50,8 +51,12 @@ public class FragmentLogNorm extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        toolbar.setTitle(logName);
-        toolbar.setBackgroundDrawable( ContextCompat.getDrawable(mContext, R.drawable.bar_log));
+        if (toolbar != null) {
+            Log.w("FragmentLogNorm", "onCreate "+logName);
+            toolbar.setTitle(logName);
+            toolbar.setBackgroundDrawable(ContextCompat.getDrawable(mContext, R.drawable.bar_log));
+            toolbar.setContentInsetsRelative(getResources().getDimensionPixelSize(R.dimen.smaller_icon_margin), 0);
+        }
     }
 
     @Override
@@ -95,6 +100,7 @@ public class FragmentLogNorm extends Fragment {
         mainMenu = menu;
         inflater.inflate(R.menu.menu_frag_log, menu);
         super.onCreateOptionsMenu(menu, inflater);
+
     }
 
     @Override

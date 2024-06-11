@@ -11,11 +11,11 @@ public class GoogleStatement {
 
         StringBuilder sb = new StringBuilder();
         for (SWho who : nowSGroup.whos) {
-            sb.append(who.who);
+            if (sb.length() > 0)
+                sb.append("\n");
+            sb.append(who.who).append(" : ").append(who.whoF).append("\n");
             for (SStock stock : who.stocks) {
-                if (sb.length() > 0)
-                    sb.append("\n");
-                sb.append(", Key (").append(stock.key1).append(", ").append(stock.key2).append(")");
+                sb.append("   Key (").append(stock.key1).append(", ").append(stock.key2).append(")");
                 sb.append(", Talk (").append(stock.talk).append(")");
                 sb.append(", Skip (").append(stock.skip1).append(")");
                 sb.append(", Prv/Nxt (").append(stock.prv).append("/").append(stock.nxt).append(")");

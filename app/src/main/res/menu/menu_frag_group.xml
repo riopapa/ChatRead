@@ -5,21 +5,21 @@
     <item
         android:id="@+id/reload_all_tables"
         android:orderInCategory="100"
-        android:icon="@drawable/upload_file"
+        android:icon="@drawable/menu_upload_file"
         app:showAsAction="always"
         android:title="@string/todo" />
 
     <item
         android:id="@+id/clear_matched_number"
         android:orderInCategory="100"
-        android:icon="@drawable/clear"
+        android:icon="@drawable/menu_clear"
         app:showAsAction="always"
         android:title="@string/todo" />
 
     <item
         android:id="@+id/log2save"
         android:orderInCategory="100"
-        android:icon="@drawable/save"
+        android:icon="@drawable/menu_save"
         app:showAsAction="always"
         android:title="@string/todo" />
 

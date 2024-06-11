@@ -2,7 +2,7 @@ package biz.riopapa.chatread.adapters;
 
 import static biz.riopapa.chatread.MainActivity.alerts;
 import static biz.riopapa.chatread.MainActivity.mAlertPos;
-import static biz.riopapa.chatread.MainActivity.mActivity;
+import static biz.riopapa.chatread.MainActivity.mMainActivity;
 import static biz.riopapa.chatread.MainActivity.mContext;
 
 import android.content.Intent;
@@ -122,7 +122,7 @@ public class AlertsAdapter extends RecyclerView.Adapter<AlertsAdapter.ViewHolder
         holder.tLine.setOnClickListener(v -> {
         Intent intent = new Intent(mContext, ActivityEditAlert.class);
         mAlertPos = holder.getAdapterPosition();
-        mActivity.startActivity(intent);
+        mMainActivity.startActivity(intent);
         });
     }
 

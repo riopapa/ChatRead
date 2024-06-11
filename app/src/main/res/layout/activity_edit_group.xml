@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/color_tab_app_background"
-    tools:context=".edit.ActivityEditAlert">
+    tools:context=".edit.ActivityEditGroup">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_edit_group"
@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         >
         <TextView
-            android:id="@+id/t_group"
+            android:id="@+id/who_group"
             android:layout_width="0dp"
             android:layout_weight="2"
             android:layout_height="wrap_content"
@@ -63,7 +63,7 @@
         android:layout_height="wrap_content"
         >
         <TextView
-            android:id="@+id/t_telka"
+            android:id="@+id/who_telka"
             android:layout_width="0dp"
             android:layout_weight="5"
             android:layout_height="wrap_content"
@@ -80,7 +80,7 @@
             android:textSize="@dimen/stock_font_size"
             />
         <TextView
-            android:id="@+id/t_ignore"
+            android:id="@+id/who_ignore"
             android:layout_width="0dp"
             android:layout_weight="3"
             android:layout_height="wrap_content"
@@ -141,7 +141,7 @@
         android:layout_height="wrap_content"
         >
         <TextView
-            android:id="@+id/t_skip3"
+            android:id="@+id/who_skip3"
             android:layout_width="0dp"
             android:layout_weight="2"
             android:layout_height="wrap_content"

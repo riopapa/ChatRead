@@ -4,7 +4,7 @@ import static android.content.Context.MODE_PRIVATE;
 import static biz.riopapa.chatread.MainActivity.alerts;
 import static biz.riopapa.chatread.MainActivity.gSheetUpload;
 import static biz.riopapa.chatread.MainActivity.logUpdate;
-import static biz.riopapa.chatread.MainActivity.mActivity;
+import static biz.riopapa.chatread.MainActivity.mMainActivity;
 import static biz.riopapa.chatread.MainActivity.mAudioManager;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.notificationBar;
@@ -89,7 +89,7 @@ public class StockInform {
                     phoneVibrate = new PhoneVibrate();
                 phoneVibrate.vib(1);
             }
-            new AlertToast().show(mContext, mActivity, title);
+            new AlertToast().show(mContext, mMainActivity, title);
 //            new AlertSay().send(mContext, title, sParse[0], netStr);
         } else {
             String title = sParse[0]+" | "+iGroup+". "+who;
@@ -108,7 +108,7 @@ public class StockInform {
 
     }
 
-    public void talkNlog(SStock SStock) {
+    public void talkNlog(SStock stock) {
 
         if (utils == null) {
             utils = new Utils();
@@ -119,17 +119,17 @@ public class StockInform {
             utils.logW("sayNlog", "sounds null");
         }
 
-        stockCounts[SStock.idx]++;
+        stockCounts[stock.idx]++;
 
         String percent = (!sbnText.contains("매수") && (sbnText.contains("매도") || sbnText.contains("익절")))? "1.9"
-                : SStock.talk;
+                : stock.talk;
         if (stockName == null)
             stockName = new StockName();
-        String [] sParse = stockName.get(SStock.prv, SStock.nxt, sbnText);
+        String [] sParse = stockName.get(stock.prv, stock.nxt, sbnText);
         String shortText = strUtil.strShorten(sbnGroup, strUtil.removeSpecialChars(sParse[1]));
-        String key12 = " {" + SStock.key1 + "." + SStock.key2 + "}";
+        String key12 = " {" + stock.key1 + "." + stock.key2 + "}";
 
-        if (!SStock.talk.isEmpty()) {
+        if (!stock.talk.isEmpty()) {
             String [] joins;
             String won = "";
             // 매수가 가 있으면 금액 말하기
@@ -138,7 +138,7 @@ public class StockInform {
                 int p = ss[1].indexOf("원");
                 won = (p > 0) ? ss[1].substring(2,p) :ss[1].substring(0,7);
             }
-            joins = new String[]{sbnGroup, sbnWho, sParse[0], SStock.talk, won};
+            joins = new String[]{sbnGroup, sbnWho, sParse[0], stock.talk, won};
             sounds.speakBuyStock(String.join(" , ", joins));
             String netStr = won + " " + ((shortText.length() > 50) ? shortText.substring(0, 50) : shortText);
             Log.w(sbnGroup, netStr);
@@ -152,7 +152,7 @@ public class StockInform {
                     phoneVibrate = new PhoneVibrate();
                 phoneVibrate.vib(1);
             }
-            new AlertToast().show(mContext, mActivity, title);
+            new AlertToast().show(mContext, mMainActivity, title);
 //            new AlertSay().send(mContext, title, sParse[0], netStr);
         } else {
             String title = sParse[0]+" | "+sbnGroup+". "+sbnWho;

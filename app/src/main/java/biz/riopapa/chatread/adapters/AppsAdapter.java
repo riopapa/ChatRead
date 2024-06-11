@@ -2,7 +2,7 @@ package biz.riopapa.chatread.adapters;
 
 import static biz.riopapa.chatread.MainActivity.mAppsPos;
 import static biz.riopapa.chatread.MainActivity.apps;
-import static biz.riopapa.chatread.MainActivity.mActivity;
+import static biz.riopapa.chatread.MainActivity.mMainActivity;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.fragment.FragmentAppsList.fnd;
 
@@ -112,7 +112,7 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.ViewHolder> {
         holder.tLine.setOnClickListener(v -> {
             mAppsPos = holder.getAdapterPosition();
             Intent intent = new Intent(holder.context, ActivityEditApp.class);
-            mActivity.startActivity(intent);
+            mMainActivity.startActivity(intent);
         });
     }
     private Drawable getPackageIcon(String packageName, PackageManager packageManager) {

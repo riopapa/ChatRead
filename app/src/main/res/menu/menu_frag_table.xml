@@ -5,7 +5,7 @@
     <item
         android:id="@+id/reload_all_tables"
         android:orderInCategory="100"
-        android:icon="@drawable/upload_file"
+        android:icon="@drawable/menu_upload_file"
         app:showAsAction="always"
         android:title="@string/todo" />
 

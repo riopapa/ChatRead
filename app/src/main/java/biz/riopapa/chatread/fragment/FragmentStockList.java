@@ -1,10 +1,8 @@
 package biz.riopapa.chatread.fragment;
 
-import static biz.riopapa.chatread.MainActivity.gIdx;
-import static biz.riopapa.chatread.MainActivity.mActivity;
 import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.stockGetPut;
-import static biz.riopapa.chatread.MainActivity.stockGroupsAdapter;
+import static biz.riopapa.chatread.MainActivity.groupsAdapter;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.mStockGroupPos;
 import static biz.riopapa.chatread.MainActivity.todayFolder;
@@ -25,8 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import biz.riopapa.chatread.R;
-import biz.riopapa.chatread.adapters.StockGroupAdapter;
-import biz.riopapa.chatread.stocks.StockGetPut;
+import biz.riopapa.chatread.adapters.GroupAdapter;
 import biz.riopapa.chatread.func.OptionTables;
 import biz.riopapa.chatread.func.ReadyToday;
 import biz.riopapa.chatread.models.SGroup;
@@ -48,8 +45,11 @@ public class FragmentStockList extends Fragment {
             toolbar.setTitle("Stock Group");
             toolbar.setBackgroundDrawable(ContextCompat.getDrawable(mContext, R.drawable.bar_stock_group));
         }
-        if (stockGroupsAdapter == null)
-            stockGroupsAdapter = new StockGroupAdapter();
+//        if (stockGetPut == null)
+//            stockGetPut = new StockGetPut();
+//        stockGetPut.sort();
+        if (groupsAdapter == null)
+            groupsAdapter = new GroupAdapter();
     }
 
     @Override
@@ -58,7 +58,7 @@ public class FragmentStockList extends Fragment {
 
         View thisView = inflater.inflate(R.layout.fragment_stock_group, container, false);
         recyclerView = thisView.findViewById(R.id.recycle_stock_group);
-        recyclerView.setAdapter(stockGroupsAdapter);
+        recyclerView.setAdapter(groupsAdapter);
         if (todayFolder == null)
             new ReadyToday();
 
@@ -92,7 +92,8 @@ public class FragmentStockList extends Fragment {
                 sGroups.set(i, sGroup);
             }
         }
-        stockGroupsAdapter.notifyDataSetChanged();
+        stockGetPut.sort();
+        groupsAdapter.notifyDataSetChanged();
         return super.onOptionsItemSelected(item);
     }
 }

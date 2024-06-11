@@ -1,134 +1,153 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/one_line_group"
+    android:id="@+id/stock_line"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="#CDE"
+    android:background="#BBCCDD"
     android:layout_margin="2dp"
-    android:padding="4dp" >
+    android:padding="2dp" >
 
     <LinearLayout
         android:layout_width = "match_parent"
         android:layout_height = "wrap_content"
-        android:layout_margin="1dp"
         android:orientation="horizontal">
+
         <TextView
-            android:id="@+id/one_group"
             android:layout_width="0dp"
-            android:layout_weight="7"
+            android:layout_weight="4"
             android:layout_height="match_parent"
             android:gravity="center"
             android:textColor="@color/textFore"
             android:textSize="@dimen/app_line_font_size"
-            android:text="group"
+            android:text="Key"
             android:maxLines="1"
             />
 
         <TextView
-            android:id="@+id/one_group_full"
+            android:id="@+id/stock_key1"
             android:layout_width="0dp"
-            android:layout_weight="16"
+            android:layout_weight="4"
             android:layout_height="match_parent"
             android:gravity="center"
             android:textColor="@color/textFore"
             android:textSize="@dimen/app_line_font_size"
-            android:text="Who"
+            android:text="Key1"
             android:maxLines="1"
             />
 
         <TextView
-            android:id="@+id/one_group_whos"
+            android:id="@+id/stock_key2"
             android:layout_width="0dp"
-            android:layout_weight="10"
+            android:layout_weight="4"
             android:layout_height="match_parent"
             android:gravity="center"
             android:textColor="@color/textFore"
             android:textSize="@dimen/app_line_font_size"
-            android:text=" "
+            android:text="Key2"
+            android:maxLines="1"
+            />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textColor="@color/textFore"
+            android:textSize="@dimen/app_line_font_size"
+            android:text="Talk"
+            android:maxLines="1"
+            />
+
+        <TextView
+            android:id="@+id/stock_talk"
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textColor="@color/textFore"
+            android:textSize="@dimen/app_line_font_size"
+            android:text="Talk"
+            android:maxLines="1"
             />
 
     </LinearLayout>
+
     <LinearLayout
         android:layout_width = "match_parent"
         android:layout_height = "wrap_content"
-        android:background="#ACDFF9"
-        android:layout_margin="1dp"
         android:orientation="horizontal">
+
         <TextView
-            android:id="@+id/one_dummp"
             android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_weight="4"
             android:layout_height="match_parent"
             android:gravity="center"
             android:textColor="@color/textFore"
             android:textSize="@dimen/app_line_font_size"
-            android:text=" "
+            android:text="Prv, Nxt"
             android:maxLines="1"
             />
 
         <TextView
-            android:id="@+id/one_group_skip1"
+            android:id="@+id/stock_prv"
             android:layout_width="0dp"
-            android:layout_weight="5"
+            android:layout_weight="4"
             android:layout_height="match_parent"
             android:gravity="center"
             android:textColor="@color/textFore"
             android:textSize="@dimen/app_line_font_size"
-            android:text="skip1"
+            android:text="Prev"
             android:maxLines="1"
             />
 
         <TextView
-            android:id="@+id/one_group_skip2"
+            android:id="@+id/stock_nxt"
             android:layout_width="0dp"
-            android:layout_weight="5"
+            android:layout_weight="4"
             android:layout_height="match_parent"
             android:gravity="center"
             android:textColor="@color/textFore"
             android:textSize="@dimen/app_line_font_size"
-            android:text="skip2"
+            android:text="Next"
             android:maxLines="1"
             />
 
         <TextView
-            android:id="@+id/one_group_skip3"
             android:layout_width="0dp"
-            android:layout_weight="5"
+            android:layout_weight="3"
             android:layout_height="match_parent"
             android:gravity="center"
             android:textColor="@color/textFore"
             android:textSize="@dimen/app_line_font_size"
-            android:text="skip3"
+            android:text="Cnt"
             android:maxLines="1"
             />
 
         <TextView
-            android:id="@+id/one_group_telegram"
+            android:id="@+id/stock_count"
             android:layout_width="0dp"
             android:layout_weight="2"
             android:layout_height="match_parent"
             android:gravity="center"
             android:textColor="@color/textFore"
             android:textSize="@dimen/app_line_font_size"
-            android:text=" "
+            android:text="Count"
+            android:maxLines="1"
             />
 
         <TextView
-            android:id="@+id/one_group_ignore"
+            android:id="@+id/stock_skip"
             android:layout_width="0dp"
-            android:layout_weight="2"
+            android:layout_weight="4"
             android:layout_height="match_parent"
             android:gravity="center"
             android:textColor="@color/textFore"
             android:textSize="@dimen/app_line_font_size"
-            android:text="ignore"
+            android:text="skip"
             android:maxLines="1"
             />
 
     </LinearLayout>
 
 </LinearLayout>
-
-<!--    android:maxLines="1"-->
-<!--    android:ellipsize="end"-->

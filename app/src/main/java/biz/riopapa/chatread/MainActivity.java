@@ -12,12 +12,9 @@ import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
-import android.os.Looper;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
@@ -28,6 +25,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -38,7 +36,9 @@ import java.util.Set;
 
 import biz.riopapa.chatread.adapters.AlertsAdapter;
 import biz.riopapa.chatread.adapters.AppsAdapter;
-import biz.riopapa.chatread.adapters.StockGroupAdapter;
+import biz.riopapa.chatread.adapters.GroupAdapter;
+import biz.riopapa.chatread.adapters.GroupWhoAdapter;
+import biz.riopapa.chatread.adapters.GroupWhoStockAdapter;
 import biz.riopapa.chatread.models.SGroup;
 import biz.riopapa.chatread.models.SStock;
 import biz.riopapa.chatread.models.SWho;
@@ -53,7 +53,6 @@ import biz.riopapa.chatread.common.Sounds;
 import biz.riopapa.chatread.common.Utils;
 import biz.riopapa.chatread.edit.ActivityEditStrRepl;
 import biz.riopapa.chatread.edit.ActivityEditTable;
-import biz.riopapa.chatread.fragment.FragmentAlert;
 import biz.riopapa.chatread.fragment.FragmentAppsList;
 import biz.riopapa.chatread.fragment.FragmentLogNorm;
 import biz.riopapa.chatread.fragment.FragmentSave;
@@ -76,9 +75,9 @@ import biz.riopapa.chatread.notification.NotificationService;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static Toolbar toolbar;
+    public static Toolbar toolbar = null;
     public static Context mContext;
-    public static Activity mActivity;
+    public static Activity mMainActivity;
 
     private DrawerLayout drawerLayout;
 
@@ -157,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
     public static ArrayList<Alert> alerts = null;
 
     /* SStock variables */
-    public static StockGroupAdapter stockGroupsAdapter = null;
+    public static GroupAdapter groupsAdapter = null;
     public static ArrayList<SGroup> sGroups = null;
     public static StockGetPut stockGetPut = null;
     public static StockCheck stockCheck = null;
@@ -209,88 +208,71 @@ public class MainActivity extends AppCompatActivity {
 
     public static int teleAppIdx;
     public static Menu menu = null;
+
+    public static GroupAdapter groupAdapter = null;
+    public static GroupWhoAdapter groupWhoAdapter = null;
+    public static GroupWhoStockAdapter groupWhoStockAdapter = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
         mContext = this;
-        mActivity = this;
+        mMainActivity = this;
         toolbar = findViewById(R.id.myToolBar);
         setSupportActionBar(toolbar);
         toolbar.setTitle("Main");
 
         drawerLayout = findViewById(R.id.myDrawer);
         NavigationView navigationView = findViewById(R.id.myNav);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
+                R.string.open, R.string.close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-        getSupportFragmentManager().beginTransaction().replace(R.id.myFrame, new FragmentLogNorm()).commit();
 
-        //==================================================================
         navigationView.setNavigationItemSelectedListener(item -> {
-            switch (item.getItemId()) {
-                case R.id.log:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
-                            new FragmentLogNorm()).commit();
-                    drawerLayout.closeDrawer(GravityCompat.START);
-                    break;
-                case R.id.stock:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
-                            new FragmentLogStock()).commit();
-                    drawerLayout.closeDrawer(GravityCompat.START);
-                    break;
-                case R.id.work:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
-                            new FragmentLogWork()).commit();
-                    drawerLayout.closeDrawer(GravityCompat.START);
-                    break;
-                case R.id.save:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
-                            new FragmentSave()).commit();
-                    drawerLayout.closeDrawer(GravityCompat.START);
-                    break;
-                case R.id.alert:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
-                            new FragmentAlert()).commit();
-                    drawerLayout.closeDrawer(GravityCompat.START);
-                    break;
-                case R.id.apps:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
-                            new FragmentAppsList()).commit();
-                    drawerLayout.closeDrawer(GravityCompat.START);
-                    break;
-                case R.id.group:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
-                            new FragmentStockList()).commit();
-                    drawerLayout.closeDrawer(GravityCompat.START);
-                    break;
-                case R.id.table_str_repl:
-                    drawerLayout.closeDrawer(GravityCompat.START);
-                    Intent intent = new Intent(mContext, ActivityEditStrRepl.class);
+            int id = item.getItemId();
+            Fragment fragment = null;
+            if (id == R.id.log) {
+                fragment = new FragmentLogNorm();
+            } else if (id == R.id.stock) {
+                fragment = new FragmentLogStock();
+            } else if (id == R.id.work) {
+                fragment = new FragmentLogWork();
+            } else if (id == R.id.save) {
+                fragment = new FragmentSave();
+            } else if (id == R.id.apps) {
+                fragment = new FragmentAppsList();
+            } else if (id == R.id.group) {
+                fragment = new FragmentStockList();
+            } else if (id == R.id.table_str_repl) {
+                Intent intent = new Intent(mContext, ActivityEditStrRepl.class);
+                startActivity(intent);
+            } else if (id == R.id.stock) {
+                fragment = new FragmentLogStock();
+            } else if (id == R.id.stock) {
+                fragment = new FragmentLogStock();
+            } else if (id == R.id.stock) {
+                fragment = new FragmentLogStock();
+            } else if (id == R.id.stock) {
+                fragment = new FragmentLogStock();
+            } else {
+                if (id == R.id.table_sms_no_num || id == R.id.table_sms_repl ||
+                        id == R.id.table_sms_txt_ig || id == R.id.table_sms_who_ig ||
+                        id == R.id.table_sys_ig || id == R.id.table_tele_grp ||
+                        id == R.id.table_kt_grp_ig || id == R.id.table_kt_no_num ||
+                        id == R.id.table_kt_txt_ig || id == R.id.table_kt_who_ig ||
+                        id == R.id.table_who_name) {
+                    menu_selected = id;
+                    Intent intent = new Intent(mContext, ActivityEditTable.class);
                     startActivity(intent);
-                    break;
-
-                case R.id.table_sms_no_num:
-                case R.id.table_sms_repl:
-                case R.id.table_sms_txt_ig:
-                case R.id.table_sms_who_ig:
-                case R.id.table_sys_ig:
-                case R.id.table_tele_grp:
-                case R.id.table_kt_grp_ig:
-                case R.id.table_kt_no_num:
-                case R.id.table_kt_txt_ig:
-                case R.id.table_kt_who_ig:
-                case R.id.table_who_name:
-                    menu_selected = item.getItemId();
-                    drawerLayout.closeDrawer(GravityCompat.START);
-                    intent = new Intent(mContext, ActivityEditTable.class);
-                    startActivity(intent);
-
-                    break;
-
-                default:
-                    throw new IllegalStateException("Unexpected value: " + item.getItemId());
+                }
+            }
+            if (fragment != null) {
+                getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
+                        fragment).commit();
+                drawerLayout.closeDrawer(GravityCompat.START);
             }
             return true;
         });
@@ -332,9 +314,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
         new SetVariables(this,"main");
-
         notificationBar.startShow();
-
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
@@ -342,6 +322,10 @@ public class MainActivity extends AppCompatActivity {
 //                finish();
             }
         });
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
+                new FragmentLogNorm()).commit();
+        drawerLayout.closeDrawer(GravityCompat.START);
 
 //        new StockGetPut().convert();
 //        new StockGetPut().get();

@@ -1,6 +1,6 @@
 package biz.riopapa.chatread.adapters;
 
-import static biz.riopapa.chatread.MainActivity.mActivity;
+import static biz.riopapa.chatread.MainActivity.mMainActivity;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.nowSGroup;
 import static biz.riopapa.chatread.MainActivity.nowSWho;
@@ -16,14 +16,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import biz.riopapa.chatread.R;
-import biz.riopapa.chatread.edit.ActivityEditAlert;
+import biz.riopapa.chatread.edit.ActivityEditGroupWho;
 import biz.riopapa.chatread.models.SWho;
 
-public class StockGroupWhoStockAdapter extends RecyclerView.Adapter<StockGroupWhoStockAdapter.ViewHolder> {
+public class GroupWhoAdapter extends RecyclerView.Adapter<GroupWhoAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return nowSWho.stocks.size();
+        return nowSGroup.whos.size();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -54,11 +54,11 @@ public class StockGroupWhoStockAdapter extends RecyclerView.Adapter<StockGroupWh
         holder.tWho.setText(SWho.who);
         holder.tWhoF.setText(SWho.whoF);
         holder.tStocks.setText("Stocks: " + SWho.stocks.size());
-
         holder.tLine.setOnClickListener(v -> {
-            Intent intent = new Intent(mContext, ActivityEditAlert.class);
+            Intent intent = new Intent(mContext, ActivityEditGroupWho.class);
             wIdx = holder.getAdapterPosition();
-            mActivity.startActivity(intent);
+            nowSWho = nowSGroup.whos.get(wIdx);
+            mMainActivity.startActivity(intent);
         });
     }
 

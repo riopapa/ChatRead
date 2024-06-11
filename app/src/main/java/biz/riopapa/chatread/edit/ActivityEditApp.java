@@ -4,6 +4,7 @@ import static biz.riopapa.chatread.MainActivity.apps;
 import static biz.riopapa.chatread.MainActivity.appsAdapter;
 import static biz.riopapa.chatread.MainActivity.mAppsPos;
 import static biz.riopapa.chatread.MainActivity.mContext;
+import static biz.riopapa.chatread.MainActivity.toolbar;
 import static biz.riopapa.chatread.fragment.FragmentAppsList.appsRecyclerView;
 
 import android.content.ClipData;
@@ -42,8 +43,8 @@ public class ActivityEditApp extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_app);
-        Toolbar toolbar = findViewById(R.id.toolbar_edit_app);
-        setSupportActionBar(toolbar);
+//        Toolbar toolbar = findViewById(R.id.toolbar_edit_app);
+//        setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(0xFFFFFF00);
         toolbar.setSubtitleTextColor(0xFF000000);
         toolbar.setSubtitle("App Edit");

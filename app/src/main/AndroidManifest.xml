@@ -45,7 +45,7 @@
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -57,7 +57,9 @@
         <activity android:name = ".edit.ActivityEditTable"/>
         <activity android:name = ".edit.ActivityEditApp"/>
         <activity android:name = ".edit.ActivityEditAlert"/>
-        <activity android:name = ".edit.ActivityEditStockGroup"/>
+        <activity android:name = ".edit.ActivityEditGroup"/>
+        <activity android:name = ".edit.ActivityEditGroupWho"/>
+
         <service
             android:name = ".NotificationListener"
             android:enabled="true"

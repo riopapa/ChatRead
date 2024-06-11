@@ -9,4 +9,6 @@
 
     <dimen name="alert_font_size">16sp</dimen>
 
+    <dimen name="smaller_icon_margin">4dp</dimen>
+
 </resources>

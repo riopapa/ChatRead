@@ -1,7 +1,7 @@
 package biz.riopapa.chatread.adapters;
 
 import static biz.riopapa.chatread.MainActivity.gIdx;
-import static biz.riopapa.chatread.MainActivity.mActivity;
+import static biz.riopapa.chatread.MainActivity.mMainActivity;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.nowSGroup;
 import static biz.riopapa.chatread.MainActivity.sGroups;
@@ -18,11 +18,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import biz.riopapa.chatread.R;
-import biz.riopapa.chatread.edit.ActivityEditStockGroup;
+import biz.riopapa.chatread.edit.ActivityEditGroup;
 import biz.riopapa.chatread.models.SWho;
 import biz.riopapa.chatread.models.SGroup;
 
-public class StockGroupAdapter extends RecyclerView.Adapter<StockGroupAdapter.ViewHolder> {
+public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
@@ -81,8 +81,8 @@ public class StockGroupAdapter extends RecyclerView.Adapter<StockGroupAdapter.Vi
         holder.tLine.setOnClickListener(v -> {
             gIdx = holder.getAdapterPosition();
             nowSGroup = sGroups.get(gIdx);
-            Intent intent = new Intent(mContext, ActivityEditStockGroup.class);
-            mActivity.startActivity(intent);
+            Intent intent = new Intent(mContext, ActivityEditGroup.class);
+            mMainActivity.startActivity(intent);
             Log.e("onBindViewHolder"," group returned");
         });
     }

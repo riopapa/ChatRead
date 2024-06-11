@@ -10,12 +10,15 @@ import biz.riopapa.chatread.models.SStock;
 
 public class StockCheck {
     // check keywords within stock arrays
-    public void check(ArrayList<SStock> SStocks) {
+    public void check(ArrayList<SStock> stocks) {
 
-        for (sIdx = 0; sIdx < SStocks.size() ; sIdx++) {
-            if (sbnText.contains(SStocks.get(sIdx).key1) && sbnText.contains(SStocks.get(sIdx).key2) &&
-                    !sbnText.contains(SStocks.get(sIdx).skip1))
-                msgKeyword.talk(SStocks.get(sIdx));
+        for (sIdx = 0; sIdx < stocks.size() ; sIdx++) {
+            if (sbnText.contains(stocks.get(sIdx).key1) && sbnText.contains(stocks.get(sIdx).key2)) {
+//                if (sbnText.contains(stocks.get(sIdx).key1) && sbnText.contains(stocks.get(sIdx).key2) &&
+//                        !sbnText.contains(stocks.get(sIdx).skip1)) {
+                msgKeyword.talk(stocks.get(sIdx));
+                break;
+            }
         }
     }
 }

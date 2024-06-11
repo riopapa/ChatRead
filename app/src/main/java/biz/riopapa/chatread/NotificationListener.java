@@ -15,15 +15,13 @@ import static biz.riopapa.chatread.MainActivity.kvKakao;
 import static biz.riopapa.chatread.MainActivity.kvSMS;
 import static biz.riopapa.chatread.MainActivity.kvTelegram;
 import static biz.riopapa.chatread.MainActivity.logUpdate;
-import static biz.riopapa.chatread.MainActivity.longWhoNames;
 import static biz.riopapa.chatread.MainActivity.mAudioManager;
 import static biz.riopapa.chatread.MainActivity.msgKeyword;
 import static biz.riopapa.chatread.MainActivity.msgSMS;
 import static biz.riopapa.chatread.MainActivity.notificationBar;
-
 import static biz.riopapa.chatread.MainActivity.nowSGroup;
 import static biz.riopapa.chatread.MainActivity.nowSWho;
-
+import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.sbnApp;
 import static biz.riopapa.chatread.MainActivity.sbnAppIdx;
 import static biz.riopapa.chatread.MainActivity.sbnAppName;
@@ -32,14 +30,12 @@ import static biz.riopapa.chatread.MainActivity.sbnAppType;
 import static biz.riopapa.chatread.MainActivity.sbnGroup;
 import static biz.riopapa.chatread.MainActivity.sbnText;
 import static biz.riopapa.chatread.MainActivity.sbnWho;
-import static biz.riopapa.chatread.MainActivity.shortWhoNames;
 import static biz.riopapa.chatread.MainActivity.smsReplFrom;
 import static biz.riopapa.chatread.MainActivity.smsReplTo;
 import static biz.riopapa.chatread.MainActivity.smsTxtIgnores;
 import static biz.riopapa.chatread.MainActivity.smsWhoIgnores;
 import static biz.riopapa.chatread.MainActivity.sounds;
 import static biz.riopapa.chatread.MainActivity.stockCheck;
-import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.stockKaGroupNameIdx;
 import static biz.riopapa.chatread.MainActivity.stockKaGroupNameTbl;
 import static biz.riopapa.chatread.MainActivity.stockTelGroupNameIdx;
@@ -299,69 +295,6 @@ public class NotificationListener extends NotificationListenerService {
 
     }
 
-    private void sayTelegram() {
-
-        if (kvTelegram.isDup("tel", sbnText))
-            return;
-        if (hasIgnoreStr(teleApp))
-            return;
-        // longWhoName, shortWhoName [],  <= teleGrp.txt
-        // 텔데봇 ^ DailyBOT
-        // 텔투봄 ^ 투자의 봄
-        // 텔오늘 ^ 오늘의단타 공식채널
-        for (int i = 0; i < longWhoNames.length; i++) {
-            if (sbnWho.contains(longWhoNames[i])) { // 정확한 이름 다 찾지 않으려 contains 씀
-                if (sbnText.length() < 15)
-                    return;
-                sbnText = strUtil.text2OneLine(sbnText);
-                sbnGroup = shortWhoNames[i];
-                if (kvTelegram.isDup(sbnGroup, sbnText))
-                    return;
-                String []grpWho = sbnWho.split(":");
-                // 'Ai 데일리 봇' 은 group 12메시 있음 : who 형태임
-                // '투자의 봄' 은 group 없이 who 만 존재
-                if (grpWho.length > 1) {
-//                    sbnGroup = grpWho[0].trim();
-                    sbnWho = grpWho[1].trim();
-                }
-
-                // whoNameFrom, to [] <= whoName
-                // Ai 매매비서 ^ ai
-                // 투바의 봄 ^ 투봄
-                for (int w = 0; w < whoNameFrom.length; w++) {
-                    if (sbnWho.contains(whoNameFrom[w])) {
-                        sbnWho = whoNameTo[w];          // 투봄 + 투봄
-                        break;
-                    }
-                }
-
-//                if (sbnText.contains("종목") && sbnText.contains("매수")) {
-//                    utils.logW(sbnGroup, "종목,매수 " + sbnWho + " > "
-//                                + sbnText);
-//                }
-//                if (msgKeyword == null)
-//                    msgKeyword = new MsgKeyword("by tele");
-                sbnText = strUtil.strShorten(sbnWho, sbnText);
-                int grpIdx = Collections.binarySearch(aGroups, sbnGroup);
-                if (grpIdx < 0)
-                    utils.logE("tele", "grpIdx " + grpIdx + " err " + sbnGroup + " > " + sbnWho
-                            + " > " + sbnText);
-                else {
-//                    utils.logW("keyword " + sbnGroup, sbnWho + " : " + sbnText);
-                    msgKeyword.say(sbnGroup, sbnWho, sbnText, grpIdx);
-                }
-                return;
-            }
-        }
-        if (sbnGroup.contains("새로운 메시지"))
-            sbnGroup = "_새_";
-        head = "[텔레 " + sbnGroup + "|" + sbnWho + "]";
-        logUpdate.addLog(head, sbnText);
-        notificationBar.update(sbnGroup + "|" + sbnWho, sbnText, true);
-        sbnText = head + ", " + sbnText;
-        sounds.speakAfterBeep(strUtil.makeEtc(sbnText, isWorking()? 20:150));
-    }
-
     private void talkTelegram() {
 
         if (hasIgnoreStr(teleApp))
@@ -370,6 +303,9 @@ public class NotificationListener extends NotificationListenerService {
         // 텔데봇 ^ DailyBOT
         // 텔투봄 ^ 투자의 봄
         // 텔오늘 ^ 오늘의단타 공식채널
+
+        if (sbnText.length() < 15)  // for better performance, with logically not true
+            return;
 
         gIdx = isStockTelGroup(sbnWho);
         if (gIdx < 0) { // not in stock group
@@ -382,35 +318,37 @@ public class NotificationListener extends NotificationListenerService {
             sounds.speakAfterBeep(strUtil.makeEtc(sbnText, isWorking() ? 20 : 150));
             return;
         }
-        if (sbnText.length() < 15)
-            return;
+//        if (sbnText.length() < 15)
+//            return;
         if (timeBegin == 0)
             new ReadyToday();
         long nowTime = System.currentTimeMillis();
         if (nowTime < timeBegin || nowTime > timeEnd)
             return;
-
+        final String [] ignores = {"항셍","나스닥","리딩","출석"};
+        for (String ignore : ignores) {
+            if (sbnText.contains(ignore))
+                return;
+        }
         sbnGroup = sGroups.get(gIdx).grp;  // replace with short group
         if (kvTelegram.isDup(sbnGroup, sbnText))
             return;
-        sbnText = strUtil.text2OneLine(sbnText);
-        String[] grpWho = sbnWho.split(":");
         // 'Ai 데일리 봇' 은 group 12메시 있음 : who 형태임
         // '투자의 봄' 은 group 없이 who 만 존재
         // 어떤 경우는 이름이 text 맨 앞에
-        if (grpWho.length > 1) {
-            sbnWho = grpWho[1].trim();
+
+        int p = sbnWho.indexOf(":");
+        if (p > 0 && p < 30) {
+            sbnWho = sbnWho.substring(p+1).trim();
         } else {
-            int p = sbnText.indexOf(":");
-            if (p > 0) {
-                sbnWho = sbnText.substring(0,p).trim();
-                sbnText = sbnText.substring(p+1).trim();
+            p = sbnText.indexOf(":");
+            if (p > 0 && p < 30) {
+                sbnWho = sbnWho.substring(0, p).trim();
+                sbnText = sbnText.substring(p + 1).trim();
             }
         }
-        utils.logW(sbnGroup, sbnWho + " >> " + sbnText);
-        // whoNameFrom, to [] <= whoName
-        // Ai 매매비서 ^ ai
-        // 투자의 봄 ^ 투봄
+
+        sbnText = strUtil.text2OneLine(sbnText);
         nowSGroup = sGroups.get(gIdx);
         if (sbnText.contains(nowSGroup.skip1) ||
                 sbnText.contains(nowSGroup.skip2))
@@ -421,6 +359,7 @@ public class NotificationListener extends NotificationListenerService {
                 // if stock Group then check skip keywords and then continue;
                 sbnWho = nowSWho.who;        // replace with short who
                 sbnText = strUtil.strShorten(sbnWho, sbnText);
+//                utils.logW(sbnGroup+"2", sbnWho + ">> " + sbnText);
                 stockCheck.check(nowSWho.stocks);
                 break;
             }

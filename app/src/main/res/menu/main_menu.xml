@@ -24,7 +24,7 @@
                     />
                 <item
                     android:title="Save"
-                    android:icon="@drawable/save"
+                    android:icon="@drawable/menu_save"
                     android:id="@+id/save"
                     />
                 <item
