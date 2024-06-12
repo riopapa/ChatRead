@@ -132,11 +132,11 @@ public class StockGetPut {
         new SnackBar().show(STOCK_TABLE +".json", msg);
         applyStockCounts();
         SharedPreferences shareGroup = mContext.getSharedPreferences(STOCK_TABLE, MODE_PRIVATE);
-        SharedPreferences.Editor sg = shareGroup.edit();
+        SharedPreferences.Editor sgEdit = shareGroup.edit();
         Gson gson = new Gson();
         String json = gson.toJson(sGroups);
-        sg.putString(STOCK_TABLE, json);
-        sg.apply();
+        sgEdit.putString(STOCK_TABLE, json);
+        sgEdit.apply();
         if (todayFolder == null)
             new ReadyToday();
         Gson gson2 = new GsonBuilder().setPrettyPrinting().create();
