@@ -107,11 +107,6 @@ public class FragmentSave extends Fragment {
             etTable.setText(ss);
             Selection.setSelection(ss, currPos, currPos + 1);
             etTable.requestFocus();
-
-        } else if (item.getItemId() == R.id.del_save_1_line) {
-            new ScrollUp(etTable, scrollView, logName,
-                    new LogSpan().delOneLine(etTable.getText().toString(),
-                            etTable.getSelectionStart(), mContext));
         }
         return super.onOptionsItemSelected(item);
     }

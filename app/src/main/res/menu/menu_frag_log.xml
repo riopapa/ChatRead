@@ -21,14 +21,14 @@
         app:showAsAction="always"
         android:title="@string/todo" />
 
-    <item
-        android:id="@+id/del_log_1_line"
-        android:orderInCategory="100"
-        android:icon="@drawable/line_remove1"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        app:showAsAction="always"
-        android:title="@string/todo" />
+<!--    <item-->
+<!--        android:id="@+id/del_log_1_line"-->
+<!--        android:orderInCategory="100"-->
+<!--        android:icon="@drawable/line_remove1"-->
+<!--        android:layout_width="32dp"-->
+<!--        android:layout_height="32dp"-->
+<!--        app:showAsAction="always"-->
+<!--        android:title="@string/todo" />-->
 
     <item
         android:id="@+id/del_log_one_set"

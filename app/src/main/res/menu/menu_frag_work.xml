@@ -18,13 +18,6 @@
         android:title="@string/todo" />
 
     <item
-        android:id="@+id/del_work_1_line"
-        android:orderInCategory="100"
-        android:icon="@drawable/line_remove1"
-        app:showAsAction="always"
-        android:title="@string/todo" />
-
-    <item
         android:id="@+id/del_work_one_set"
         android:orderInCategory="100"
         android:icon="@drawable/line_remove3"

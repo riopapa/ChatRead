@@ -155,7 +155,7 @@ public class NotificationListener extends NotificationListenerService {
 
             case TG:
 //                sayTelegram();
-                talkTelegram();
+                sayTelegram();
                 break;
 
             case APP:
@@ -295,7 +295,7 @@ public class NotificationListener extends NotificationListenerService {
 
     }
 
-    private void talkTelegram() {
+    private void sayTelegram() {
 
         if (hasIgnoreStr(teleApp))
             return;
@@ -342,19 +342,21 @@ public class NotificationListener extends NotificationListenerService {
         // {텔소나} [소나무 투자그룹 정보방] 자연 윤: 🖼 수고하셨습니당!
         // {텔투봄} [🌸투자의 봄(春)🌸] 🌸투자의 봄(春)🌸: 참여하실 분들은
 
-//        utils.logW(sbnGroup, "["+sbnWho + "] " + sbnText);
+        sbnText = strUtil.text2OneLine(sbnText);
+
+        utils.logW(sbnGroup, "["+sbnWho + "] " + sbnText);
         int p = sbnWho.indexOf(":");
-        if (p > 0 && p < 30) {
+        if (p > 0 && p < 30) {  // 텔소나, 텔리치
             sbnWho = sbnWho.substring(p+1).trim();
         } else {
             p = sbnText.indexOf(":");
-            if (p > 0 && p < 30) {
+            if (p > 0 && p < 60) {  // 텔투봄, 텔천하
                 sbnWho = sbnWho.substring(0, p).trim();
                 sbnText = sbnText.substring(p + 1).trim();
-            }
+            } else
+                utils.logW(sbnGroup+"2", "?"+sbnWho + "? " + sbnText);
         }
 
-        sbnText = strUtil.text2OneLine(sbnText);
         nowSGroup = sGroups.get(gIdx);
         if (sbnText.contains(nowSGroup.skip1) ||
                 sbnText.contains(nowSGroup.skip2))

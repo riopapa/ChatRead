@@ -15,6 +15,7 @@ import android.os.Environment;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
@@ -323,9 +324,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
-                new FragmentLogNorm()).commit();
-        drawerLayout.closeDrawer(GravityCompat.START);
+
+        View decorView = getWindow().getDecorView();
+        decorView.post(new Runnable() {
+            @Override
+            public void run() {
+                getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
+                        new FragmentLogNorm()).commit();
+                drawerLayout.closeDrawer(GravityCompat.START);
+            }
+        });
 
 //        new StockGetPut().convert();
 //        new StockGetPut().get();

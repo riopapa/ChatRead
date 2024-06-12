@@ -121,10 +121,10 @@ public class FragmentLogNorm extends Fragment {
             Selection.setSelection(ss, currPos, currPos + 1);
             etTable.requestFocus();
 
-        } else if (item.getItemId() == R.id.del_log_1_line) {
-            new ScrollUp(etTable, scrollView, logName,
-                    new LogSpan().delOneLine(etTable.getText().toString(),
-                            etTable.getSelectionStart(), mContext));
+//        } else if (item.getItemId() == R.id.del_log_1_line) {
+//            new ScrollUp(etTable, scrollView, logName,
+//                    new LogSpan().delOneLine(etTable.getText().toString(),
+//                            etTable.getSelectionStart(), mContext));
 
         } else if (item.getItemId() == R.id.log2save) {
             new Copy2Save(etTable.getText().toString().trim() + "\n", etTable.getSelectionStart());
