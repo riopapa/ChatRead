@@ -318,8 +318,6 @@ public class NotificationListener extends NotificationListenerService {
             sounds.speakAfterBeep(strUtil.makeEtc(sbnText, isWorking() ? 20 : 150));
             return;
         }
-//        if (sbnText.length() < 15)
-//            return;
         if (timeBegin == 0)
             new ReadyToday();
         long nowTime = System.currentTimeMillis();
@@ -337,6 +335,14 @@ public class NotificationListener extends NotificationListenerService {
         // '투자의 봄' 은 group 없이 who 만 존재
         // 어떤 경우는 이름이 text 맨 앞에
 
+        // {텔천하} 제왕>> 윤 종묵 님이 🔹수익 天下 🔸단타의 제왕 (王) 그룹에 사진을 보냈습니다
+        // {텔천하} [🔹수익 天下 🔸단타의 제왕 (王): 수익 영의정 (正)] #청산하세요
+        // {텔리치} [👑 리치플러스 R (급등일보)👑: 리치플러스] ✅ LS에코에너지 英 사업 부지 협상 돌
+        // {텔소나} [소나무 투자그룹 정보방] 오영석 전문가: 선물투자가  어렵고.복잡하다고
+        // {텔소나} [소나무 투자그룹 정보방] 자연 윤: 🖼 수고하셨습니당!
+        // {텔투봄} [🌸투자의 봄(春)🌸] 🌸투자의 봄(春)🌸: 참여하실 분들은
+
+//        utils.logW(sbnGroup, "["+sbnWho + "] " + sbnText);
         int p = sbnWho.indexOf(":");
         if (p > 0 && p < 30) {
             sbnWho = sbnWho.substring(p+1).trim();
@@ -359,7 +365,7 @@ public class NotificationListener extends NotificationListenerService {
                 // if stock Group then check skip keywords and then continue;
                 sbnWho = nowSWho.who;        // replace with short who
                 sbnText = strUtil.strShorten(sbnWho, sbnText);
-//                utils.logW(sbnGroup+"2", sbnWho + ">> " + sbnText);
+                utils.logW(sbnGroup, sbnWho + ">> " + sbnText);
                 stockCheck.check(nowSWho.stocks);
                 break;
             }

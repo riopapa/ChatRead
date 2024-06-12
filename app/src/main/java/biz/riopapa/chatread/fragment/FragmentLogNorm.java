@@ -52,7 +52,6 @@ public class FragmentLogNorm extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         if (toolbar != null) {
-            Log.w("FragmentLogNorm", "onCreate "+logName);
             toolbar.setTitle(logName);
             toolbar.setBackgroundDrawable(ContextCompat.getDrawable(mContext, R.drawable.bar_log));
             toolbar.setContentInsetsRelative(getResources().getDimensionPixelSize(R.dimen.smaller_icon_margin), 0);

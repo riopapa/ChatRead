@@ -11,8 +11,10 @@ import static biz.riopapa.chatread.MainActivity.teleApp;
 import static biz.riopapa.chatread.MainActivity.teleAppIdx;
 
 import android.os.Environment;
+import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
@@ -52,10 +54,9 @@ public class AppsTable {
         apps.sort(Comparator.comparing(obj -> (obj.fullName)));
         makeTable();
 
-        Gson gson = new Gson();
-        String json = gson.toJson(apps);
-//        FileIO.writeKR(new File(tableFolder, "appTable.json"), json);
-        fileIO.writeFile(tableFolder, "appTable.json", json);
+        Gson gson2 = new GsonBuilder().setPrettyPrinting().create();
+        String prettyJson = gson2.toJson(apps);
+        fileIO.writeFile(tableFolder, "appTable.json", prettyJson);
     }
 
     public void makeTable() {

@@ -2,6 +2,7 @@ package biz.riopapa.chatread.stocks;
 
 import static android.content.Context.MODE_PRIVATE;
 import static biz.riopapa.chatread.MainActivity.alerts;
+import static biz.riopapa.chatread.MainActivity.apps;
 import static biz.riopapa.chatread.MainActivity.downloadFolder;
 import static biz.riopapa.chatread.MainActivity.fileIO;
 import static biz.riopapa.chatread.MainActivity.stockCounts;
@@ -18,6 +19,7 @@ import android.content.SharedPreferences;
 import android.os.Environment;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
@@ -135,18 +137,11 @@ public class StockGetPut {
         String json = gson.toJson(sGroups);
         sg.putString(STOCK_TABLE, json);
         sg.apply();
-        json = json.replace("{\"grp\"","\n\n{\"grp\"")
-                .replace("{\"count\"","\n\n{\"count\"")
-                .replace(",", ", ")
-                .replace("\"next\":", "\n\"next\":")
-                .replace("[{", "[\n{")
-                .replace("}]}", "}\n]\n}")
-                .replace("}],", "}\n],\n")
-                .replace(",", ", ")
-        ;
         if (todayFolder == null)
             new ReadyToday();
-        fileIO.writeFile(tableFolder, STOCK_TABLE +".json", json);
+        Gson gson2 = new GsonBuilder().setPrettyPrinting().create();
+        String prettyJson = gson2.toJson(apps);
+        fileIO.writeFile(tableFolder, STOCK_TABLE +".json", prettyJson);
     }
 
     public void applyStockCounts() {
