@@ -5,6 +5,7 @@ import static biz.riopapa.chatread.MainActivity.menu_selected;
 import static biz.riopapa.chatread.MainActivity.mTableName;
 import static biz.riopapa.chatread.MainActivity.tableFolder;
 import static biz.riopapa.chatread.MainActivity.tableListFile;
+import static biz.riopapa.chatread.MainActivity.toolbar;
 
 import android.os.Bundle;
 import android.text.Spannable;
@@ -32,16 +33,14 @@ public class ActivityEditTable extends AppCompatActivity {
 
     int pos = -1;
     String key, fullText;
-    int [] menuId = { R.id.table_sms_no_num,   R.id.table_sms_repl,    R.id.table_sms_txt_ig,
-                        R.id.table_sms_who_ig,  R.id.table_sys_ig,      R.id.table_tele_grp,
-                        R.id.table_who_name,
+    int [] menuId = { R.id.table_sms_no_num,   R.id.table_sms_repl,     R.id.table_sms_txt_ig,
+                        R.id.table_sms_who_ig,  R.id.table_sys_ig,
                         R.id.table_kt_grp_ig,   R.id.table_kt_no_num,   R.id.table_kt_txt_ig,
                         R.id.table_kt_who_ig,
     };
     String [] fileId = {
                         "smsNoNum",             "smsRepl",              "smsTxtIg",
-                        "smsWhoIg",             "sysIg",                "teleGrp",
-                        "whoName",
+                        "smsWhoIg",             "sysIg",
                         "ktGrpIg",              "ktNoNum",              "ktTxtIg",
                         "ktWhoIg",
     };
@@ -62,14 +61,13 @@ public class ActivityEditTable extends AppCompatActivity {
                     Toast.LENGTH_LONG).show();
             return;
         }
-
-        Toolbar toolbar = findViewById(R.id.toolbar_table);
-        setSupportActionBar(toolbar);
-        toolbar.setTitleTextColor(0xFFFFFF00);
-        toolbar.setSubtitleTextColor(0xFF000000);
-        toolbar.setTitle(mTableName);
-        toolbar.setSubtitle(mTableName);
-
+        if (toolbar == null) {
+            setSupportActionBar(toolbar);
+            toolbar.setTitleTextColor(0xFFFFFF00);
+            toolbar.setSubtitleTextColor(0xFF000000);
+            toolbar.setTitle(mTableName);
+            toolbar.setSubtitle(mTableName);
+        }
         EditText eTable = findViewById(R.id.text_table);
         File file = new File(tableFolder, mTableName + ".txt");
         String[] lines = tableListFile.readRaw(file);
@@ -82,6 +80,7 @@ public class ActivityEditTable extends AppCompatActivity {
         eTable.setFocusableInTouchMode(true);
 
         EditText eKey = findViewById(R.id.key_table);
+        eKey.setText(mTableName);
         eKey.setTextColor(0xFF000000);
 
         ImageView ivSearch = findViewById(R.id.search_table);

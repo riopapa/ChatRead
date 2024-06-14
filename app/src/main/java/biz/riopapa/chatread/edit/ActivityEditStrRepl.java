@@ -5,6 +5,7 @@ import static biz.riopapa.chatread.MainActivity.fileIO;
 import static biz.riopapa.chatread.MainActivity.mTableName;
 import static biz.riopapa.chatread.MainActivity.tableFolder;
 import static biz.riopapa.chatread.MainActivity.tableListFile;
+import static biz.riopapa.chatread.MainActivity.toolbar;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -41,12 +42,14 @@ public class ActivityEditStrRepl extends AppCompatActivity {
         setContentView(R.layout.activity_edit_table);
         mTableName = "strRepl";
 
-        Toolbar toolbar = findViewById(R.id.toolbar_table);
-        setSupportActionBar(toolbar);
-        toolbar.setTitleTextColor(0xFFFFFF00);
-        toolbar.setSubtitleTextColor(0xFF000000);
-        toolbar.setTitle(mTableName);
-        toolbar.setSubtitle(mTableName);
+//        Toolbar toolbar = findViewById(R.id.toolbar_table);
+        if (toolbar != null) {
+//            setSupportActionBar(toolbar);
+            toolbar.setTitleTextColor(0xFFFFFF00);
+            toolbar.setSubtitleTextColor(0xFF000000);
+            toolbar.setTitle(mTableName);
+            toolbar.setSubtitle(mTableName);
+        }
 
         EditText eTable = findViewById(R.id.text_table);
         File file = new File(tableFolder, mTableName + ".txt");
@@ -60,6 +63,7 @@ public class ActivityEditStrRepl extends AppCompatActivity {
         eTable.setFocusableInTouchMode(true);
         eTable.setTextColor(0xFF000000);
         EditText eKey = findViewById(R.id.key_table);
+        eKey.setText(mTableName);
         eKey.setTextColor(0xFF000000);
 
         ImageView ivSearch = findViewById(R.id.search_table);

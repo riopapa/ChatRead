@@ -8,10 +8,9 @@ import static biz.riopapa.chatread.MainActivity.downloadFolder;
 import static biz.riopapa.chatread.MainActivity.fileIO;
 import static biz.riopapa.chatread.MainActivity.tableFolder;
 import static biz.riopapa.chatread.MainActivity.teleApp;
-import static biz.riopapa.chatread.MainActivity.teleAppIdx;
+import static biz.riopapa.chatread.MainActivity.telegramAppIdx;
 
 import android.os.Environment;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -72,7 +71,7 @@ public class AppsTable {
                 appFullNames.add(app.fullName);
                 appNameIdx.add(i);
                 if (app.fullName.equals("org.telegram.messenger")) {
-                    teleAppIdx = i;
+                    telegramAppIdx = i;
                     teleApp = app;
                 }
             }

@@ -126,17 +126,12 @@ public class NotificationListener extends NotificationListenerService {
                     sbnText = strUtil.text2OneLine(sbnText);
                     if (kvKakao.isDup(sbnGroup, sbnText))
                         return;
-//                    if (msgKeyword == null)
-//                        msgKeyword = new MsgKeyword("by ka");
-
-//                    int grpIdx = Collections.binarySearch(aGroups, sbnGroup);
                     sayKaStock();
                     return;
                 }
                 break;
 
             case TG:
-//                sayTelegram();
                 sayTelegram();
                 break;
 
@@ -277,7 +272,6 @@ public class NotificationListener extends NotificationListenerService {
 
     }
 
-
     private void sayKaStock() {
 
         // longWhoName, shortWhoName [],  <= teleGrp.txt
@@ -285,8 +279,6 @@ public class NotificationListener extends NotificationListenerService {
         // 텔투봄 ^ 투자의 봄
         // 텔오늘 ^ 오늘의단타 공식채널
 
-        if (sbnText.length() < 15)  // for better performance, with logically not true
-            return;
         int grpIdx = isStockKaGroup(sbnGroup);
         if (grpIdx < 0) {
             sbnText = strUtil.strShorten(sbnGroup, sbnText);
@@ -299,6 +291,8 @@ public class NotificationListener extends NotificationListenerService {
                     strUtil.replaceKKHH(strUtil.makeEtc(sbnText, isWorking() ? 20 : 150)));
             return;
         }
+        if (sbnText.length() < 15)  // for better performance, with logically not true
+            return;
        if (timeBegin == 0)
             new ReadyToday();
         long nowTime = System.currentTimeMillis();
@@ -336,16 +330,16 @@ public class NotificationListener extends NotificationListenerService {
         }
 
         nowSGroup = sGroups.get(grpIdx);
-        if (sbnText.contains(nowSGroup.skip1) ||
-                sbnText.contains(nowSGroup.skip2))
+        if (sbnText.contains(nowSGroup.skip1) || sbnText.contains(nowSGroup.skip2))
             return;
-        for (wIdx = 0; wIdx < nowSGroup.whos.size(); wIdx++) {
-            if (sbnWho.contains(nowSGroup.whos.get(wIdx).whoF)) {
-                nowSWho = nowSGroup.whos.get(wIdx);
+        for (int i = 0; i < nowSGroup.whos.size(); i++) {
+            if (sbnWho.contains(nowSGroup.whos.get(i).whoF)) {
+                nowSWho = nowSGroup.whos.get(i);
                 // if stock Group then check skip keywords and then continue;
                 sbnWho = nowSWho.who;        // replace with short who
                 sbnText = strUtil.strShorten(sbnWho, sbnText);
                 utils.logW(sbnGroup, sbnWho + ">> " + sbnText);
+                wIdx = i;
                 stockCheck.check(nowSWho.stocks);
                 break;
             }
@@ -416,13 +410,14 @@ public class NotificationListener extends NotificationListenerService {
         if (sbnText.contains(nowSGroup.skip1) ||
                 sbnText.contains(nowSGroup.skip2))
             return;
-        for (wIdx = 0; wIdx < nowSGroup.whos.size(); wIdx++) {
-            if (sbnWho.contains(nowSGroup.whos.get(wIdx).whoF)) {
-                nowSWho = nowSGroup.whos.get(wIdx);
+        for (int i = 0; i < nowSGroup.whos.size(); i++) {
+            if (sbnWho.contains(nowSGroup.whos.get(i).whoF)) {
+                nowSWho = nowSGroup.whos.get(i);
                 // if stock Group then check skip keywords and then continue;
                 sbnWho = nowSWho.who;        // replace with short who
                 sbnText = strUtil.strShorten(sbnWho, sbnText);
                 utils.logW(sbnGroup, sbnWho + ">> " + sbnText);
+                wIdx = i;
                 stockCheck.check(nowSWho.stocks);
                 break;
             }

@@ -2,20 +2,18 @@ package biz.riopapa.chatread.edit;
 
 import static biz.riopapa.chatread.MainActivity.gIdx;
 import static biz.riopapa.chatread.MainActivity.gSheetUpload;
-import static biz.riopapa.chatread.MainActivity.mContext;
-import static biz.riopapa.chatread.MainActivity.mMainActivity;
-import static biz.riopapa.chatread.MainActivity.nowSGroup;
-import static biz.riopapa.chatread.MainActivity.sGroups;
-import static biz.riopapa.chatread.MainActivity.stockGetPut;
 import static biz.riopapa.chatread.MainActivity.groupWhoAdapter;
 import static biz.riopapa.chatread.MainActivity.groupsAdapter;
+import static biz.riopapa.chatread.MainActivity.mContext;
+import static biz.riopapa.chatread.MainActivity.nowSGroup;
+import static biz.riopapa.chatread.MainActivity.sGroups;
+import static biz.riopapa.chatread.MainActivity.stockCheck;
+import static biz.riopapa.chatread.MainActivity.stockGetPut;
 import static biz.riopapa.chatread.MainActivity.toolbar;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -118,9 +116,9 @@ public class ActivityEditGroup extends AppCompatActivity {
     private void deleteStockGroup() {
 
         String time = new SimpleDateFormat(".MM/dd HH:mm", Locale.KOREA).format(new Date());
-        mStatement = new GoogleStatement().make();
+        mStatement = new GoogleStatement().make(nowSGroup);
         String mWho = "\n삭제됨\n" + nowSGroup.grpF + "\n" + time;
-        String mPercent = "\n삭제됨\n" + new GooglePercent().make() + "\n" + time;
+        String mPercent = "\n삭제됨\n" + new GooglePercent().make(nowSGroup) + "\n" + time;
         sGroups.remove(gIdx);
         stockGetPut.put( nowSGroup.grp+" Deleted "+ nowSGroup.grpF);
         groupsAdapter.notifyDataSetChanged();
@@ -142,36 +140,49 @@ public class ActivityEditGroup extends AppCompatActivity {
     }
 
     private void duplicateGroup() {
-        nowSGroup.grp = eGroup.getText().toString();
-        nowSGroup.grpF = eGroupF.getText().toString();
-        sGroups.add(nowSGroup);
-        Toast.makeText(mContext,"Duplicated "+ nowSGroup.grp+" / " + nowSGroup.grpF, Toast.LENGTH_SHORT).show();
-        groupsAdapter.notifyDataSetChanged();
-        finish();
+        try {
+            SGroup nGroup =  (SGroup) nowSGroup.clone();
+            String telKa = tTelKa.getText().toString();
+            nGroup.grp = eGroup.getText().toString();
+            nGroup.grpF = eGroupF.getText().toString();;
+            nGroup.telKa = telKa.equals("t") ? 't' : (telKa.equals("k") ? 'k' : '_');
+            nGroup.ignore = sIgnore.isChecked();
+            nGroup.skip1 = eSkip1.getText().toString();
+            nGroup.skip2 = eSkip2.getText().toString();
+            nGroup.skip3 = eSkip3.getText().toString();
+            sGroups.add(gIdx, nGroup);
+            stockGetPut.put("group");
+            stockGetPut.get();
+            groupsAdapter.notifyDataSetChanged();
+            mPercent = new GooglePercent().make(nGroup);
+            mStatement = new GoogleStatement().make(nGroup);
+            mTalk = new SimpleDateFormat("yy/MM/dd\nHH:mm", Locale.KOREA).format(new Date());
+            gSheetUpload.uploadGroupInfo(nGroup.grp, GROUP, nGroup.grpF, mPercent,
+                    mTalk, mStatement, "key12");
+            finish();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void saveGroup() {
-        SGroup nGroup = new SGroup();
-        String telKa = tTelKa.getText().toString();
-        nGroup.grp = eGroup.getText().toString();
-        nGroup.grpF = eGroupF.getText().toString();;
-        nGroup.telKa = telKa.equals("t") ? 't' : (telKa.equals("k") ? 'k' : '_');
-        nGroup.ignore = sIgnore.isChecked();
-        nGroup.skip1 = eSkip1.getText().toString();
-        nGroup.skip2 = eSkip2.getText().toString();
-        nGroup.skip3 = eSkip3.getText().toString();
-        nGroup.whos = nowSGroup.whos;
-        sGroups.set(gIdx, nGroup);
-        stockGetPut.setStockTelKaCount();
-        stockGetPut.put("group");
-        groupsAdapter.notifyDataSetChanged();
+        try {
+            SGroup nGroup =  (SGroup) nowSGroup.clone();
+            nGroup.grp = eGroup.getText().toString();
+            nGroup.grpF = eGroupF.getText().toString();
+            sGroups.set(gIdx, nGroup);
+            Toast.makeText(mContext,"Saving "+ nGroup.grp+" / " + nGroup.grpF, Toast.LENGTH_SHORT).show();
+            groupsAdapter.notifyDataSetChanged();
+            mPercent = new GooglePercent().make(nGroup);
+            mStatement = new GoogleStatement().make(nGroup);
+            mTalk = new SimpleDateFormat("yy/MM/dd\nHH:mm", Locale.KOREA).format(new Date());
+            gSheetUpload.uploadGroupInfo(nGroup.grp, GROUP, nGroup.grpF, mPercent,
+                    mTalk, mStatement, "key12");
+            finish();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
 
-        mPercent = new GooglePercent().make();
-        mStatement = new GoogleStatement().make();
-        mTalk = new SimpleDateFormat("yy/MM/dd\nHH:mm", Locale.KOREA).format(new Date());
-        gSheetUpload.uploadGroupInfo(nGroup.grp, GROUP, nGroup.grpF, mPercent,
-                mTalk, mStatement, "key12");
-        finish();
     }
 
     String telka2String(char c) {

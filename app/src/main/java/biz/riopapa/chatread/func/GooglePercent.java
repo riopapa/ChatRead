@@ -2,14 +2,14 @@ package biz.riopapa.chatread.func;
 
 import static biz.riopapa.chatread.MainActivity.nowSGroup;
 
+import biz.riopapa.chatread.models.SGroup;
+
 public class GooglePercent {
 
-    public String make() {
-        String sb = "Skip (" + nowSGroup.skip1 + ", " + nowSGroup.skip1 + ", " +
-                nowSGroup.skip2 + ")" +
-                " Ignore:" + ((nowSGroup.ignore) ? "yes" : "") +
-                " TelKa (" + ((nowSGroup.telKa == 't') ? "tel" : (nowSGroup.telKa == 'k') ? "ka" : "") +
+    public String make(SGroup sGroup) {
+        return "Skip (" + sGroup.skip1 + ", " + sGroup.skip1 + ", " + sGroup.skip2 + ")" +
+                " Ignore:" + ((sGroup.ignore) ? "yes" : "") +
+                " TelKa (" + ((sGroup.telKa == 't') ? "tel" : (sGroup.telKa == 'k') ? "ka" : "") +
                 ")";
-        return sb;
     }
 }

@@ -19,17 +19,17 @@ public class StockCheck {
 
     public void check(ArrayList<SStock> stocks) {
 
-        for (sIdx = 0; sIdx < stocks.size() ; sIdx++) {
-            nowSStock = stocks.get(sIdx);
+        for (int s = 0; s < stocks.size() ; s++) {
+            nowSStock = stocks.get(s);
             if (sbnText.contains(nowSStock.key1) && sbnText.contains(nowSStock.key2)) {
-                stockInform.talkNlog(nowSStock);
-                nowSStock.count++;
-                nowSWho.stocks.set(sIdx, nowSStock);
-                nowSGroup.whos.set(wIdx, nowSWho);
-                sGroups.set(gIdx, nowSGroup);
                 if (stockInform == null)
                     stockInform = new StockInform();
-                stockGetPut.put("stock Cnt");
+                stockInform.talkNlog(nowSStock);
+                nowSStock.count++;
+                nowSWho.stocks.set(s, nowSStock);
+                nowSGroup.whos.set(wIdx, nowSWho);
+                sGroups.set(gIdx, nowSGroup);
+                stockGetPut.put("stockCnt");
                 break;
             }
         }

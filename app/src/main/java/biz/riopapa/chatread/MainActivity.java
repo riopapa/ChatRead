@@ -165,8 +165,8 @@ public class MainActivity extends AppCompatActivity {
     public static SGroup nowSGroup;
     public static SWho nowSWho;
     public static SStock nowSStock;
-    public static String [] stockTelGroupNameTbl, stockKaGroupNameTbl, stockTelWhoTbl, stockStockTbl;
-    public static int [] stockTelGroupNameIdx, stockKaGroupNameIdx, stockTelWhoIdx, stockStockIdx;
+    public static String [] stockTelGroupNameTbl, stockKaGroupNameTbl;
+    public static int [] stockTelGroupNameIdx, stockKaGroupNameIdx;
     public static ArrayList<App> apps;
     public static AppsAdapter appsAdapter;
     public static App teleApp;
@@ -206,10 +206,8 @@ public class MainActivity extends AppCompatActivity {
     public static GSheetUpload gSheetUpload = null;
     public static FileIO fileIO;
 
-    public static int teleAppIdx;
-    public static Menu menu = null;
+    public static int telegramAppIdx;
 
-    public static GroupAdapter groupAdapter = null;
     public static GroupWhoAdapter groupWhoAdapter = null;
     public static GroupWhoStockAdapter groupWhoStockAdapter = null;
 
@@ -260,10 +258,10 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 if (id == R.id.table_sms_no_num || id == R.id.table_sms_repl ||
                         id == R.id.table_sms_txt_ig || id == R.id.table_sms_who_ig ||
-                        id == R.id.table_sys_ig || id == R.id.table_tele_grp ||
+                        id == R.id.table_sys_ig ||
                         id == R.id.table_kt_grp_ig || id == R.id.table_kt_no_num ||
-                        id == R.id.table_kt_txt_ig || id == R.id.table_kt_who_ig ||
-                        id == R.id.table_who_name) {
+                        id == R.id.table_kt_txt_ig || id == R.id.table_kt_who_ig
+                    ) {
                     menu_selected = id;
                     Intent intent = new Intent(mContext, ActivityEditTable.class);
                     startActivity(intent);
@@ -325,18 +323,11 @@ public class MainActivity extends AppCompatActivity {
 
 
         View decorView = getWindow().getDecorView();
-        decorView.post(new Runnable() {
-            @Override
-            public void run() {
-                getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
-                        new FragmentLogNorm()).commit();
-                drawerLayout.closeDrawer(GravityCompat.START);
-            }
+        decorView.post(() -> {
+            getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
+                    new FragmentLogNorm()).commit();
+            drawerLayout.closeDrawer(GravityCompat.START);
         });
-
-//        new StockGetPut().convert();
-//        new StockGetPut().get();
-//        new StockGetPut().put("put");
     }
 
     private boolean isNotificationAllowed(String packageName) {

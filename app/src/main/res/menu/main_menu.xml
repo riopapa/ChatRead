@@ -86,16 +86,6 @@
             android:icon="@drawable/icon_android"
             android:id="@+id/table_sys_ig"
             />
-        <item
-            android:title="Telegram : Group Name"
-            android:icon="@drawable/icon_telegram"
-            android:id="@+id/table_tele_grp"
-            />
-        <item
-            android:title="Who : Name Replace"
-            android:icon="@drawable/icon_who"
-            android:id="@+id/table_who_name"
-            />
     </group>
 
     <group android:id="@+id/groupkk">

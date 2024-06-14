@@ -46,7 +46,6 @@ public class OptionTables {
         smsWhoIgnores =  tableListFile.read("smsWhoIg");
         smsTxtIgnores =  tableListFile.read("smsTxtIg");
         smsNoNumbers = tableListFile.read("smsNoNum");
-        smsNoNumbers = tableListFile.read("smsNoNum");
 
         if (ktTxtIgnores == null || smsWhoIgnores == null) {
             sounds.beepOnce(MainActivity.soundType.ERR.ordinal());
@@ -56,55 +55,9 @@ public class OptionTables {
         }
         readStrReplFile();
         readSmsReplFile();
-        readTelegramGroup();
-        readWhoName();
         new AppsTable().get();
         stockGetPut.get();
 
-    }
-
-    private void readTelegramGroup() {
-        /* teleGrp.txt
-         * group ^ channel name
-         * 텔단타 ^ 오늘의단타
-         */
-        String [] lists =  tableListFile.read("teleGrp");
-
-        shortWhoNames = new String[lists.length];
-        longWhoNames = new String[lists.length];
-
-        for (int i = 0; i < lists.length; i++) {
-            String pLine = lists[i];
-            String [] strings = pLine.split("\\^");
-            if (strings.length < 2) {
-                new SnackBar().show("Telegram Table Error ", pLine);
-            } else {
-                shortWhoNames[i] = strings[0].trim();
-                longWhoNames[i] = strings[1].trim();
-            }
-        }
-    }
-
-    private void readWhoName() {
-        /*
-         * group ^ channel name
-         * 부자   ^ 부자 프로젝트
-         */
-        String [] lists =  tableListFile.read("whoName");
-
-        whoNameFrom = new String[lists.length];
-        whoNameTo = new String[lists.length];
-
-        for (int i = 0; i < lists.length; i++) {
-            String pLine = lists[i];
-            String [] strings = pLine.split("\\^");
-            if (strings.length < 2) {
-                new SnackBar().show("SWho Name Table Error ", pLine);
-            } else {
-                whoNameTo[i] = strings[0].trim();
-                whoNameFrom[i] = strings[1].trim();
-            }
-        }
     }
 
     void readSmsReplFile() {

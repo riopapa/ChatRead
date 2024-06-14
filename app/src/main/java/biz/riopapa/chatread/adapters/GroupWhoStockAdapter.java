@@ -10,6 +10,7 @@ import static biz.riopapa.chatread.MainActivity.nowSStock;
 import static biz.riopapa.chatread.MainActivity.nowSWho;
 import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.sIdx;
+import static biz.riopapa.chatread.MainActivity.stockGetPut;
 import static biz.riopapa.chatread.MainActivity.wIdx;
 import static biz.riopapa.chatread.edit.ActivityEditGroupWho.whoActivity;
 import static biz.riopapa.chatread.edit.ActivityEditGroupWho.whoContext;
@@ -105,42 +106,56 @@ public class GroupWhoStockAdapter extends RecyclerView.Adapter<GroupWhoStockAdap
         builder.setView(dialogView)
             .setTitle("Edit Stock")
             .setPositiveButton("Updt", (dialog, which) -> {
-                SStock nStock = new SStock();
-                nStock.key1 = eKey1.getText().toString();
-                nStock.key2 = eKey2.getText().toString();
-                nStock.prv = ePrev.getText().toString();
-                nStock.nxt = eNext.getText().toString();
-                nStock.talk = eTalk.getText().toString();
-                nStock.count = Integer.parseInt(eCount.getText().toString());
-                nStock.skip1 = eSkip.getText().toString();
-                nowSWho.stocks.set(sIdx, nStock);
-                nowSGroup.whos.set(wIdx, nowSWho);
-                sGroups.set(gIdx, nowSGroup);
-                groupWhoStockAdapter.notifyDataSetChanged();
-                dialog.dismiss();
+                try {
+                    SStock nStock = (SStock) nowSStock.clone();
+                    nStock.key1 = eKey1.getText().toString();
+                    nStock.key2 = eKey2.getText().toString();
+                    nStock.prv = ePrev.getText().toString();
+                    nStock.nxt = eNext.getText().toString();
+                    nStock.talk = eTalk.getText().toString();
+                    nStock.count = Integer.parseInt(eCount.getText().toString());
+                    nStock.skip1 = eSkip.getText().toString();
+                    nowSWho.stocks.set(sIdx, nStock);
+                    nowSGroup.whos.set(wIdx, nowSWho);
+                    sGroups.set(gIdx, nowSGroup);
+                    stockGetPut.put("stock");
+                    stockGetPut.get();
+                    groupWhoStockAdapter.notifyDataSetChanged();
+                    dialog.dismiss();
+                } catch (CloneNotSupportedException e) {
+                    throw new RuntimeException(e);
+                }
+
                 // Implement logic for "Apply" button (e.g., get data from EditTexts)
             })
             .setNeutralButton("Dup", (dialog, which) -> {
-                SStock nStock = new SStock();
-                nStock.key1 = eKey1.getText().toString();
-                nStock.key2 = eKey2.getText().toString();
-                nStock.prv = ePrev.getText().toString();
-                nStock.nxt = eNext.getText().toString();
-                nStock.talk = eTalk.getText().toString();
-                nStock.count = Integer.parseInt(eCount.getText().toString());
-                nStock.skip1 = eSkip.getText().toString();
-                nowSWho.stocks.add(sIdx, nStock);
-                nowSGroup.whos.set(wIdx, nowSWho);
-                sGroups.set(gIdx, nowSGroup);
-                nowSStock = null;
-                groupWhoStockAdapter.notifyDataSetChanged();
-                dialog.dismiss();
+                try {
+                    SStock nStock = (SStock) nowSStock.clone();
+                    nStock.key1 = eKey1.getText().toString();
+                    nStock.key2 = eKey2.getText().toString();
+                    nStock.prv = ePrev.getText().toString();
+                    nStock.nxt = eNext.getText().toString();
+                    nStock.talk = eTalk.getText().toString();
+                    nStock.count = Integer.parseInt(eCount.getText().toString());
+                    nStock.skip1 = eSkip.getText().toString();
+                    nowSWho.stocks.add(sIdx, nStock);
+                    nowSGroup.whos.set(wIdx, nowSWho);
+                    sGroups.set(gIdx, nowSGroup);
+                    stockGetPut.put("stock");
+                    stockGetPut.get();
+                    groupWhoStockAdapter.notifyDataSetChanged();
+                    dialog.dismiss();
+                } catch (CloneNotSupportedException e) {
+                    throw new RuntimeException(e);
+                }
             })
             .setNegativeButton("Del", (dialog, which) -> {
                 if (nowSWho.stocks.size() > 1) {
                     nowSWho.stocks.remove(sIdx);
                     nowSGroup.whos.set(wIdx, nowSWho);
                     sGroups.set(gIdx, nowSGroup);
+                    stockGetPut.put("stock");
+                    stockGetPut.get();
                     groupWhoStockAdapter.notifyDataSetChanged();
                     dialog.dismiss();
                 }
