@@ -62,7 +62,6 @@ public class ActivityEditApp extends AppCompatActivity {
         infoTalk = findViewById(R.id.info_talk);
         replFromTo = findViewById(R.id.repl_from_to);
 
-
         if (mAppsPos == -1) {
 //            actionBar.setTitle("Add App");
             app = new App();

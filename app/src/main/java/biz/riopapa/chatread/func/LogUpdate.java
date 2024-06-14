@@ -18,16 +18,16 @@ import java.util.Locale;
 
 public class LogUpdate {
 
-    public LogUpdate(Context context) {
-        if (sharePref == null) {
-            sharePref = context.getSharedPreferences("sayText", MODE_PRIVATE);
-            sharedEditor = sharePref.edit();
-        }
-        logQue = sharePref.getString("logQue", "");
-        logStock = sharePref.getString("logStock", "");
-        logSave = sharePref.getString("logSave", "");
-        logWork = sharePref.getString("logWork", "");
-    }
+//    public void load(Context context) {
+//        if (sharePref == null) {
+//            sharePref = context.getSharedPreferences("sayText", MODE_PRIVATE);
+//            sharedEditor = sharePref.edit();
+//        }
+//        logQue = sharePref.getString("logQue", "");
+//        logStock = sharePref.getString("logStock", "");
+//        logSave = sharePref.getString("logSave", "");
+//        logWork = sharePref.getString("logWork", "");
+//    }
 
     final SimpleDateFormat TIME_INFO = new SimpleDateFormat("MM-dd HH:mm ", Locale.KOREA);
     public void addLog(String header, String text) {

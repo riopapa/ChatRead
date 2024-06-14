@@ -1,6 +1,8 @@
 package biz.riopapa.chatread.fragment;
 
+import static biz.riopapa.chatread.MainActivity.logQue;
 import static biz.riopapa.chatread.MainActivity.logStock;
+import static biz.riopapa.chatread.MainActivity.logUpdate;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.toolbar;
 
@@ -99,11 +101,11 @@ public class FragmentLogStock extends Fragment {
                             etTable.getSelectionStart(), mContext));
 
         } else if (item.getItemId() == R.id.del_stock_many) {
-            int currPos = etTable.getSelectionStart();
-            int logLen = logStock.length();
-            logStock = new LogUpdate(mContext).squeezeLog(logStock);
-            if (currPos > 0)
-                currPos += logStock.length() - logLen;
+            int currPos = etTable.getSelectionStart() - logStock.length();
+            logStock = logUpdate.squeezeLog(logStock);
+            currPos = logStock.length() + currPos;
+            if (currPos < 10)
+                currPos = 10;
             ss = new LogSpan().make(logStock, mContext);
             etTable.setText(ss);
             Selection.setSelection(ss, currPos, currPos + 1);

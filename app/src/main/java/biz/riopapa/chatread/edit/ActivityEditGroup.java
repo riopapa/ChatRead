@@ -32,6 +32,7 @@ import biz.riopapa.chatread.R;
 import biz.riopapa.chatread.adapters.GroupWhoAdapter;
 import biz.riopapa.chatread.func.GooglePercent;
 import biz.riopapa.chatread.func.GoogleStatement;
+import biz.riopapa.chatread.models.SGroup;
 
 public class ActivityEditGroup extends AppCompatActivity {
 
@@ -130,6 +131,8 @@ public class ActivityEditGroup extends AppCompatActivity {
     }
 
     private void duplicateGroup() {
+        nowSGroup.grp = eGroup.getText().toString();
+        nowSGroup.grpF = eGroupF.getText().toString();
         sGroups.add(nowSGroup);
         Toast.makeText(mContext,"Duplicated "+ nowSGroup.grp+" / " + nowSGroup.grpF, Toast.LENGTH_SHORT).show();
         groupsAdapter.notifyDataSetChanged();
@@ -137,24 +140,25 @@ public class ActivityEditGroup extends AppCompatActivity {
     }
 
     private void saveGroup() {
-        String group = eGroup.getText().toString();
-        String groupF = eGroupF.getText().toString();
+        SGroup nGroup = new SGroup();
         String telKa = tTelKa.getText().toString();
-        boolean ignore = sIgnore.isChecked();
-        nowSGroup.grp = group;
-        nowSGroup.grpF = groupF;
-        nowSGroup.telKa = telKa.equals("t") ? 't' : (telKa.equals("k") ? 'k' : '_');
-        nowSGroup.ignore = ignore;
-        sGroups.set(gIdx, nowSGroup);
-
-        stockGetPut.put("group");
+        nGroup.grp = eGroup.getText().toString();
+        nGroup.grpF = eGroupF.getText().toString();;
+        nGroup.telKa = telKa.equals("t") ? 't' : (telKa.equals("k") ? 'k' : '_');
+        nGroup.ignore = sIgnore.isChecked();
+        nGroup.skip1 = eSkip1.getText().toString();
+        nGroup.skip2 = eSkip2.getText().toString();
+        nGroup.skip3 = eSkip3.getText().toString();
+        nGroup.whos = nowSGroup.whos;
+        sGroups.set(gIdx, nGroup);
         stockGetPut.setStockCounts();
+        stockGetPut.put("group");
         groupsAdapter.notifyDataSetChanged();
 
         mPercent = new GooglePercent().make();
         mStatement = new GoogleStatement().make();
         mTalk = new SimpleDateFormat("yy/MM/dd\nHH:mm", Locale.KOREA).format(new Date());
-        gSheetUpload.uploadGroupInfo(group, GROUP, groupF, mPercent,
+        gSheetUpload.uploadGroupInfo(nGroup.grp, GROUP, nGroup.grpF, mPercent,
                 mTalk, mStatement, "key12");
         finish();
     }

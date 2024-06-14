@@ -140,7 +140,7 @@ public class StockGetPut {
         if (todayFolder == null)
             new ReadyToday();
         Gson gson2 = new GsonBuilder().setPrettyPrinting().create();
-        String prettyJson = gson2.toJson(apps);
+        String prettyJson = gson2.toJson(sGroups);
         fileIO.writeFile(tableFolder, STOCK_TABLE +".json", prettyJson);
     }
 

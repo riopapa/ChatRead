@@ -1,6 +1,8 @@
 package biz.riopapa.chatread.fragment;
 
 import static biz.riopapa.chatread.MainActivity.logSave;
+import static biz.riopapa.chatread.MainActivity.logUpdate;
+import static biz.riopapa.chatread.MainActivity.logWork;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.toolbar;
 
@@ -98,11 +100,11 @@ public class FragmentSave extends Fragment {
                             etTable.getSelectionStart(), mContext));
 
         } else if (item.getItemId() == R.id.del_save_many) {
-            int currPos = etTable.getSelectionStart();
-            int logLen = logSave.length();
-            logSave = new LogUpdate(mContext).squeezeLog(logSave);
-            if (currPos > 0)
-                currPos += logSave.length() - logLen;
+            int currPos = etTable.getSelectionStart() - logSave.length();
+            logSave = logUpdate.squeezeLog(logSave);
+            currPos = logSave.length() + currPos;
+            if (currPos < 10)
+                currPos = 10;
             ss = new LogSpan().make(logSave, mContext);
             etTable.setText(ss);
             Selection.setSelection(ss, currPos, currPos + 1);

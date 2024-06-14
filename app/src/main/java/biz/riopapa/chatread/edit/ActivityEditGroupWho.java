@@ -13,6 +13,8 @@ import static biz.riopapa.chatread.MainActivity.groupsAdapter;
 import static biz.riopapa.chatread.MainActivity.toolbar;
 import static biz.riopapa.chatread.MainActivity.wIdx;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -25,9 +27,11 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
@@ -35,6 +39,7 @@ import biz.riopapa.chatread.R;
 import biz.riopapa.chatread.adapters.GroupWhoStockAdapter;
 import biz.riopapa.chatread.func.GooglePercent;
 import biz.riopapa.chatread.func.GoogleStatement;
+import biz.riopapa.chatread.models.SWho;
 
 public class ActivityEditGroupWho extends AppCompatActivity {
 
@@ -46,18 +51,22 @@ public class ActivityEditGroupWho extends AppCompatActivity {
     View deleteMenu;
     RecyclerView recyclerView;
     final String GROUP = ")_(";
+    public static Activity whoActivity;
+    public static Context whoContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_group_who);
-//        Toolbar toolbar = findViewById(R.id.toolbar_edit_group);
-        if (toolbar == null) {
-            setSupportActionBar(toolbar);
-            toolbar.setTitleTextColor(0xFF44FF33);
-            toolbar.setSubtitleTextColor(0xFF000000);
-            toolbar.setSubtitle("SStock Group Edit");
-        }
+//        Toolbar toolbar = findViewById(R.id.toolbar_edit_group_who);
+//        if (toolbar != null) {
+//            setSupportActionBar(toolbar);
+//            toolbar.setTitleTextColor(0xFF44FF33);
+//            toolbar.setSubtitleTextColor(0xFF000000);
+//            toolbar.setSubtitle("SStock Group Edit");
+//        }
+        whoActivity = this;
+        whoContext = this;
 
         tGroup = findViewById(R.id.who_group);
         tGroupF = findViewById(R.id.who_group_full);
@@ -101,14 +110,14 @@ public class ActivityEditGroupWho extends AppCompatActivity {
         return true;
     }
 
-    private void setLongClick() {
+    void setLongClick() {
         deleteMenu.setOnLongClickListener(v -> {
             deleteStockWhoGroup();
             return true;
         });
     }
 
-    private void deleteStockWhoGroup() {
+    void deleteStockWhoGroup() {
 
         String time = new SimpleDateFormat(".MM/dd HH:mm", Locale.KOREA).format(new Date());
         mStatement = new GoogleStatement().make();
@@ -144,12 +153,13 @@ public class ActivityEditGroupWho extends AppCompatActivity {
         finish();
     }
 
-    private void saveGroupWho() {
-        String who = eWho.getText().toString();
-        String whoF = eWhoF.getText().toString();
-        nowSWho.who = who;
-        nowSWho.whoF = whoF;
-        nowSGroup.whos.set(wIdx, nowSWho);
+    void saveGroupWho() {
+        SWho nWho = new SWho();
+        nWho.who = eWho.getText().toString();
+        nWho.whoF = eWhoF.getText().toString();
+        nWho.stocks = new ArrayList<>();
+        nWho.stocks.addAll(nowSWho.stocks);
+        nowSGroup.whos.set(wIdx, nWho);
         sGroups.set(gIdx, nowSGroup);
         stockGetPut.put("group");
 

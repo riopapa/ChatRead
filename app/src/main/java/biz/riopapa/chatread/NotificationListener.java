@@ -74,6 +74,7 @@ public class NotificationListener extends NotificationListenerService {
     final String TG = "tg";
     final String TELEGRAM = "텔레";
     final String APP = "app";   // general application
+    final String DUMMY = "";
 
     Context ctx;
     String head;
@@ -297,8 +298,6 @@ public class NotificationListener extends NotificationListenerService {
 
     private void sayTelegram() {
 
-        if (hasIgnoreStr(teleApp))
-            return;
         // longWhoName, shortWhoName [],  <= teleGrp.txt
         // 텔데봇 ^ DailyBOT
         // 텔투봄 ^ 투자의 봄
@@ -307,8 +306,11 @@ public class NotificationListener extends NotificationListenerService {
         if (sbnText.length() < 15)  // for better performance, with logically not true
             return;
 
-        gIdx = isStockTelGroup(sbnWho);
-        if (gIdx < 0) { // not in stock group
+        if (hasIgnoreStr(teleApp))
+            return;
+
+        int grpIdx = isStockTelGroup(sbnWho);
+        if (grpIdx < 0) { // not in stock group
             if (sbnGroup.contains("새로운 메시지"))
                 sbnGroup = "_새_";
             head = "[텔레 <" + sbnGroup + "><" + sbnWho + ">]";
@@ -323,12 +325,7 @@ public class NotificationListener extends NotificationListenerService {
         long nowTime = System.currentTimeMillis();
         if (nowTime < timeBegin || nowTime > timeEnd)
             return;
-        final String [] ignores = {"항셍","나스닥","리딩","출석"};
-        for (String ignore : ignores) {
-            if (sbnText.contains(ignore))
-                return;
-        }
-        sbnGroup = sGroups.get(gIdx).grp;  // replace with short group
+        sbnGroup = sGroups.get(grpIdx).grp;  // replace with short group
         if (kvTelegram.isDup(sbnGroup, sbnText))
             return;
         // 'Ai 데일리 봇' 은 group 12메시 있음 : who 형태임
@@ -351,13 +348,15 @@ public class NotificationListener extends NotificationListenerService {
         } else {
             p = sbnText.indexOf(":");
             if (p > 0 && p < 60) {  // 텔투봄, 텔천하
-                sbnWho = sbnWho.substring(0, p).trim();
+                sbnWho = sbnText.substring(0, p).trim();
                 sbnText = sbnText.substring(p + 1).trim();
-            } else
-                utils.logW(sbnGroup+"2", "?"+sbnWho + "? " + sbnText);
+            } else {
+                utils.logW(sbnGroup + "2", "?" + sbnWho + "? " + sbnText);
+                return;
+            }
         }
 
-        nowSGroup = sGroups.get(gIdx);
+        nowSGroup = sGroups.get(grpIdx);
         if (sbnText.contains(nowSGroup.skip1) ||
                 sbnText.contains(nowSGroup.skip2))
             return;
@@ -427,7 +426,7 @@ public class NotificationListener extends NotificationListenerService {
         Bundle extras = mNotification.extras;
         // get eText //
         try {
-            sbnText = extras.getString(Notification.EXTRA_TEXT);
+            sbnText = DUMMY + extras.getString(Notification.EXTRA_TEXT);
             if (sbnText.isEmpty() || sbnText.equals("null"))
                 return true;
         } catch (Exception e) {
@@ -435,7 +434,7 @@ public class NotificationListener extends NotificationListenerService {
         }
         // get eWho //
         try {
-            sbnWho = extras.getString(Notification.EXTRA_TITLE);
+            sbnWho = DUMMY + extras.getString(Notification.EXTRA_TITLE);
             if (sbnWho.equals("null"))
                 sbnWho = "";
         } catch (Exception e) {
@@ -457,7 +456,7 @@ public class NotificationListener extends NotificationListenerService {
 
             case "com.kakao.talk":
                 sbnAppNick = "카톡";
-                sbnAppType = "kk";
+                sbnAppType = KK_TALK;
                 break;
 
             case "org.telegram.messenger":
@@ -467,7 +466,7 @@ public class NotificationListener extends NotificationListenerService {
 
             case "com.samsung.android.messaging":
                 sbnAppNick = "문자";
-                sbnAppType = "sms";
+                sbnAppType = SMS;
                 return false;
 
             default:

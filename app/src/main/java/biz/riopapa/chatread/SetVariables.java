@@ -47,6 +47,7 @@ import android.os.Environment;
 import android.util.Log;
 
 import java.io.File;
+import java.util.Objects;
 
 import biz.riopapa.chatread.stocks.StockInform;
 import biz.riopapa.chatread.stocks.AlertTable;
@@ -80,7 +81,7 @@ public class SetVariables {
             sharePref = context.getSharedPreferences("sayText", MODE_PRIVATE);
             sharedEditor = sharePref.edit();
         }
-        if (logQue == null) {
+        if (logQue.isEmpty()) {
             logQue = sharePref.getString("logQue", "");
             logStock = sharePref.getString("logStock", "");
             logSave = sharePref.getString("logSave", "");
@@ -111,7 +112,7 @@ public class SetVariables {
             sounds = new Sounds();
             utils = new Utils();
             strUtil = new StrUtil();
-            logUpdate = new LogUpdate(mContext);
+            logUpdate = new LogUpdate();
             stockInform = new StockInform();
             stockName = new StockName();
             stockGetPut = new StockGetPut();

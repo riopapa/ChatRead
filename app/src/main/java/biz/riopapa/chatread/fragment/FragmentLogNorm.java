@@ -1,6 +1,7 @@
 package biz.riopapa.chatread.fragment;
 
 import static biz.riopapa.chatread.MainActivity.logQue;
+import static biz.riopapa.chatread.MainActivity.logUpdate;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.toolbar;
 
@@ -111,11 +112,11 @@ public class FragmentLogNorm extends Fragment {
                             etTable.getSelectionStart(), mContext));
 
         } else if (item.getItemId() == R.id.del_log_many) {
-            int currPos = etTable.getSelectionStart();
-            int logLen = logQue.length();
-            logQue = new LogUpdate(mContext).squeezeLog(logQue);
-            if (currPos > 0)
-                currPos += logQue.length() - logLen;
+            int currPos = etTable.getSelectionStart() - logQue.length();
+            logQue = logUpdate.squeezeLog(logQue);
+            currPos = logQue.length() + currPos;
+            if (currPos < 10)
+                currPos = 10;
             ss = new LogSpan().make(logQue, mContext);
             etTable.setText(ss);
             Selection.setSelection(ss, currPos, currPos + 1);
