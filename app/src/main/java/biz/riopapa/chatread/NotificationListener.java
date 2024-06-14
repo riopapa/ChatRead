@@ -351,7 +351,7 @@ public class NotificationListener extends NotificationListenerService {
                 sbnWho = sbnText.substring(0, p).trim();
                 sbnText = sbnText.substring(p + 1).trim();
             } else {
-                utils.logW(sbnGroup + "2", "?" + sbnWho + "? " + sbnText);
+                utils.logW(sbnGroup, "??" + sbnWho + "?? " + sbnText);
                 return;
             }
         }
