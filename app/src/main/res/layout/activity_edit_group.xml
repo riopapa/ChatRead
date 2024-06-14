@@ -63,7 +63,6 @@
         android:layout_height="wrap_content"
         >
         <TextView
-            android:id="@+id/who_telka"
             android:layout_width="0dp"
             android:layout_weight="5"
             android:layout_height="wrap_content"
@@ -80,7 +79,6 @@
             android:textSize="@dimen/stock_font_size"
             />
         <TextView
-            android:id="@+id/who_ignore"
             android:layout_width="0dp"
             android:layout_weight="3"
             android:layout_height="wrap_content"

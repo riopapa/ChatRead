@@ -63,17 +63,4 @@ public class MsgKeyword {
             }
         }
     }
-
-    public void talk(SStock SStock) {
-
-        if (stockInform == null)
-            stockInform = new StockInform();
-        stockInform.talkNlog(SStock);
-//            if (alertsAdapter == null)
-//                alertsAdapter = new AlertsAdapter();
-//            else {
-//                alertsAdapter.notifyItemChanged(aAlertLineIdx[grpIdx][gWhoIdx][i]);
-//            }
-//        }
-    }
 }

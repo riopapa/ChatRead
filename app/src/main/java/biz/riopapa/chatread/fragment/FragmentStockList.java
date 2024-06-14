@@ -91,8 +91,10 @@ public class FragmentStockList extends Fragment {
                 SGroup sGroup = sGroups.get(i);
                 sGroups.set(i, sGroup);
             }
+        } else if (item.getItemId() == R.id.saveStocks) {
+            stockGetPut.put("All save");
+            stockGetPut.sort();
         }
-        stockGetPut.sort();
         groupsAdapter.notifyDataSetChanged();
         return super.onOptionsItemSelected(item);
     }

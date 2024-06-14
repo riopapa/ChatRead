@@ -6,5 +6,4 @@ public class SStock {
     public String talk;
     public String skip1;
     public int count;   // how many matched?
-    public int idx;     // stockCounts array index;
 }

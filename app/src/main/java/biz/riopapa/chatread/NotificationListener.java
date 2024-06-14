@@ -129,28 +129,9 @@ public class NotificationListener extends NotificationListenerService {
 //                    if (msgKeyword == null)
 //                        msgKeyword = new MsgKeyword("by ka");
 
-                    int grpIdx = Collections.binarySearch(aGroups, sbnGroup);
-//                    Log.w("grpIdx check " + grpIdx, "grpIdx=" + grpIdx + " group=" + sbnGroup + " who=" + sbnWho);
-                    if (grpIdx >= 0) {
-                        if (sbnText.length() < 15)
-                            return;
-                        for (int w = 0; w < whoNameFrom.length; w++) {
-                            if (sbnWho.contains(whoNameFrom[w])) {
-                                sbnWho = whoNameTo[w];
-                                break;
-                            }
-                        }
-                        msgKeyword.say(sbnGroup, sbnWho, sbnText, grpIdx);
-                        return;
-                    }
-                    sbnText = strUtil.strShorten(sbnGroup, sbnText);
-                    notificationBar.update("카톡!" + sbnGroup + "." + sbnWho, sbnText, true);
-                    head = "{카톡!" + sbnGroup + "." + sbnWho + "} ";
-                    logUpdate.addLog(head, sbnText);
-                    if (IgnoreNumber.in(ktNoNumbers, sbnGroup))
-                        sbnText = strUtil.removeDigit(sbnText);
-                    sounds.speakKakao(" 카톡 왔음 " + sbnGroup + " 의 " + sbnWho + " 님이 " +
-                            strUtil.replaceKKHH(strUtil.makeEtc(sbnText, isWorking()? 20:150)));
+//                    int grpIdx = Collections.binarySearch(aGroups, sbnGroup);
+                    sayKaStock();
+                    return;
                 }
                 break;
 
@@ -294,6 +275,81 @@ public class NotificationListener extends NotificationListenerService {
         String say = head + ", " + sbnText;
         sounds.speakAfterBeep(strUtil.makeEtc(say, 100));
 
+    }
+
+
+    private void sayKaStock() {
+
+        // longWhoName, shortWhoName [],  <= teleGrp.txt
+        // 텔데봇 ^ DailyBOT
+        // 텔투봄 ^ 투자의 봄
+        // 텔오늘 ^ 오늘의단타 공식채널
+
+        if (sbnText.length() < 15)  // for better performance, with logically not true
+            return;
+        int grpIdx = isStockKaGroup(sbnGroup);
+        if (grpIdx < 0) {
+            sbnText = strUtil.strShorten(sbnGroup, sbnText);
+            notificationBar.update("카톡!" + sbnGroup + "." + sbnWho, sbnText, true);
+            head = "{카톡!" + sbnGroup + "." + sbnWho + "} ";
+            logUpdate.addLog(head, sbnText);
+            if (IgnoreNumber.in(ktNoNumbers, sbnGroup))
+                sbnText = strUtil.removeDigit(sbnText);
+            sounds.speakKakao(" 카톡 왔음 " + sbnGroup + " 의 " + sbnWho + " 님이 " +
+                    strUtil.replaceKKHH(strUtil.makeEtc(sbnText, isWorking() ? 20 : 150)));
+            return;
+        }
+       if (timeBegin == 0)
+            new ReadyToday();
+        long nowTime = System.currentTimeMillis();
+        if (nowTime < timeBegin || nowTime > timeEnd)
+            return;
+        sbnGroup = sGroups.get(grpIdx).grp;  // replace with short group
+        if (kvKakao.isDup(sbnGroup, sbnText))
+            return;
+        // 'Ai 데일리 봇' 은 group 12메시 있음 : who 형태임
+        // '투자의 봄' 은 group 없이 who 만 존재
+        // 어떤 경우는 이름이 text 맨 앞에
+
+        // {텔천하} 제왕>> 윤 종묵 님이 🔹수익 天下 🔸단타의 제왕 (王) 그룹에 사진을 보냈습니다
+        // {텔천하} [🔹수익 天下 🔸단타의 제왕 (王): 수익 영의정 (正)] #청산하세요
+        // {텔리치} [👑 리치플러스 R (급등일보)👑: 리치플러스] ✅ LS에코에너지 英 사업 부지 협상 돌
+        // {텔소나} [소나무 투자그룹 정보방] 오영석 전문가: 선물투자가  어렵고.복잡하다고
+        // {텔소나} [소나무 투자그룹 정보방] 자연 윤: 🖼 수고하셨습니당!
+        // {텔투봄} [🌸투자의 봄(春)🌸] 🌸투자의 봄(春)🌸: 참여하실 분들은
+
+        sbnText = strUtil.text2OneLine(sbnText);
+
+        utils.logW(sbnGroup, "["+sbnWho + "] " + sbnText);
+        int p = sbnWho.indexOf(":");
+        if (p > 0 && p < 30) {  // 텔소나, 텔리치
+            sbnWho = sbnWho.substring(p+1).trim();
+        } else {
+            p = sbnText.indexOf(":");
+            if (p > 0 && p < 60) {  // 텔투봄, 텔천하
+                sbnWho = sbnText.substring(0, p).trim();
+                sbnText = sbnText.substring(p + 1).trim();
+            } else {
+                utils.logW(sbnGroup, "??" + sbnWho + "?? " + sbnText);
+                return;
+            }
+        }
+
+        nowSGroup = sGroups.get(grpIdx);
+        if (sbnText.contains(nowSGroup.skip1) ||
+                sbnText.contains(nowSGroup.skip2))
+            return;
+        for (wIdx = 0; wIdx < nowSGroup.whos.size(); wIdx++) {
+            if (sbnWho.contains(nowSGroup.whos.get(wIdx).whoF)) {
+                nowSWho = nowSGroup.whos.get(wIdx);
+                // if stock Group then check skip keywords and then continue;
+                sbnWho = nowSWho.who;        // replace with short who
+                sbnText = strUtil.strShorten(sbnWho, sbnText);
+                utils.logW(sbnGroup, sbnWho + ">> " + sbnText);
+                stockCheck.check(nowSWho.stocks);
+                break;
+            }
+        }
     }
 
     private void sayTelegram() {

@@ -165,7 +165,6 @@ public class MainActivity extends AppCompatActivity {
     public static SGroup nowSGroup;
     public static SWho nowSWho;
     public static SStock nowSStock;
-    public static int [] stockCounts;
     public static String [] stockTelGroupNameTbl, stockKaGroupNameTbl, stockTelWhoTbl, stockStockTbl;
     public static int [] stockTelGroupNameIdx, stockKaGroupNameIdx, stockTelWhoIdx, stockStockIdx;
     public static ArrayList<App> apps;

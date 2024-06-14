@@ -1,13 +1,10 @@
 package biz.riopapa.chatread.stocks;
 
 import static android.content.Context.MODE_PRIVATE;
-import static biz.riopapa.chatread.MainActivity.alerts;
-import static biz.riopapa.chatread.MainActivity.apps;
 import static biz.riopapa.chatread.MainActivity.downloadFolder;
 import static biz.riopapa.chatread.MainActivity.fileIO;
-import static biz.riopapa.chatread.MainActivity.stockCounts;
-import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.mContext;
+import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.stockKaGroupNameIdx;
 import static biz.riopapa.chatread.MainActivity.stockKaGroupNameTbl;
 import static biz.riopapa.chatread.MainActivity.stockTelGroupNameIdx;
@@ -30,15 +27,12 @@ import java.util.List;
 
 import biz.riopapa.chatread.common.SnackBar;
 import biz.riopapa.chatread.func.ReadyToday;
-import biz.riopapa.chatread.models.Alert;
 import biz.riopapa.chatread.models.SGroup;
 import biz.riopapa.chatread.models.SWho;
-import biz.riopapa.chatread.models.SStock;
 
 public class StockGetPut {
 
     final static String STOCK_TABLE = "StockTable";
-    final static String COUNTS_ONLY = "GroupCounts";
 
 //   group^ group name  ^     skip1  ^  skip2    ^ skip3 ^  -1  ^ skip4    ^ sayMore
 //    고선 ^ 리딩방 CA ^     !!     ^     해외  ^  BTC  ^       ^    0%    ^ 개장전
@@ -66,7 +60,7 @@ public class StockGetPut {
             getFromFile();
         else
             sGroups = gson.fromJson(json, type);
-        setStockCounts();
+        setStockTelKaCount();
     }
 
     public void getFromFile() {
@@ -87,27 +81,23 @@ public class StockGetPut {
         sGroups = list;
     }
 
-    public void setStockCounts() {
-        int idx = 0;
-        stockCounts = new int[100]; // max 100 groups
-
+    public void setStockTelKaCount() {
         int telCnt = 0, kaCnt = 0;
         for (int g = 0; g < sGroups.size(); g++) {
             SGroup grp = sGroups.get(g);
             telCnt += (grp.telKa == 't') ? 1 : 0;
             kaCnt += (grp.telKa == 'k') ? 1 : 0;
-            for (int w = 0; w < grp.whos.size(); w++) {
-                SWho SWho = grp.whos.get(w);
-                for (int s = 0; s < SWho.stocks.size(); s++) {
-                    SStock SStock = SWho.stocks.get(s);
-                    SStock.idx = idx;
-                    stockCounts[idx] = SStock.count;
-                    SWho.stocks.set(s, SStock);
-                    idx++;
-                }
-                grp.whos.set(w, SWho);
-            }
-            sGroups.set(g, grp);
+//            for (int w = 0; w < grp.whos.size(); w++) {
+//                SWho SWho = grp.whos.get(w);
+//                for (int s = 0; s < SWho.stocks.size(); s++) {
+//                    SStock SStock = SWho.stocks.get(s);
+//                    SStock.idx = idx;
+//                    SWho.stocks.set(s, SStock);
+//                    idx++;
+//                }
+//                grp.whos.set(w, SWho);
+//            }
+//            sGroups.set(g, grp);
         }
         stockTelGroupNameTbl = new String[telCnt];
         stockTelGroupNameIdx = new int[telCnt];
@@ -130,7 +120,7 @@ public class StockGetPut {
 
     public void put(String msg) {
         new SnackBar().show(STOCK_TABLE +".json", msg);
-        applyStockCounts();
+        sort();
         SharedPreferences shareGroup = mContext.getSharedPreferences(STOCK_TABLE, MODE_PRIVATE);
         SharedPreferences.Editor sgEdit = shareGroup.edit();
         Gson gson = new Gson();
@@ -144,109 +134,6 @@ public class StockGetPut {
         fileIO.writeFile(tableFolder, STOCK_TABLE +".json", prettyJson);
     }
 
-    public void applyStockCounts() {
-        for (int g = 0; g < sGroups.size(); g++) {
-            SGroup grp = sGroups.get(g);
-            for (int w = 0; w < grp.whos.size(); w++) {
-                SWho who = grp.whos.get(w);
-                for (int s = 0; s < who.stocks.size(); s++) {
-                    SStock stock = who.stocks.get(s);
-                    stock.count = stockCounts[stock.idx];
-                    who.stocks.set(s, stock);
-                }
-                grp.whos.set(w, who);
-            }
-            sGroups.set(g, grp);
-        }
-    }
-
-    void save_counts() {
-        SharedPreferences shareCount = mContext.getSharedPreferences(COUNTS_ONLY, MODE_PRIVATE);
-        SharedPreferences.Editor sc = shareCount.edit();
-        sc.clear();
-        sc.apply();
-        for (int g = 0; g < sGroups.size(); g++) {
-            SGroup grp = sGroups.get(g);
-            for (int w = 0; w < grp.whos.size(); w++) {
-                SWho SWho = grp.whos.get(w);
-                for (int s = 0; s < SWho.stocks.size(); s++) {
-                    SStock sto = SWho.stocks.get(s);
-                    String[] joins = new String[]{"m", grp.grp, SWho.who, sto.key1, sto.key2};
-                    String keyVal = String.join("~", joins);
-                    sc.putInt(keyVal, sto.count);
-                }
-            }
-        }
-        sc.apply();
-    }
-
-    public void convert() {
-        sGroups = new ArrayList<>();
-        SGroup grp = new SGroup();
-        SStock SStock = new SStock();
-        grp.whos = new ArrayList<>();
-        SWho SWho = new SWho();
-        SWho.stocks = new ArrayList<>();
-        String svG = "group", svWho = "w";
-        for (int a = 0; a < alerts.size(); a++) {
-            Alert al = alerts.get(a);
-            if (svG.equals(al.group)) {
-                if (svWho.equals(al.who)) {
-                    SStock = new SStock();
-                    SStock.key1 = al.key1;
-                    SStock.key2 = al.key2;
-                    SStock.count = al.matched;
-                    SStock.talk = "";
-                    SStock.prv = al.prev;
-                    SStock.nxt = al.next;
-                    SStock.skip1 = al.skip;
-                    SWho.stocks.add(SStock);
-                } else {
-                    if (!svWho.equals("w")) {
-                        grp.whos.add(SWho);
-                    }
-                    svWho = al.who;
-                    SWho = new SWho();
-                    SWho.who = al.who;
-                    SWho.whoF = al.who;
-                    SWho.stocks = new ArrayList<>();
-                    SStock = new SStock();
-                    SStock.key1 = al.key1;
-                    SStock.key2 = al.key2;
-                    SStock.count = al.matched;
-                    SStock.talk = "";
-                    SStock.prv = al.prev;
-                    SStock.nxt = al.next;
-                    SStock.skip1 = al.skip;
-                    SWho.stocks.add(SStock);
-                }
-            } else {
-                if (!svG.equals("group")) {
-                    grp.whos.add(SWho);
-                    sGroups.add(grp);
-                    SWho = new SWho();
-                    SWho.stocks = new ArrayList<>();
-                    grp = new SGroup();
-                    grp.telKa = 'x';
-                    grp.whos = new ArrayList<>();
-                }
-                svG = al.group;
-                svWho = "w";
-                grp = new SGroup();
-                grp.whos = new ArrayList<>();
-                grp.grp = al.group;
-                grp.grpF = al.who;
-                grp.skip1 = al.key1;
-                grp.skip2 = al.key2;
-                grp.skip3 = al.skip;
-                grp.telKa = (al.group.charAt(0) == '텔') ? 't' : 'k';
-                grp.ignore = false;
-                SWho = new SWho();
-            }
-        }
-        sGroups.add(grp);
-        put("convert");
-    }
 
     public void sort() {
         // 'group' asc, 'who' asc, 'matched count' desc
@@ -260,10 +147,114 @@ public class StockGetPut {
             }
             sGroups.set(g, grp);
         }
-        setStockCounts();
+        setStockTelKaCount();
     }
 
 //    static final String del = String.copyValueOf(new char[]{(char) Byte.parseByte("7F", 16)});
 
 
 }
+//    public void convert() {
+//        sGroups = new ArrayList<>();
+//        SGroup grp = new SGroup();
+//        SStock SStock = new SStock();
+//        grp.whos = new ArrayList<>();
+//        SWho SWho = new SWho();
+//        SWho.stocks = new ArrayList<>();
+//        String svG = "group", svWho = "w";
+//        for (int a = 0; a < alerts.size(); a++) {
+//            Alert al = alerts.get(a);
+//            if (svG.equals(al.group)) {
+//                if (svWho.equals(al.who)) {
+//                    SStock = new SStock();
+//                    SStock.key1 = al.key1;
+//                    SStock.key2 = al.key2;
+//                    SStock.count = al.matched;
+//                    SStock.talk = "";
+//                    SStock.prv = al.prev;
+//                    SStock.nxt = al.next;
+//                    SStock.skip1 = al.skip;
+//                    SWho.stocks.add(SStock);
+//                } else {
+//                    if (!svWho.equals("w")) {
+//                        grp.whos.add(SWho);
+//                    }
+//                    svWho = al.who;
+//                    SWho = new SWho();
+//                    SWho.who = al.who;
+//                    SWho.whoF = al.who;
+//                    SWho.stocks = new ArrayList<>();
+//                    SStock = new SStock();
+//                    SStock.key1 = al.key1;
+//                    SStock.key2 = al.key2;
+//                    SStock.count = al.matched;
+//                    SStock.talk = "";
+//                    SStock.prv = al.prev;
+//                    SStock.nxt = al.next;
+//                    SStock.skip1 = al.skip;
+//                    SWho.stocks.add(SStock);
+//                }
+//            } else {
+//                if (!svG.equals("group")) {
+//                    grp.whos.add(SWho);
+//                    sGroups.add(grp);
+//                    SWho = new SWho();
+//                    SWho.stocks = new ArrayList<>();
+//                    grp = new SGroup();
+//                    grp.telKa = 'x';
+//                    grp.whos = new ArrayList<>();
+//                }
+//                svG = al.group;
+//                svWho = "w";
+//                grp = new SGroup();
+//                grp.whos = new ArrayList<>();
+//                grp.grp = al.group;
+//                grp.grpF = al.who;
+//                grp.skip1 = al.key1;
+//                grp.skip2 = al.key2;
+//                grp.skip3 = al.skip;
+//                grp.telKa = (al.group.charAt(0) == '텔') ? 't' : 'k';
+//                grp.ignore = false;
+//                SWho = new SWho();
+//            }
+//        }
+//        sGroups.add(grp);
+//        put("convert");
+//    }
+
+//    void save_counts() {
+//        SharedPreferences shareCount = mContext.getSharedPreferences(COUNTS_ONLY, MODE_PRIVATE);
+//        SharedPreferences.Editor sc = shareCount.edit();
+//        sc.clear();
+//        sc.apply();
+//        for (int g = 0; g < sGroups.size(); g++) {
+//            SGroup grp = sGroups.get(g);
+//            for (int w = 0; w < grp.whos.size(); w++) {
+//                SWho SWho = grp.whos.get(w);
+//                for (int s = 0; s < SWho.stocks.size(); s++) {
+//                    SStock sto = SWho.stocks.get(s);
+//                    String[] joins = new String[]{"m", grp.grp, SWho.who, sto.key1, sto.key2};
+//                    String keyVal = String.join("~", joins);
+//                    sc.putInt(keyVal, sto.count);
+//                }
+//            }
+//        }
+//        sc.apply();
+//    }
+//
+
+//
+//    public void applyStockCounts() {
+//        for (int g = 0; g < sGroups.size(); g++) {
+//            SGroup grp = sGroups.get(g);
+//            for (int w = 0; w < grp.whos.size(); w++) {
+//                SWho who = grp.whos.get(w);
+//                for (int s = 0; s < who.stocks.size(); s++) {
+//                    SStock stock = who.stocks.get(s);
+//                    who.stocks.set(s, stock);
+//                }
+//                grp.whos.set(w, who);
+//            }
+//            sGroups.set(g, grp);
+//        }
+//    }

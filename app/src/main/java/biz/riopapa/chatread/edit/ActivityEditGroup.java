@@ -3,6 +3,7 @@ package biz.riopapa.chatread.edit;
 import static biz.riopapa.chatread.MainActivity.gIdx;
 import static biz.riopapa.chatread.MainActivity.gSheetUpload;
 import static biz.riopapa.chatread.MainActivity.mContext;
+import static biz.riopapa.chatread.MainActivity.mMainActivity;
 import static biz.riopapa.chatread.MainActivity.nowSGroup;
 import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.stockGetPut;
@@ -10,9 +11,11 @@ import static biz.riopapa.chatread.MainActivity.groupWhoAdapter;
 import static biz.riopapa.chatread.MainActivity.groupsAdapter;
 import static biz.riopapa.chatread.MainActivity.toolbar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,7 +42,7 @@ public class ActivityEditGroup extends AppCompatActivity {
     EditText eGroup, eGroupF, eSkip1, eSkip2, eSkip3;
     TextView tTelKa;
     SwitchCompat sIgnore;
-    String mGroup, mWho, mPercent, mStatement, mTalk;
+    String mPercent, mStatement, mTalk;
     View deleteMenu;
     RecyclerView recyclerView;
     public static AppCompatActivity groupActivity;
@@ -73,8 +76,16 @@ public class ActivityEditGroup extends AppCompatActivity {
         eSkip1.setText(nowSGroup.skip1);
         eSkip2.setText(nowSGroup.skip2);
         eSkip3.setText(nowSGroup.skip3);
+        tTelKa.setOnClickListener(v -> {
+            if (tTelKa.getText().toString().equals("t")) {
+                tTelKa.setText("k");
+            } else if (tTelKa.getText().toString().equals("k")) {
+                tTelKa.setText("_");
+            } else if (tTelKa.getText().toString().equals("_")) {
+                tTelKa.setText("t");
+            }
+        });
 
-        stockGetPut.applyStockCounts();
         setRecycler();
     }
 
@@ -151,7 +162,7 @@ public class ActivityEditGroup extends AppCompatActivity {
         nGroup.skip3 = eSkip3.getText().toString();
         nGroup.whos = nowSGroup.whos;
         sGroups.set(gIdx, nGroup);
-        stockGetPut.setStockCounts();
+        stockGetPut.setStockTelKaCount();
         stockGetPut.put("group");
         groupsAdapter.notifyDataSetChanged();
 
@@ -164,6 +175,6 @@ public class ActivityEditGroup extends AppCompatActivity {
     }
 
     String telka2String(char c) {
-        return (c == 't') ? "tel" : (c == 'k') ? "ka" : "";
+        return (c == 't') ? "t" : (c == 'k') ? "k" : "_";
     }
 }

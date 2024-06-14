@@ -13,7 +13,6 @@ import static biz.riopapa.chatread.MainActivity.sbnGroup;
 import static biz.riopapa.chatread.MainActivity.sbnText;
 import static biz.riopapa.chatread.MainActivity.sbnWho;
 import static biz.riopapa.chatread.MainActivity.sounds;
-import static biz.riopapa.chatread.MainActivity.stockCounts;
 import static biz.riopapa.chatread.MainActivity.stockName;
 import static biz.riopapa.chatread.MainActivity.strUtil;
 import static biz.riopapa.chatread.MainActivity.utils;
@@ -118,8 +117,6 @@ public class StockInform {
             sounds = new Sounds();
             utils.logW("sayNlog", "sounds null");
         }
-
-        stockCounts[stock.idx]++;
 
         String percent = (!sbnText.contains("매수") && (sbnText.contains("매도") || sbnText.contains("익절")))? "1.9"
                 : stock.talk;
