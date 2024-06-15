@@ -42,11 +42,6 @@
             android:checkable="false">
             <menu>
                 <item
-                    android:title="Alert"
-                    android:icon="@drawable/icon_alert"
-                    android:id="@+id/alert"
-                    />
-                <item
                     android:title="Apps"
                     android:icon="@drawable/icon_apps"
                     android:id="@+id/apps"

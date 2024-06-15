@@ -2,7 +2,6 @@ package biz.riopapa.chatread;
 
 import static android.content.Context.MODE_PRIVATE;
 import static biz.riopapa.chatread.MainActivity.stockInform;
-import static biz.riopapa.chatread.MainActivity.alertWhoIndex;
 import static biz.riopapa.chatread.MainActivity.downloadFolder;
 import static biz.riopapa.chatread.MainActivity.fileIO;
 import static biz.riopapa.chatread.MainActivity.kvCommon;
@@ -18,9 +17,7 @@ import static biz.riopapa.chatread.MainActivity.logWork;
 import static biz.riopapa.chatread.MainActivity.mAudioManager;
 import static biz.riopapa.chatread.MainActivity.mBackgroundServiceIntent;
 import static biz.riopapa.chatread.MainActivity.mContext;
-import static biz.riopapa.chatread.MainActivity.msgKeyword;
 import static biz.riopapa.chatread.MainActivity.msgNamoo;
-import static biz.riopapa.chatread.MainActivity.msgSMS;
 import static biz.riopapa.chatread.MainActivity.notificationBar;
 import static biz.riopapa.chatread.MainActivity.notificationService;
 import static biz.riopapa.chatread.MainActivity.packageDirectory;
@@ -47,11 +44,8 @@ import android.os.Environment;
 import android.util.Log;
 
 import java.io.File;
-import java.util.Objects;
 
 import biz.riopapa.chatread.stocks.StockInform;
-import biz.riopapa.chatread.stocks.AlertTable;
-import biz.riopapa.chatread.stocks.AlertWhoIndex;
 import biz.riopapa.chatread.stocks.StockCheck;
 import biz.riopapa.chatread.stocks.StockName;
 import biz.riopapa.chatread.stocks.StockGetPut;
@@ -61,9 +55,7 @@ import biz.riopapa.chatread.common.Utils;
 import biz.riopapa.chatread.func.AppsTable;
 import biz.riopapa.chatread.func.FileIO;
 import biz.riopapa.chatread.func.LogUpdate;
-import biz.riopapa.chatread.func.MsgKeyword;
 import biz.riopapa.chatread.func.MsgNamoo;
-import biz.riopapa.chatread.func.MsgSMS;
 import biz.riopapa.chatread.func.OptionTables;
 import biz.riopapa.chatread.func.ReadyToday;
 import biz.riopapa.chatread.func.StrUtil;
@@ -121,8 +113,6 @@ public class SetVariables {
 
             mAudioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
             phoneVibrate = new PhoneVibrate();
-            msgKeyword = new MsgKeyword(msg);
-            msgSMS = new MsgSMS();
             msgNamoo = new MsgNamoo();
             notificationService = new NotificationService();
             notificationBar = new NotificationBar();
@@ -135,8 +125,6 @@ public class SetVariables {
         new ReadyToday();
         new OptionTables();
         new AppsTable().get();
-        new AlertTable().get();
-        alertWhoIndex = new AlertWhoIndex();
         tableListFile = new TableListFile();
 
     }

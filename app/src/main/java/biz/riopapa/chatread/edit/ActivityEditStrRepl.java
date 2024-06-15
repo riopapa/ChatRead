@@ -1,8 +1,8 @@
 package biz.riopapa.chatread.edit;
 
-import static biz.riopapa.chatread.MainActivity.aGroups;
 import static biz.riopapa.chatread.MainActivity.fileIO;
 import static biz.riopapa.chatread.MainActivity.mTableName;
+import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.tableFolder;
 import static biz.riopapa.chatread.MainActivity.tableListFile;
 import static biz.riopapa.chatread.MainActivity.toolbar;
@@ -21,11 +21,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.Collections;
 
 import biz.riopapa.chatread.R;
 import biz.riopapa.chatread.func.OptionTables;
@@ -106,9 +104,14 @@ public class ActivityEditStrRepl extends AppCompatActivity {
             String [] oneL = textLine.split("\\^");
             if (!oneL[0].equals(svGroup)) {
                 svGroup = oneL[0];
-                int gIdx = Collections.binarySearch(aGroups, svGroup);
-                String del = (gIdx >= 0) ? "":" // 없는 그룹 //";
-                sb.append(dummyHead).append(svGroup).append(del).append(" ] -\n\n");    // dummy some chars between groups
+                String grp = " // 없는 그룹 // ";
+                for (int i = 0; i < sGroups.size(); i++) {
+                    if (sGroups.get(i).grp.equals(svGroup)) {
+                        grp = svGroup;
+                        break;
+                    }
+                }
+                sb.append(dummyHead).append(svGroup).append(grp).append(" ] -\n\n");    // dummy some chars between groups
             }
             sb.append(textLine).append("\n").append("\n");
         }

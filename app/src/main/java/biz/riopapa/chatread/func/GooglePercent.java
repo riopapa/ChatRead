@@ -9,7 +9,6 @@ public class GooglePercent {
     public String make(SGroup sGroup) {
         return "Skip (" + sGroup.skip1 + ", " + sGroup.skip1 + ", " + sGroup.skip2 + ")" +
                 " Ignore:" + ((sGroup.ignore) ? "yes" : "") +
-                " TelKa (" + ((sGroup.telKa == 't') ? "tel" : (sGroup.telKa == 'k') ? "ka" : "") +
-                ")";
+                " TelKa (" + sGroup.telKa.toString() + ")";
     }
 }

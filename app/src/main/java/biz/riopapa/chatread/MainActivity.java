@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.widget.Toast;
 
@@ -32,10 +31,8 @@ import com.google.android.material.navigation.NavigationView;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
-import biz.riopapa.chatread.adapters.AlertsAdapter;
 import biz.riopapa.chatread.adapters.AppsAdapter;
 import biz.riopapa.chatread.adapters.GroupAdapter;
 import biz.riopapa.chatread.adapters.GroupWhoAdapter;
@@ -45,7 +42,6 @@ import biz.riopapa.chatread.models.SStock;
 import biz.riopapa.chatread.models.SWho;
 import biz.riopapa.chatread.stocks.StockGetPut;
 import biz.riopapa.chatread.stocks.StockInform;
-import biz.riopapa.chatread.stocks.AlertWhoIndex;
 import biz.riopapa.chatread.stocks.StockCheck;
 import biz.riopapa.chatread.stocks.StockName;
 import biz.riopapa.chatread.common.Permission;
@@ -63,9 +59,7 @@ import biz.riopapa.chatread.fragment.FragmentStockList;
 import biz.riopapa.chatread.func.FileIO;
 import biz.riopapa.chatread.func.GSheetUpload;
 import biz.riopapa.chatread.func.LogUpdate;
-import biz.riopapa.chatread.func.MsgKeyword;
 import biz.riopapa.chatread.func.MsgNamoo;
-import biz.riopapa.chatread.func.MsgSMS;
 import biz.riopapa.chatread.func.StrUtil;
 import biz.riopapa.chatread.func.TableListFile;
 import biz.riopapa.chatread.models.Alert;
@@ -102,15 +96,6 @@ public class MainActivity extends AppCompatActivity {
 
     public static String[] ktGroupIgnores = null;
     public static String[] ktWhoIgnores = null;
-
-    public static String[] aGroupSaid = null;
-    public static int [][][] aAlertLineIdx;
-
-    public static List<String> aGroups;    // {고선, 텔레, 힐}
-    public static List<Boolean> aGroupQuiets;
-    public static String[] aGSkip1, aGSkip2, aGSkip3;
-    public static String[][] aGroupWhos;     // [2] 이진홍, 김선수
-    public static String[][][] aGroupWhoKey1, aGroupWhoKey2, aGroupWhoSkip, aGroupWhoPrev, aGroupWhoNext;
 
     public static String[] smsWhoIgnores = null;
     public static String[] smsTxtIgnores = null;
@@ -153,7 +138,6 @@ public class MainActivity extends AppCompatActivity {
 
     public static boolean isPhoneBusy = false;
 
-    public static AlertsAdapter alertsAdapter = null;
     public static ArrayList<Alert> alerts = null;
 
     /* SStock variables */
@@ -165,17 +149,14 @@ public class MainActivity extends AppCompatActivity {
     public static SGroup nowSGroup;
     public static SWho nowSWho;
     public static SStock nowSStock;
-    public static String [] stockTelGroupNameTbl, stockKaGroupNameTbl;
-    public static int [] stockTelGroupNameIdx, stockKaGroupNameIdx;
+    public static String [] stockTelGroupNameTbl, stockKaGroupNameTbl, stockSMSGroupNameTbl;
+    public static int [] stockTelGroupNameIdx, stockKaGroupNameIdx, stockSMSGroupNameIdx;
     public static ArrayList<App> apps;
     public static AppsAdapter appsAdapter;
     public static App teleApp;
 
-
-    public static AlertWhoIndex alertWhoIndex = null;
-
     public static final String lastChar = "힝";
-    public static int mStockGroupPos = -1, mAlertPos = -1, mAppsPos = -1;  // updated or duplicated recycler position
+    public static int mStockGroupPos = -1, mAppsPos = -1;  // updated or duplicated recycler position
 
     public enum soundType { PRE, POST, ERR, HI_TESLA, ONLY, STOCK, INFO, KAKAO}
     public static final int[] beepRawIds = { R.raw.pre, R.raw.post, R.raw.err,
@@ -199,8 +180,6 @@ public class MainActivity extends AppCompatActivity {
     public static AudioManager mAudioManager = null;
     public static PhoneVibrate phoneVibrate = null;
 
-    public static MsgKeyword msgKeyword = null;
-    public static MsgSMS msgSMS = null;
     public static MsgNamoo msgNamoo = null;
 
     public static GSheetUpload gSheetUpload = null;

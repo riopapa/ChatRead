@@ -1,5 +1,6 @@
 package biz.riopapa.chatread.fragment;
 
+import static biz.riopapa.chatread.MainActivity.alerts;
 import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.stockGetPut;
 import static biz.riopapa.chatread.MainActivity.groupsAdapter;
@@ -27,6 +28,8 @@ import biz.riopapa.chatread.adapters.GroupAdapter;
 import biz.riopapa.chatread.func.OptionTables;
 import biz.riopapa.chatread.func.ReadyToday;
 import biz.riopapa.chatread.models.SGroup;
+import biz.riopapa.chatread.models.SStock;
+import biz.riopapa.chatread.models.SWho;
 
 public class FragmentStockList extends Fragment {
 
@@ -87,13 +90,30 @@ public class FragmentStockList extends Fragment {
             new OptionTables();
             stockGetPut.get();
         } else if (item.getItemId() == R.id.clear_matched_number) {
-            for (int i = 0; i < sGroups.size(); i++) {
-                SGroup sGroup = sGroups.get(i);
-                sGroups.set(i, sGroup);
+            for (int g = 0; g < sGroups.size(); g++) {
+                SGroup sGroup = sGroups.get(g);
+                for (int w = 0; w < sGroup.whos.size(); w++) {
+                    SWho sWho = sGroup.whos.get(w);
+                    for (int s = 0; s < sWho.stocks.size(); s++) {
+                        SStock sStock = sWho.stocks.get(s);
+                        if (sStock.count > 1000)
+                            sStock.count = 1000;
+                        else {
+                            int i = (sStock.count + 99) / 100 * 100;
+                            sStock.count = i;
+                        }
+                        sWho.stocks.set(s, sStock);
+                    }
+                    sGroup.whos.set(w, sWho);
+                }
+                sGroups.set(g, sGroup);
             }
+            stockGetPut.put("All save");
+            stockGetPut.get();
+            groupsAdapter.notifyDataSetChanged();
         } else if (item.getItemId() == R.id.saveStocks) {
             stockGetPut.put("All save");
-            stockGetPut.sort();
+            stockGetPut.get();
         }
         groupsAdapter.notifyDataSetChanged();
         return super.onOptionsItemSelected(item);

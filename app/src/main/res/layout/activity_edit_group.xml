@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/first_line"
+        app:layout_constraintBottom_toTopOf="@id/grp_first_line"
         />
 
     <LinearLayout

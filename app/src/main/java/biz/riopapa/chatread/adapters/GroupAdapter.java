@@ -72,7 +72,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
         holder.tSkip1.setText(sg.skip1);
         holder.tSkip2.setText(sg.skip2);
         holder.tSkip3.setText(sg.skip3);
-        holder.tTelegram.setText((sg.telKa == 't') ? "텔레" : "  ");
+        holder.tTelegram.setText(sg.telKa);
         holder.tIgnore.setText((sg.ignore) ? "무시" : "  ");
 
         holder.tLine.setBackgroundColor(mContext.getResources().getColor(

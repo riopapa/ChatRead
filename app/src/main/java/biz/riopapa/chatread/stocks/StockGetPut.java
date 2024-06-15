@@ -7,10 +7,13 @@ import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.stockKaGroupNameIdx;
 import static biz.riopapa.chatread.MainActivity.stockKaGroupNameTbl;
+import static biz.riopapa.chatread.MainActivity.stockSMSGroupNameIdx;
+import static biz.riopapa.chatread.MainActivity.stockSMSGroupNameTbl;
 import static biz.riopapa.chatread.MainActivity.stockTelGroupNameIdx;
 import static biz.riopapa.chatread.MainActivity.stockTelGroupNameTbl;
 import static biz.riopapa.chatread.MainActivity.tableFolder;
 import static biz.riopapa.chatread.MainActivity.todayFolder;
+import static biz.riopapa.chatread.MainActivity.utils;
 
 import android.content.SharedPreferences;
 import android.os.Environment;
@@ -82,11 +85,12 @@ public class StockGetPut {
     }
 
     public void setStockTelKaCount() {
-        int telCnt = 0, kaCnt = 0;
+        int telCnt = 0, kaCnt = 0, smsCnt = 0;
         for (int g = 0; g < sGroups.size(); g++) {
             SGroup grp = sGroups.get(g);
-            telCnt += (grp.telKa == 't') ? 1 : 0;
-            kaCnt += (grp.telKa == 'k') ? 1 : 0;
+            telCnt += grp.telKa.equals("t") ? 1 : 0;
+            kaCnt += grp.telKa.equals("k") ? 1 : 0;
+            smsCnt += grp.telKa.equals("s") ? 1 : 0;
 //            for (int w = 0; w < grp.whos.size(); w++) {
 //                SWho SWho = grp.whos.get(w);
 //                for (int s = 0; s < SWho.stocks.size(); s++) {
@@ -103,23 +107,33 @@ public class StockGetPut {
         stockTelGroupNameIdx = new int[telCnt];
         stockKaGroupNameTbl = new String[kaCnt];
         stockKaGroupNameIdx = new int[kaCnt];
-        int t = 0, k = 0;
+        stockSMSGroupNameTbl = new String[smsCnt];
+        stockSMSGroupNameIdx = new int[smsCnt];
+        int t = 0, k = 0, s = 0;
         for (int g = 0; g < sGroups.size(); g++) {
-            if (sGroups.get(g).telKa == 't') {
-                stockTelGroupNameTbl[t] = sGroups.get(g).grpF;
-                stockTelGroupNameIdx[t] = g;
-                t++;
-            }
-            if (sGroups.get(g).telKa == 'k') {
-                stockKaGroupNameTbl[k] = sGroups.get(g).grpF;
-                stockKaGroupNameIdx[k] = g;
-                k++;
+            switch (sGroups.get(g).telKa) {
+                case "t":
+                    stockTelGroupNameTbl[t] = sGroups.get(g).grpF;
+                    stockTelGroupNameIdx[t] = g;
+                    t++;
+                    break;
+                case "k":
+                    stockKaGroupNameTbl[k] = sGroups.get(g).grpF;
+                    stockKaGroupNameIdx[k] = g;
+                    k++;
+                    break;
+                case "s":
+                    stockKaGroupNameTbl[s] = sGroups.get(g).grpF;
+                    stockKaGroupNameIdx[s] = g;
+                    k++;
+                    break;
             }
         }
     }
 
     public void put(String msg) {
         new SnackBar().show(STOCK_TABLE +".json", msg);
+        utils.logW("StockPut", msg);
         sort();
         SharedPreferences shareGroup = mContext.getSharedPreferences(STOCK_TABLE, MODE_PRIVATE);
         SharedPreferences.Editor sgEdit = shareGroup.edit();
@@ -134,8 +148,7 @@ public class StockGetPut {
         fileIO.writeFile(tableFolder, STOCK_TABLE +".json", prettyJson);
     }
 
-
-    public void sort() {
+    void sort() {
         // 'group' asc, 'who' asc, 'matched count' desc
         sGroups.sort(Comparator.comparing(obj -> (obj.grp)));
         for (int g = 0; g < sGroups.size(); g++) {

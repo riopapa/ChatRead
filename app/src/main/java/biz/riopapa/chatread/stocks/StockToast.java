@@ -8,7 +8,7 @@ import android.os.Looper;
 import android.view.Display;
 import android.widget.Toast;
 
-public class AlertToast {
+public class StockToast {
 
     public void show(Context context, Activity activity, String msg) {
         new Handler(Looper.getMainLooper()).post(() -> {

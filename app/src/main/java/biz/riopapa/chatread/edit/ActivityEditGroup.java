@@ -7,7 +7,6 @@ import static biz.riopapa.chatread.MainActivity.groupsAdapter;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.nowSGroup;
 import static biz.riopapa.chatread.MainActivity.sGroups;
-import static biz.riopapa.chatread.MainActivity.stockCheck;
 import static biz.riopapa.chatread.MainActivity.stockGetPut;
 import static biz.riopapa.chatread.MainActivity.toolbar;
 
@@ -69,22 +68,25 @@ public class ActivityEditGroup extends AppCompatActivity {
 
         eGroup.setText(nowSGroup.grp);
         eGroupF.setText(nowSGroup.grpF);
-        tTelKa.setText(telka2String(nowSGroup.telKa));
+        tTelKa.setText(nowSGroup.telKa);
         sIgnore.setChecked(nowSGroup.ignore);
         eSkip1.setText(nowSGroup.skip1);
         eSkip2.setText(nowSGroup.skip2);
         eSkip3.setText(nowSGroup.skip3);
-        tTelKa.setOnClickListener(v -> {
-            if (tTelKa.getText().toString().equals("t")) {
-                tTelKa.setText("k");
-            } else if (tTelKa.getText().toString().equals("k")) {
-                tTelKa.setText("_");
-            } else if (tTelKa.getText().toString().equals("_")) {
-                tTelKa.setText("t");
-            }
-        });
-
+        tTelKa.setOnClickListener(v -> tTelKa.setText(nextTelKa(tTelKa.getText().toString())));
         setRecycler();
+    }
+
+    String nextTelKa(String c) {
+        switch (c) {
+            case "t":
+                return "k";
+            case "k":
+                return "s";
+            case "s":
+                return "_";
+        }
+        return "t";
     }
 
     private void setRecycler() {
@@ -142,10 +144,10 @@ public class ActivityEditGroup extends AppCompatActivity {
     private void duplicateGroup() {
         try {
             SGroup nGroup =  (SGroup) nowSGroup.clone();
-            String telKa = tTelKa.getText().toString();
+
             nGroup.grp = eGroup.getText().toString();
-            nGroup.grpF = eGroupF.getText().toString();;
-            nGroup.telKa = telKa.equals("t") ? 't' : (telKa.equals("k") ? 'k' : '_');
+            nGroup.grpF = eGroupF.getText().toString();
+            nGroup.telKa = tTelKa.getText().toString();
             nGroup.ignore = sIgnore.isChecked();
             nGroup.skip1 = eSkip1.getText().toString();
             nGroup.skip2 = eSkip2.getText().toString();
@@ -183,9 +185,5 @@ public class ActivityEditGroup extends AppCompatActivity {
             throw new RuntimeException(e);
         }
 
-    }
-
-    String telka2String(char c) {
-        return (c == 't') ? "t" : (c == 'k') ? "k" : "_";
     }
 }

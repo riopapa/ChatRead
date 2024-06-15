@@ -76,7 +76,7 @@ public class ActivityEditGroupWho extends AppCompatActivity {
 
         tGroup.setText(nowSGroup.grp);
         tGroupF.setText(nowSGroup.grpF);
-        tTelKa.setText(telka2String(nowSGroup.telKa));
+        tTelKa.setText(nowSGroup.telKa.toString());;
         sIgnore.setChecked(nowSGroup.ignore);
         tSkip1.setText(nowSGroup.skip1);
         tSkip2.setText(nowSGroup.skip2);
@@ -179,9 +179,4 @@ private void duplicateGroupWho() {
             throw new RuntimeException(e);
         }
     }
-
-    String telka2String(char c) {
-        return (c == 't') ? "tel" : (c == 'k') ? "ka" : "";
-    }
-
 }

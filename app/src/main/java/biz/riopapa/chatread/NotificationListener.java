@@ -1,11 +1,10 @@
 package biz.riopapa.chatread;
 
-import static biz.riopapa.chatread.MainActivity.aGroups;
 import static biz.riopapa.chatread.MainActivity.appFullNames;
 import static biz.riopapa.chatread.MainActivity.appIgnores;
 import static biz.riopapa.chatread.MainActivity.appNameIdx;
 import static biz.riopapa.chatread.MainActivity.apps;
-import static biz.riopapa.chatread.MainActivity.gIdx;
+import static biz.riopapa.chatread.MainActivity.gSheetUpload;
 import static biz.riopapa.chatread.MainActivity.ktGroupIgnores;
 import static biz.riopapa.chatread.MainActivity.ktNoNumbers;
 import static biz.riopapa.chatread.MainActivity.ktTxtIgnores;
@@ -14,10 +13,9 @@ import static biz.riopapa.chatread.MainActivity.kvCommon;
 import static biz.riopapa.chatread.MainActivity.kvKakao;
 import static biz.riopapa.chatread.MainActivity.kvSMS;
 import static biz.riopapa.chatread.MainActivity.kvTelegram;
+import static biz.riopapa.chatread.MainActivity.lastChar;
 import static biz.riopapa.chatread.MainActivity.logUpdate;
 import static biz.riopapa.chatread.MainActivity.mAudioManager;
-import static biz.riopapa.chatread.MainActivity.msgKeyword;
-import static biz.riopapa.chatread.MainActivity.msgSMS;
 import static biz.riopapa.chatread.MainActivity.notificationBar;
 import static biz.riopapa.chatread.MainActivity.nowSGroup;
 import static biz.riopapa.chatread.MainActivity.nowSWho;
@@ -30,6 +28,7 @@ import static biz.riopapa.chatread.MainActivity.sbnAppType;
 import static biz.riopapa.chatread.MainActivity.sbnGroup;
 import static biz.riopapa.chatread.MainActivity.sbnText;
 import static biz.riopapa.chatread.MainActivity.sbnWho;
+import static biz.riopapa.chatread.MainActivity.smsNoNumbers;
 import static biz.riopapa.chatread.MainActivity.smsReplFrom;
 import static biz.riopapa.chatread.MainActivity.smsReplTo;
 import static biz.riopapa.chatread.MainActivity.smsTxtIgnores;
@@ -38,6 +37,8 @@ import static biz.riopapa.chatread.MainActivity.sounds;
 import static biz.riopapa.chatread.MainActivity.stockCheck;
 import static biz.riopapa.chatread.MainActivity.stockKaGroupNameIdx;
 import static biz.riopapa.chatread.MainActivity.stockKaGroupNameTbl;
+import static biz.riopapa.chatread.MainActivity.stockSMSGroupNameIdx;
+import static biz.riopapa.chatread.MainActivity.stockSMSGroupNameTbl;
 import static biz.riopapa.chatread.MainActivity.stockTelGroupNameIdx;
 import static biz.riopapa.chatread.MainActivity.stockTelGroupNameTbl;
 import static biz.riopapa.chatread.MainActivity.strUtil;
@@ -46,8 +47,6 @@ import static biz.riopapa.chatread.MainActivity.timeBegin;
 import static biz.riopapa.chatread.MainActivity.timeEnd;
 import static biz.riopapa.chatread.MainActivity.utils;
 import static biz.riopapa.chatread.MainActivity.wIdx;
-import static biz.riopapa.chatread.MainActivity.whoNameFrom;
-import static biz.riopapa.chatread.MainActivity.whoNameTo;
 
 import android.app.Notification;
 import android.content.Context;
@@ -56,7 +55,10 @@ import android.os.Bundle;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 
+import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Date;
+import java.util.Locale;
 
 import biz.riopapa.chatread.common.Copy2Clipboard;
 import biz.riopapa.chatread.common.IgnoreNumber;
@@ -213,24 +215,7 @@ public class NotificationListener extends NotificationListenerService {
 
             case SMS:
 
-                if (sbnWho.replaceAll(ctx.getString(R.string.regex_number_only), "").length() < 6 &&
-                        !sbnText.contains("스마트폰 배우고"))
-                    return;
-                if (IgnoreThis.contains(sbnWho, smsWhoIgnores) || IgnoreThis.contains(sbnText, smsTxtIgnores))
-                    return;
-                sbnText = strUtil.text2OneLine(sbnText);
-                if (kvSMS.isDup(sbnWho, sbnText))
-                    return;
-//                if (msgSMS == null)
-//                    msgSMS = new MsgSMS();
-                sbnWho = sbnWho.replaceAll("[\\u200C-\\u206F]", "");
-                sbnText = sbnText.replace(ctx.getString(R.string.web_sent), "")
-                        .replaceAll("[\\u200C-\\u206F]", "");
-                if (smsReplFrom != null) {
-                    for (int i = 0; i < smsReplFrom.length; i++)
-                        sbnText = sbnText.replace(smsReplFrom[i], smsReplTo[i]);
-                }
-                msgSMS.say(sbnWho, strUtil.strShorten(sbnWho, sbnText));
+                saySMS();
                 break;
 
             default:
@@ -424,6 +409,89 @@ public class NotificationListener extends NotificationListenerService {
         }
     }
 
+    void saySMS() {
+        if (sbnWho.replaceAll(ctx.getString(R.string.regex_number_only), "").length() < 6 &&
+                !sbnText.contains("스마트폰 배우고"))
+            return;
+        if (IgnoreThis.contains(sbnWho, smsWhoIgnores) || IgnoreThis.contains(sbnText, smsTxtIgnores))
+            return;
+        sbnText = strUtil.text2OneLine(sbnText);
+        if (kvSMS.isDup(sbnWho, sbnText))
+            return;
+        if (sbnWho.contains("NH투자")) {
+            if (sbnText.contains("체결"))
+                saySMSTrade();
+            else {
+                saySMSNormal();
+            }
+        } else if (sbnWho.contains("찌라")) {
+
+            int sIdx = isStockSMSGroup(sbnWho);
+            if (sIdx < 0) {
+                sbnWho = sbnWho.replaceAll("[\\u200C-\\u206F]", "");
+                sbnText = sbnText.replace(ctx.getString(R.string.web_sent), "")
+                        .replaceAll("[\\u200C-\\u206F]", "");
+                if (smsReplFrom != null) {
+                    for (int i = 0; i < smsReplFrom.length; i++)
+                        sbnText = sbnText.replace(smsReplFrom[i], smsReplTo[i]);
+                }
+                saySMSNormal();
+            }
+
+        } else {
+            saySMSNormal();
+        }
+    }
+
+    private void saySMSTrade() {
+        int pos = sbnText.indexOf("주문");
+        if (pos > 0) {
+            sbnText = sbnText.substring(0, pos);
+            try {
+                String[] words = sbnText.split("\\|");
+                // |[NH투자]|매수 전량체결|KMH    |10주|9,870원|주문 0001026052
+                //   0       1          2       3    4       5
+                if (words.length < 5) {
+                    logUpdate.addStock("SMS NH 증권 에러 " + words.length, sbnText);
+                    sounds.speakAfterBeep(sbnText);
+                } else {
+                    String stockName = words[2].trim();  // 종목명
+                    boolean buySell = words[1].contains("매수");
+                    String samPam = (buySell) ?  " 샀음": " 팔림";
+                    String amount = words[3];
+                    String uPrice = words[4];
+                    String sGroup = lastChar + "체결";
+                    String sayMsg = stockName + " " + amount + " " + uPrice + samPam;
+                    notificationBar.update(samPam +":"+stockName, sayMsg, true);
+                    logUpdate.addStock("sms>NH투자", sayMsg);
+                    gSheetUpload.add2Stock(sGroup, sbnWho, samPam, stockName,
+                            sbnText.replace(stockName, new StringBuffer(stockName).insert(1, ".").toString()), samPam,
+                            new SimpleDateFormat("yy-MM-dd HH:mm", Locale.KOREA).format(new Date()));
+                    sayMsg = stockName + samPam;
+                    if (isWorking())
+                        sayMsg = strUtil.makeEtc(sayMsg, 20);
+                    sounds.speakAfterBeep(strUtil.removeDigit(sayMsg));
+                }
+            } catch (Exception e) {
+                logUpdate.addStock("NH투자", "Exception " + sbnText + e);
+//                sounds.speakAfterBeep(mText);
+            }
+        } else
+            saySMSNormal();
+    }
+
+    private void saySMSNormal() {
+        String head = "[sms."+ sbnWho + "] ";
+        sbnText = strUtil.strShorten("sms", sbnText);
+        notificationBar.update(head, sbnText, true);
+        logUpdate.addLog(head, sbnText);
+        if (utils == null)
+            utils = new Utils();
+        if (IgnoreNumber.in(smsNoNumbers, sbnWho))
+            sbnText = strUtil.removeDigit(sbnText);
+        sounds.speakAfterBeep(head + strUtil.makeEtc(sbnText, isWorking()? 20: 120));
+    }
+
     private int isStockTelGroup(String sbnWho) {
         for (int i = 0; i < stockTelGroupNameTbl.length; i++) {
             if (sbnWho.contains(stockTelGroupNameTbl[i]))
@@ -436,6 +504,14 @@ public class NotificationListener extends NotificationListenerService {
         for (int i = 0; i < stockKaGroupNameTbl.length; i++) {
             if (sbnWho.contains(stockKaGroupNameTbl[i]))
                 return stockKaGroupNameIdx[i];
+        }
+        return -1;
+    }
+
+    private int isStockSMSGroup(String sbnWho) {
+        for (int i = 0; i < stockSMSGroupNameTbl.length; i++) {
+            if (sbnWho.contains(stockSMSGroupNameTbl[i]))
+                return stockSMSGroupNameIdx[i];
         }
         return -1;
     }
