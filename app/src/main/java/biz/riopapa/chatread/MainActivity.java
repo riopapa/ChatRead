@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static ArrayList<Alert> alerts = null;
 
-    /* SStock variables */
+    /* Stock variables */
     public static GroupAdapter groupsAdapter = null;
     public static ArrayList<SGroup> sGroups = null;
     public static StockGetPut stockGetPut = null;
@@ -230,14 +230,6 @@ public class MainActivity extends AppCompatActivity {
             } else if (id == R.id.table_str_repl) {
                 Intent intent = new Intent(mContext, ActivityEditStrRepl.class);
                 startActivity(intent);
-            } else if (id == R.id.stock) {
-                fragment = new FragmentLogStock();
-            } else if (id == R.id.stock) {
-                fragment = new FragmentLogStock();
-            } else if (id == R.id.stock) {
-                fragment = new FragmentLogStock();
-            } else if (id == R.id.stock) {
-                fragment = new FragmentLogStock();
             } else {
                 if (id == R.id.table_sms_no_num || id == R.id.table_sms_repl ||
                         id == R.id.table_sms_txt_ig || id == R.id.table_sms_who_ig ||

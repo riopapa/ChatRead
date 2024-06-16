@@ -5,9 +5,7 @@ import static biz.riopapa.chatread.MainActivity.nowSGroup;
 import static biz.riopapa.chatread.MainActivity.nowSStock;
 import static biz.riopapa.chatread.MainActivity.nowSWho;
 import static biz.riopapa.chatread.MainActivity.sGroups;
-import static biz.riopapa.chatread.MainActivity.sIdx;
 import static biz.riopapa.chatread.MainActivity.sbnText;
-import static biz.riopapa.chatread.MainActivity.stockGetPut;
 import static biz.riopapa.chatread.MainActivity.stockInform;
 import static biz.riopapa.chatread.MainActivity.wIdx;
 
@@ -29,7 +27,6 @@ public class StockCheck {
                 nowSWho.stocks.set(s, nowSStock);
                 nowSGroup.whos.set(wIdx, nowSWho);
                 sGroups.set(gIdx, nowSGroup);
-//                stockGetPut.put("stockCnt");
                 break;
             }
         }

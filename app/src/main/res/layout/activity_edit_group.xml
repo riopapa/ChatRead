@@ -165,6 +165,26 @@
             android:textSize="@dimen/stock_font_size"
             />
     </LinearLayout>
+    <TextView
+        android:id="@+id/dummy_repl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Replace to ^ from"
+        android:textSize="@dimen/stock_font_size"
+        android:gravity="center"
+        />
+    <EditText
+        android:id="@+id/e_repl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#DDCCB2"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:textColor="#000"
+        android:inputType="text|textMultiLine"
+        android:autofillHints="replace from ; to"
+        android:text=""
+        android:textSize="14sp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycle_whos"

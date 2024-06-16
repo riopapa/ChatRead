@@ -25,6 +25,7 @@ import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
@@ -36,7 +37,7 @@ import biz.riopapa.chatread.models.SGroup;
 
 public class ActivityEditGroup extends AppCompatActivity {
 
-    EditText eGroup, eGroupF, eSkip1, eSkip2, eSkip3;
+    EditText eGroup, eGroupF, eSkip1, eSkip2, eSkip3, eRepl;
     TextView tTelKa;
     SwitchCompat sIgnore;
     String mPercent, mStatement, mTalk;
@@ -65,6 +66,7 @@ public class ActivityEditGroup extends AppCompatActivity {
         eSkip1 = findViewById(R.id.e_skip1);
         eSkip2 = findViewById(R.id.e_skip2);
         eSkip3 = findViewById(R.id.e_skip3);
+        eRepl = findViewById(R.id.e_repl);
 
         eGroup.setText(nowSGroup.grp);
         eGroupF.setText(nowSGroup.grpF);
@@ -74,6 +76,14 @@ public class ActivityEditGroup extends AppCompatActivity {
         eSkip2.setText(nowSGroup.skip2);
         eSkip3.setText(nowSGroup.skip3);
         tTelKa.setOnClickListener(v -> tTelKa.setText(nextTelKa(tTelKa.getText().toString())));
+        if (nowSGroup.replF != null) {
+            String s = "";
+            for (int i = 0; i < nowSGroup.replF.size(); i++) {
+                s += nowSGroup.replT.get(i) + " ^ " + nowSGroup.replF.get(i) + "\n\n";
+            }
+            eRepl.setText(s);
+        } else
+            eRepl.setText("");
         setRecycler();
     }
 
@@ -159,6 +169,8 @@ public class ActivityEditGroup extends AppCompatActivity {
             if (nGroup.skip3.isEmpty())
                 nGroup.skip3 = NOTHING;
 
+            buildRepl(eRepl.getText().toString(), nGroup);
+
             sGroups.add(gIdx, nGroup);
             stockGetPut.put("group dup");
             stockGetPut.get();
@@ -174,6 +186,18 @@ public class ActivityEditGroup extends AppCompatActivity {
         }
     }
 
+    private void buildRepl(String s, SGroup nGroup) {
+        String[] split = s.split("\n");
+        nGroup.replT = new ArrayList<>();
+        nGroup.replF = new ArrayList<>();
+        for (int i = 0; i < split.length; i++) {
+            if (split[i].isEmpty())
+                continue;
+            String[] split2 = split[i].split("\\^");
+            nGroup.replT.add(split2[0].trim());
+            nGroup.replF.add(split2[1].trim());
+        }
+    }
     private void saveGroup() {
         try {
             SGroup nGroup =  (SGroup) nowSGroup.clone();
@@ -190,6 +214,8 @@ public class ActivityEditGroup extends AppCompatActivity {
                 nGroup.skip2 = NOTHING;
             if (nGroup.skip3.isEmpty())
                 nGroup.skip3 = NOTHING;
+            buildRepl(eRepl.getText().toString(), nGroup);
+
             sGroups.set(gIdx, nGroup);
             stockGetPut.put("group save");
             stockGetPut.get();

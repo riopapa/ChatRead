@@ -4,6 +4,7 @@ import static biz.riopapa.chatread.MainActivity.appFullNames;
 import static biz.riopapa.chatread.MainActivity.appIgnores;
 import static biz.riopapa.chatread.MainActivity.appNameIdx;
 import static biz.riopapa.chatread.MainActivity.apps;
+import static biz.riopapa.chatread.MainActivity.gIdx;
 import static biz.riopapa.chatread.MainActivity.gSheetUpload;
 import static biz.riopapa.chatread.MainActivity.ktGroupIgnores;
 import static biz.riopapa.chatread.MainActivity.ktNoNumbers;
@@ -19,6 +20,10 @@ import static biz.riopapa.chatread.MainActivity.mAudioManager;
 import static biz.riopapa.chatread.MainActivity.notificationBar;
 import static biz.riopapa.chatread.MainActivity.nowSGroup;
 import static biz.riopapa.chatread.MainActivity.nowSWho;
+import static biz.riopapa.chatread.MainActivity.replGroup;
+import static biz.riopapa.chatread.MainActivity.replGroupCnt;
+import static biz.riopapa.chatread.MainActivity.replLong;
+import static biz.riopapa.chatread.MainActivity.replShort;
 import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.sbnApp;
 import static biz.riopapa.chatread.MainActivity.sbnAppIdx;
@@ -67,6 +72,7 @@ import biz.riopapa.chatread.common.Utils;
 import biz.riopapa.chatread.func.MsgNamoo;
 import biz.riopapa.chatread.func.ReadyToday;
 import biz.riopapa.chatread.models.App;
+import biz.riopapa.chatread.models.SGroup;
 
 public class NotificationListener extends NotificationListenerService {
     final String SMS = "sms";
@@ -322,7 +328,7 @@ public class NotificationListener extends NotificationListenerService {
                 nowSWho = nowSGroup.whos.get(i);
                 // if stock Group then check skip keywords and then continue;
                 sbnWho = nowSWho.who;        // replace with short who
-                sbnText = strUtil.strShorten(sbnWho, sbnText);
+                sbnText = makeShort(sbnText, nowSGroup);
                 utils.logW(sbnGroup, sbnWho + ">> " + sbnText);
                 wIdx = i;
                 stockCheck.check(nowSWho.stocks);
@@ -400,7 +406,7 @@ public class NotificationListener extends NotificationListenerService {
                 nowSWho = nowSGroup.whos.get(i);
                 // if stock Group then check skip keywords and then continue;
                 sbnWho = nowSWho.who;        // replace with short who
-                sbnText = strUtil.strShorten(sbnWho, sbnText);
+                sbnText = makeShort(sbnText, nowSGroup);
                 utils.logW(sbnGroup, sbnWho + ">> " + sbnText);
                 wIdx = i;
                 stockCheck.check(nowSWho.stocks);
@@ -426,8 +432,8 @@ public class NotificationListener extends NotificationListenerService {
             }
         } else if (sbnWho.contains("찌라")) {
 
-            int sIdx = isStockSMSGroup(sbnWho);
-            if (sIdx < 0) {
+            int grpIdx = isStockSMSGroup(sbnWho);
+            if (grpIdx < 0) {
                 sbnWho = sbnWho.replaceAll("[\\u200C-\\u206F]", "");
                 sbnText = sbnText.replace(ctx.getString(R.string.web_sent), "")
                         .replaceAll("[\\u200C-\\u206F]", "");
@@ -436,6 +442,21 @@ public class NotificationListener extends NotificationListenerService {
                         sbnText = sbnText.replace(smsReplFrom[i], smsReplTo[i]);
                 }
                 saySMSNormal();
+            } else {
+                nowSGroup = sGroups.get(grpIdx);
+                gIdx = grpIdx;
+                for (int i = 0; i < nowSGroup.whos.size(); i++) {
+                    if (sbnWho.contains(nowSGroup.whos.get(i).whoF)) {
+                        nowSWho = nowSGroup.whos.get(i);
+                        // if stock Group then check skip keywords and then continue;
+                        sbnWho = nowSWho.who;        // replace with short who
+                        sbnText = makeShort(sbnText, nowSGroup);
+                        utils.logW(sbnGroup, sbnWho + ">> " + sbnText);
+                        wIdx = i;
+                        stockCheck.check(nowSWho.stocks);
+                        break;
+                    }
+                }
             }
 
         } else {
@@ -628,4 +649,12 @@ public class NotificationListener extends NotificationListenerService {
         return mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC) < 6;
     }
 
+    String makeShort(String text, SGroup sGroup) {
+        if (sGroup.replF != null) {
+            for (int i = 0; i < sGroup.replF.size(); i++) {
+                text = text.replace(sGroup.replF.get(i), sGroup.replT.get(i));
+            }
+        }
+        return text;
+    }
 }

@@ -11,6 +11,8 @@ public class SGroup implements Cloneable {
     public String telKa; // 't' for telegram, 'k' for kakaoTalk;
     public boolean ignore;
     public ArrayList<SWho> whos;
+    public ArrayList<String> replF = null;  // replace from to
+    public ArrayList<String> replT = null;
 
     @NonNull
     @Override
