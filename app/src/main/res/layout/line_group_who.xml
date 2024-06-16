@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/grp_line_group_who"
+    android:id="@+id/line_group_who"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -36,20 +36,36 @@
             android:text="Who Full"
             android:maxLines="1"
             />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width = "match_parent"
+        android:layout_height = "wrap_content"
+        android:background="#CCDDEE"
+        android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/grp_who_stocks"
+            android:id="@+id/who_dummy"
             android:layout_width="0dp"
-            android:layout_weight="8"
+            android:layout_weight="1"
             android:layout_height="match_parent"
             android:gravity="center"
             android:textColor="@color/textFore"
             android:textSize="@dimen/app_line_font_size"
-            android:text="Stocks"
+            android:text=""
+            android:maxLines="1"
             />
 
+        <TextView
+            android:id="@+id/who_info"
+            android:layout_width="0dp"
+            android:layout_weight="12"
+            android:layout_height="match_parent"
+            android:gravity="left"
+            android:textColor="@color/textFore"
+            android:textSize="13sp"
+            android:text="Who Full"
+            android:maxLines="10"
+            />
     </LinearLayout>
 </LinearLayout>
-
-<!--    android:maxLines="1"-->
-<!--    android:ellipsize="end"-->

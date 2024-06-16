@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import biz.riopapa.chatread.R;
 import biz.riopapa.chatread.edit.ActivityEditGroup;
+import biz.riopapa.chatread.models.SStock;
 import biz.riopapa.chatread.models.SWho;
 import biz.riopapa.chatread.models.SGroup;
 
@@ -34,7 +35,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tGroup, tGroupF, tWhos, tSkip1, tSkip2, tSkip3, tIgnore, tTelegram;
+        TextView tGroup, tGroupF, tSkip1, tSkip2, tSkip3, tIgnore, tTelegram, tInfo;
         View tLine;
 
         ViewHolder(final View itemView) {
@@ -42,12 +43,12 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
             tLine = itemView.findViewById(R.id.one_line_group);
             tGroup = itemView.findViewById(R.id.one_group);
             tGroupF = itemView.findViewById(R.id.one_group_full);
-            tWhos = itemView.findViewById(R.id.one_group_whos);
             tSkip1  = itemView.findViewById(R.id.one_group_skip1);
             tSkip2  = itemView.findViewById(R.id.one_group_skip2);
             tSkip3  = itemView.findViewById(R.id.one_group_skip3);
             tIgnore = itemView.findViewById(R.id.one_group_ignore);
             tTelegram = itemView.findViewById(R.id.one_group_telegram);
+            tInfo = itemView.findViewById(R.id.one_group_info);
         }
     }
 
@@ -64,16 +65,22 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
         SGroup sg = sGroups.get(position);
         holder.tGroup.setText(sg.grp);
         holder.tGroupF.setText(sg.grpF);
-        String whos = "";
+        String info = "";
+
         for (SWho w : sg.whos) {
-            whos += w.who + " ";
+            for (SStock s : w.stocks) {
+                if (!info.isEmpty())
+                    info += "\n";
+                info += w.whoF + " : " + s.key1 + "/" + s.key2
+                        + ", " + s.prv + "/" + s.nxt + ", " + s.count;
+            }
         }
-        holder.tWhos.setText(whos);
         holder.tSkip1.setText(sg.skip1);
         holder.tSkip2.setText(sg.skip2);
         holder.tSkip3.setText(sg.skip3);
         holder.tTelegram.setText(sg.telKa);
         holder.tIgnore.setText((sg.ignore) ? "무시" : "  ");
+        holder.tInfo.setText(info);
 
         holder.tLine.setBackgroundColor(mContext.getResources().getColor(
                 (gIdx == position)? R.color.line_now : R.color.line_default));
@@ -85,6 +92,9 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
             mMainActivity.startActivity(intent);
             Log.e("onBindViewHolder"," group returned");
         });
+
+
+
     }
 
 }

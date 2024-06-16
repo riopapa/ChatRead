@@ -553,8 +553,8 @@ public class NotificationListener extends NotificationListenerService {
         Bundle extras = mNotification.extras;
         // get eText //
         try {
-            sbnText = DUMMY + extras.getString(Notification.EXTRA_TEXT);
-            if (sbnText.isEmpty() || sbnText.equals("null"))
+            sbnText = extras.getString(Notification.EXTRA_TEXT);
+            if (sbnText == null || sbnText.isEmpty() || sbnText.equals("null"))
                 return true;
         } catch (Exception e) {
             return true;

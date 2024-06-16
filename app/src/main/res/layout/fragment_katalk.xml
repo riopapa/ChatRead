@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#A8ADA8"
+    tools:context=".fragment.FragmentSave"
+    >
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_tab_log_background"
+    android:orientation="vertical"
+    >
+
+    <LinearLayout
+        android:id="@+id/ka_head"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/ka_clear_key"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="4dp"
+            android:layout_weight="1"
+            android:background="#00000000"
+            android:contentDescription="@string/search"
+            android:src="@drawable/clear_text" />
+
+        <EditText
+            android:id="@+id/ka_search_key1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14sp"
+            android:layout_weight="5"
+            android:inputType="text"
+            android:autofillHints="Enter Text to search" />
+
+        <EditText
+            android:id="@+id/ka_search_key2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14sp"
+            android:layout_weight="5"
+            android:inputType="text"
+            android:autofillHints="Enter Text to search" />
+
+        <ImageButton
+            android:id="@+id/ka_search"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="4dp"
+            android:layout_weight="1"
+            android:background="#00000000"
+            android:contentDescription="@string/search"
+            android:src="@drawable/search" />
+
+        <ImageView
+            android:id="@+id/ka_find_next"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="4dp"
+            android:layout_weight="1"
+            android:background="#00000000"
+            android:contentDescription="@string/search"
+            android:src="@drawable/arrow_right" />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/ka_table_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:fastScrollEnabled="true"
+        android:scrollbars="vertical"
+        android:scrollbarSize="6dp"
+        style="@style/up_down_scroll_thumb"
+        >
+        <EditText
+            android:id="@+id/ka_table_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:autofillHints="Table text"
+            android:cursorVisible="true"
+            android:focusable="false"
+            android:inputType="text|textMultiLine"
+            android:scrollbars="vertical"
+            android:text="x"
+            android:textSize="14sp" />
+    </ScrollView>
+</LinearLayout>
+</FrameLayout>

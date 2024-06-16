@@ -53,7 +53,8 @@
     <color name="tabBackUnselected">#80ACE3BD</color>
 
     <color name="keyMatchedBack">#60CFAE1D</color>
-    <color name="keyMatchedWord">#8FB68F</color>
+    <color name="keyTextFore">#FF06243C</color>
+    <color name="keyMatchedWord">#FF8FB68F</color>
 
     <color name="log_head_f0">#FF611714</color>
     <color name="log_head_b0">#CCE7F2DB</color>

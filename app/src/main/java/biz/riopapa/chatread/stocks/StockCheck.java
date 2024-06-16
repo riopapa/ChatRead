@@ -29,7 +29,7 @@ public class StockCheck {
                 nowSWho.stocks.set(s, nowSStock);
                 nowSGroup.whos.set(wIdx, nowSWho);
                 sGroups.set(gIdx, nowSGroup);
-                stockGetPut.put("stockCnt");
+//                stockGetPut.put("stockCnt");
                 break;
             }
         }

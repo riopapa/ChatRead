@@ -116,7 +116,7 @@ public class ActivityEditGroupWho extends AppCompatActivity {
     void deleteStockWhoGroup() {
 
         String time = new SimpleDateFormat(".MM/dd HH:mm", Locale.KOREA).format(new Date());
-        mStatement = new GoogleStatement().make(nowSGroup);
+        mStatement = new GoogleStatement().make(nowSGroup,",");
         String mWho = "\n삭제됨\n" + nowSGroup.grpF + "\n" + time;
         String mPercent = "\n삭제됨\n" + new GooglePercent().make(nowSGroup) + "\n" + time;
         nowSGroup.whos.remove(wIdx);
@@ -150,7 +150,6 @@ private void duplicateGroupWho() {
             sGroups.set(gIdx, nowSGroup);
             stockGetPut.put("Dup who "+ nWho.who+" / " + nWho.whoF);
             stockGetPut.get();
-            Toast.makeText(mContext,"Duplicated "+ nowSGroup.grp+" / " + nowSGroup.grpF, Toast.LENGTH_SHORT).show();
             groupWhoAdapter.notifyDataSetChanged();
             finish();
         } catch (CloneNotSupportedException e) {
@@ -165,12 +164,12 @@ private void duplicateGroupWho() {
             nWho.whoF = eWhoF.getText().toString();
             nowSGroup.whos.set(wIdx, nWho);
             sGroups.set(gIdx, nowSGroup);
-            stockGetPut.put("group");
+            stockGetPut.put("Save Who "+ nWho.who+" / " + nWho.whoF);
             stockGetPut.get();
             groupWhoAdapter.notifyDataSetChanged();
 
             mPercent = new GooglePercent().make(nowSGroup);
-            mStatement = new GoogleStatement().make(nowSGroup);
+            mStatement = new GoogleStatement().make(nowSGroup,",");
             mTalk = new SimpleDateFormat("yy/MM/dd\nHH:mm", Locale.KOREA).format(new Date());
             gSheetUpload.uploadGroupInfo(nowSGroup.grp, GROUP, nowSGroup.grpF, mPercent,
                     mTalk, mStatement, "key12");

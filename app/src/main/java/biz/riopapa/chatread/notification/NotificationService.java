@@ -1,15 +1,19 @@
 package biz.riopapa.chatread.notification;
 
 import static biz.riopapa.chatread.MainActivity.HIDE_STOP;
+import static biz.riopapa.chatread.MainActivity.OPERATION;
 import static biz.riopapa.chatread.MainActivity.SHOW_NOTIFICATION_BAR;
 import static biz.riopapa.chatread.MainActivity.RELOAD_APP;
 import static biz.riopapa.chatread.MainActivity.SHOW_MESSAGE;
 import static biz.riopapa.chatread.MainActivity.STOP_SAY;
 import static biz.riopapa.chatread.MainActivity.mContext;
+import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.sharePref;
 import static biz.riopapa.chatread.MainActivity.sharedEditor;
 import static biz.riopapa.chatread.MainActivity.sounds;
+import static biz.riopapa.chatread.MainActivity.stockGetPut;
 import static biz.riopapa.chatread.MainActivity.strUtil;
+import static biz.riopapa.chatread.MainActivity.utils;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -73,7 +77,7 @@ public class NotificationService extends Service {
         if (operation == -1) {
             return START_NOT_STICKY;
         }
-//        Log.w("onStartCommand", "operation = "+operation+ " " + OPERATION[operation-1000]);
+        Log.w("onStartCommand", "operation = "+operation+ " " + OPERATION[operation-1000]);
         if (msg1.isEmpty())
             msgGet();
 
@@ -96,7 +100,6 @@ public class NotificationService extends Service {
                 break;
 
             case RELOAD_APP:
-
                 reload_App();
                 break;
 
@@ -112,7 +115,6 @@ public class NotificationService extends Service {
                 show_stop = false;
                 break;
 
-
             default:
                 Log.e("NotifiSVC","Case Error "+operation);
                 break;
@@ -122,6 +124,10 @@ public class NotificationService extends Service {
     }
 
     private void reload_App() {
+        if (sGroups != null && stockGetPut != null) {
+            stockGetPut.put("Noty");
+        } else
+            utils.logW("Noty", "sGroup or stockGetPut is null");
         Log.w("reload","App reloading");
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             mRemoteViews = null;
@@ -152,6 +158,13 @@ public class NotificationService extends Service {
 //                .setStyle(new NotificationCompat.BigTextStyle())
                 .setOngoing(true);
 
+        Intent sIntent = new Intent(mContext, NotificationService.class);
+        sIntent.putExtra("operation", STOP_SAY);
+        PendingIntent pendingStop = PendingIntent.getService(mContext, STOP_SAY, sIntent,
+                PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+        mBuilder.setContentIntent(pendingStop);
+        mRemoteViews.setOnClickPendingIntent(R.id.stop_now, pendingStop);
+
         Intent int1 = new Intent(mContext, MainActivity.class);
         int1.putExtra("operation", RELOAD_APP);
         PendingIntent pending1 = PendingIntent.getService(mContext, RELOAD_APP, int1,
@@ -161,15 +174,6 @@ public class NotificationService extends Service {
                 PendingIntent.getActivity(mContext, 0, int1,
                         PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT));
 
-        Intent sIntent = new Intent(mContext, NotificationService.class);
-//        sIntent.setComponent(new ComponentName("biz.riopapa.chatread", "biz.riopapa.chatread.notification.NotificationListener"));
-//        bindService(sIntent, connection, Context.BIND_AUTO_CREATE);
-
-        sIntent.putExtra("operation", STOP_SAY);
-        PendingIntent pendingStop = PendingIntent.getService(mContext, STOP_SAY, sIntent,
-                PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-        mBuilder.setContentIntent(pendingStop);
-        mRemoteViews.setOnClickPendingIntent(R.id.stop_now, pendingStop);
 //        mRemoteViews.setOnClickPendingIntent(R.id.stop_now,
 //                PendingIntent.getActivity(mContext, 0, sIntent,
 //                        PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT));

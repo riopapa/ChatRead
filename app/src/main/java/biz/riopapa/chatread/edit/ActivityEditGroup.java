@@ -44,7 +44,7 @@ public class ActivityEditGroup extends AppCompatActivity {
     RecyclerView recyclerView;
     public static AppCompatActivity groupActivity;
     final String GROUP = ")_(";
-
+    final String NOTHING = "_n_";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,7 +118,7 @@ public class ActivityEditGroup extends AppCompatActivity {
     private void deleteStockGroup() {
 
         String time = new SimpleDateFormat(".MM/dd HH:mm", Locale.KOREA).format(new Date());
-        mStatement = new GoogleStatement().make(nowSGroup);
+        mStatement = new GoogleStatement().make(nowSGroup,",");
         String mWho = "\n삭제됨\n" + nowSGroup.grpF + "\n" + time;
         String mPercent = "\n삭제됨\n" + new GooglePercent().make(nowSGroup) + "\n" + time;
         sGroups.remove(gIdx);
@@ -152,12 +152,19 @@ public class ActivityEditGroup extends AppCompatActivity {
             nGroup.skip1 = eSkip1.getText().toString();
             nGroup.skip2 = eSkip2.getText().toString();
             nGroup.skip3 = eSkip3.getText().toString();
+            if (nGroup.skip1.isEmpty())
+                nGroup.skip1 = NOTHING;
+            if (nGroup.skip2.isEmpty())
+                nGroup.skip2 = NOTHING;
+            if (nGroup.skip3.isEmpty())
+                nGroup.skip3 = NOTHING;
+
             sGroups.add(gIdx, nGroup);
-            stockGetPut.put("group");
+            stockGetPut.put("group dup");
             stockGetPut.get();
             groupsAdapter.notifyDataSetChanged();
             mPercent = new GooglePercent().make(nGroup);
-            mStatement = new GoogleStatement().make(nGroup);
+            mStatement = new GoogleStatement().make(nGroup,",");
             mTalk = new SimpleDateFormat("yy/MM/dd\nHH:mm", Locale.KOREA).format(new Date());
             gSheetUpload.uploadGroupInfo(nGroup.grp, GROUP, nGroup.grpF, mPercent,
                     mTalk, mStatement, "key12");
@@ -172,11 +179,25 @@ public class ActivityEditGroup extends AppCompatActivity {
             SGroup nGroup =  (SGroup) nowSGroup.clone();
             nGroup.grp = eGroup.getText().toString();
             nGroup.grpF = eGroupF.getText().toString();
+            nGroup.telKa = tTelKa.getText().toString();
+            nGroup.ignore = sIgnore.isChecked();
+            nGroup.skip1 = eSkip1.getText().toString();
+            nGroup.skip2 = eSkip2.getText().toString();
+            nGroup.skip3 = eSkip3.getText().toString();
+            if (nGroup.skip1.isEmpty())
+                nGroup.skip1 = NOTHING;
+            if (nGroup.skip2.isEmpty())
+                nGroup.skip2 = NOTHING;
+            if (nGroup.skip3.isEmpty())
+                nGroup.skip3 = NOTHING;
             sGroups.set(gIdx, nGroup);
+            stockGetPut.put("group save");
+            stockGetPut.get();
+
             Toast.makeText(mContext,"Saving "+ nGroup.grp+" / " + nGroup.grpF, Toast.LENGTH_SHORT).show();
             groupsAdapter.notifyDataSetChanged();
             mPercent = new GooglePercent().make(nGroup);
-            mStatement = new GoogleStatement().make(nGroup);
+            mStatement = new GoogleStatement().make(nGroup,",");
             mTalk = new SimpleDateFormat("yy/MM/dd\nHH:mm", Locale.KOREA).format(new Date());
             gSheetUpload.uploadGroupInfo(nGroup.grp, GROUP, nGroup.grpF, mPercent,
                     mTalk, mStatement, "key12");

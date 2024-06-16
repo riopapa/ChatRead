@@ -37,6 +37,7 @@ import biz.riopapa.chatread.adapters.AppsAdapter;
 import biz.riopapa.chatread.adapters.GroupAdapter;
 import biz.riopapa.chatread.adapters.GroupWhoAdapter;
 import biz.riopapa.chatread.adapters.GroupWhoStockAdapter;
+import biz.riopapa.chatread.fragment.FragmentKaTalk;
 import biz.riopapa.chatread.models.SGroup;
 import biz.riopapa.chatread.models.SStock;
 import biz.riopapa.chatread.models.SWho;
@@ -123,7 +124,8 @@ public class MainActivity extends AppCompatActivity {
     public static SharedPreferences sharePref;
     public static SharedPreferences.Editor sharedEditor;
 
-//    public static final String [] OPERATION = {"Show Message","start","stop say", "reload app"};
+    public static final String [] OPERATION = {"Show Message","snow Noty","stop say",
+            "reload app","hide_stop"};
     public static final int SHOW_MESSAGE = 1000;
     public static final int SHOW_NOTIFICATION_BAR = 1001;
     public static final int STOP_SAY = 1002;
@@ -223,6 +225,8 @@ public class MainActivity extends AppCompatActivity {
                 fragment = new FragmentAppsList();
             } else if (id == R.id.group) {
                 fragment = new FragmentStockList();
+            } else if (id == R.id.kt_log) {
+                fragment = new FragmentKaTalk();
             } else if (id == R.id.table_str_repl) {
                 Intent intent = new Intent(mContext, ActivityEditStrRepl.class);
                 startActivity(intent);

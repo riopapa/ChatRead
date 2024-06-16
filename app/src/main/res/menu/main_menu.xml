@@ -89,6 +89,12 @@
             android:checkable="false">
             <menu>
                 <item
+                    android:title="katalk : View Log"
+                    android:icon="@drawable/icon_log"
+                    android:id="@+id/kt_log"
+                    />
+
+                <item
                     android:title="katalk : Group Ignore"
                     android:icon="@drawable/icon_kakaotalk"
                     android:id="@+id/table_kt_grp_ig"

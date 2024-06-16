@@ -1,6 +1,7 @@
 package biz.riopapa.chatread.adapters;
 
 import static biz.riopapa.chatread.MainActivity.gIdx;
+import static biz.riopapa.chatread.MainActivity.gSheetUpload;
 import static biz.riopapa.chatread.MainActivity.groupWhoAdapter;
 import static biz.riopapa.chatread.MainActivity.groupWhoStockAdapter;
 import static biz.riopapa.chatread.MainActivity.mContext;
@@ -27,7 +28,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import biz.riopapa.chatread.R;
+import biz.riopapa.chatread.func.GooglePercent;
+import biz.riopapa.chatread.func.GoogleStatement;
 import biz.riopapa.chatread.models.SGroup;
 import biz.riopapa.chatread.models.SStock;
 
@@ -144,6 +151,7 @@ public class GroupWhoStockAdapter extends RecyclerView.Adapter<GroupWhoStockAdap
                     stockGetPut.put("stock");
                     stockGetPut.get();
                     groupWhoStockAdapter.notifyDataSetChanged();
+                    upload2Google();
                     dialog.dismiss();
                 } catch (CloneNotSupportedException e) {
                     throw new RuntimeException(e);
@@ -157,6 +165,12 @@ public class GroupWhoStockAdapter extends RecyclerView.Adapter<GroupWhoStockAdap
                     stockGetPut.put("stock");
                     stockGetPut.get();
                     groupWhoStockAdapter.notifyDataSetChanged();
+                    nowSGroup.whos.remove(wIdx);
+                    sGroups.set(gIdx, nowSGroup);
+                    stockGetPut.put( " Deleted "+ nowSWho.whoF);
+                    stockGetPut.get();
+                    groupWhoAdapter.notifyDataSetChanged();
+                    upload2Google();
                     dialog.dismiss();
                 }
             })
@@ -164,4 +178,13 @@ public class GroupWhoStockAdapter extends RecyclerView.Adapter<GroupWhoStockAdap
         builder.create().show();
     }
 
+    void upload2Google() {
+        final String GROUP = ")_(";
+        String mPercent = new GooglePercent().make(nowSGroup);
+        String mStatement = new GoogleStatement().make(nowSGroup,",");
+        String mTalk = new SimpleDateFormat("yy/MM/dd\nHH:mm", Locale.KOREA).format(new Date());
+        gSheetUpload.uploadGroupInfo(nowSGroup.grp, GROUP, nowSGroup.grpF, mPercent,
+                mTalk, mStatement, "key12");
+
+    }
 }

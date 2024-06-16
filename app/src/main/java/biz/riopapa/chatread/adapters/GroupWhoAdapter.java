@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import biz.riopapa.chatread.R;
 import biz.riopapa.chatread.edit.ActivityEditGroupWho;
+import biz.riopapa.chatread.models.SStock;
 import biz.riopapa.chatread.models.SWho;
 
 public class GroupWhoAdapter extends RecyclerView.Adapter<GroupWhoAdapter.ViewHolder> {
@@ -28,15 +29,15 @@ public class GroupWhoAdapter extends RecyclerView.Adapter<GroupWhoAdapter.ViewHo
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tWho, tWhoF, tStocks;
+        TextView tWho, tWhoF, tInfo;
         View tLine;
 
         ViewHolder(final View itemView) {
             super(itemView);
-            tLine = itemView.findViewById(R.id.grp_line_group_who);
+            tLine = itemView.findViewById(R.id.line_group_who);
             tWho = itemView.findViewById(R.id.grp_who);
             tWhoF = itemView.findViewById(R.id.grp_who_full);
-            tStocks = itemView.findViewById(R.id.grp_who_stocks);
+            tInfo = itemView.findViewById(R.id.who_info);
         }
     }
 
@@ -50,10 +51,17 @@ public class GroupWhoAdapter extends RecyclerView.Adapter<GroupWhoAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
 
-        SWho SWho = nowSGroup.whos.get(position);
-        holder.tWho.setText(SWho.who);
-        holder.tWhoF.setText(SWho.whoF);
-        holder.tStocks.setText("Stocks: " + SWho.stocks.size());
+        SWho sWho = nowSGroup.whos.get(position);
+        holder.tWho.setText(sWho.who);
+        holder.tWhoF.setText(sWho.whoF);
+        String info = "";
+        for (SStock s : sWho.stocks) {
+            if (!info.isEmpty())
+                info += "\n";
+            info += s.key1 + "/" + s.key2 + ", " + s.prv + "/" + s.nxt + ", " + s.count;
+        }
+        holder.tInfo.setText(info);
+
         holder.tLine.setOnClickListener(v -> {
             Intent intent = new Intent(mContext, ActivityEditGroupWho.class);
             wIdx = holder.getAdapterPosition();
