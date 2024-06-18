@@ -37,7 +37,7 @@ import biz.riopapa.chatread.models.SGroup;
 
 public class ActivityEditGroup extends AppCompatActivity {
 
-    EditText eGroup, eGroupF, eSkip1, eSkip2, eSkip3, eRepl;
+    EditText eGroup, eGroupM, eGroupF, eSkip1, eSkip2, eSkip3, eRepl;
     TextView tTelKa;
     SwitchCompat sIgnore;
     String mPercent, mStatement, mTalk;
@@ -51,15 +51,16 @@ public class ActivityEditGroup extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_group);
 //        Toolbar toolbar = findViewById(R.id.toolbar_edit_group);
-        if (toolbar == null) {
-            setSupportActionBar(toolbar);
+        if (toolbar != null) {
+//            setSupportActionBar(toolbar);
             toolbar.setTitleTextColor(0xFF44FF33);
             toolbar.setSubtitleTextColor(0xFF000000);
-            toolbar.setSubtitle("SStock Group Edit");
+            toolbar.setSubtitle("Group Edit");
         }
         groupActivity = this;
 
         eGroup = findViewById(R.id.e_group);
+        eGroupM = findViewById(R.id.e_group_match);
         eGroupF = findViewById(R.id.e_group_full);
         tTelKa = findViewById(R.id.e_telka);
         sIgnore = findViewById(R.id.s_ignore);
@@ -69,6 +70,7 @@ public class ActivityEditGroup extends AppCompatActivity {
         eRepl = findViewById(R.id.e_repl);
 
         eGroup.setText(nowSGroup.grp);
+        eGroupM.setText(nowSGroup.grpM);
         eGroupF.setText(nowSGroup.grpF);
         tTelKa.setText(nowSGroup.telKa);
         sIgnore.setChecked(nowSGroup.ignore);
@@ -129,10 +131,10 @@ public class ActivityEditGroup extends AppCompatActivity {
 
         String time = new SimpleDateFormat(".MM/dd HH:mm", Locale.KOREA).format(new Date());
         mStatement = new GoogleStatement().make(nowSGroup,",");
-        String mWho = "\n삭제됨\n" + nowSGroup.grpF + "\n" + time;
+        String mWho = "\n삭제됨\n" + nowSGroup.grpM + "\n" + time;
         String mPercent = "\n삭제됨\n" + new GooglePercent().make(nowSGroup) + "\n" + time;
         sGroups.remove(gIdx);
-        stockGetPut.put( nowSGroup.grp+" Deleted "+ nowSGroup.grpF);
+        stockGetPut.put( nowSGroup.grp+" Deleted "+ nowSGroup.grpM);
         groupsAdapter.notifyDataSetChanged();
         gSheetUpload.uploadGroupInfo(nowSGroup.grp, "timeStamp", mWho, mPercent,
                 time, mStatement, "key12");
@@ -156,6 +158,7 @@ public class ActivityEditGroup extends AppCompatActivity {
             SGroup nGroup =  (SGroup) nowSGroup.clone();
 
             nGroup.grp = eGroup.getText().toString();
+            nGroup.grpM = eGroupM.getText().toString();
             nGroup.grpF = eGroupF.getText().toString();
             nGroup.telKa = tTelKa.getText().toString();
             nGroup.ignore = sIgnore.isChecked();
@@ -178,7 +181,7 @@ public class ActivityEditGroup extends AppCompatActivity {
             mPercent = new GooglePercent().make(nGroup);
             mStatement = new GoogleStatement().make(nGroup,",");
             mTalk = new SimpleDateFormat("yy/MM/dd\nHH:mm", Locale.KOREA).format(new Date());
-            gSheetUpload.uploadGroupInfo(nGroup.grp, GROUP, nGroup.grpF, mPercent,
+            gSheetUpload.uploadGroupInfo(nGroup.grp, GROUP, nGroup.grpM, mPercent,
                     mTalk, mStatement, "key12");
             finish();
         } catch (CloneNotSupportedException e) {
@@ -202,6 +205,7 @@ public class ActivityEditGroup extends AppCompatActivity {
         try {
             SGroup nGroup =  (SGroup) nowSGroup.clone();
             nGroup.grp = eGroup.getText().toString();
+            nGroup.grpM = eGroupM.getText().toString();
             nGroup.grpF = eGroupF.getText().toString();
             nGroup.telKa = tTelKa.getText().toString();
             nGroup.ignore = sIgnore.isChecked();
@@ -220,12 +224,12 @@ public class ActivityEditGroup extends AppCompatActivity {
             stockGetPut.put("group save");
             stockGetPut.get();
 
-            Toast.makeText(mContext,"Saving "+ nGroup.grp+" / " + nGroup.grpF, Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext,"Saving "+ nGroup.grp+" / " + nGroup.grpM, Toast.LENGTH_SHORT).show();
             groupsAdapter.notifyDataSetChanged();
             mPercent = new GooglePercent().make(nGroup);
             mStatement = new GoogleStatement().make(nGroup,",");
             mTalk = new SimpleDateFormat("yy/MM/dd\nHH:mm", Locale.KOREA).format(new Date());
-            gSheetUpload.uploadGroupInfo(nGroup.grp, GROUP, nGroup.grpF, mPercent,
+            gSheetUpload.uploadGroupInfo(nGroup.grp, GROUP, nGroup.grpM, mPercent,
                     mTalk, mStatement, "key12");
             finish();
         } catch (CloneNotSupportedException e) {

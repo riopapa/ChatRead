@@ -30,7 +30,7 @@ public class Utils {
                 excludeName(traceClassName(traces[3].getClassName()))+"> "+traces[3].getMethodName() +
                 "#" + traces[3].getLineNumber() + " {"+ tag + "} " + text;
         Log.w(tag, logText);
-        fileIO.append2Today("zLog"+toDay+tag+".txt", logText);
+        fileIO.append2Today("zLog_"+tag+".txt", logText);
     }
 
     public void logE(String tag, String text) {
@@ -40,7 +40,7 @@ public class Utils {
                 excludeName(traceClassName(traces[3].getClassName()))+"> "+traces[3].getMethodName() +
                 "#" + traces[3].getLineNumber() + " {"+ tag + "} " + text;
         Log.e("<" + tag + ">" , logText);
-        fileIO.append2File(new File(packageDirectory, "zchatread.txt"), tag, logText);
+        fileIO.append2Today("errLog_"+tag+".txt", logText);
 //        sounds.beepOnce(MainActivity.soundType.ERR.ordinal());   // error sound
     }
 

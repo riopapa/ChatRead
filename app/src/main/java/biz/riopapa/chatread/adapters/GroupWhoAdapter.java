@@ -29,13 +29,14 @@ public class GroupWhoAdapter extends RecyclerView.Adapter<GroupWhoAdapter.ViewHo
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tWho, tWhoF, tInfo;
+        TextView tWho, tWhoM, tWhoF, tInfo;
         View tLine;
 
         ViewHolder(final View itemView) {
             super(itemView);
             tLine = itemView.findViewById(R.id.line_group_who);
             tWho = itemView.findViewById(R.id.grp_who);
+            tWhoM = itemView.findViewById(R.id.grp_who_match);
             tWhoF = itemView.findViewById(R.id.grp_who_full);
             tInfo = itemView.findViewById(R.id.who_info);
         }
@@ -53,6 +54,7 @@ public class GroupWhoAdapter extends RecyclerView.Adapter<GroupWhoAdapter.ViewHo
 
         SWho sWho = nowSGroup.whos.get(position);
         holder.tWho.setText(sWho.who);
+        holder.tWhoM.setText(sWho.whoM);
         holder.tWhoF.setText(sWho.whoF);
         String info = "";
         for (SStock s : sWho.stocks) {
@@ -61,11 +63,10 @@ public class GroupWhoAdapter extends RecyclerView.Adapter<GroupWhoAdapter.ViewHo
             info += s.key1 + "/" + s.key2 + ", " + s.prv + "/" + s.nxt + ", " + s.count;
         }
         holder.tInfo.setText(info);
-
         holder.tLine.setOnClickListener(v -> {
-            Intent intent = new Intent(mContext, ActivityEditGroupWho.class);
             wIdx = holder.getAdapterPosition();
             nowSWho = nowSGroup.whos.get(wIdx);
+            Intent intent = new Intent(mContext, ActivityEditGroupWho.class);
             mMainActivity.startActivity(intent);
         });
     }

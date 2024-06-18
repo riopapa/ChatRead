@@ -55,7 +55,7 @@ public class StockInform {
             String won = "";
             // 매수가 가 있으면 금액 말하기
             String [] ss = shortText.split("매수가");
-            if (ss.length > 0) {
+            if (ss.length > 1) {
                 int p = ss[1].indexOf("원");
                 won = (p > 0) ? ss[1].substring(2,p) :ss[1].substring(0,7);
             }

@@ -45,8 +45,9 @@ public class ActivityEditApp extends AppCompatActivity {
         setContentView(R.layout.activity_edit_app);
 //        Toolbar toolbar = findViewById(R.id.toolbar_edit_app);
 //        setSupportActionBar(toolbar);
-        toolbar.setTitleTextColor(0xFFFFFF00);
-        toolbar.setSubtitleTextColor(0xFF000000);
+        toolbar.setTitleTextColor(0xFFFFDD00);
+        toolbar.setTitle("App EDIT");
+        toolbar.setSubtitleTextColor(0xFF667788);
         toolbar.setSubtitle("App Edit");
 
         eFullName = findViewById(R.id.e_app_full_name);

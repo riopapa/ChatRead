@@ -20,10 +20,6 @@ import static biz.riopapa.chatread.MainActivity.mAudioManager;
 import static biz.riopapa.chatread.MainActivity.notificationBar;
 import static biz.riopapa.chatread.MainActivity.nowSGroup;
 import static biz.riopapa.chatread.MainActivity.nowSWho;
-import static biz.riopapa.chatread.MainActivity.replGroup;
-import static biz.riopapa.chatread.MainActivity.replGroupCnt;
-import static biz.riopapa.chatread.MainActivity.replLong;
-import static biz.riopapa.chatread.MainActivity.replShort;
 import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.sbnApp;
 import static biz.riopapa.chatread.MainActivity.sbnAppIdx;
@@ -113,7 +109,8 @@ public class NotificationListener extends NotificationListenerService {
                 if (sbnGroup.isEmpty()) {  // no groupNames
                     if (sbnWho.isEmpty())  // nothing
                         return;
-                    if (IgnoreThis.contains(sbnWho, ktWhoIgnores))
+                    if (sbnWho.charAt(sbnWho.length() - 1) == '#' ||
+                        IgnoreThis.contains(sbnWho, ktWhoIgnores))
                         return;
                     sbnText = strUtil.text2OneLine(sbnText);
                     if (kvKakao.isDup(sbnWho, sbnText))
@@ -127,7 +124,9 @@ public class NotificationListener extends NotificationListenerService {
                     sounds.speakKakao(" 카톡 왔음 " + sbnWho + " 님이 " +
                             strUtil.replaceKKHH(strUtil.makeEtc(sbnText, isWorking()? 20 :150)));
                 } else {    // with group name
-                    if (IgnoreThis.contains(sbnGroup, ktGroupIgnores))
+                    if (sbnGroup.charAt(sbnGroup.length() - 1) == '#' ||
+                        sbnWho.charAt(sbnWho.length() - 1) == '#' ||
+                        IgnoreThis.contains(sbnGroup, ktGroupIgnores))
                         return;
                     else if (!sbnWho.isEmpty() && IgnoreThis.contains(sbnWho, ktWhoIgnores))
                         return;
@@ -259,7 +258,7 @@ public class NotificationListener extends NotificationListenerService {
         logUpdate.addWork(head, sbnText);
         notificationBar.update(head, sbnText, true);
         String say = head + ", " + sbnText;
-        sounds.speakAfterBeep(strUtil.makeEtc(say, 100));
+        sounds.speakAfterBeep(strUtil.makeEtc(say, 50));
 
     }
 
@@ -282,7 +281,7 @@ public class NotificationListener extends NotificationListenerService {
                     strUtil.replaceKKHH(strUtil.makeEtc(sbnText, isWorking() ? 20 : 150)));
             return;
         }
-        if (sbnText.length() < 15)  // for better performance, with logically not true
+        if (sbnText.length() < 20)  // for better performance, with logically not true
             return;
        if (timeBegin == 0)
             new ReadyToday();
@@ -304,32 +303,17 @@ public class NotificationListener extends NotificationListenerService {
         // {텔투봄} [🌸투자의 봄(春)🌸] 🌸투자의 봄(春)🌸: 참여하실 분들은
 
         sbnText = strUtil.text2OneLine(sbnText);
-
-        utils.logW(sbnGroup, "["+sbnWho + "] " + sbnText);
-        int p = sbnWho.indexOf(":");
-        if (p > 0 && p < 30) {  // 텔소나, 텔리치
-            sbnWho = sbnWho.substring(p+1).trim();
-        } else {
-            p = sbnText.indexOf(":");
-            if (p > 0 && p < 60) {  // 텔투봄, 텔천하
-                sbnWho = sbnText.substring(0, p).trim();
-                sbnText = sbnText.substring(p + 1).trim();
-            } else {
-                utils.logW(sbnGroup, "??" + sbnWho + "?? " + sbnText);
-                return;
-            }
-        }
-
+        utils.logW(sbnGroup, "{["+sbnWho + "} " + sbnText);
         nowSGroup = sGroups.get(grpIdx);
         if (sbnText.contains(nowSGroup.skip1) || sbnText.contains(nowSGroup.skip2))
             return;
         for (int i = 0; i < nowSGroup.whos.size(); i++) {
-            if (sbnWho.contains(nowSGroup.whos.get(i).whoF)) {
+            if (sbnWho.contains(nowSGroup.whos.get(i).whoM)) {
                 nowSWho = nowSGroup.whos.get(i);
                 // if stock Group then check skip keywords and then continue;
                 sbnWho = nowSWho.who;        // replace with short who
                 sbnText = makeShort(sbnText, nowSGroup);
-                utils.logW(sbnGroup, sbnWho + ">> " + sbnText);
+                utils.logW(sbnGroup, "check "+sbnWho + ">> " + sbnText);
                 wIdx = i;
                 stockCheck.check(nowSWho.stocks);
                 break;
@@ -344,7 +328,7 @@ public class NotificationListener extends NotificationListenerService {
         // 텔투봄 ^ 투자의 봄
         // 텔오늘 ^ 오늘의단타 공식채널
 
-        if (sbnText.length() < 15)  // for better performance, with logically not true
+        if (sbnText.length() < 20)  // for better performance, with logically not true
             return;
 
         if (hasIgnoreStr(teleApp))
@@ -355,6 +339,7 @@ public class NotificationListener extends NotificationListenerService {
             if (sbnGroup.contains("새로운 메시지"))
                 sbnGroup = "_새_";
             head = "[텔레 <" + sbnGroup + "><" + sbnWho + ">]";
+            sbnText = strUtil.text2OneLine(sbnText);
             logUpdate.addLog(head, sbnText);
             notificationBar.update(sbnGroup + "|" + sbnWho, sbnText, true);
             sbnText = head + ", " + sbnText;
@@ -367,8 +352,6 @@ public class NotificationListener extends NotificationListenerService {
         if (nowTime < timeBegin || nowTime > timeEnd)
             return;
         sbnGroup = sGroups.get(grpIdx).grp;  // replace with short group
-        if (kvTelegram.isDup(sbnGroup, sbnText))
-            return;
         // 'Ai 데일리 봇' 은 group 12메시 있음 : who 형태임
         // '투자의 봄' 은 group 없이 who 만 존재
         // 어떤 경우는 이름이 text 맨 앞에
@@ -392,17 +375,19 @@ public class NotificationListener extends NotificationListenerService {
                 sbnWho = sbnText.substring(0, p).trim();
                 sbnText = sbnText.substring(p + 1).trim();
             } else {
-                utils.logW(sbnGroup, "??" + sbnWho + "?? " + sbnText);
+//                utils.logW(sbnGroup, "??" + sbnWho + "?? " + sbnText);
                 return;
             }
         }
+        if (kvTelegram.isDup(sbnGroup, sbnText))
+            return;
 
         nowSGroup = sGroups.get(grpIdx);
         if (sbnText.contains(nowSGroup.skip1) ||
                 sbnText.contains(nowSGroup.skip2))
             return;
         for (int i = 0; i < nowSGroup.whos.size(); i++) {
-            if (sbnWho.contains(nowSGroup.whos.get(i).whoF)) {
+            if (sbnWho.contains(nowSGroup.whos.get(i).whoM)) {
                 nowSWho = nowSGroup.whos.get(i);
                 // if stock Group then check skip keywords and then continue;
                 sbnWho = nowSWho.who;        // replace with short who
@@ -419,7 +404,8 @@ public class NotificationListener extends NotificationListenerService {
         if (sbnWho.replaceAll(ctx.getString(R.string.regex_number_only), "").length() < 6 &&
                 !sbnText.contains("스마트폰 배우고"))
             return;
-        if (IgnoreThis.contains(sbnWho, smsWhoIgnores) || IgnoreThis.contains(sbnText, smsTxtIgnores))
+        if (sbnWho.charAt(sbnWho.length() - 1) == '#' ||
+            IgnoreThis.contains(sbnWho, smsWhoIgnores) || IgnoreThis.contains(sbnText, smsTxtIgnores))
             return;
         sbnText = strUtil.text2OneLine(sbnText);
         if (kvSMS.isDup(sbnWho, sbnText))
@@ -446,7 +432,7 @@ public class NotificationListener extends NotificationListenerService {
                 nowSGroup = sGroups.get(grpIdx);
                 gIdx = grpIdx;
                 for (int i = 0; i < nowSGroup.whos.size(); i++) {
-                    if (sbnWho.contains(nowSGroup.whos.get(i).whoF)) {
+                    if (sbnWho.contains(nowSGroup.whos.get(i).whoM)) {
                         nowSWho = nowSGroup.whos.get(i);
                         // if stock Group then check skip keywords and then continue;
                         sbnWho = nowSWho.who;        // replace with short who
@@ -574,25 +560,21 @@ public class NotificationListener extends NotificationListenerService {
         Bundle extras = mNotification.extras;
         // get eText //
         try {
-            sbnText = extras.getString(Notification.EXTRA_TEXT);
-            if (sbnText == null || sbnText.isEmpty() || sbnText.equals("null"))
-                return true;
+            sbnText = extras.getString(Notification.EXTRA_TEXT,"");
         } catch (Exception e) {
+            utils.logW("sbnText", "sbnText Exception "+ sbnAppName +" "+sbnText);
             return true;
         }
+        if (sbnText == null || sbnText.isEmpty())
+            return true;
+
         // get eWho //
         try {
-            sbnWho = DUMMY + extras.getString(Notification.EXTRA_TITLE);
-            if (sbnWho.equals("null"))
-                sbnWho = "";
+            sbnWho = extras.getString(Notification.EXTRA_TITLE,"");
         } catch (Exception e) {
             new Utils().logW("sbn WHO Error", "no SWho "+ sbnAppName +" "+sbnText);
             return true;
         }
-//        if (apps == null || appIgnores == null) {
-//            new AppsTable().get();
-//            Log.e("reloading", "apps is null new size=" + apps.size());
-//        }
 
         switch (sbnAppName) {
 

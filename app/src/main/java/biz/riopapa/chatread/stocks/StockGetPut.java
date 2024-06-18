@@ -55,7 +55,7 @@ public class StockGetPut {
 
     public void get() {
         SharedPreferences shareGroup = mContext.getSharedPreferences(STOCK_TABLE, MODE_PRIVATE);
-        String json = shareGroup.getString(STOCK_TABLE, "");
+        String json = shareGroup.getString(STOCK_TABLE, "");    // .xml file
         Gson gson = new Gson();
         Type type = new TypeToken<List<SGroup>>() {
         }.getType();
@@ -73,7 +73,7 @@ public class StockGetPut {
         }
         ArrayList<SGroup> list;
         Gson gson = new Gson();
-        String json = fileIO.readFile(tableFolder, STOCK_TABLE +".json");
+        String json = fileIO.readFile(tableFolder, STOCK_TABLE +".xml");
         if (json.isEmpty()) {
             list = new ArrayList<>();
         } else {
@@ -91,17 +91,6 @@ public class StockGetPut {
             telCnt += grp.telKa.equals("t") ? 1 : 0;
             kaCnt += grp.telKa.equals("k") ? 1 : 0;
             smsCnt += grp.telKa.equals("s") ? 1 : 0;
-//            for (int w = 0; w < grp.whos.size(); w++) {
-//                SWho SWho = grp.whos.get(w);
-//                for (int s = 0; s < SWho.stocks.size(); s++) {
-//                    SStock SStock = SWho.stocks.get(s);
-//                    SStock.idx = idx;
-//                    SWho.stocks.set(s, SStock);
-//                    idx++;
-//                }
-//                grp.whos.set(w, SWho);
-//            }
-//            sGroups.set(g, grp);
         }
         stockTelGroupNameTbl = new String[telCnt];
         stockTelGroupNameIdx = new int[telCnt];
@@ -113,18 +102,18 @@ public class StockGetPut {
         for (int g = 0; g < sGroups.size(); g++) {
             switch (sGroups.get(g).telKa) {
                 case "t":
-                    stockTelGroupNameTbl[t] = sGroups.get(g).grpF;
+                    stockTelGroupNameTbl[t] = sGroups.get(g).grpM;
                     stockTelGroupNameIdx[t] = g;
                     t++;
                     break;
                 case "k":
-                    stockKaGroupNameTbl[k] = sGroups.get(g).grpF;
+                    stockKaGroupNameTbl[k] = sGroups.get(g).grpM;
                     stockKaGroupNameIdx[k] = g;
                     k++;
                     break;
                 case "s":
-                    stockKaGroupNameTbl[s] = sGroups.get(g).grpF;
-                    stockKaGroupNameIdx[s] = g;
+                    stockSMSGroupNameTbl[s] = sGroups.get(g).grpM;
+                    stockSMSGroupNameIdx[s] = g;
                     k++;
                     break;
             }
@@ -145,7 +134,7 @@ public class StockGetPut {
             new ReadyToday();
         Gson gson2 = new GsonBuilder().setPrettyPrinting().create();
         String prettyJson = gson2.toJson(sGroups);
-        fileIO.writeFile(tableFolder, STOCK_TABLE +".json", prettyJson);
+        fileIO.writeFile(tableFolder, STOCK_TABLE +".xml", prettyJson);
     }
 
     void sort() {

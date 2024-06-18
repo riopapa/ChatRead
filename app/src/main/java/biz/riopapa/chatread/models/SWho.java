@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 public class SWho implements Cloneable{
     public String who;  // who short name
+    public String whoM; // who match Name
     public String whoF; // who full name
     public ArrayList<SStock> stocks;
     @NonNull

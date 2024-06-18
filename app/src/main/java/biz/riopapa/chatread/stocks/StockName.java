@@ -3,7 +3,7 @@ package biz.riopapa.chatread.stocks;
 public class StockName {
 
     // returns stockname, and dot added iText
-    final String shorten = "[\\d,%:|#+\\[\\]()/]";
+    final String shorten = "[\\d,%:|#+-\\[\\]()/]";
     public String[] get(String prev, String next, String iText) {
         String str = iText;
         int p1 = iText.indexOf(prev);

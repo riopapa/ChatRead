@@ -6,7 +6,8 @@ import java.util.ArrayList;
 
 public class SGroup implements Cloneable {
     public String grp; // group Short name
-    public String grpF; // group Full name
+    public String grpM; // group Match Name
+    public String grpF; // group full name
     public String skip1, skip2, skip3;  // if contains this string then skip this group
     public String telKa; // 't' for telegram, 'k' for kakaoTalk;
     public boolean ignore;

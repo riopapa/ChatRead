@@ -4,11 +4,11 @@ import static biz.riopapa.chatread.MainActivity.gIdx;
 import static biz.riopapa.chatread.MainActivity.gSheetUpload;
 import static biz.riopapa.chatread.MainActivity.groupWhoAdapter;
 import static biz.riopapa.chatread.MainActivity.groupWhoStockAdapter;
-import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.nowSGroup;
 import static biz.riopapa.chatread.MainActivity.nowSWho;
 import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.stockGetPut;
+import static biz.riopapa.chatread.MainActivity.toolbar;
 import static biz.riopapa.chatread.MainActivity.wIdx;
 
 import android.app.Activity;
@@ -21,7 +21,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
@@ -39,9 +38,9 @@ import biz.riopapa.chatread.models.SWho;
 
 public class ActivityEditGroupWho extends AppCompatActivity {
 
-    TextView tGroup, tGroupF, tSkip1, tSkip2, tSkip3;
+    TextView tGroup, tGroupM, tGroupF, tSkip1, tSkip2, tSkip3;
     TextView tTelKa;
-    EditText eWho, eWhoF;
+    EditText eWho, eWhoM, eWhoF;
     SwitchCompat sIgnore;
     String mPercent, mStatement, mTalk;
     View deleteMenu;
@@ -59,12 +58,14 @@ public class ActivityEditGroupWho extends AppCompatActivity {
 //            setSupportActionBar(toolbar);
 //            toolbar.setTitleTextColor(0xFF44FF33);
 //            toolbar.setSubtitleTextColor(0xFF000000);
-//            toolbar.setSubtitle("SStock Group Edit");
+//            toolbar.setTitle("Group Who");
+//            toolbar.setSubtitle("Who Edit");
 //        }
         whoActivity = this;
         whoContext = this;
 
         tGroup = findViewById(R.id.who_group);
+        tGroupM = findViewById(R.id.who_group_match);
         tGroupF = findViewById(R.id.who_group_full);
         tTelKa = findViewById(R.id.who_telka);
         sIgnore = findViewById(R.id.who_ignore);
@@ -72,16 +73,19 @@ public class ActivityEditGroupWho extends AppCompatActivity {
         tSkip2 = findViewById(R.id.who_skip2);
         tSkip3 = findViewById(R.id.who_skip3);
         eWho = findViewById(R.id.who_who);
+        eWhoM = findViewById(R.id.who_who_match);
         eWhoF = findViewById(R.id.who_who_full);
 
         tGroup.setText(nowSGroup.grp);
+        tGroupM.setText(nowSGroup.grpM);
         tGroupF.setText(nowSGroup.grpF);
-        tTelKa.setText(nowSGroup.telKa.toString());;
+        tTelKa.setText(nowSGroup.telKa);;
         sIgnore.setChecked(nowSGroup.ignore);
         tSkip1.setText(nowSGroup.skip1);
         tSkip2.setText(nowSGroup.skip2);
         tSkip3.setText(nowSGroup.skip3);
         eWho.setText(nowSWho.who);
+        eWhoM.setText(nowSWho.whoM);
         eWhoF.setText(nowSWho.whoF);
 
         setRecycler();
@@ -117,7 +121,7 @@ public class ActivityEditGroupWho extends AppCompatActivity {
 
         String time = new SimpleDateFormat(".MM/dd HH:mm", Locale.KOREA).format(new Date());
         mStatement = new GoogleStatement().make(nowSGroup,",");
-        String mWho = "\n삭제됨\n" + nowSGroup.grpF + "\n" + time;
+        String mWho = "\n삭제됨\n" + nowSGroup.grpM + "\n" + time;
         String mPercent = "\n삭제됨\n" + new GooglePercent().make(nowSGroup) + "\n" + time;
         nowSGroup.whos.remove(wIdx);
         sGroups.set(gIdx, nowSGroup);
@@ -145,10 +149,11 @@ private void duplicateGroupWho() {
         try {
             SWho nWho =  (SWho) nowSWho.clone();
             nWho.who = eWho.getText().toString();
+            nWho.whoM = eWhoM.getText().toString();
             nWho.whoF = eWhoF.getText().toString();
             nowSGroup.whos.add(wIdx, nWho);
             sGroups.set(gIdx, nowSGroup);
-            stockGetPut.put("Dup who "+ nWho.who+" / " + nWho.whoF);
+            stockGetPut.put("Dup who "+ nWho.who+" / " + nWho.whoM);
             stockGetPut.get();
             groupWhoAdapter.notifyDataSetChanged();
             finish();
@@ -161,17 +166,18 @@ private void duplicateGroupWho() {
         try {
             SWho nWho = (SWho) nowSWho.clone();
             nWho.who = eWho.getText().toString();
+            nWho.whoM = eWhoM.getText().toString();
             nWho.whoF = eWhoF.getText().toString();
             nowSGroup.whos.set(wIdx, nWho);
             sGroups.set(gIdx, nowSGroup);
-            stockGetPut.put("Save Who "+ nWho.who+" / " + nWho.whoF);
+            stockGetPut.put("Save Who "+ nWho.who+" / " + nWho.whoM);
             stockGetPut.get();
             groupWhoAdapter.notifyDataSetChanged();
 
             mPercent = new GooglePercent().make(nowSGroup);
             mStatement = new GoogleStatement().make(nowSGroup,",");
             mTalk = new SimpleDateFormat("yy/MM/dd\nHH:mm", Locale.KOREA).format(new Date());
-            gSheetUpload.uploadGroupInfo(nowSGroup.grp, GROUP, nowSGroup.grpF, mPercent,
+            gSheetUpload.uploadGroupInfo(nowSGroup.grp, GROUP, nowSGroup.grpM, mPercent,
                     mTalk, mStatement, "key12");
             finish();
         } catch (CloneNotSupportedException e) {

@@ -4,8 +4,6 @@ import static biz.riopapa.chatread.MainActivity.gIdx;
 import static biz.riopapa.chatread.MainActivity.gSheetUpload;
 import static biz.riopapa.chatread.MainActivity.groupWhoAdapter;
 import static biz.riopapa.chatread.MainActivity.groupWhoStockAdapter;
-import static biz.riopapa.chatread.MainActivity.mContext;
-import static biz.riopapa.chatread.MainActivity.mMainActivity;
 import static biz.riopapa.chatread.MainActivity.nowSGroup;
 import static biz.riopapa.chatread.MainActivity.nowSStock;
 import static biz.riopapa.chatread.MainActivity.nowSWho;
@@ -13,14 +11,11 @@ import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.sIdx;
 import static biz.riopapa.chatread.MainActivity.stockGetPut;
 import static biz.riopapa.chatread.MainActivity.wIdx;
-import static biz.riopapa.chatread.edit.ActivityEditGroupWho.whoActivity;
 import static biz.riopapa.chatread.edit.ActivityEditGroupWho.whoContext;
 
-import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -37,6 +32,7 @@ import biz.riopapa.chatread.func.GooglePercent;
 import biz.riopapa.chatread.func.GoogleStatement;
 import biz.riopapa.chatread.models.SGroup;
 import biz.riopapa.chatread.models.SStock;
+import biz.riopapa.chatread.models.SWho;
 
 public class GroupWhoStockAdapter extends RecyclerView.Adapter<GroupWhoStockAdapter.ViewHolder> {
 
@@ -123,8 +119,8 @@ public class GroupWhoStockAdapter extends RecyclerView.Adapter<GroupWhoStockAdap
                     nStock.count = Integer.parseInt(eCount.getText().toString());
                     nStock.skip1 = eSkip.getText().toString();
                     nowSWho.stocks.set(sIdx, nStock);
-                    nowSGroup.whos.set(wIdx, nowSWho);
-                    sGroups.set(gIdx, nowSGroup);
+                    nowSGroup.whos.set(wIdx, (SWho) nowSWho.clone());
+                    sGroups.set(gIdx, (SGroup) nowSGroup.clone());
                     stockGetPut.put("stock");
                     stockGetPut.get();
                     groupWhoStockAdapter.notifyDataSetChanged();
@@ -146,8 +142,8 @@ public class GroupWhoStockAdapter extends RecyclerView.Adapter<GroupWhoStockAdap
                     nStock.count = Integer.parseInt(eCount.getText().toString());
                     nStock.skip1 = eSkip.getText().toString();
                     nowSWho.stocks.add(sIdx, nStock);
-                    nowSGroup.whos.set(wIdx, nowSWho);
-                    sGroups.set(gIdx, nowSGroup);
+                    nowSGroup.whos.set(wIdx, (SWho) nowSWho.clone());
+                    sGroups.set(gIdx, (SGroup) nowSGroup.clone());
                     stockGetPut.put("stock");
                     stockGetPut.get();
                     groupWhoStockAdapter.notifyDataSetChanged();
@@ -167,7 +163,7 @@ public class GroupWhoStockAdapter extends RecyclerView.Adapter<GroupWhoStockAdap
                     groupWhoStockAdapter.notifyDataSetChanged();
                     nowSGroup.whos.remove(wIdx);
                     sGroups.set(gIdx, nowSGroup);
-                    stockGetPut.put( " Deleted "+ nowSWho.whoF);
+                    stockGetPut.put( " Deleted "+ nowSWho.whoM);
                     stockGetPut.get();
                     groupWhoAdapter.notifyDataSetChanged();
                     upload2Google();
@@ -183,7 +179,7 @@ public class GroupWhoStockAdapter extends RecyclerView.Adapter<GroupWhoStockAdap
         String mPercent = new GooglePercent().make(nowSGroup);
         String mStatement = new GoogleStatement().make(nowSGroup,",");
         String mTalk = new SimpleDateFormat("yy/MM/dd\nHH:mm", Locale.KOREA).format(new Date());
-        gSheetUpload.uploadGroupInfo(nowSGroup.grp, GROUP, nowSGroup.grpF, mPercent,
+        gSheetUpload.uploadGroupInfo(nowSGroup.grp, GROUP, nowSGroup.grpM, mPercent,
                 mTalk, mStatement, "key12");
 
     }

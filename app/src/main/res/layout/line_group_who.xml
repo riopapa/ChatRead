@@ -26,6 +26,18 @@
             />
 
         <TextView
+            android:id="@+id/grp_who_match"
+            android:layout_width="0dp"
+            android:layout_weight="6"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textColor="@color/textFore"
+            android:textSize="@dimen/app_line_font_size"
+            android:text="Who Match"
+            android:maxLines="1"
+            />
+
+        <TextView
             android:id="@+id/grp_who_full"
             android:layout_width="0dp"
             android:layout_weight="12"

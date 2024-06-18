@@ -1,7 +1,5 @@
 package biz.riopapa.chatread.func;
 
-import static biz.riopapa.chatread.MainActivity.nowSGroup;
-
 import biz.riopapa.chatread.models.SGroup;
 import biz.riopapa.chatread.models.SStock;
 import biz.riopapa.chatread.models.SWho;
@@ -14,7 +12,7 @@ public class GoogleStatement {
         for (SWho who : nGroup.whos) {
             if (sb.length() > 0)
                 sb.append("\n");
-            sb.append(who.who).append(" : ").append(who.whoF);
+            sb.append(who.who).append(" : ").append(who.whoM);
             for (SStock stock : who.stocks) {
                 sb.append("\n   Key(").append(stock.key1).append(", ").append(stock.key2).append(")");
                 sb.append(",Talk(").append(stock.talk).append(")");

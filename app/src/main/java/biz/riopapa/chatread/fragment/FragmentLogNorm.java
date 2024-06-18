@@ -71,9 +71,6 @@ public class FragmentLogNorm extends Fragment {
         ivClear = thisView.findViewById(R.id.clear_log);
         ivVolume = thisView.findViewById(R.id.volumes);
 
-        ss = new LogSpan().make(logQue, this.getContext());
-        etTable.setText(ss);
-
         ivNext.setVisibility(View.GONE);
 
         ivFind.setOnClickListener(v -> {
@@ -88,10 +85,13 @@ public class FragmentLogNorm extends Fragment {
             new SetFocused(etKeyword);
         });
         scrollView = thisView.findViewById(R.id.scroll_log);
-        new Handler(Looper.getMainLooper()).post(() -> scrollView.smoothScrollBy(0, 90000));
-        super.onResume();
-
+        new Handler(Looper.getMainLooper()).post(() -> {
+                ss = new LogSpan().make(logQue, this.getContext());
+                etTable.setText(ss);
+                scrollView.smoothScrollBy(0, 90000);
+        });
         ivVolume.setImageBitmap(VolumeIcon.draw());
+        super.onResume();
         return thisView;
     }
 

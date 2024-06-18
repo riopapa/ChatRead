@@ -8,7 +8,6 @@ import static biz.riopapa.chatread.MainActivity.replGroupCnt;
 import static biz.riopapa.chatread.MainActivity.replLong;
 import static biz.riopapa.chatread.MainActivity.replShort;
 import static biz.riopapa.chatread.MainActivity.sGroups;
-import static biz.riopapa.chatread.MainActivity.sbnGroup;
 import static biz.riopapa.chatread.MainActivity.strUtil;
 import static biz.riopapa.chatread.MainActivity.tableListFile;
 
@@ -59,7 +58,7 @@ public class SelectChats {
         }
         kalog.grpF = chatHeader.substring(0,p1);
         for (int i = 1; i < sGroups.size(); i++) {
-            if (kalog.grpF.contains(sGroups.get(i).grpF)) {
+            if (kalog.grpF.contains(sGroups.get(i).grpM)) {
                 kalog.grp = sGroups.get(i).grp;
                 kalog.idx = i;
                 sGroup = sGroups.get(i);
@@ -73,7 +72,7 @@ public class SelectChats {
 
         StringBuilder headStr = new StringBuilder();
 
-        headStr.append("그룹 : ").append(sGroup.grp).append(" : ").append(sGroup.grpF).append("\n");
+        headStr.append("그룹 : ").append(sGroup.grp).append(" : ").append(sGroup.grpM).append("\n");
         headStr.append(new GoogleStatement().make(sGroup,"\n    "));
         headStr.append("\nstrReplaces ---\n\n");
         for (int i = 0; i < replGroupCnt; i++) {
@@ -263,7 +262,7 @@ public class SelectChats {
         for (int w = 0; w < sGroup.whos.size(); w++) {
             sWho = sGroup.whos.get(w);
             aWhos.add(sWho.who.trim());
-            aWhoFs.add(sWho.whoF.trim());
+            aWhoFs.add(sWho.whoM.trim());
 
             for (int s = 0; s < sWho.stocks.size(); s++) {
                 aKey1.add(sWho.stocks.get(s).key1);

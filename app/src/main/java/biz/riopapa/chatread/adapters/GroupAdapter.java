@@ -35,13 +35,14 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tGroup, tGroupF, tSkip1, tSkip2, tSkip3, tIgnore, tTelegram, tInfo;
+        TextView tGroup, tGroupM, tGroupF, tSkip1, tSkip2, tSkip3, tIgnore, tTelegram, tInfo;
         View tLine;
 
         ViewHolder(final View itemView) {
             super(itemView);
             tLine = itemView.findViewById(R.id.one_line_group);
             tGroup = itemView.findViewById(R.id.one_group);
+            tGroupM = itemView.findViewById(R.id.one_group_match);
             tGroupF = itemView.findViewById(R.id.one_group_full);
             tSkip1  = itemView.findViewById(R.id.one_group_skip1);
             tSkip2  = itemView.findViewById(R.id.one_group_skip2);
@@ -64,6 +65,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
 
         SGroup sg = sGroups.get(position);
         holder.tGroup.setText(sg.grp);
+        holder.tGroupM.setText(sg.grpM);
         holder.tGroupF.setText(sg.grpF);
         String info = "";
 
@@ -71,7 +73,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
             for (SStock s : w.stocks) {
                 if (!info.isEmpty())
                     info += "\n";
-                info += w.whoF + " : " + s.key1 + "/" + s.key2
+                info += w.whoM + " : " + s.key1 + "/" + s.key2
                         + ", " + s.prv + "/" + s.nxt + ", " + s.count;
             }
         }
@@ -81,7 +83,6 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
         holder.tTelegram.setText(sg.telKa);
         holder.tIgnore.setText((sg.ignore) ? "무시" : "  ");
         holder.tInfo.setText(info);
-
         holder.tLine.setBackgroundColor(mContext.getResources().getColor(
                 (gIdx == position)? R.color.line_now : R.color.line_default));
 
@@ -92,9 +93,6 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
             mMainActivity.startActivity(intent);
             Log.e("onBindViewHolder"," group returned");
         });
-
-
-
     }
 
 }
