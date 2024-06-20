@@ -119,8 +119,11 @@ public class GroupWhoStockAdapter extends RecyclerView.Adapter<GroupWhoStockAdap
                     nStock.count = Integer.parseInt(eCount.getText().toString());
                     nStock.skip1 = eSkip.getText().toString();
                     nowSWho.stocks.set(sIdx, nStock);
+                    nowSStock = nowSWho.stocks.get(sIdx);
                     nowSGroup.whos.set(wIdx, (SWho) nowSWho.clone());
+                    nowSWho = nowSGroup.whos.get(wIdx);
                     sGroups.set(gIdx, (SGroup) nowSGroup.clone());
+                    nowSGroup = sGroups.get(gIdx);
                     stockGetPut.put("stock");
                     stockGetPut.get();
                     groupWhoStockAdapter.notifyDataSetChanged();
@@ -142,9 +145,12 @@ public class GroupWhoStockAdapter extends RecyclerView.Adapter<GroupWhoStockAdap
                     nStock.count = Integer.parseInt(eCount.getText().toString());
                     nStock.skip1 = eSkip.getText().toString();
                     nowSWho.stocks.add(sIdx, nStock);
+                    nowSStock = nowSWho.stocks.get(sIdx);
                     nowSGroup.whos.set(wIdx, (SWho) nowSWho.clone());
+                    nowSWho = nowSGroup.whos.get(wIdx);
                     sGroups.set(gIdx, (SGroup) nowSGroup.clone());
-                    stockGetPut.put("stock");
+                    nowSGroup = sGroups.get(gIdx);
+                    stockGetPut.put("stock dup "+nowSGroup.grpF +" "+ nowSWho.whoF+ " / " + nStock.key1);
                     stockGetPut.get();
                     groupWhoStockAdapter.notifyDataSetChanged();
                     upload2Google();
@@ -162,8 +168,9 @@ public class GroupWhoStockAdapter extends RecyclerView.Adapter<GroupWhoStockAdap
                     stockGetPut.get();
                     groupWhoStockAdapter.notifyDataSetChanged();
                     nowSGroup.whos.remove(wIdx);
+                    wIdx = 0;
                     sGroups.set(gIdx, nowSGroup);
-                    stockGetPut.put( " Deleted "+ nowSWho.whoM);
+                    stockGetPut.put("stock del "+nowSGroup.grpF +" "+ nowSWho.whoF);
                     stockGetPut.get();
                     groupWhoAdapter.notifyDataSetChanged();
                     upload2Google();
@@ -171,6 +178,7 @@ public class GroupWhoStockAdapter extends RecyclerView.Adapter<GroupWhoStockAdap
                 }
             })
             ;
+
         builder.create().show();
     }
 

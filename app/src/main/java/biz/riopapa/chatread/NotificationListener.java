@@ -249,10 +249,6 @@ public class NotificationListener extends NotificationListenerService {
                     sbnWho = sbnWho.replace(sbnApp.replFrom[i], sbnApp.replTo[i]);
             }
         }
-//        if (sbnApp.addWho) {
-//            sbnText = sbnWho + "※" + sbnText;
-//            sbnWho = "";
-//        }
 
         head = sbnAppNick + "." + sbnWho;
         logUpdate.addWork(head, sbnText);

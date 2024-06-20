@@ -84,10 +84,10 @@ public class FragmentLogNorm extends Fragment {
         ivClear.setOnClickListener(v -> {
             new SetFocused(etKeyword);
         });
+        ss = new LogSpan().make(logQue, this.getContext());
+        etTable.setText(ss);
         scrollView = thisView.findViewById(R.id.scroll_log);
         new Handler(Looper.getMainLooper()).post(() -> {
-                ss = new LogSpan().make(logQue, this.getContext());
-                etTable.setText(ss);
                 scrollView.smoothScrollBy(0, 90000);
         });
         ivVolume.setImageBitmap(VolumeIcon.draw());
@@ -121,11 +121,6 @@ public class FragmentLogNorm extends Fragment {
             etTable.setText(ss);
             Selection.setSelection(ss, currPos, currPos + 1);
             etTable.requestFocus();
-
-//        } else if (item.getItemId() == R.id.del_log_1_line) {
-//            new ScrollUp(etTable, scrollView, logName,
-//                    new LogSpan().delOneLine(etTable.getText().toString(),
-//                            etTable.getSelectionStart(), mContext));
 
         } else if (item.getItemId() == R.id.log2save) {
             new Copy2Save(etTable.getText().toString().trim() + "\n", etTable.getSelectionStart());

@@ -103,7 +103,7 @@
 
     <LinearLayout
         android:id="@+id/who_third_line"
-        android:layout_margin="4dp"
+        android:layout_margin="2dp"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -135,7 +135,7 @@
     </LinearLayout>
     <LinearLayout
         android:id="@+id/who_fourth_line"
-        android:layout_margin="4dp"
+        android:layout_margin="2dp"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
