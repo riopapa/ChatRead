@@ -42,7 +42,6 @@ import biz.riopapa.chatread.models.SGroup;
 import biz.riopapa.chatread.models.SStock;
 import biz.riopapa.chatread.models.SWho;
 import biz.riopapa.chatread.stocks.StockGetPut;
-import biz.riopapa.chatread.stocks.StockInform;
 import biz.riopapa.chatread.stocks.StockCheck;
 import biz.riopapa.chatread.stocks.StockName;
 import biz.riopapa.chatread.common.Permission;
@@ -176,7 +175,6 @@ public class MainActivity extends AppCompatActivity {
     public static Utils utils = null;
     public static StrUtil strUtil = null;
     public static LogUpdate logUpdate = null;
-    public static StockInform stockInform = null;
     public static StockName stockName = null;
 
     public static AudioManager mAudioManager = null;

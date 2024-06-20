@@ -1,7 +1,6 @@
 package biz.riopapa.chatread;
 
 import static android.content.Context.MODE_PRIVATE;
-import static biz.riopapa.chatread.MainActivity.stockInform;
 import static biz.riopapa.chatread.MainActivity.downloadFolder;
 import static biz.riopapa.chatread.MainActivity.fileIO;
 import static biz.riopapa.chatread.MainActivity.kvCommon;
@@ -45,7 +44,6 @@ import android.util.Log;
 
 import java.io.File;
 
-import biz.riopapa.chatread.stocks.StockInform;
 import biz.riopapa.chatread.stocks.StockCheck;
 import biz.riopapa.chatread.stocks.StockName;
 import biz.riopapa.chatread.stocks.StockGetPut;
@@ -105,7 +103,6 @@ public class SetVariables {
             utils = new Utils();
             strUtil = new StrUtil();
             logUpdate = new LogUpdate();
-            stockInform = new StockInform();
             stockName = new StockName();
             stockGetPut = new StockGetPut();
             stockCheck = new StockCheck();
