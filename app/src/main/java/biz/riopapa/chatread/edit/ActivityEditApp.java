@@ -18,7 +18,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
-import androidx.appcompat.widget.Toolbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,7 +73,7 @@ public class ActivityEditApp extends AppCompatActivity {
             app.addWho = false;
             app.num = true;
             app.inform = null;
-            app.replFrom = null;
+            app.replF = null;
 
             ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
             ClipData pData = clipboard.getPrimaryClip();
@@ -127,10 +126,10 @@ public class ActivityEditApp extends AppCompatActivity {
         infoTalk.setClickable(true);
         infoTalk.setFocusableInTouchMode(true);
 
-        if (app.replFrom != null) {
+        if (app.replF != null) {
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < app.replFrom.length; i++)
-                sb.append(app.replFrom[i]).append(deliStr).append(app.replTo[i]).append("\n\n");
+            for (int i = 0; i < app.replF.length; i++)
+                sb.append(app.replF[i]).append(deliStr).append(app.replT[i]).append("\n\n");
             replFromTo.setText(sb.toString());
         }
         replFromTo.setFocusable(true);
@@ -231,10 +230,10 @@ public class ActivityEditApp extends AppCompatActivity {
             }
         }
         if (!replF.isEmpty()) {
-            app.replFrom = replF.toArray(new String[0]);
-            app.replTo = replT.toArray(new String[0]);
+            app.replF = replF.toArray(new String[0]);
+            app.replT = replT.toArray(new String[0]);
         } else
-            app.replFrom = null;
+            app.replF = null;
 
         if (mAppsPos == -1)
             apps.add(app);

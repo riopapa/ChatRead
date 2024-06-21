@@ -70,7 +70,6 @@ import biz.riopapa.chatread.common.Utils;
 import biz.riopapa.chatread.func.MsgNamoo;
 import biz.riopapa.chatread.func.ReadyToday;
 import biz.riopapa.chatread.models.App;
-import biz.riopapa.chatread.models.SGroup;
 
 public class NotificationListener extends NotificationListenerService {
     final String SMS = "sms";
@@ -189,10 +188,10 @@ public class NotificationListener extends NotificationListenerService {
                         }
                     }
                 }
-                if (sbnApp.replFrom != null) {
-                    for (int i = 0; i < sbnApp.replFrom.length; i++) {
-                        if ((sbnText).contains(sbnApp.replFrom[i])) {
-                            sbnText = sbnText.replace(sbnApp.replFrom[i],sbnApp.replTo[i]);
+                if (sbnApp.replF != null) {
+                    for (int i = 0; i < sbnApp.replF.length; i++) {
+                        if ((sbnText).contains(sbnApp.replF[i])) {
+                            sbnText = sbnText.replace(sbnApp.replF[i],sbnApp.replT[i]);
                         }
                     }
                 }
@@ -266,12 +265,12 @@ public class NotificationListener extends NotificationListenerService {
     private void sayWork() {
 
 //        utils.logW("work", "grp="+sbnGroup+", who="+sbnWho+", txt="+sbnText);
-        if (sbnApp.replFrom != null) {
-            for (int i = 0; i < sbnApp.replFrom.length; i++) {
-                if ((sbnText).contains(sbnApp.replFrom[i]))
-                    sbnText = sbnText.replace(sbnApp.replFrom[i], sbnApp.replTo[i]);
-                if ((sbnWho).contains(sbnApp.replFrom[i]))
-                    sbnWho = sbnWho.replace(sbnApp.replFrom[i], sbnApp.replTo[i]);
+        if (sbnApp.replF != null) {
+            for (int i = 0; i < sbnApp.replF.length; i++) {
+                if ((sbnText).contains(sbnApp.replF[i]))
+                    sbnText = sbnText.replace(sbnApp.replF[i], sbnApp.replT[i]);
+                if ((sbnWho).contains(sbnApp.replF[i]))
+                    sbnWho = sbnWho.replace(sbnApp.replF[i], sbnApp.replT[i]);
             }
         }
 
@@ -626,9 +625,9 @@ public class NotificationListener extends NotificationListenerService {
     }
 
     String makeShort(String text, App app) {
-        if (app.replFrom != null) {
-            for (int i = 0; i < app.replFrom.length; i++) {
-                text = text.replace(app.replFrom[i], app.replTo[i]);
+        if (app.replF != null) {
+            for (int i = 0; i < app.replF.length; i++) {
+                text = text.replace(app.replF[i], app.replT[i]);
             }
         }
         return text;
