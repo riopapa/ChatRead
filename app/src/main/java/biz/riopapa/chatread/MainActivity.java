@@ -154,7 +154,9 @@ public class MainActivity extends AppCompatActivity {
     public static int [] stockTelGroupNameIdx, stockKaGroupNameIdx, stockSMSGroupNameIdx;
     public static ArrayList<App> apps;
     public static AppsAdapter appsAdapter;
-    public static App teleApp;
+    public static App teleApp, kaApp, smsApp;
+
+    public static int telegramAppIdx, kakaoAppIdx, smsAppIdx;
 
     public static final String lastChar = "힝";
     public static int mStockGroupPos = -1, mAppsPos = -1;  // updated or duplicated recycler position
@@ -184,8 +186,6 @@ public class MainActivity extends AppCompatActivity {
 
     public static GSheetUpload gSheetUpload = null;
     public static FileIO fileIO;
-
-    public static int telegramAppIdx;
 
     public static GroupWhoAdapter groupWhoAdapter = null;
     public static GroupWhoStockAdapter groupWhoStockAdapter = null;

@@ -6,6 +6,10 @@ import static biz.riopapa.chatread.MainActivity.appNameIdx;
 import static biz.riopapa.chatread.MainActivity.apps;
 import static biz.riopapa.chatread.MainActivity.downloadFolder;
 import static biz.riopapa.chatread.MainActivity.fileIO;
+import static biz.riopapa.chatread.MainActivity.kaApp;
+import static biz.riopapa.chatread.MainActivity.kakaoAppIdx;
+import static biz.riopapa.chatread.MainActivity.smsApp;
+import static biz.riopapa.chatread.MainActivity.smsAppIdx;
 import static biz.riopapa.chatread.MainActivity.tableFolder;
 import static biz.riopapa.chatread.MainActivity.teleApp;
 import static biz.riopapa.chatread.MainActivity.telegramAppIdx;
@@ -22,10 +26,11 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import biz.riopapa.chatread.common.SnackBar;
 import biz.riopapa.chatread.models.App;
 
 public class AppsTable {
+
+    /* App table is in sdcard/download/_ChatTalk/appTable.xml */
 
     public void get() {
         if (tableFolder ==  null) {
@@ -33,14 +38,10 @@ public class AppsTable {
             tableFolder = new File(downloadFolder, "_ChatTalk");
         }
         Gson gson = new Gson();
-        String json = fileIO.readFile(tableFolder ,"appTable.json");
-        if (json.isEmpty()) {
-            apps = readPackageTable();
-        } else {
-            Type type = new TypeToken<List<App>>() {
-            }.getType();
-            apps = gson.fromJson(json, type);
-        }
+        String json = fileIO.readFile(tableFolder ,"appTable.xml");
+        Type type = new TypeToken<List<App>>() {
+        }.getType();
+        apps = gson.fromJson(json, type);
         makeTable();
     }
 
@@ -55,7 +56,7 @@ public class AppsTable {
 
         Gson gson2 = new GsonBuilder().setPrettyPrinting().create();
         String prettyJson = gson2.toJson(apps);
-        fileIO.writeFile(tableFolder, "appTable.json", prettyJson);
+        fileIO.writeFile(tableFolder, "appTable.xml", prettyJson);
     }
 
     public void makeTable() {
@@ -70,53 +71,22 @@ public class AppsTable {
             } else {
                 appFullNames.add(app.fullName);
                 appNameIdx.add(i);
-                if (app.fullName.equals("org.telegram.messenger")) {
-                    telegramAppIdx = i;
-                    teleApp = app;
+                switch (app.fullName) {
+                    case "org.telegram.messenger":
+                        telegramAppIdx = i;
+                        teleApp = app;
+                        break;
+                    case "com.kakao.talk":
+                        kakaoAppIdx = i;
+                        kaApp = app;
+                        break;
+                    case "com.samsung.android.messaging":
+                        smsAppIdx = i;
+                        smsApp = app;
+                        break;
                 }
             }
         }
-    }
-
-    private ArrayList<App> readPackageTable() {
-        /*
-         * full package name       ^ nickName^ type ^ comment
-         * com.kakao.talk          ^   카톡   ^  kk  ^
-         */
-        ArrayList<App> list = new ArrayList<>();
-
-        String [] packages =  new TableListFile().read("appNames");
-        String [] strings;
-
-        for (String pLine:packages) {
-            App app = new App();
-            strings = pLine.split("\\^");
-            if (strings.length < 3) {
-                new SnackBar().show("Package Table Error ", pLine);
-            } else {
-                app.fullName = strings[0].trim();
-                app.nickName = strings[1].trim();
-                String type = strings[2].trim() + "   ";
-                app.memo = strings[3].trim();
-                app.say = true;
-                app.log = !type.contains("yx");
-                app.grp = true;
-                app.who = true;
-                app.addWho = false;
-                app.num = true;
-                if (type.contains("ynn")) {
-                    app.who = false;
-                } else if (type.contains("yyx")) {
-                    app.grp = false;
-                } else if (type.contains("ynx")) {
-                    app.who = false;
-                } else if (type.contains("ywx")) {
-                    app.addWho = true;
-                }
-                list.add(app);
-            }
-        }
-        return list;
     }
 
 }

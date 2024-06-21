@@ -35,9 +35,10 @@ public class ReadyToday {
         Calendar c = Calendar.getInstance();
         c.setTimeInMillis(System.currentTimeMillis());
         c.set(Calendar.HOUR_OF_DAY, 8);
-        c.set(Calendar.MINUTE, 40);
+        c.set(Calendar.MINUTE, 45);
         timeBegin =c.getTimeInMillis();
         c.set(Calendar.HOUR_OF_DAY, 15);
+        c.set(Calendar.MINUTE, 35);
         timeEnd = c.getTimeInMillis();
 
         todayFolder = new File(packageDirectory, toDay);
