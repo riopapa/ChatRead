@@ -112,7 +112,7 @@ public class Sounds {
             new Timer().schedule(new TimerTask() {
                 public void run() {
                     try {
-                        mTTS.speak(text2Speak, TextToSpeech.QUEUE_ADD, null, TTSId);
+                        mTTS.speak(onlySpeakable(text2Speak), TextToSpeech.QUEUE_ADD, null, TTSId);
                     } catch (Exception e) {
                         new Utils().logE("Sound", "TTS Error:" + e);
                     }
@@ -141,7 +141,7 @@ public class Sounds {
                 public void run() {
                     try {
                         isTalking = true;
-                        mTTS.speak(onlySpeakable(text), TextToSpeech.QUEUE_ADD, null, TTSId);
+                        mTTS.speak(text, TextToSpeech.QUEUE_ADD, null, TTSId);
                     } catch (Exception e) {
                         new Utils().logE("Sound", "TTS Error:" + e);
                     }

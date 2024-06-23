@@ -1,4 +1,4 @@
-package biz.riopapa.chatread;
+package biz.riopapa.chatread.notification;
 
 import static biz.riopapa.chatread.MainActivity.appFullNames;
 import static biz.riopapa.chatread.MainActivity.appIgnores;
@@ -63,6 +63,9 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 
+import biz.riopapa.chatread.MainActivity;
+import biz.riopapa.chatread.R;
+import biz.riopapa.chatread.SetVariables;
 import biz.riopapa.chatread.common.Copy2Clipboard;
 import biz.riopapa.chatread.common.IgnoreNumber;
 import biz.riopapa.chatread.common.IgnoreThis;

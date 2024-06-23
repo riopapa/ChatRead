@@ -5,7 +5,7 @@ import static biz.riopapa.chatread.MainActivity.gSheetUpload;
 import static biz.riopapa.chatread.MainActivity.logUpdate;
 import static biz.riopapa.chatread.MainActivity.sounds;
 import static biz.riopapa.chatread.MainActivity.strUtil;
-import static biz.riopapa.chatread.NotificationListener.isWorking;
+import static biz.riopapa.chatread.notification.NotificationListener.isWorking;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

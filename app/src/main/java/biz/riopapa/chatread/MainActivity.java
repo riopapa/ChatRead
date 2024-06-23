@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
     public static SharedPreferences sharePref;
     public static SharedPreferences.Editor sharedEditor;
 
-    public static final String [] OPERATION = {"Show Message","snow Noty","stop say",
+    public static final String [] OPERATION = {"Show Message","show Noty","stop say",
             "reload app","hide_stop"};
     public static final int SHOW_MESSAGE = 1000;
     public static final int SHOW_NOTIFICATION_BAR = 1001;
@@ -198,9 +198,10 @@ public class MainActivity extends AppCompatActivity {
         mContext = this;
         mMainActivity = this;
         toolbar = findViewById(R.id.myToolBar);
-        setSupportActionBar(toolbar);
-        toolbar.setTitle("Main");
-
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            toolbar.setTitle("Main");
+        }
         drawerLayout = findViewById(R.id.myDrawer);
         NavigationView navigationView = findViewById(R.id.myNav);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,

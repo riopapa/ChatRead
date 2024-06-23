@@ -53,12 +53,12 @@ public class ActivityEditGroup extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_group);
 //        Toolbar toolbar = findViewById(R.id.toolbar_edit_group);
-        if (toolbar != null) {
-//            setSupportActionBar(toolbar);
-            toolbar.setTitleTextColor(0xFF44FF33);
-            toolbar.setSubtitleTextColor(0xFF000000);
-            toolbar.setSubtitle("Group Edit");
-        }
+//        if (toolbar != null) {
+////            setSupportActionBar(toolbar);
+//            toolbar.setTitleTextColor(0xFF44FF33);
+//            toolbar.setSubtitleTextColor(0xFF000000);
+//            toolbar.setSubtitle("Group Edit");
+//        }
         groupActivity = this;
 
         eGroup = findViewById(R.id.e_group);

@@ -77,7 +77,7 @@ public class NotificationService extends Service {
         if (operation == -1) {
             return START_NOT_STICKY;
         }
-        Log.w("onStartCommand", "operation = "+operation+ " " + OPERATION[operation-1000]);
+        utils.logW("onStartCommand", "operation = "+operation+ " " + OPERATION[operation-1000]);
         if (msg1.isEmpty())
             msgGet();
 
@@ -116,7 +116,7 @@ public class NotificationService extends Service {
                 break;
 
             default:
-                Log.e("NotifiSVC","Case Error "+operation);
+                utils.logW("onStartCommand", "operation = "+operation+ " Case Error");
                 break;
         }
         updateRemoteViews();
@@ -165,35 +165,35 @@ public class NotificationService extends Service {
         mBuilder.setContentIntent(pendingStop);
         mRemoteViews.setOnClickPendingIntent(R.id.stop_now, pendingStop);
 
-        Intent int1 = new Intent(mContext, MainActivity.class);
-        int1.putExtra("operation", RELOAD_APP);
-        PendingIntent pending1 = PendingIntent.getService(mContext, RELOAD_APP, int1,
+        Intent intMain = new Intent(mContext, MainActivity.class);
+        intMain.putExtra("operation", RELOAD_APP);
+        PendingIntent pendingMain = PendingIntent.getService(mContext, RELOAD_APP, intMain,
                 PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-        mBuilder.setContentIntent(pending1);
+        mBuilder.setContentIntent(pendingMain);
         mRemoteViews.setOnClickPendingIntent(R.id.line_1,
-                PendingIntent.getActivity(mContext, 0, int1,
+                PendingIntent.getActivity(mContext, 0, intMain,
                         PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT));
 
 //        mRemoteViews.setOnClickPendingIntent(R.id.stop_now,
 //                PendingIntent.getActivity(mContext, 0, sIntent,
 //                        PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT));
 
-        Intent int2 = new Intent(mContext, MainActivity.class);
-        int2.putExtra("operation", RELOAD_APP);
-        PendingIntent pending2 = PendingIntent.getService(mContext, RELOAD_APP, int2,
-                PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-        mBuilder.setContentIntent(pending2);
+//        Intent int2 = new Intent(mContext, MainActivity.class);
+//        int2.putExtra("operation", RELOAD_APP);
+//        PendingIntent pending2 = PendingIntent.getService(mContext, RELOAD_APP, intMain,
+//                PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+//        mBuilder.setContentIntent(pending2);
         mRemoteViews.setOnClickPendingIntent(R.id.line_2,
-                PendingIntent.getActivity(mContext, 0, int2,
+                PendingIntent.getActivity(mContext, 0, intMain,
                         PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT));
 
-        Intent int3 = new Intent(mContext, MainActivity.class);
-        int3.putExtra("operation", RELOAD_APP);
-        PendingIntent pending3 = PendingIntent.getService(mContext, RELOAD_APP, int3,
-                PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-        mBuilder.setContentIntent(pending3);
+//        Intent int3 = new Intent(mContext, MainActivity.class);
+//        int3.putExtra("operation", RELOAD_APP);
+//        PendingIntent pending3 = PendingIntent.getService(mContext, RELOAD_APP, intMain,
+//                PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+//        mBuilder.setContentIntent(pending3);
         mRemoteViews.setOnClickPendingIntent(R.id.line_3,
-                PendingIntent.getActivity(mContext, 0, int3,
+                PendingIntent.getActivity(mContext, 0, intMain,
                         PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT));
 
     }

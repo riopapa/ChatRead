@@ -56,14 +56,6 @@ public class ActivityEditGroupWho extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_group_who);
-//        Toolbar toolbar = findViewById(R.id.toolbar_edit_group_who);
-//        if (toolbar != null) {
-//            setSupportActionBar(toolbar);
-//            toolbar.setTitleTextColor(0xFF44FF33);
-//            toolbar.setSubtitleTextColor(0xFF000000);
-//            toolbar.setTitle("Group Who");
-//            toolbar.setSubtitle("Who Edit");
-//        }
         whoActivity = this;
         whoContext = this;
 
@@ -82,7 +74,7 @@ public class ActivityEditGroupWho extends AppCompatActivity {
         tGroup.setText(nowSGroup.grp);
         tGroupM.setText(nowSGroup.grpM);
         tGroupF.setText(nowSGroup.grpF);
-        tTelKa.setText(nowSGroup.telKa);;
+        tTelKa.setText(nowSGroup.telKa);
         sIgnore.setChecked(nowSGroup.ignore);
         tSkip1.setText(nowSGroup.skip1);
         tSkip2.setText(nowSGroup.skip2);

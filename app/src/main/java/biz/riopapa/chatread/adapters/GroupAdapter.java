@@ -8,6 +8,12 @@ import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.stockGetPut;
 
 import android.content.Intent;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.TextUtils;
+import android.text.style.BackgroundColorSpan;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,26 +69,40 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
 
-        SGroup sg = sGroups.get(position);
-        holder.tGroup.setText(sg.grp);
-        holder.tGroupM.setText(sg.grpM);
-        holder.tGroupF.setText(sg.grpF);
-        String info = "";
+        SGroup sgrp = sGroups.get(position);
+        holder.tGroup.setText(sgrp.grp);
+        holder.tGroupM.setText(sgrp.grpM);
+        holder.tGroupF.setText(sgrp.grpF);
 
-        for (SWho w : sg.whos) {
+        SpannableStringBuilder grpBuilder = new SpannableStringBuilder();
+
+        for (SWho w : sgrp.whos) {
+            if (grpBuilder.length() > 1)
+                grpBuilder.append("\n");
+            SpannableString ssWho = new SpannableString(w.who + " : "+w.whoM + ", "+w.whoF + "\n");
+            ssWho.setSpan(new ForegroundColorSpan(0xFF131455), 0, ssWho.length()
+                    , Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            grpBuilder.append(ssWho);
+            SpannableStringBuilder stBuilder = new SpannableStringBuilder();
             for (SStock s : w.stocks) {
-                if (!info.isEmpty())
-                    info += "\n";
-                info += w.whoM + " : " + s.key1 + "/" + s.key2
-                        + ", " + s.prv + "/" + s.nxt + ", " + s.count;
+                if (stBuilder.length() > 1)
+                    stBuilder.append("\n");
+                SpannableString ssStock = new SpannableString(s.key1 + "/" + s.key2 + ", " + s.prv + "/" + s.nxt + ", " + s.count);
+                ssStock.setSpan(new ForegroundColorSpan(0xFF132518), 0, ssStock.length()
+                        , Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                ssStock.setSpan(new BackgroundColorSpan(0xFFC9AABB), 0, ssStock.length()
+                        , Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                stBuilder.append(ssStock);
             }
+            grpBuilder.append(stBuilder);
         }
-        holder.tSkip1.setText(sg.skip1);
-        holder.tSkip2.setText(sg.skip2);
-        holder.tSkip3.setText(sg.skip3);
-        holder.tTelegram.setText(sg.telKa);
-        holder.tIgnore.setText((sg.ignore) ? "무시" : "  ");
-        holder.tInfo.setText(info);
+
+        holder.tSkip1.setText(sgrp.skip1);
+        holder.tSkip2.setText(sgrp.skip2);
+        holder.tSkip3.setText(sgrp.skip3);
+        holder.tTelegram.setText(sgrp.telKa);
+        holder.tIgnore.setText((sgrp.ignore) ? "무시" : "  ");
+        holder.tInfo.setText(grpBuilder);
         holder.tLine.setBackgroundColor(mContext.getResources().getColor(
                 (gIdx == position)? R.color.line_now : R.color.line_default));
 

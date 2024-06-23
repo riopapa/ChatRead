@@ -12,15 +12,15 @@
     <color name="notification_bar">#81375BCF</color>
 
     <color name="line_1">#E1201C4A</color>
-    <color name="line1back">#E1534CAA</color>
+    <color name="line1back">#E14B43AD</color>
     <color name="textLine1">#FFFFFF</color>
 
-    <color name="line_2">#06332F</color>
-    <color name="line2Back">#0C534D</color>
+    <color name="line_2">#0D3633</color>
+    <color name="line2Back">#168279</color>
     <color name="textLine2">#FFFFFF</color>
 
     <color name="line_3">#E1201C4A</color>
-    <color name="line3back">#E1534CAA</color>
+    <color name="line3back">#E1443D94</color>
     <color name="textLine3">#FFFFFF</color>
 
     <color name="snackBarBack">#AAAAAA</color>
