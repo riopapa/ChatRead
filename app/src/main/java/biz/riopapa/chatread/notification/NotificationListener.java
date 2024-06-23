@@ -38,12 +38,12 @@ import static biz.riopapa.chatread.MainActivity.smsTxtIgnores;
 import static biz.riopapa.chatread.MainActivity.smsWhoIgnores;
 import static biz.riopapa.chatread.MainActivity.sounds;
 import static biz.riopapa.chatread.MainActivity.stockCheck;
-import static biz.riopapa.chatread.MainActivity.stockKaGroupNameIdx;
-import static biz.riopapa.chatread.MainActivity.stockKaGroupNameTbl;
-import static biz.riopapa.chatread.MainActivity.stockSMSGroupNameIdx;
-import static biz.riopapa.chatread.MainActivity.stockSMSGroupNameTbl;
-import static biz.riopapa.chatread.MainActivity.stockTelGroupNameIdx;
-import static biz.riopapa.chatread.MainActivity.stockTelGroupNameTbl;
+import static biz.riopapa.chatread.MainActivity.stockKaGroupMatchIdx;
+import static biz.riopapa.chatread.MainActivity.stockKaGroupMatchTbl;
+import static biz.riopapa.chatread.MainActivity.stockSMSGroupMatchIdx;
+import static biz.riopapa.chatread.MainActivity.stockSMSGroupMatchTbl;
+import static biz.riopapa.chatread.MainActivity.stockTelGroupMatchIdx;
+import static biz.riopapa.chatread.MainActivity.stockTelGroupMatchTbl;
 import static biz.riopapa.chatread.MainActivity.strUtil;
 import static biz.riopapa.chatread.MainActivity.teleApp;
 import static biz.riopapa.chatread.MainActivity.timeBegin;
@@ -145,6 +145,16 @@ public class NotificationListener extends NotificationListenerService {
                 }
                 break;
 
+            case ANDROID:
+
+                if (kvCommon.isDup(ANDROID, sbnText))
+                    return;
+                if (hasIgnoreStr(sbnApp))
+                    return;
+                head = "< an > "+sbnWho;
+                logUpdate.addLog(head, sbnWho+" / "+sbnText);
+                break;
+
             case TG:
 
                 if (sbnText.length() < 20)  // for better performance, with logically not true
@@ -233,16 +243,6 @@ public class NotificationListener extends NotificationListenerService {
                     logUpdate.addLog(head, sbnText);
                 }
                 notificationBar.update(head, sbnText, true);
-                break;
-
-            case ANDROID:
-
-                if (kvCommon.isDup(ANDROID, sbnText))
-                    return;
-                if (hasIgnoreStr(sbnApp))
-                    return;
-                head = "< an > "+sbnWho;
-                logUpdate.addLog(head, sbnWho+" / "+sbnText);
                 break;
 
             case SMS:
@@ -497,25 +497,25 @@ public class NotificationListener extends NotificationListenerService {
     }
 
     private int isStockTelGroup(String sbnWho) {
-        for (int i = 0; i < stockTelGroupNameTbl.length; i++) {
-            if (sbnWho.contains(stockTelGroupNameTbl[i]))
-                return stockTelGroupNameIdx[i];
+        for (int i = 0; i < stockTelGroupMatchTbl.length; i++) {
+            if (sbnWho.contains(stockTelGroupMatchTbl[i]))
+                return stockTelGroupMatchIdx[i];
         }
         return -1;
     }
 
     private int isStockKaGroup(String sbnWho) {
-        for (int i = 0; i < stockKaGroupNameTbl.length; i++) {
-            if (sbnWho.contains(stockKaGroupNameTbl[i]))
-                return stockKaGroupNameIdx[i];
+        for (int i = 0; i < stockKaGroupMatchTbl.length; i++) {
+            if (sbnWho.contains(stockKaGroupMatchTbl[i]))
+                return stockKaGroupMatchIdx[i];
         }
         return -1;
     }
 
     private int isStockSMSGroup(String sbnWho) {
-        for (int i = 0; i < stockSMSGroupNameTbl.length; i++) {
-            if (sbnWho.contains(stockSMSGroupNameTbl[i]))
-                return stockSMSGroupNameIdx[i];
+        for (int i = 0; i < stockSMSGroupMatchTbl.length; i++) {
+            if (sbnWho.contains(stockSMSGroupMatchTbl[i]))
+                return stockSMSGroupMatchIdx[i];
         }
         return -1;
     }
@@ -534,15 +534,15 @@ public class NotificationListener extends NotificationListenerService {
 
     private void sayTesla() {
 
+        if (kvCommon.isDup(TESRY, sbnText))
+            return;
         if (sbnText.contains("연결됨")) {
             long nowTime = System.currentTimeMillis();
-            if ((nowTime - tesla_time) > 50 * 60 * 1000)    // 50 min.
+            if ((nowTime - tesla_time) > 70 * 60 * 1000)    // 70 min.
                 sounds.beepOnce(MainActivity.soundType.HI_TESLA.ordinal());
             tesla_time = nowTime;
             return;
         }
-        if (kvCommon.isDup(TESRY, sbnText))
-            return;
         logUpdate.addLog("[ 테스리 ]", sbnText);
         notificationBar.update(sbnAppNick, sbnText, true);
         sounds.speakAfterBeep("테스리, " + sbnText);

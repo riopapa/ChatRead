@@ -5,12 +5,12 @@ import static biz.riopapa.chatread.MainActivity.downloadFolder;
 import static biz.riopapa.chatread.MainActivity.fileIO;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.sGroups;
-import static biz.riopapa.chatread.MainActivity.stockKaGroupNameIdx;
-import static biz.riopapa.chatread.MainActivity.stockKaGroupNameTbl;
-import static biz.riopapa.chatread.MainActivity.stockSMSGroupNameIdx;
-import static biz.riopapa.chatread.MainActivity.stockSMSGroupNameTbl;
-import static biz.riopapa.chatread.MainActivity.stockTelGroupNameIdx;
-import static biz.riopapa.chatread.MainActivity.stockTelGroupNameTbl;
+import static biz.riopapa.chatread.MainActivity.stockKaGroupMatchIdx;
+import static biz.riopapa.chatread.MainActivity.stockKaGroupMatchTbl;
+import static biz.riopapa.chatread.MainActivity.stockSMSGroupMatchIdx;
+import static biz.riopapa.chatread.MainActivity.stockSMSGroupMatchTbl;
+import static biz.riopapa.chatread.MainActivity.stockTelGroupMatchIdx;
+import static biz.riopapa.chatread.MainActivity.stockTelGroupMatchTbl;
 import static biz.riopapa.chatread.MainActivity.tableFolder;
 import static biz.riopapa.chatread.MainActivity.todayFolder;
 import static biz.riopapa.chatread.MainActivity.utils;
@@ -92,28 +92,28 @@ public class StockGetPut {
             kaCnt += grp.telKa.equals("k") ? 1 : 0;
             smsCnt += grp.telKa.equals("s") ? 1 : 0;
         }
-        stockTelGroupNameTbl = new String[telCnt];
-        stockTelGroupNameIdx = new int[telCnt];
-        stockKaGroupNameTbl = new String[kaCnt];
-        stockKaGroupNameIdx = new int[kaCnt];
-        stockSMSGroupNameTbl = new String[smsCnt];
-        stockSMSGroupNameIdx = new int[smsCnt];
+        stockTelGroupMatchTbl = new String[telCnt];
+        stockTelGroupMatchIdx = new int[telCnt];
+        stockKaGroupMatchTbl = new String[kaCnt];
+        stockKaGroupMatchIdx = new int[kaCnt];
+        stockSMSGroupMatchTbl = new String[smsCnt];
+        stockSMSGroupMatchIdx = new int[smsCnt];
         int t = 0, k = 0, s = 0;
         for (int g = 0; g < sGroups.size(); g++) {
             switch (sGroups.get(g).telKa) {
                 case "t":
-                    stockTelGroupNameTbl[t] = sGroups.get(g).grpM;
-                    stockTelGroupNameIdx[t] = g;
+                    stockTelGroupMatchTbl[t] = sGroups.get(g).grpM;
+                    stockTelGroupMatchIdx[t] = g;
                     t++;
                     break;
                 case "k":
-                    stockKaGroupNameTbl[k] = sGroups.get(g).grpM;
-                    stockKaGroupNameIdx[k] = g;
+                    stockKaGroupMatchTbl[k] = sGroups.get(g).grpM;
+                    stockKaGroupMatchIdx[k] = g;
                     k++;
                     break;
                 case "s":
-                    stockSMSGroupNameTbl[s] = sGroups.get(g).grpM;
-                    stockSMSGroupNameIdx[s] = g;
+                    stockSMSGroupMatchTbl[s] = sGroups.get(g).grpM;
+                    stockSMSGroupMatchIdx[s] = g;
                     k++;
                     break;
             }

@@ -150,8 +150,8 @@ public class MainActivity extends AppCompatActivity {
     public static SGroup nowSGroup;
     public static SWho nowSWho;
     public static SStock nowSStock;
-    public static String [] stockTelGroupNameTbl, stockKaGroupNameTbl, stockSMSGroupNameTbl;
-    public static int [] stockTelGroupNameIdx, stockKaGroupNameIdx, stockSMSGroupNameIdx;
+    public static String [] stockTelGroupMatchTbl, stockKaGroupMatchTbl, stockSMSGroupMatchTbl;
+    public static int [] stockTelGroupMatchIdx, stockKaGroupMatchIdx, stockSMSGroupMatchIdx;
     public static ArrayList<App> apps;
     public static AppsAdapter appsAdapter;
     public static App teleApp, kaApp, smsApp;
