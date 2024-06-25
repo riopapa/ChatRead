@@ -30,7 +30,7 @@ import static biz.riopapa.chatread.MainActivity.stockGetPut;
 import static biz.riopapa.chatread.MainActivity.strUtil;
 import static biz.riopapa.chatread.MainActivity.tableFolder;
 import static biz.riopapa.chatread.MainActivity.tableListFile;
-import static biz.riopapa.chatread.MainActivity.gSheetUpload;
+import static biz.riopapa.chatread.MainActivity.gSheet;
 import static biz.riopapa.chatread.MainActivity.toDay;
 import static biz.riopapa.chatread.MainActivity.todayFolder;
 import static biz.riopapa.chatread.MainActivity.utils;
@@ -58,7 +58,7 @@ import biz.riopapa.chatread.func.OptionTables;
 import biz.riopapa.chatread.func.ReadyToday;
 import biz.riopapa.chatread.func.StrUtil;
 import biz.riopapa.chatread.func.TableListFile;
-import biz.riopapa.chatread.func.GSheetUpload;
+import biz.riopapa.chatread.func.GSheet;
 import biz.riopapa.chatread.models.KeyVal;
 import biz.riopapa.chatread.notification.NotificationBar;
 import biz.riopapa.chatread.notification.NotificationService;
@@ -106,7 +106,7 @@ public class SetVariables {
             stockName = new StockName();
             stockGetPut = new StockGetPut();
             stockCheck = new StockCheck();
-            gSheetUpload = new GSheetUpload();
+            gSheet = new GSheet();
 
             mAudioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
             phoneVibrate = new PhoneVibrate();

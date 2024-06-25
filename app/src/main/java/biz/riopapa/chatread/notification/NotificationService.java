@@ -11,6 +11,7 @@ import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.sharePref;
 import static biz.riopapa.chatread.MainActivity.sharedEditor;
 import static biz.riopapa.chatread.MainActivity.sounds;
+import static biz.riopapa.chatread.MainActivity.stockCnt;
 import static biz.riopapa.chatread.MainActivity.stockGetPut;
 import static biz.riopapa.chatread.MainActivity.strUtil;
 import static biz.riopapa.chatread.MainActivity.utils;
@@ -77,7 +78,8 @@ public class NotificationService extends Service {
         if (operation == -1) {
             return START_NOT_STICKY;
         }
-        utils.logW("onStartCommand", "operation = "+operation+ " " + OPERATION[operation-1000]);
+        if (operation > 1001)
+            utils.logW("onStartCommand", "operation = "+operation+ " " + OPERATION[operation-1000]);
         if (msg1.isEmpty())
             msgGet();
 
@@ -100,6 +102,9 @@ public class NotificationService extends Service {
                 break;
 
             case RELOAD_APP:
+                if (stockCnt > 0 && stockGetPut != null) {
+                    stockGetPut.put("reload");
+                }
                 reload_App();
                 break;
 

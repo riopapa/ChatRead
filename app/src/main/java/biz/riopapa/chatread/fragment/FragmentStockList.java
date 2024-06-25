@@ -85,7 +85,10 @@ public class FragmentStockList extends Fragment {
 
         if (item.getItemId() == R.id.reload_all_tables) {
             new OptionTables();
-            stockGetPut.get();
+            stockGetPut.getFromFile();
+            stockGetPut.setStockTelKaCount();
+            groupsAdapter.notifyDataSetChanged();
+
         } else if (item.getItemId() == R.id.clear_matched_number) {
             for (int g = 0; g < sGroups.size(); g++) {
                 SGroup sGroup = sGroups.get(g);

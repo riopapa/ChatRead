@@ -60,7 +60,8 @@ public class GroupWhoAdapter extends RecyclerView.Adapter<GroupWhoAdapter.ViewHo
         for (SStock s : sWho.stocks) {
             if (!info.isEmpty())
                 info += "\n";
-            info += s.key1 + "/" + s.key2 + ", " + s.prv + "/" + s.nxt + ", " + s.count;
+            info += s.key1 + "/" + s.key2 + ", " + s.prv + "/" + s.nxt + ", " + s.count
+                    + ", " + s.talk;
         }
         holder.tInfo.setText(info);
         holder.tLine.setOnClickListener(v -> {

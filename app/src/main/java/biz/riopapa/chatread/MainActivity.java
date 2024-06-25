@@ -57,7 +57,7 @@ import biz.riopapa.chatread.fragment.FragmentLogStock;
 import biz.riopapa.chatread.fragment.FragmentLogWork;
 import biz.riopapa.chatread.fragment.FragmentStockList;
 import biz.riopapa.chatread.func.FileIO;
-import biz.riopapa.chatread.func.GSheetUpload;
+import biz.riopapa.chatread.func.GSheet;
 import biz.riopapa.chatread.func.LogUpdate;
 import biz.riopapa.chatread.func.MsgNamoo;
 import biz.riopapa.chatread.func.StrUtil;
@@ -155,6 +155,7 @@ public class MainActivity extends AppCompatActivity {
     public static ArrayList<App> apps;
     public static AppsAdapter appsAdapter;
     public static App teleApp, kaApp, smsApp;
+    public static int stockCnt = 0;
 
     public static int telegramAppIdx, kakaoAppIdx, smsAppIdx;
 
@@ -184,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static MsgNamoo msgNamoo = null;
 
-    public static GSheetUpload gSheetUpload = null;
+    public static GSheet gSheet = null;
     public static FileIO fileIO;
 
     public static GroupWhoAdapter groupWhoAdapter = null;

@@ -1,15 +1,15 @@
 package biz.riopapa.chatread.adapters;
 
 import static biz.riopapa.chatread.MainActivity.gIdx;
-import static biz.riopapa.chatread.MainActivity.gSheetUpload;
+import static biz.riopapa.chatread.MainActivity.gSheet;
 import static biz.riopapa.chatread.MainActivity.groupWhoAdapter;
 import static biz.riopapa.chatread.MainActivity.groupWhoStockAdapter;
+import static biz.riopapa.chatread.MainActivity.groupsAdapter;
 import static biz.riopapa.chatread.MainActivity.nowSGroup;
 import static biz.riopapa.chatread.MainActivity.nowSStock;
 import static biz.riopapa.chatread.MainActivity.nowSWho;
 import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.sIdx;
-import static biz.riopapa.chatread.MainActivity.stockGetPut;
 import static biz.riopapa.chatread.MainActivity.wIdx;
 import static biz.riopapa.chatread.edit.ActivityEditGroupWho.whoContext;
 
@@ -23,18 +23,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
 import biz.riopapa.chatread.R;
-import biz.riopapa.chatread.func.GooglePercent;
-import biz.riopapa.chatread.func.GoogleStatement;
-import biz.riopapa.chatread.models.SGroup;
 import biz.riopapa.chatread.models.SStock;
-import biz.riopapa.chatread.models.SWho;
 
 public class GroupWhoStockAdapter extends RecyclerView.Adapter<GroupWhoStockAdapter.ViewHolder> {
+
+    SStock newStock;
 
     @Override
     public int getItemCount() {
@@ -81,6 +75,11 @@ public class GroupWhoStockAdapter extends RecyclerView.Adapter<GroupWhoStockAdap
         holder.tLine.setOnClickListener(v -> {
             sIdx = holder.getAdapterPosition();
             nowSStock = nowSWho.stocks.get(sIdx);
+            try {
+                newStock = (SStock) nowSStock.clone();
+            } catch (CloneNotSupportedException e) {
+                throw new RuntimeException(e);
+            }
             editStock();
         });
     }
@@ -109,72 +108,52 @@ public class GroupWhoStockAdapter extends RecyclerView.Adapter<GroupWhoStockAdap
         builder.setView(dialogView)
             .setTitle("Edit Stock")
             .setPositiveButton("Updt", (dialog, which) -> {
-                try {
-                    SStock nStock = (SStock) nowSStock.clone();
-                    nStock.key1 = eKey1.getText().toString();
-                    nStock.key2 = eKey2.getText().toString();
-                    nStock.prv = ePrev.getText().toString();
-                    nStock.nxt = eNext.getText().toString();
-                    nStock.talk = eTalk.getText().toString();
-                    nStock.count = Integer.parseInt(eCount.getText().toString());
-                    nStock.skip1 = eSkip.getText().toString();
-                    nowSWho.stocks.set(sIdx, nStock);
-                    nowSStock = nowSWho.stocks.get(sIdx);
-                    nowSGroup.whos.set(wIdx, (SWho) nowSWho.clone());
-                    nowSWho = nowSGroup.whos.get(wIdx);
-                    sGroups.set(gIdx, (SGroup) nowSGroup.clone());
-                    nowSGroup = sGroups.get(gIdx);
-                    stockGetPut.put("stock");
-                    stockGetPut.get();
-                    groupWhoStockAdapter.notifyDataSetChanged();
-                    dialog.dismiss();
-                } catch (CloneNotSupportedException e) {
-                    throw new RuntimeException(e);
-                }
+                newStock.key1 = eKey1.getText().toString();
+                newStock.key2 = eKey2.getText().toString();
+                newStock.prv = ePrev.getText().toString();
+                newStock.nxt = eNext.getText().toString();
+                newStock.talk = eTalk.getText().toString();
+                newStock.count = Integer.parseInt(eCount.getText().toString());
+                newStock.skip1 = eSkip.getText().toString();
+                nowSWho.stocks.set(sIdx, newStock);
+                nowSStock = nowSWho.stocks.get(sIdx);
+                nowSGroup.whos.set(wIdx, nowSWho);
+                nowSWho = nowSGroup.whos.get(wIdx);
+                sGroups.set(gIdx, nowSGroup);
+                nowSGroup = sGroups.get(gIdx);
+//                stockGetPut.put("stock");
+//                stockGetPut.get();
+                groupWhoStockAdapter.notifyDataSetChanged();
+                dialog.dismiss();
 
                 // Implement logic for "Apply" button (e.g., get data from EditTexts)
             })
             .setNeutralButton("Dup", (dialog, which) -> {
-                try {
-                    SStock nStock = (SStock) nowSStock.clone();
-                    nStock.key1 = eKey1.getText().toString();
-                    nStock.key2 = eKey2.getText().toString();
-                    nStock.prv = ePrev.getText().toString();
-                    nStock.nxt = eNext.getText().toString();
-                    nStock.talk = eTalk.getText().toString();
-                    nStock.count = Integer.parseInt(eCount.getText().toString());
-                    nStock.skip1 = eSkip.getText().toString();
-                    nowSWho.stocks.add(sIdx, nStock);
-                    nowSStock = nowSWho.stocks.get(sIdx);
-                    nowSGroup.whos.set(wIdx, (SWho) nowSWho.clone());
-                    nowSWho = nowSGroup.whos.get(wIdx);
-                    sGroups.set(gIdx, (SGroup) nowSGroup.clone());
-                    nowSGroup = sGroups.get(gIdx);
-                    stockGetPut.put("stock dup "+nowSGroup.grpF +" "+ nowSWho.whoF+ " / " + nStock.key1);
-                    stockGetPut.get();
-                    groupWhoStockAdapter.notifyDataSetChanged();
-                    upload2Google();
-                    dialog.dismiss();
-                } catch (CloneNotSupportedException e) {
-                    throw new RuntimeException(e);
-                }
+                newStock.key1 = eKey1.getText().toString();
+                newStock.key2 = eKey2.getText().toString();
+                newStock.prv = ePrev.getText().toString();
+                newStock.nxt = eNext.getText().toString();
+                newStock.talk = eTalk.getText().toString();
+                newStock.count = Integer.parseInt(eCount.getText().toString());
+                newStock.skip1 = eSkip.getText().toString();
+                nowSWho.stocks.add(newStock);
+                nowSGroup.whos.set(wIdx, nowSWho);
+                sGroups.set(gIdx, nowSGroup);
+                groupWhoStockAdapter.notifyDataSetChanged();
+                groupWhoAdapter.notifyDataSetChanged();
+                groupsAdapter.notifyDataSetChanged();
+                dialog.dismiss();
+                gSheet.updateGSheetGroup(nowSGroup);
             })
             .setNegativeButton("Del", (dialog, which) -> {
                 if (nowSWho.stocks.size() > 1) {
                     nowSWho.stocks.remove(sIdx);
                     nowSGroup.whos.set(wIdx, nowSWho);
-                    sGroups.set(gIdx, nowSGroup);
-                    stockGetPut.put("stock");
-                    stockGetPut.get();
                     groupWhoStockAdapter.notifyDataSetChanged();
-                    nowSGroup.whos.remove(wIdx);
-                    wIdx = 0;
-                    sGroups.set(gIdx, nowSGroup);
-                    stockGetPut.put("stock del "+nowSGroup.grpF +" "+ nowSWho.whoF);
-                    stockGetPut.get();
                     groupWhoAdapter.notifyDataSetChanged();
-                    upload2Google();
+                    groupsAdapter.notifyDataSetChanged();
                     dialog.dismiss();
+                    gSheet.updateGSheetGroup(nowSGroup);
                 }
             })
             ;
@@ -182,13 +161,4 @@ public class GroupWhoStockAdapter extends RecyclerView.Adapter<GroupWhoStockAdap
         builder.create().show();
     }
 
-    void upload2Google() {
-        final String GROUP = ")_(";
-        String mPercent = new GooglePercent().make(nowSGroup);
-        String mStatement = new GoogleStatement().make(nowSGroup,",");
-        String mTalk = new SimpleDateFormat("yy/MM/dd\nHH:mm", Locale.KOREA).format(new Date());
-        gSheetUpload.uploadGroupInfo(nowSGroup.grp, GROUP, nowSGroup.grpM, mPercent,
-                mTalk, mStatement, "key12");
-
-    }
 }

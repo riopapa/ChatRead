@@ -1,7 +1,7 @@
 package biz.riopapa.chatread.func;
 
 import static android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE;
-import static biz.riopapa.chatread.MainActivity.gSheetUpload;
+import static biz.riopapa.chatread.MainActivity.gSheet;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.replGroup;
 import static biz.riopapa.chatread.MainActivity.replGroupCnt;
@@ -73,7 +73,7 @@ public class SelectChats {
         StringBuilder headStr = new StringBuilder();
 
         headStr.append("그룹 : ").append(sGroup.grp).append(" : ").append(sGroup.grpM).append("\n");
-        headStr.append(new GoogleStatement().make(sGroup,"\n    "));
+        headStr.append(gSheet.makeStatement(sGroup,"\n    "));
         headStr.append("\nstrReplaces ---\n\n");
         for (int i = 0; i < replGroupCnt; i++) {
             int compared = kalog.grp.compareTo(replGroup[i]);
@@ -236,7 +236,7 @@ public class SelectChats {
                     }
                     if (upload) {
                         String [] strs = new StockName().get(prevs[k], nexts[k], thisLine);
-                        gSheetUpload.add2Stock(sGroup.grp, who, "chats", strs[0],
+                        gSheet.add2Stock(sGroup.grp, who, "chats", strs[0],
                                 strs[1], keys, time);
                     }
                     return s;

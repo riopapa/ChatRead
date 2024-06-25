@@ -1,11 +1,11 @@
-package biz.riopapa.chatread.notification;
+package biz.riopapa.chatread;
 
 import static biz.riopapa.chatread.MainActivity.appFullNames;
 import static biz.riopapa.chatread.MainActivity.appIgnores;
 import static biz.riopapa.chatread.MainActivity.appNameIdx;
 import static biz.riopapa.chatread.MainActivity.apps;
 import static biz.riopapa.chatread.MainActivity.gIdx;
-import static biz.riopapa.chatread.MainActivity.gSheetUpload;
+import static biz.riopapa.chatread.MainActivity.gSheet;
 import static biz.riopapa.chatread.MainActivity.kaApp;
 import static biz.riopapa.chatread.MainActivity.ktGroupIgnores;
 import static biz.riopapa.chatread.MainActivity.ktNoNumbers;
@@ -63,9 +63,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 
-import biz.riopapa.chatread.MainActivity;
-import biz.riopapa.chatread.R;
-import biz.riopapa.chatread.SetVariables;
 import biz.riopapa.chatread.common.Copy2Clipboard;
 import biz.riopapa.chatread.common.IgnoreNumber;
 import biz.riopapa.chatread.common.IgnoreThis;
@@ -326,7 +323,6 @@ public class NotificationListener extends NotificationListenerService {
         // {텔투봄} [🌸투자의 봄(春)🌸] 🌸투자의 봄(春)🌸: 참여하실 분들은
 
         sbnText = strUtil.text2OneLine(sbnText);
-        utils.logW(sbnGroup, "{["+sbnWho + "} " + sbnText);
         nowSGroup = sGroups.get(grpIdx);
         if (sbnText.contains(nowSGroup.skip1) || sbnText.contains(nowSGroup.skip2))
             return;
@@ -335,12 +331,13 @@ public class NotificationListener extends NotificationListenerService {
                 nowSWho = nowSGroup.whos.get(i);
                 // if stock Group then check skip keywords and then continue;
                 sbnWho = nowSWho.who;        // replace with short who
-                utils.logW(sbnGroup, "check "+sbnWho + ">> " + sbnText);
+//        utils.logW(sbnGroup, "["+sbnWho + "] " + ((sbnText.length() > 100)? sbnText.substring(0, 100): sbnText));
                 wIdx = i;
                 stockCheck.check(nowSWho.stocks);
-                break;
+                return;
             }
         }
+//        utils.logW(sbnGroup, "{["+sbnWho + "} " + sbnText);
     }
 
     private void sayTelStock() {
@@ -363,7 +360,7 @@ public class NotificationListener extends NotificationListenerService {
         // {텔투봄} [🌸투자의 봄(春)🌸] 🌸투자의 봄(春)🌸: 참여하실 분들은
 
         sbnText = strUtil.text2OneLine(sbnText);
-        utils.logW(sbnGroup, "["+sbnWho + "] " + sbnText);
+//        utils.logW(sbnGroup, "["+sbnWho + "] " + ((sbnText.length() > 100)? sbnText.substring(0, 100): sbnText));
         int p = sbnWho.indexOf(":");
         if (p > 0 && p < 30) {  // 텔소나, 텔리치
             sbnWho = sbnWho.substring(p+1).trim();
@@ -386,12 +383,10 @@ public class NotificationListener extends NotificationListenerService {
             return;
         for (int i = 0; i < nowSGroup.whos.size(); i++) {
             if (sbnWho.contains(nowSGroup.whos.get(i).whoM)) {
-                nowSWho = nowSGroup.whos.get(i);
-                // if stock Group then check skip keywords and then continue;
-                sbnWho = nowSWho.who;        // replace with short who
-                utils.logW(sbnGroup, sbnWho + ">> " + sbnText);
+                sbnWho = nowSGroup.whos.get(i).who;        // replace with short who
+//                utils.logW(sbnGroup, sbnWho + ">> " + sbnText);
                 wIdx = i;
-                stockCheck.check(nowSWho.stocks);
+                stockCheck.check(nowSGroup.whos.get(i).stocks);
                 break;
             }
         }
@@ -467,7 +462,7 @@ public class NotificationListener extends NotificationListenerService {
                     String sayMsg = stockName + " " + amount + " " + uPrice + samPam;
                     notificationBar.update(samPam +":"+stockName, sayMsg, true);
                     logUpdate.addStock("sms>NH투자", sayMsg);
-                    gSheetUpload.add2Stock(sGroup, sbnWho, samPam, stockName,
+                    gSheet.add2Stock(sGroup, sbnWho, samPam, stockName,
                             sbnText.replace(stockName, new StringBuffer(stockName).insert(1, ".").toString()), samPam,
                             new SimpleDateFormat("yy-MM-dd HH:mm", Locale.KOREA).format(new Date()));
                     sayMsg = stockName + samPam;

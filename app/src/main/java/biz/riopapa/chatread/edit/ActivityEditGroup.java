@@ -1,14 +1,13 @@
 package biz.riopapa.chatread.edit;
 
 import static biz.riopapa.chatread.MainActivity.gIdx;
-import static biz.riopapa.chatread.MainActivity.gSheetUpload;
+import static biz.riopapa.chatread.MainActivity.gSheet;
 import static biz.riopapa.chatread.MainActivity.groupWhoAdapter;
 import static biz.riopapa.chatread.MainActivity.groupsAdapter;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.nowSGroup;
 import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.stockGetPut;
-import static biz.riopapa.chatread.MainActivity.toolbar;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -31,8 +30,6 @@ import java.util.Locale;
 
 import biz.riopapa.chatread.R;
 import biz.riopapa.chatread.adapters.GroupWhoAdapter;
-import biz.riopapa.chatread.func.GooglePercent;
-import biz.riopapa.chatread.func.GoogleStatement;
 import biz.riopapa.chatread.models.SGroup;
 
 public class ActivityEditGroup extends AppCompatActivity {
@@ -43,10 +40,9 @@ public class ActivityEditGroup extends AppCompatActivity {
     String mPercent, mStatement, mTalk;
     View deleteMenu;
     RecyclerView recyclerView;
-    public static AppCompatActivity groupActivity;
     final String GROUP = ")_(";
     final String NOTHING = "_n_";
-    SGroup nGroup;
+    SGroup newGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +55,12 @@ public class ActivityEditGroup extends AppCompatActivity {
 //            toolbar.setSubtitleTextColor(0xFF000000);
 //            toolbar.setSubtitle("Group Edit");
 //        }
-        groupActivity = this;
+        nowSGroup = sGroups.get(gIdx);
+        try {
+            newGroup = (SGroup) sGroups.get(gIdx).clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
 
         eGroup = findViewById(R.id.e_group);
         eGroupM = findViewById(R.id.e_group_match);
@@ -124,15 +125,10 @@ public class ActivityEditGroup extends AppCompatActivity {
 
     private void deleteStockGroup() {
 
-        String time = new SimpleDateFormat(".MM/dd HH:mm", Locale.KOREA).format(new Date());
-        mStatement = new GoogleStatement().make(nowSGroup,",");
-        String mWho = "\n삭제됨\n" + nowSGroup.grpM + "\n" + time;
-        String mPercent = "\n삭제됨\n" + new GooglePercent().make(nowSGroup) + "\n" + time;
+        gSheet.deleteGSheetGroup(nowSGroup);
         sGroups.remove(gIdx);
         stockGetPut.put( nowSGroup.grp+" Deleted "+ nowSGroup.grpM);
         groupsAdapter.notifyDataSetChanged();
-        gSheetUpload.uploadGroupInfo(nowSGroup.grp, "timeStamp", mWho, mPercent,
-                time, mStatement, "key12");
         finish();
     }
 
@@ -149,39 +145,30 @@ public class ActivityEditGroup extends AppCompatActivity {
     }
 
     private void duplicateGroup() {
-        try {
-            nGroup =  (SGroup) nowSGroup.clone();
-        } catch (CloneNotSupportedException e) {
-            throw new RuntimeException(e);
-        }
 
-        nGroup.grp = eGroup.getText().toString();
-        nGroup.grpM = eGroupM.getText().toString();
-        nGroup.grpF = eGroupF.getText().toString();
-        nGroup.telKa = tTelKa.getText().toString();
-        nGroup.ignore = sIgnore.isChecked();
-        nGroup.skip1 = eSkip1.getText().toString();
-        nGroup.skip2 = eSkip2.getText().toString();
-        nGroup.skip3 = eSkip3.getText().toString();
-        if (nGroup.skip1.isEmpty())
-            nGroup.skip1 = NOTHING;
-        if (nGroup.skip2.isEmpty())
-            nGroup.skip2 = NOTHING;
-        if (nGroup.skip3.isEmpty())
-            nGroup.skip3 = NOTHING;
+        newGroup.grp = eGroup.getText().toString();
+        newGroup.grpM = eGroupM.getText().toString();
+        newGroup.grpF = eGroupF.getText().toString();
+        newGroup.telKa = tTelKa.getText().toString();
+        newGroup.ignore = sIgnore.isChecked();
+        newGroup.skip1 = eSkip1.getText().toString();
+        newGroup.skip2 = eSkip2.getText().toString();
+        newGroup.skip3 = eSkip3.getText().toString();
+        if (newGroup.skip1.isEmpty())
+            newGroup.skip1 = NOTHING;
+        if (newGroup.skip2.isEmpty())
+            newGroup.skip2 = NOTHING;
+        if (newGroup.skip3.isEmpty())
+            newGroup.skip3 = NOTHING;
 
-        buildRepl(eRepl.getText().toString(), nGroup);
+        buildRepl(eRepl.getText().toString(), newGroup);
 
-        sGroups.add(gIdx,nGroup);
+        sGroups.add(gIdx, newGroup);
         nowSGroup = sGroups.get(gIdx);
         stockGetPut.put("group dup");
         stockGetPut.get();
         groupsAdapter.notifyDataSetChanged();
-        mPercent = new GooglePercent().make(nGroup);
-        mStatement = new GoogleStatement().make(nGroup,",");
-        mTalk = new SimpleDateFormat("yy/MM/dd\nHH:mm", Locale.KOREA).format(new Date());
-        gSheetUpload.uploadGroupInfo(nGroup.grp, GROUP, nGroup.grpM, mPercent,
-                mTalk, mStatement, "key12");
+        gSheet.updateGSheetGroup(newGroup);
         finish();
     }
 
@@ -189,48 +176,39 @@ public class ActivityEditGroup extends AppCompatActivity {
         String[] split = s.split("\n");
         nGroup.replT = new ArrayList<>();
         nGroup.replF = new ArrayList<>();
-        for (int i = 0; i < split.length; i++) {
-            if (split[i].isEmpty())
+        for (String sp1 : split) {
+            if (sp1.isEmpty())
                 continue;
-            String[] split2 = split[i].split("\\^");
+            String[] split2 = sp1.split("\\^");
             nGroup.replT.add(split2[0].trim());
             nGroup.replF.add(split2[1].trim());
         }
     }
     private void saveGroup() {
-        try {
-            nGroup =  (SGroup) nowSGroup.clone();
-        } catch (CloneNotSupportedException e) {
-            throw new RuntimeException(e);
-        }
 
-        nGroup.grp = eGroup.getText().toString();
-        nGroup.grpM = eGroupM.getText().toString();
-        nGroup.grpF = eGroupF.getText().toString();
-        nGroup.telKa = tTelKa.getText().toString();
-        nGroup.ignore = sIgnore.isChecked();
-        nGroup.skip1 = eSkip1.getText().toString();
-        nGroup.skip2 = eSkip2.getText().toString();
-        nGroup.skip3 = eSkip3.getText().toString();
-        if (nGroup.skip1.isEmpty())
-            nGroup.skip1 = NOTHING;
-        if (nGroup.skip2.isEmpty())
-            nGroup.skip2 = NOTHING;
-        if (nGroup.skip3.isEmpty())
-            nGroup.skip3 = NOTHING;
-        buildRepl(eRepl.getText().toString(), nGroup);
-        sGroups.set(gIdx, nGroup);
+        newGroup.grp = eGroup.getText().toString();
+        newGroup.grpM = eGroupM.getText().toString();
+        newGroup.grpF = eGroupF.getText().toString();
+        newGroup.telKa = tTelKa.getText().toString();
+        newGroup.ignore = sIgnore.isChecked();
+        newGroup.skip1 = eSkip1.getText().toString();
+        newGroup.skip2 = eSkip2.getText().toString();
+        newGroup.skip3 = eSkip3.getText().toString();
+        if (newGroup.skip1.isEmpty())
+            newGroup.skip1 = NOTHING;
+        if (newGroup.skip2.isEmpty())
+            newGroup.skip2 = NOTHING;
+        if (newGroup.skip3.isEmpty())
+            newGroup.skip3 = NOTHING;
+        buildRepl(eRepl.getText().toString(), newGroup);
+        sGroups.set(gIdx, newGroup);
         nowSGroup = sGroups.get(gIdx);
         stockGetPut.put("group save");
         stockGetPut.get();
 
-        Toast.makeText(mContext,"Saving "+ nGroup.grp+" / " + nGroup.grpM, Toast.LENGTH_SHORT).show();
+        Toast.makeText(mContext,"Saving "+ newGroup.grp+" / " + newGroup.grpM, Toast.LENGTH_SHORT).show();
         groupsAdapter.notifyDataSetChanged();
-        mPercent = new GooglePercent().make(nGroup);
-        mStatement = new GoogleStatement().make(nGroup,",");
-        mTalk = new SimpleDateFormat("yy/MM/dd\nHH:mm", Locale.KOREA).format(new Date());
-        gSheetUpload.uploadGroupInfo(nGroup.grp, GROUP, nGroup.grpM, mPercent,
-                mTalk, mStatement, "key12");
+        gSheet.updateGSheetGroup(newGroup);
         finish();
 
     }

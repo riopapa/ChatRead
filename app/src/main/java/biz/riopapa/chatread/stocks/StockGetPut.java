@@ -3,8 +3,13 @@ package biz.riopapa.chatread.stocks;
 import static android.content.Context.MODE_PRIVATE;
 import static biz.riopapa.chatread.MainActivity.downloadFolder;
 import static biz.riopapa.chatread.MainActivity.fileIO;
+import static biz.riopapa.chatread.MainActivity.gIdx;
 import static biz.riopapa.chatread.MainActivity.mContext;
+import static biz.riopapa.chatread.MainActivity.nowSGroup;
+import static biz.riopapa.chatread.MainActivity.nowSStock;
+import static biz.riopapa.chatread.MainActivity.nowSWho;
 import static biz.riopapa.chatread.MainActivity.sGroups;
+import static biz.riopapa.chatread.MainActivity.sIdx;
 import static biz.riopapa.chatread.MainActivity.stockKaGroupMatchIdx;
 import static biz.riopapa.chatread.MainActivity.stockKaGroupMatchTbl;
 import static biz.riopapa.chatread.MainActivity.stockSMSGroupMatchIdx;
@@ -14,6 +19,7 @@ import static biz.riopapa.chatread.MainActivity.stockTelGroupMatchTbl;
 import static biz.riopapa.chatread.MainActivity.tableFolder;
 import static biz.riopapa.chatread.MainActivity.todayFolder;
 import static biz.riopapa.chatread.MainActivity.utils;
+import static biz.riopapa.chatread.MainActivity.wIdx;
 
 import android.content.SharedPreferences;
 import android.os.Environment;
@@ -36,22 +42,6 @@ import biz.riopapa.chatread.models.SWho;
 public class StockGetPut {
 
     final static String STOCK_TABLE = "StockTable";
-
-//   group^ group name  ^     skip1  ^  skip2    ^ skip3 ^  -1  ^ skip4    ^ sayMore
-//    고선 ^ 리딩방 CA ^     !!     ^     해외  ^  BTC  ^       ^    0%    ^ 개장전
-
-//   group^  who        ^  keyword1 ^ keyword2 ^ talk ^ count ^ skip     ^ more ^ prev ^ next
-//    고선 ^ 고선생       ^    매수    ^   목표가  ^      ^  101  ^          ^ 중지
-
-//    static ArrayList<String> gSkip1 = new ArrayList<>(), gSkip2 = new ArrayList<>(),
-//            gSkip3 = new ArrayList<>(), gSkip4 = new ArrayList<>();
-//
-//    static List<String> chkKey1 = new ArrayList<>();
-//    static List<String> chkKey2 = new ArrayList<>();
-//    static List<String> chkSkip = new ArrayList<>();
-//    static List<String> prvKey = new ArrayList<>();
-//    static List<String> nxtKey = new ArrayList<>();
-//    static int gIdx, gwIdx, svIdx;
 
     public void get() {
         SharedPreferences shareGroup = mContext.getSharedPreferences(STOCK_TABLE, MODE_PRIVATE);

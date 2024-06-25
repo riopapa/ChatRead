@@ -1,7 +1,6 @@
 package biz.riopapa.chatread.stocks;
 
-import static biz.riopapa.chatread.MainActivity.gIdx;
-import static biz.riopapa.chatread.MainActivity.gSheetUpload;
+import static biz.riopapa.chatread.MainActivity.gSheet;
 import static biz.riopapa.chatread.MainActivity.logUpdate;
 import static biz.riopapa.chatread.MainActivity.mAudioManager;
 import static biz.riopapa.chatread.MainActivity.mContext;
@@ -9,24 +8,21 @@ import static biz.riopapa.chatread.MainActivity.mMainActivity;
 import static biz.riopapa.chatread.MainActivity.notificationBar;
 import static biz.riopapa.chatread.MainActivity.nowSGroup;
 import static biz.riopapa.chatread.MainActivity.nowSStock;
-import static biz.riopapa.chatread.MainActivity.nowSWho;
 import static biz.riopapa.chatread.MainActivity.phoneVibrate;
-import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.sbnGroup;
 import static biz.riopapa.chatread.MainActivity.sbnText;
 import static biz.riopapa.chatread.MainActivity.sbnWho;
 import static biz.riopapa.chatread.MainActivity.sounds;
+import static biz.riopapa.chatread.MainActivity.stockCnt;
 import static biz.riopapa.chatread.MainActivity.stockName;
 import static biz.riopapa.chatread.MainActivity.strUtil;
 import static biz.riopapa.chatread.MainActivity.utils;
-import static biz.riopapa.chatread.MainActivity.wIdx;
 
 import android.content.Context;
 import android.hardware.display.DisplayManager;
 import android.media.AudioManager;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.Display;
 import android.widget.Toast;
 
@@ -42,7 +38,6 @@ import biz.riopapa.chatread.common.Sounds;
 import biz.riopapa.chatread.common.Utils;
 import biz.riopapa.chatread.models.SGroup;
 import biz.riopapa.chatread.models.SStock;
-import biz.riopapa.chatread.models.SWho;
 
 public class StockCheck {
 
@@ -52,13 +47,7 @@ public class StockCheck {
             nowSStock = stocks.get(s);
             if (sbnText.contains(nowSStock.key1) && sbnText.contains(nowSStock.key2)) {
                 nowSStock.count++;
-                try {
-                    nowSWho.stocks.set(s, (SStock) nowSStock.clone());
-                    nowSGroup.whos.set(wIdx, (SWho) nowSWho.clone());
-                    sGroups.set(gIdx, (SGroup) nowSGroup.clone());
-                } catch (CloneNotSupportedException e) {
-                    utils.logE("StockCheck", "CloneNotSupportedException");
-                }
+                stockCnt++;
                 talkNlog(nowSStock);
                 break;
             }
@@ -84,19 +73,7 @@ public class StockCheck {
         String shortText = makeShort(strUtil.removeSpecialChars(sParse[1]), nowSGroup);
         if (!stock.talk.isEmpty()) {
             String [] joins;
-            String won = "";
-            // 매수가 가 있으면 금액 말하기
-            String [] ss = shortText.split("매수가");
-            if (ss.length > 1) {
-                int p = ss[1].indexOf("원");
-                won = (p > 0) ? ss[1].substring(2,p) :ss[1].substring(0,7);
-            } else {
-                ss = shortText.split("진입가");
-                if (ss.length > 1) {
-                    int p = ss[1].indexOf("원");
-                    won = (p > 0) ? ss[1].substring(2, p) : ss[1].substring(0, 7);
-                }
-            }
+            String won = wonValue(shortText);
             joins = new String[]{sbnGroup, sbnWho, sParse[0], stock.talk, won};
             sounds.speakBuyStock(String.join(" , ", joins));
             String netStr = won + " " + ((shortText.length() > 50) ? shortText.substring(0, 50) : shortText);
@@ -127,7 +104,20 @@ public class StockCheck {
             notificationBar.update(title, shortParse1, false);
         }
         String timeStamp = new SimpleDateFormat("yy-MM-dd HH:mm", Locale.KOREA).format(new Date());
-        gSheetUpload.add2Stock(sbnGroup, timeStamp, sbnWho, percent, sParse[0], shortText, key12);
+        gSheet.add2Stock(sbnGroup, timeStamp, sbnWho, percent, sParse[0], shortText, key12);
+    }
+
+    private String wonValue (String shortText) {
+        // 매수가, 진입가 가 있으면 금액 말하기
+        String [] ss = shortText.split("매수가");
+        if (ss.length < 2) {
+            ss = shortText.split("진입가");
+            if (ss.length < 2)
+                return "";
+        } else
+            return  "";
+        int p = ss[1].indexOf("원");
+        return (p > 0) ? ss[1].substring(2,p) :ss[1].substring(0,7);
     }
 
     boolean isSilentNow() {
