@@ -81,6 +81,8 @@ public class Sounds {
     public void stopTTS() {
         if (mTTS != null)
             mTTS.stop();
+        if (mAudioManager != null)
+            mAudioManager.abandonAudioFocusRequest(mFocusGain);
     }
 
     public void speakAfterBeep(String text) {

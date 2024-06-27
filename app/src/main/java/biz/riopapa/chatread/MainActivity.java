@@ -100,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
     public static String[] smsWhoIgnores = null;
     public static String[] smsTxtIgnores = null;
     public static String[] smsNoNumbers = null;
+    public static String[] smsWho = null;
     public static String[] smsReplFrom = null;
     public static String[] smsReplTo = null;
 

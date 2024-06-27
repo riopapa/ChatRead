@@ -1,5 +1,6 @@
 package biz.riopapa.chatread.stocks;
 
+import static biz.riopapa.chatread.MainActivity.gIdx;
 import static biz.riopapa.chatread.MainActivity.gSheet;
 import static biz.riopapa.chatread.MainActivity.logUpdate;
 import static biz.riopapa.chatread.MainActivity.mAudioManager;
@@ -8,7 +9,9 @@ import static biz.riopapa.chatread.MainActivity.mMainActivity;
 import static biz.riopapa.chatread.MainActivity.notificationBar;
 import static biz.riopapa.chatread.MainActivity.nowSGroup;
 import static biz.riopapa.chatread.MainActivity.nowSStock;
+import static biz.riopapa.chatread.MainActivity.nowSWho;
 import static biz.riopapa.chatread.MainActivity.phoneVibrate;
+import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.sbnGroup;
 import static biz.riopapa.chatread.MainActivity.sbnText;
 import static biz.riopapa.chatread.MainActivity.sbnWho;
@@ -17,6 +20,7 @@ import static biz.riopapa.chatread.MainActivity.stockCnt;
 import static biz.riopapa.chatread.MainActivity.stockName;
 import static biz.riopapa.chatread.MainActivity.strUtil;
 import static biz.riopapa.chatread.MainActivity.utils;
+import static biz.riopapa.chatread.MainActivity.wIdx;
 
 import android.content.Context;
 import android.hardware.display.DisplayManager;
@@ -41,13 +45,16 @@ import biz.riopapa.chatread.models.SStock;
 
 public class StockCheck {
 
-    public void check(ArrayList<SStock> stocks) {
+    public void check(int g, int w, ArrayList<SStock> stocks) {
 
         for (int s = 0; s < stocks.size() ; s++) {
             nowSStock = stocks.get(s);
             if (sbnText.contains(nowSStock.key1) && sbnText.contains(nowSStock.key2)) {
                 nowSStock.count++;
                 stockCnt++;
+                nowSGroup.whos.get(w).stocks.set(s, nowSStock);
+                nowSGroup.whos.set(w, nowSWho);
+                sGroups.set(g, nowSGroup);
                 talkNlog(nowSStock);
                 break;
             }
@@ -78,7 +85,7 @@ public class StockCheck {
             sounds.speakBuyStock(String.join(" , ", joins));
             String netStr = won + " " + ((shortText.length() > 50) ? shortText.substring(0, 50) : shortText);
             utils.logW(sbnGroup, netStr);
-            String title = sParse[0]+" / " + sbnWho;
+            String title = sParse[0]+" / " + sbnWho + ":" +sbnGroup;
             notificationBar.update(title, netStr, true);
             logUpdate.addStock(sParse[0] + " ["+sbnGroup+":"+sbnWho+"]", shortText+key12
                     + " " + stock.count);

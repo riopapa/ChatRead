@@ -71,7 +71,7 @@ public class ActivityEditTable extends AppCompatActivity {
         EditText eTable = findViewById(R.id.text_table);
         File file = new File(tableFolder, mTableName + ".txt");
         String[] lines = tableListFile.readRaw(file);
-        String text = Arrays.stream(lines).map(s -> s + "\n").collect(Collectors.joining()) + "\n";
+        String text = Arrays.stream(lines).map(s -> s + "\n\n").collect(Collectors.joining());
         eTable.setText(text);
         eTable.setFocusable(true);
         eTable.setEnabled(true);
@@ -86,7 +86,7 @@ public class ActivityEditTable extends AppCompatActivity {
         ImageView ivSearch = findViewById(R.id.search_table);
         ivSearch.setOnClickListener(v -> {
             int cnt = 0;
-            key = eKey.getText().toString();           // .replace(" ","\u00A0");
+            key = eKey.getText().toString();
             fullText = eTable.getText().toString();
             eTable.setText(fullText);   // reset previous searched color
             Spannable Word2Span = new SpannableString( eTable.getText() );
@@ -112,14 +112,13 @@ public class ActivityEditTable extends AppCompatActivity {
             if (pos > 0)
                 eTable.setSelection(pos, pos+key.length());
         });
-
     }
 
     String sortText(String txt) {
         String[] arrText = txt.split("\n");
         Arrays.sort(arrText);
-        StringBuilder sortedText = new StringBuilder();
-        Arrays.stream(arrText).filter(t -> txt.length() > 2).forEach(t -> sortedText.append(t).append("\n"));
+        .......        StringBuilder sortedText = new StringBuilder();
+        Arrays.stream(arrText).filter(t -> t.length() > 2).forEach(t -> sortedText.append(t).append("\n"));
         return sortedText.toString();
     }
 

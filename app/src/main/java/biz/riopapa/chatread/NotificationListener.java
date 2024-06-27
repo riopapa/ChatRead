@@ -35,6 +35,7 @@ import static biz.riopapa.chatread.MainActivity.smsNoNumbers;
 import static biz.riopapa.chatread.MainActivity.smsReplFrom;
 import static biz.riopapa.chatread.MainActivity.smsReplTo;
 import static biz.riopapa.chatread.MainActivity.smsTxtIgnores;
+import static biz.riopapa.chatread.MainActivity.smsWho;
 import static biz.riopapa.chatread.MainActivity.smsWhoIgnores;
 import static biz.riopapa.chatread.MainActivity.sounds;
 import static biz.riopapa.chatread.MainActivity.stockCheck;
@@ -289,7 +290,7 @@ public class NotificationListener extends NotificationListenerService {
         // 텔투봄 ^ 투자의 봄
         // 텔오늘 ^ 오늘의단타 공식채널
 
-        grpIdx = isStockKaGroup(sbnGroup);
+        int grpIdx = isStockKaGroup(sbnGroup);
         if (grpIdx < 0) {
             sbnText = strUtil.strShorten(sbnGroup, sbnText);
             notificationBar.update("카톡!" + sbnGroup + "." + sbnWho, sbnText, true);
@@ -326,14 +327,13 @@ public class NotificationListener extends NotificationListenerService {
         nowSGroup = sGroups.get(grpIdx);
         if (sbnText.contains(nowSGroup.skip1) || sbnText.contains(nowSGroup.skip2))
             return;
-        for (int i = 0; i < nowSGroup.whos.size(); i++) {
-            if (sbnWho.contains(nowSGroup.whos.get(i).whoM)) {
-                nowSWho = nowSGroup.whos.get(i);
+        for (int w = 0; w < nowSGroup.whos.size(); w++) {
+            if (sbnWho.contains(nowSGroup.whos.get(w).whoM)) {
+                nowSWho = nowSGroup.whos.get(w);
                 // if stock Group then check skip keywords and then continue;
                 sbnWho = nowSWho.who;        // replace with short who
 //        utils.logW(sbnGroup, "["+sbnWho + "] " + ((sbnText.length() > 100)? sbnText.substring(0, 100): sbnText));
-                wIdx = i;
-                stockCheck.check(nowSWho.stocks);
+                stockCheck.check(grpIdx, w, nowSWho.stocks);
                 return;
             }
         }
@@ -381,12 +381,11 @@ public class NotificationListener extends NotificationListenerService {
         if (sbnText.contains(nowSGroup.skip1) ||
                 sbnText.contains(nowSGroup.skip2))
             return;
-        for (int i = 0; i < nowSGroup.whos.size(); i++) {
-            if (sbnWho.contains(nowSGroup.whos.get(i).whoM)) {
-                sbnWho = nowSGroup.whos.get(i).who;        // replace with short who
+        for (int w = 0; w < nowSGroup.whos.size(); w++) {
+            if (sbnWho.contains(nowSGroup.whos.get(w).whoM)) {
+                sbnWho = nowSGroup.whos.get(w).who;        // replace with short who
 //                utils.logW(sbnGroup, sbnWho + ">> " + sbnText);
-                wIdx = i;
-                stockCheck.check(nowSGroup.whos.get(i).stocks);
+                stockCheck.check(grpIdx, w, nowSGroup.whos.get(w).stocks);
                 break;
             }
         }
@@ -415,22 +414,16 @@ public class NotificationListener extends NotificationListenerService {
                 sbnWho = sbnWho.replaceAll("[\\u200C-\\u206F]", "");
                 sbnText = sbnText.replace(ctx.getString(R.string.web_sent), "")
                         .replaceAll("[\\u200C-\\u206F]", "");
-                if (smsReplFrom != null) {
-                    for (int i = 0; i < smsReplFrom.length; i++)
-                        sbnText = sbnText.replace(smsReplFrom[i], smsReplTo[i]);
-                }
                 saySMSNormal();
             } else {
                 nowSGroup = sGroups.get(grpIdx);
-                gIdx = grpIdx;
-                for (int i = 0; i < nowSGroup.whos.size(); i++) {
-                    if (sbnWho.contains(nowSGroup.whos.get(i).whoM)) {
-                        nowSWho = nowSGroup.whos.get(i);
+                for (int w = 0; w < nowSGroup.whos.size(); w++) {
+                    if (sbnWho.contains(nowSGroup.whos.get(w).whoM)) {
+                        nowSWho = nowSGroup.whos.get(w);
                         // if stock Group then check skip keywords and then continue;
                         sbnWho = nowSWho.who;        // replace with short who
                         utils.logW(sbnGroup, sbnWho + ">> " + sbnText);
-                        wIdx = i;
-                        stockCheck.check(nowSWho.stocks);
+                        stockCheck.check(grpIdx, w, nowSWho.stocks);
                         break;
                     }
                 }
@@ -481,11 +474,15 @@ public class NotificationListener extends NotificationListenerService {
     private void saySMSNormal() {
         String head = "[sms."+ sbnWho + "] ";
         sbnText = strUtil.strShorten("sms", sbnText);
-        sbnText = makeShort(sbnText, smsApp);
         notificationBar.update(head, sbnText, true);
         logUpdate.addLog(head, sbnText);
         if (utils == null)
             utils = new Utils();
+        for (int i = 0; i < smsWho.length; i++) {
+            if (sbnWho.equals(smsWho[i])) {
+                sbnText = sbnText.replace(smsReplFrom[i], smsReplTo[i]);
+            }
+        }
         if (IgnoreNumber.in(smsNoNumbers, sbnWho))
             sbnText = strUtil.removeDigit(sbnText);
         sounds.speakAfterBeep(head + strUtil.makeEtc(sbnText, isWorking()? 20: 120));
@@ -546,23 +543,22 @@ public class NotificationListener extends NotificationListenerService {
     boolean isSbnNothing(StatusBarNotification sbn) {
 
         sbnAppName = sbn.getPackageName();  // to LowCase
-        if (sbnAppName.isEmpty())
+        if (sbnAppName.isEmpty() || Collections.binarySearch(appIgnores, sbnAppName) >= 0)
             return true;
-        Notification mNotification = sbn.getNotification();
-        Bundle extras = mNotification.extras;
+        Bundle extras = sbn.getNotification().extras;
         // get eText //
         try {
-            sbnText = extras.getString(Notification.EXTRA_TEXT,"");
+            sbnText = "" + extras.getString(Notification.EXTRA_TEXT,"");
         } catch (Exception e) {
             utils.logW("sbnText", "sbnText Exception "+ sbnAppName +" "+sbnText);
             return true;
         }
-        if (sbnText == null || sbnText.isEmpty())
+        if (sbnText.isEmpty())
             return true;
 
         // get eWho //
         try {
-            sbnWho = extras.getString(Notification.EXTRA_TITLE,"");
+            sbnWho = "" + extras.getString(Notification.EXTRA_TITLE,"");
         } catch (Exception e) {
             new Utils().logW("sbn WHO Error", "no SWho "+ sbnAppName +" "+sbnText);
             return true;
@@ -592,8 +588,6 @@ public class NotificationListener extends NotificationListenerService {
                 return false;
 
             default:
-                if (Collections.binarySearch(appIgnores, sbnAppName) >= 0)
-                    return true;
                 sbnAppIdx = Collections.binarySearch(appFullNames, sbnAppName);
                 if (sbnAppIdx >= 0) {
                     sbnAppIdx = appNameIdx.get(sbnAppIdx);
@@ -620,15 +614,6 @@ public class NotificationListener extends NotificationListenerService {
 
     public static boolean isWorking() {
         return mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC) < 6;
-    }
-
-    String makeShort(String text, App app) {
-        if (app.replF != null) {
-            for (int i = 0; i < app.replF.length; i++) {
-                text = text.replace(app.replF[i], app.replT[i]);
-            }
-        }
-        return text;
     }
 
 }

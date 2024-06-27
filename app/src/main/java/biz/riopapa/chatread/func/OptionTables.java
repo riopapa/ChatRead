@@ -4,32 +4,27 @@ import static biz.riopapa.chatread.MainActivity.ktGroupIgnores;
 import static biz.riopapa.chatread.MainActivity.ktNoNumbers;
 import static biz.riopapa.chatread.MainActivity.ktTxtIgnores;
 import static biz.riopapa.chatread.MainActivity.ktWhoIgnores;
-import static biz.riopapa.chatread.MainActivity.longWhoNames;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.replGroup;
 import static biz.riopapa.chatread.MainActivity.replGroupCnt;
 import static biz.riopapa.chatread.MainActivity.replLong;
 import static biz.riopapa.chatread.MainActivity.replShort;
-import static biz.riopapa.chatread.MainActivity.shortWhoNames;
 import static biz.riopapa.chatread.MainActivity.smsNoNumbers;
 import static biz.riopapa.chatread.MainActivity.smsReplFrom;
 import static biz.riopapa.chatread.MainActivity.smsReplTo;
 import static biz.riopapa.chatread.MainActivity.smsTxtIgnores;
+import static biz.riopapa.chatread.MainActivity.smsWho;
 import static biz.riopapa.chatread.MainActivity.smsWhoIgnores;
 import static biz.riopapa.chatread.MainActivity.sounds;
 import static biz.riopapa.chatread.MainActivity.stockGetPut;
 import static biz.riopapa.chatread.MainActivity.tableListFile;
 import static biz.riopapa.chatread.MainActivity.utils;
-import static biz.riopapa.chatread.MainActivity.whoNameFrom;
-import static biz.riopapa.chatread.MainActivity.whoNameTo;
 
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import biz.riopapa.chatread.MainActivity;
-import biz.riopapa.chatread.stocks.StockGetPut;
-import biz.riopapa.chatread.common.SnackBar;
 import biz.riopapa.chatread.common.Sounds;
 
 public class OptionTables {
@@ -43,9 +38,7 @@ public class OptionTables {
         ktTxtIgnores = tableListFile.read("ktTxtIg");
         ktNoNumbers = tableListFile.read("ktNoNum");
 
-        smsWhoIgnores =  tableListFile.read("smsWhoIg");
-        smsTxtIgnores =  tableListFile.read("smsTxtIg");
-        smsNoNumbers = tableListFile.read("smsNoNum");
+        readySMSTables();
 
         if (ktTxtIgnores == null || smsWhoIgnores == null) {
             sounds.beepOnce(MainActivity.soundType.ERR.ordinal());
@@ -54,24 +47,27 @@ public class OptionTables {
             utils.logW("readAll",s);
         }
         readStrReplFile();
-        readSmsReplFile();
         new AppsTable().get();
         stockGetPut.get();
 
     }
 
-    void readSmsReplFile() {
+    void readySMSTables() {
+        smsWhoIgnores =  tableListFile.read("smsWhoIg");
+        smsTxtIgnores =  tableListFile.read("smsTxtIg");
+        smsNoNumbers = tableListFile.read("smsNoNum");
         /*
-         * 0   ^  1
-         * 짧은 ^ 아주 긴 문장 ; comment
+         * 0   ^  1  ^ 2
+         * Who ^ 짧은 ^ 아주 긴 문장 ; comment
          */
         String[] lines = tableListFile.read("smsRepl");
+        ArrayList<String> sWho = new ArrayList<>();
         ArrayList<String> sShort = new ArrayList<>();
         ArrayList<String> sLong = new ArrayList<>();
         for (String oneLine : lines) {
             if (!oneLine.isEmpty()) {
                 String[] ones = oneLine.split("\\^");
-                if (ones.length < 2) {
+                if (ones.length != 3) {
                     if (sounds == null)
                         sounds = new Sounds();
                     sounds.beepOnce(MainActivity.soundType.ERR.ordinal());
@@ -79,15 +75,18 @@ public class OptionTables {
                     Toast.makeText(mContext, s, Toast.LENGTH_LONG).show();
                     utils.logW("readSMS", s);
                 } else {
-                    sShort.add(ones[0].trim());
-                    sLong.add(ones[1].trim());
+                    sWho.add(ones[0].trim());
+                    sShort.add(ones[1].trim());
+                    sLong.add(ones[2].trim());
                 }
             }
         }
         if (!sShort.isEmpty()) {
+            smsWho = new String[sShort.size()];
             smsReplFrom = new String[sShort.size()];
             smsReplTo = new String[sShort.size()];
             for (int i = 0; i < sShort.size(); i++) {
+                smsWho[i] = sWho.get(i);
                 smsReplFrom[i] = sLong.get(i);
                 smsReplTo[i] = sShort.get(i);
             }
