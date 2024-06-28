@@ -100,9 +100,9 @@
                     android:id="@+id/table_kt_grp_ig"
                     />
                 <item
-                    android:title="katalk : No Number"
-                    android:icon="@drawable/icon_no_number"
-                    android:id="@+id/table_kt_no_num"
+                    android:title="katalk : Who Ignore"
+                    android:icon="@drawable/icon_who"
+                    android:id="@+id/table_kt_who_ig"
                     />
                 <item
                     android:title="katalk : Text Ignore"
@@ -110,9 +110,14 @@
                     android:id="@+id/table_kt_txt_ig"
                     />
                 <item
-                    android:title="katalk : Who Ignore"
-                    android:icon="@drawable/icon_who"
-                    android:id="@+id/table_kt_who_ig"
+                    android:title="katalk : Replace String"
+                    android:icon="@drawable/icon_str_replace"
+                    android:id="@+id/table_kt_repl"
+                    />
+                <item
+                    android:title="katalk : No Number"
+                    android:icon="@drawable/icon_no_number"
+                    android:id="@+id/table_kt_no_num"
                     />
             </menu>
         </item>

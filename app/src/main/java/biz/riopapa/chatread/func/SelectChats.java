@@ -3,10 +3,6 @@ package biz.riopapa.chatread.func;
 import static android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE;
 import static biz.riopapa.chatread.MainActivity.gSheet;
 import static biz.riopapa.chatread.MainActivity.mContext;
-import static biz.riopapa.chatread.MainActivity.replGroup;
-import static biz.riopapa.chatread.MainActivity.replGroupCnt;
-import static biz.riopapa.chatread.MainActivity.replLong;
-import static biz.riopapa.chatread.MainActivity.replShort;
 import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.strUtil;
 import static biz.riopapa.chatread.MainActivity.tableListFile;
@@ -75,12 +71,9 @@ public class SelectChats {
         headStr.append("그룹 : ").append(sGroup.grp).append(" : ").append(sGroup.grpM).append("\n");
         headStr.append(gSheet.makeStatement(sGroup,"\n    "));
         headStr.append("\nstrReplaces ---\n\n");
-        for (int i = 0; i < replGroupCnt; i++) {
-            int compared = kalog.grp.compareTo(replGroup[i]);
-            if (compared == 0) {
-                for (int j = 0; j < replLong[i].length; j++)
-                    headStr.append(replShort[i][j]).append(" > ").append(replLong[i][j]).append("\n");
-            }
+        for (int i = 0; i < sGroup.replF.size(); i++) {
+            headStr.append(sGroup.replT.get(i)).append(" < ")
+                    .append(sGroup.replF.get(i)).append("\n");
         }
 
         msgLines = new ArrayList<>();     // message lines chosen
@@ -142,6 +135,9 @@ public class SelectChats {
             }
             boolean found = whoFound || key1Found;
             if (found) { //  || inWhoList(txt)) {
+                for (int i = 0; i < sGroup.replF.size(); i++) {
+                    thisLine = thisLine.replace(sGroup.replF.get(i), sGroup.replT.get(i));
+                }
                 thisLine = cutTail(strUtil.removeSpecialChars(thisLine));
                 SpannableString ssLine = key2Matched(time, sWho.who, thisLine, upload);
                 if (ssLine.length() > 10) {

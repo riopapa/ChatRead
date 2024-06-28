@@ -38,9 +38,11 @@ import biz.riopapa.chatread.adapters.GroupAdapter;
 import biz.riopapa.chatread.adapters.GroupWhoAdapter;
 import biz.riopapa.chatread.adapters.GroupWhoStockAdapter;
 import biz.riopapa.chatread.fragment.FragmentKaTalk;
+import biz.riopapa.chatread.func.StrReplSet;
 import biz.riopapa.chatread.models.SGroup;
 import biz.riopapa.chatread.models.SStock;
 import biz.riopapa.chatread.models.SWho;
+import biz.riopapa.chatread.models.StrRepl;
 import biz.riopapa.chatread.stocks.StockGetPut;
 import biz.riopapa.chatread.stocks.StockCheck;
 import biz.riopapa.chatread.stocks.StockName;
@@ -62,7 +64,6 @@ import biz.riopapa.chatread.func.LogUpdate;
 import biz.riopapa.chatread.func.MsgNamoo;
 import biz.riopapa.chatread.func.StrUtil;
 import biz.riopapa.chatread.func.TableListFile;
-import biz.riopapa.chatread.models.Alert;
 import biz.riopapa.chatread.models.App;
 import biz.riopapa.chatread.models.KeyVal;
 import biz.riopapa.chatread.notification.NotificationBar;
@@ -107,12 +108,6 @@ public class MainActivity extends AppCompatActivity {
     public static String[] ktNoNumbers = null;
     public static String[] ktTxtIgnores = null;
 
-    public static String[] shortWhoNames = null;
-    public static String[] longWhoNames = null;
-
-    public static String[] whoNameFrom = null;
-    public static String[] whoNameTo = null;
-
     public static String mTableName;
 
     public static int replGroupCnt = 0;
@@ -120,6 +115,8 @@ public class MainActivity extends AppCompatActivity {
     public static String [][] replLong;
     public static String [][] replShort;
     public static String logQue = "", logStock = "", logSave = "", logWork = "";
+
+    public static ArrayList<StrRepl> ktStrRepl = null;
 
     public static SharedPreferences sharePref;
     public static SharedPreferences.Editor sharedEditor;
@@ -140,14 +137,13 @@ public class MainActivity extends AppCompatActivity {
 
     public static boolean isPhoneBusy = false;
 
-    public static ArrayList<Alert> alerts = null;
-
     /* Stock variables */
     public static GroupAdapter groupsAdapter = null;
     public static ArrayList<SGroup> sGroups = null;
     public static StockGetPut stockGetPut = null;
     public static StockCheck stockCheck = null;
-    public static int gIdx, wIdx, sIdx;
+    public static StrReplSet strReplSet = null;
+    public static int gIDX, wIDX, sIDX;
     public static SGroup nowSGroup;
     public static SWho nowSWho;
     public static SStock nowSStock;
@@ -161,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
     public static int telegramAppIdx, kakaoAppIdx, smsAppIdx;
 
     public static final String lastChar = "힝";
-    public static int mStockGroupPos = -1, mAppsPos = -1;  // updated or duplicated recycler position
+    public static int mAppsPos = -1;  // updated or duplicated recycler position
 
     public enum soundType { PRE, POST, ERR, HI_TESLA, ONLY, STOCK, INFO, KAKAO}
     public static final int[] beepRawIds = { R.raw.pre, R.raw.post, R.raw.err,
@@ -236,7 +232,8 @@ public class MainActivity extends AppCompatActivity {
                         id == R.id.table_sms_txt_ig || id == R.id.table_sms_who_ig ||
                         id == R.id.table_sys_ig ||
                         id == R.id.table_kt_grp_ig || id == R.id.table_kt_no_num ||
-                        id == R.id.table_kt_txt_ig || id == R.id.table_kt_who_ig
+                        id == R.id.table_kt_txt_ig || id == R.id.table_kt_who_ig ||
+                        id == R.id.table_kt_repl
                     ) {
                     menu_selected = id;
                     Intent intent = new Intent(mContext, ActivityEditTable.class);

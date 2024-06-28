@@ -1,7 +1,9 @@
 package biz.riopapa.chatread.func;
 
+import static biz.riopapa.chatread.MainActivity.fileIO;
 import static biz.riopapa.chatread.MainActivity.ktGroupIgnores;
 import static biz.riopapa.chatread.MainActivity.ktNoNumbers;
+import static biz.riopapa.chatread.MainActivity.ktStrRepl;
 import static biz.riopapa.chatread.MainActivity.ktTxtIgnores;
 import static biz.riopapa.chatread.MainActivity.ktWhoIgnores;
 import static biz.riopapa.chatread.MainActivity.mContext;
@@ -17,22 +19,29 @@ import static biz.riopapa.chatread.MainActivity.smsWho;
 import static biz.riopapa.chatread.MainActivity.smsWhoIgnores;
 import static biz.riopapa.chatread.MainActivity.sounds;
 import static biz.riopapa.chatread.MainActivity.stockGetPut;
+import static biz.riopapa.chatread.MainActivity.strReplSet;
+import static biz.riopapa.chatread.MainActivity.tableFolder;
 import static biz.riopapa.chatread.MainActivity.tableListFile;
 import static biz.riopapa.chatread.MainActivity.utils;
 
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 
 import biz.riopapa.chatread.MainActivity;
 import biz.riopapa.chatread.common.Sounds;
+import biz.riopapa.chatread.models.App;
 
 public class OptionTables {
 
     public OptionTables() {
 
-//        if (tableListFile == null)
-            tableListFile = new TableListFile();
+        tableListFile = new TableListFile();
         ktGroupIgnores = tableListFile.read("ktGrpIg");
         ktWhoIgnores = tableListFile.read("ktWhoIg");
         ktTxtIgnores = tableListFile.read("ktTxtIg");
@@ -47,6 +56,7 @@ public class OptionTables {
             utils.logW("readAll",s);
         }
         readStrReplFile();
+        ktStrRepl = strReplSet.get("ktRepl");
         new AppsTable().get();
         stockGetPut.get();
 
@@ -159,5 +169,18 @@ public class OptionTables {
             replLong[i] = sLong;
             replShort[i] = sShort;
         }
+    }
+
+    void readKtReplFile() {
+        /*
+         * 0       1         2
+         * group ^ repl To ^ repl from
+         * 퍼플  ^ pp1   ^ $매수 하신분들 【 매수 】
+         */
+        Gson gson = new Gson();
+        String json = fileIO.readFile(tableFolder ,"ktRepl.xml");
+        Type type = new TypeToken<List<App>>() {
+        }.getType();
+        ktStrRepl = gson.fromJson(json, type);
     }
 }

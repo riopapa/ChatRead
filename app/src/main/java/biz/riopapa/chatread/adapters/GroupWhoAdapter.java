@@ -4,7 +4,7 @@ import static biz.riopapa.chatread.MainActivity.mMainActivity;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.nowSGroup;
 import static biz.riopapa.chatread.MainActivity.nowSWho;
-import static biz.riopapa.chatread.MainActivity.wIdx;
+import static biz.riopapa.chatread.MainActivity.wIDX;
 
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -56,17 +56,18 @@ public class GroupWhoAdapter extends RecyclerView.Adapter<GroupWhoAdapter.ViewHo
         holder.tWho.setText(sWho.who);
         holder.tWhoM.setText(sWho.whoM);
         holder.tWhoF.setText(sWho.whoF);
-        String info = "";
+        StringBuilder info = new StringBuilder();
         for (SStock s : sWho.stocks) {
-            if (!info.isEmpty())
-                info += "\n";
-            info += s.key1 + "/" + s.key2 + ", " + s.prv + "/" + s.nxt + ", " + s.count
-                    + ", " + s.talk;
+            if (info.length() > 0)
+                info.append("\n");
+            info.append(s.key1).append("/").append(s.key2).append(", ")
+                    .append(s.prv).append("/").append(s.nxt).append(", ")
+                    .append(s.count).append(", ").append(s.talk);
         }
-        holder.tInfo.setText(info);
+        holder.tInfo.setText(info.toString());
         holder.tLine.setOnClickListener(v -> {
-            wIdx = holder.getAdapterPosition();
-            nowSWho = nowSGroup.whos.get(wIdx);
+            wIDX = holder.getAdapterPosition();
+            nowSWho = nowSGroup.whos.get(wIDX);
             Intent intent = new Intent(mContext, ActivityEditGroupWho.class);
             mMainActivity.startActivity(intent);
         });

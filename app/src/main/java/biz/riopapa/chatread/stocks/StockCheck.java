@@ -1,6 +1,5 @@
 package biz.riopapa.chatread.stocks;
 
-import static biz.riopapa.chatread.MainActivity.gIdx;
 import static biz.riopapa.chatread.MainActivity.gSheet;
 import static biz.riopapa.chatread.MainActivity.logUpdate;
 import static biz.riopapa.chatread.MainActivity.mAudioManager;
@@ -20,7 +19,6 @@ import static biz.riopapa.chatread.MainActivity.stockCnt;
 import static biz.riopapa.chatread.MainActivity.stockName;
 import static biz.riopapa.chatread.MainActivity.strUtil;
 import static biz.riopapa.chatread.MainActivity.utils;
-import static biz.riopapa.chatread.MainActivity.wIdx;
 
 import android.content.Context;
 import android.hardware.display.DisplayManager;
@@ -50,11 +48,12 @@ public class StockCheck {
         for (int s = 0; s < stocks.size() ; s++) {
             nowSStock = stocks.get(s);
             if (sbnText.contains(nowSStock.key1) && sbnText.contains(nowSStock.key2)) {
-                nowSStock.count++;
+//                nowSGroup = sGroups.get(g);
+//                nowSWho = nowSGroup.whos.get(w);
+//                nowSStock = nowSWho.stocks.get(s);
+//                nowSStock.count++;
+                sGroups.get(g).whos.get(w).stocks.get(s).count++;
                 stockCnt++;
-                nowSGroup.whos.get(w).stocks.set(s, nowSStock);
-                nowSGroup.whos.set(w, nowSWho);
-                sGroups.set(g, nowSGroup);
                 talkNlog(nowSStock);
                 break;
             }

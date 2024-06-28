@@ -103,7 +103,7 @@ public class NotificationService extends Service {
 
             case RELOAD_APP:
                 if (stockCnt > 0 && stockGetPut != null) {
-                    stockGetPut.put("reload");
+                    stockGetPut.put("reload stocknt="+stockCnt);
                 }
                 reload_App();
                 break;

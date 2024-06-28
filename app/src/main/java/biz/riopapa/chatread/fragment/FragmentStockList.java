@@ -1,11 +1,9 @@
 package biz.riopapa.chatread.fragment;
 
-import static biz.riopapa.chatread.MainActivity.alerts;
+import static biz.riopapa.chatread.MainActivity.gIDX;
 import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.stockGetPut;
 import static biz.riopapa.chatread.MainActivity.groupsAdapter;
-import static biz.riopapa.chatread.MainActivity.mContext;
-import static biz.riopapa.chatread.MainActivity.mStockGroupPos;
 import static biz.riopapa.chatread.MainActivity.todayFolder;
 import static biz.riopapa.chatread.MainActivity.toolbar;
 
@@ -18,7 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -46,10 +44,9 @@ public class FragmentStockList extends Fragment {
         setHasOptionsMenu(true);
         if (toolbar != null) {
             toolbar.setTitle("StockList");
-            toolbar.setBackgroundDrawable(ContextCompat.getDrawable(mContext, R.drawable.bar_stock_group));
+//            toolbar.setBackgroundDrawable(ContextCompat.getDrawable(mContext, R.drawable.bar_stock_group));
         }
-        if (groupsAdapter == null)
-            groupsAdapter = new GroupAdapter();
+        groupsAdapter = new GroupAdapter();
     }
 
     @Override
@@ -61,16 +58,22 @@ public class FragmentStockList extends Fragment {
         recyclerView.setAdapter(groupsAdapter);
         if (todayFolder == null)
             new ReadyToday();
+        return thisView;
+    }
 
-        if (mStockGroupPos > 0) {
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        recyclerView = view.findViewById(R.id.recycle_stock_group);
+        recyclerView.setAdapter(groupsAdapter);
+        if (gIDX > 0) {
             LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView
                     .getLayoutManager();
             assert layoutManager != null;
             layoutManager.scrollToPositionWithOffset(
-                    mStockGroupPos, (mStockGroupPos > 3) ? mStockGroupPos - 3 : mStockGroupPos - 2);
+                    gIDX, (gIDX > 3) ? gIDX - 3 : gIDX - 2);
         }
-
-        return thisView;
     }
 
     @Override
@@ -87,7 +90,6 @@ public class FragmentStockList extends Fragment {
             new OptionTables();
             stockGetPut.getFromFile();
             stockGetPut.setStockTelKaCount();
-            groupsAdapter.notifyDataSetChanged();
 
         } else if (item.getItemId() == R.id.clear_matched_number) {
             for (int g = 0; g < sGroups.size(); g++) {
@@ -99,8 +101,7 @@ public class FragmentStockList extends Fragment {
                         if (sStock.count > 1000)
                             sStock.count = 1000;
                         else {
-                            int i = (sStock.count + 99) / 100 * 100;
-                            sStock.count = i;
+                            sStock.count = (sStock.count + 99) / 100 * 100;
                         }
                         sWho.stocks.set(s, sStock);
                     }
@@ -110,12 +111,13 @@ public class FragmentStockList extends Fragment {
             }
             stockGetPut.put("All save");
             stockGetPut.get();
-            groupsAdapter.notifyDataSetChanged();
         } else if (item.getItemId() == R.id.saveStocks) {
             stockGetPut.put("All save");
             stockGetPut.get();
         }
-        groupsAdapter.notifyDataSetChanged();
+        for (int i = 0; i < sGroups.size(); i++)
+            groupsAdapter.notifyItemChanged(i);
         return super.onOptionsItemSelected(item);
     }
+
 }

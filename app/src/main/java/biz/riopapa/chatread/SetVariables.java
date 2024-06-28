@@ -27,6 +27,7 @@ import static biz.riopapa.chatread.MainActivity.sounds;
 import static biz.riopapa.chatread.MainActivity.stockCheck;
 import static biz.riopapa.chatread.MainActivity.stockName;
 import static biz.riopapa.chatread.MainActivity.stockGetPut;
+import static biz.riopapa.chatread.MainActivity.strReplSet;
 import static biz.riopapa.chatread.MainActivity.strUtil;
 import static biz.riopapa.chatread.MainActivity.tableFolder;
 import static biz.riopapa.chatread.MainActivity.tableListFile;
@@ -44,6 +45,7 @@ import android.util.Log;
 
 import java.io.File;
 
+import biz.riopapa.chatread.func.StrReplSet;
 import biz.riopapa.chatread.stocks.StockCheck;
 import biz.riopapa.chatread.stocks.StockName;
 import biz.riopapa.chatread.stocks.StockGetPut;
@@ -106,6 +108,7 @@ public class SetVariables {
             stockName = new StockName();
             stockGetPut = new StockGetPut();
             stockCheck = new StockCheck();
+            strReplSet = new StrReplSet();
             gSheet = new GSheet();
 
             mAudioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);

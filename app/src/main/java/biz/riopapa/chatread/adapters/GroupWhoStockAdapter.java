@@ -1,16 +1,16 @@
 package biz.riopapa.chatread.adapters;
 
-import static biz.riopapa.chatread.MainActivity.gIdx;
+import static biz.riopapa.chatread.MainActivity.gIDX;
 import static biz.riopapa.chatread.MainActivity.gSheet;
 import static biz.riopapa.chatread.MainActivity.groupWhoAdapter;
 import static biz.riopapa.chatread.MainActivity.groupWhoStockAdapter;
-import static biz.riopapa.chatread.MainActivity.groupsAdapter;
 import static biz.riopapa.chatread.MainActivity.nowSGroup;
 import static biz.riopapa.chatread.MainActivity.nowSStock;
 import static biz.riopapa.chatread.MainActivity.nowSWho;
 import static biz.riopapa.chatread.MainActivity.sGroups;
-import static biz.riopapa.chatread.MainActivity.sIdx;
-import static biz.riopapa.chatread.MainActivity.wIdx;
+import static biz.riopapa.chatread.MainActivity.sIDX;
+import static biz.riopapa.chatread.MainActivity.stockGetPut;
+import static biz.riopapa.chatread.MainActivity.wIDX;
 import static biz.riopapa.chatread.edit.ActivityEditGroupWho.whoContext;
 
 import android.view.LayoutInflater;
@@ -68,13 +68,13 @@ public class GroupWhoStockAdapter extends RecyclerView.Adapter<GroupWhoStockAdap
         holder.tKey2.setText(stock.key2);
         holder.tPrev.setText(stock.prv);
         holder.tNext.setText(stock.nxt);
-        holder.tCount.setText(""+stock.count);
+        holder.tCount.setText(String.format("%d", stock.count));
         holder.tSkip.setText(stock.skip1);
         holder.tTalk.setText(stock.talk);
 
         holder.tLine.setOnClickListener(v -> {
-            sIdx = holder.getAdapterPosition();
-            nowSStock = nowSWho.stocks.get(sIdx);
+            sIDX = holder.getAdapterPosition();
+            nowSStock = nowSWho.stocks.get(sIDX);
             try {
                 newStock = (SStock) nowSStock.clone();
             } catch (CloneNotSupportedException e) {
@@ -115,15 +115,13 @@ public class GroupWhoStockAdapter extends RecyclerView.Adapter<GroupWhoStockAdap
                 newStock.talk = eTalk.getText().toString();
                 newStock.count = Integer.parseInt(eCount.getText().toString());
                 newStock.skip1 = eSkip.getText().toString();
-                nowSWho.stocks.set(sIdx, newStock);
-                nowSStock = nowSWho.stocks.get(sIdx);
-                nowSGroup.whos.set(wIdx, nowSWho);
-                nowSWho = nowSGroup.whos.get(wIdx);
-                sGroups.set(gIdx, nowSGroup);
-                nowSGroup = sGroups.get(gIdx);
-//                stockGetPut.put("stock");
-//                stockGetPut.get();
-                groupWhoStockAdapter.notifyDataSetChanged();
+                nowSWho.stocks.set(sIDX, newStock);
+                nowSStock = nowSWho.stocks.get(sIDX);
+                nowSGroup.whos.set(wIDX, nowSWho);
+                nowSWho = nowSGroup.whos.get(wIDX);
+                sGroups.set(gIDX, nowSGroup);
+                nowSGroup = sGroups.get(gIDX);
+                dataSetChanged();
                 dialog.dismiss();
 
                 // Implement logic for "Apply" button (e.g., get data from EditTexts)
@@ -137,22 +135,18 @@ public class GroupWhoStockAdapter extends RecyclerView.Adapter<GroupWhoStockAdap
                 newStock.count = Integer.parseInt(eCount.getText().toString());
                 newStock.skip1 = eSkip.getText().toString();
                 nowSWho.stocks.add(newStock);
-                nowSGroup.whos.set(wIdx, nowSWho);
-                sGroups.set(gIdx, nowSGroup);
-                groupWhoStockAdapter.notifyDataSetChanged();
-                groupWhoAdapter.notifyDataSetChanged();
-                groupsAdapter.notifyDataSetChanged();
+                nowSGroup.whos.set(wIDX, nowSWho);
+                sGroups.set(gIDX, nowSGroup);
+                dataSetChanged();
                 dialog.dismiss();
                 gSheet.updateGSheetGroup(nowSGroup);
             })
             .setNegativeButton("Del", (dialog, which) -> {
                 if (nowSWho.stocks.size() > 1) {
-                    nowSWho.stocks.remove(sIdx);
-                    nowSGroup.whos.set(wIdx, nowSWho);
-                    groupWhoStockAdapter.notifyDataSetChanged();
-                    groupWhoAdapter.notifyDataSetChanged();
-                    groupsAdapter.notifyDataSetChanged();
+                    nowSWho.stocks.remove(sIDX);
+                    nowSGroup.whos.set(wIDX, nowSWho);
                     dialog.dismiss();
+                    dataSetChanged();
                     gSheet.updateGSheetGroup(nowSGroup);
                 }
             })
@@ -161,4 +155,13 @@ public class GroupWhoStockAdapter extends RecyclerView.Adapter<GroupWhoStockAdap
         builder.create().show();
     }
 
+    void dataSetChanged() {
+        for (int i = 0; i < nowSWho.stocks.size(); i++)
+            groupWhoStockAdapter.notifyItemChanged(i);
+        for (int i = 0; i < nowSGroup.whos.size(); i++)
+            groupWhoAdapter.notifyItemChanged(i);
+
+        stockGetPut.put("stock");
+        stockGetPut.get();
+    }
 }

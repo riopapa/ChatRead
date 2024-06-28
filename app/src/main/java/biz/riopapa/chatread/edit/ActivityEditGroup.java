@@ -1,6 +1,6 @@
 package biz.riopapa.chatread.edit;
 
-import static biz.riopapa.chatread.MainActivity.gIdx;
+import static biz.riopapa.chatread.MainActivity.gIDX;
 import static biz.riopapa.chatread.MainActivity.gSheet;
 import static biz.riopapa.chatread.MainActivity.groupWhoAdapter;
 import static biz.riopapa.chatread.MainActivity.groupsAdapter;
@@ -23,10 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
 
 import biz.riopapa.chatread.R;
 import biz.riopapa.chatread.adapters.GroupWhoAdapter;
@@ -55,9 +52,16 @@ public class ActivityEditGroup extends AppCompatActivity {
 //            toolbar.setSubtitleTextColor(0xFF000000);
 //            toolbar.setSubtitle("Group Edit");
 //        }
-        nowSGroup = sGroups.get(gIdx);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        nowSGroup = sGroups.get(gIDX);
         try {
-            newGroup = (SGroup) sGroups.get(gIdx).clone();
+            newGroup = (SGroup) sGroups.get(gIDX).clone();
         } catch (CloneNotSupportedException e) {
             throw new RuntimeException(e);
         }
@@ -92,7 +96,6 @@ public class ActivityEditGroup extends AppCompatActivity {
         groupWhoAdapter = new GroupWhoAdapter();
         recyclerView = findViewById(R.id.recycle_whos);
         recyclerView.setAdapter(groupWhoAdapter);
-
     }
 
     String nextTelKa(String c) {
@@ -126,7 +129,7 @@ public class ActivityEditGroup extends AppCompatActivity {
     private void deleteStockGroup() {
 
         gSheet.deleteGSheetGroup(nowSGroup);
-        sGroups.remove(gIdx);
+        sGroups.remove(gIDX);
         stockGetPut.put( nowSGroup.grp+" Deleted "+ nowSGroup.grpM);
         groupsAdapter.notifyDataSetChanged();
         finish();
@@ -163,8 +166,8 @@ public class ActivityEditGroup extends AppCompatActivity {
 
         buildRepl(eRepl.getText().toString(), newGroup);
 
-        sGroups.add(gIdx, newGroup);
-        nowSGroup = sGroups.get(gIdx);
+        sGroups.add(gIDX, newGroup);
+        nowSGroup = sGroups.get(gIDX);
         stockGetPut.put("group dup");
         stockGetPut.get();
         groupsAdapter.notifyDataSetChanged();
@@ -201,15 +204,16 @@ public class ActivityEditGroup extends AppCompatActivity {
         if (newGroup.skip3.isEmpty())
             newGroup.skip3 = NOTHING;
         buildRepl(eRepl.getText().toString(), newGroup);
-        sGroups.set(gIdx, newGroup);
-        nowSGroup = sGroups.get(gIdx);
+        sGroups.set(gIDX, newGroup);
+        nowSGroup = sGroups.get(gIDX);
         stockGetPut.put("group save");
         stockGetPut.get();
 
         Toast.makeText(mContext,"Saving "+ newGroup.grp+" / " + newGroup.grpM, Toast.LENGTH_SHORT).show();
-        groupsAdapter.notifyDataSetChanged();
+        for (int i = 0; i < sGroups.size(); i++)
+            groupsAdapter.notifyItemChanged(i);
         gSheet.updateGSheetGroup(newGroup);
         finish();
-
     }
+
 }

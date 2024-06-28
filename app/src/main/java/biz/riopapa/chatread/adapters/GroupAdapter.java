@@ -1,6 +1,6 @@
 package biz.riopapa.chatread.adapters;
 
-import static biz.riopapa.chatread.MainActivity.gIdx;
+import static biz.riopapa.chatread.MainActivity.gIDX;
 import static biz.riopapa.chatread.MainActivity.mMainActivity;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.nowSGroup;
@@ -11,10 +11,8 @@ import android.content.Intent;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
-import android.text.TextUtils;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -105,15 +103,12 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
         holder.tIgnore.setText((sgrp.ignore) ? "무시" : "  ");
         holder.tInfo.setText(grpBuilder);
         holder.tLine.setBackgroundColor(mContext.getResources().getColor(
-                (gIdx == position)? R.color.line_now : R.color.line_default));
+                (gIDX == position)? R.color.line_now : R.color.line_default));
 
         holder.tLine.setOnClickListener(v -> {
-            gIdx = holder.getAdapterPosition();
-            nowSGroup = sGroups.get(gIdx);
-            Intent intent = new Intent(mContext, ActivityEditGroup.class);
-            mMainActivity.startActivity(intent);
-            Log.e("onBindViewHolder"," group returned");
+            gIDX = holder.getAdapterPosition();
+            nowSGroup = sGroups.get(gIDX);
+            mMainActivity.startActivityForResult(new Intent(mContext, ActivityEditGroup.class), 123);
         });
     }
-
 }

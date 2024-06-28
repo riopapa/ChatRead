@@ -36,13 +36,13 @@ public class ActivityEditTable extends AppCompatActivity {
     int [] menuId = { R.id.table_sms_no_num,   R.id.table_sms_repl,     R.id.table_sms_txt_ig,
                         R.id.table_sms_who_ig,  R.id.table_sys_ig,
                         R.id.table_kt_grp_ig,   R.id.table_kt_no_num,   R.id.table_kt_txt_ig,
-                        R.id.table_kt_who_ig,
+                        R.id.table_kt_who_ig,   R.id.table_kt_repl
     };
     String [] fileId = {
                         "smsNoNum",             "smsRepl",              "smsTxtIg",
                         "smsWhoIg",             "sysIg",
                         "ktGrpIg",              "ktNoNum",              "ktTxtIg",
-                        "ktWhoIg",
+                        "ktWhoIg",              "ktRepl"
     };
 
     @Override
@@ -117,7 +117,7 @@ public class ActivityEditTable extends AppCompatActivity {
     String sortText(String txt) {
         String[] arrText = txt.split("\n");
         Arrays.sort(arrText);
-        .......        StringBuilder sortedText = new StringBuilder();
+        StringBuilder sortedText = new StringBuilder();
         Arrays.stream(arrText).filter(t -> t.length() > 2).forEach(t -> sortedText.append(t).append("\n"));
         return sortedText.toString();
     }
