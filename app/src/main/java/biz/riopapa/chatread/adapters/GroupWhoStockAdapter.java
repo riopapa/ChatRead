@@ -40,7 +40,7 @@ public class GroupWhoStockAdapter extends RecyclerView.Adapter<GroupWhoStockAdap
         TextView tKey1, tKey2, tPrev, tNext, tCount, tSkip, tTalk;
         View tLine;
 
-        ViewHolder(final View itemView) {
+    private   ViewHolder(final View itemView) {
             super(itemView);
             tLine = itemView.findViewById(R.id.stock_line);
             tKey1 = itemView.findViewById(R.id.stock_key1);
@@ -68,7 +68,7 @@ public class GroupWhoStockAdapter extends RecyclerView.Adapter<GroupWhoStockAdap
         holder.tKey2.setText(stock.key2);
         holder.tPrev.setText(stock.prv);
         holder.tNext.setText(stock.nxt);
-        holder.tCount.setText(String.format("%d", stock.count));
+        holder.tCount.setText("" + stock.count);
         holder.tSkip.setText(stock.skip1);
         holder.tTalk.setText(stock.talk);
 

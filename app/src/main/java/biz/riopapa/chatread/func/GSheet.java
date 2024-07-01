@@ -52,45 +52,39 @@ public class GSheet {
         sheetQues.add(new SheetQue("stock", group, timeStamp, who, percent, talk, statement, key12));
         uploadStock();
     }
-    public void uploadStock() {
-//        if (sheetQues.isEmpty())
-//            return;
-//        Thread thread = new Thread(() -> {
-            SheetQue que = sheetQues.get(0);
-            FormBody.Builder formBuilder = new FormBody.Builder();
-            formBuilder.add("action", que.action);
-            formBuilder.add("group", que.group);
-            formBuilder.add("timeStamp", que.timeStamp);
-            formBuilder.add("who", que.who);
-            formBuilder.add("percent", que.percent);
-            formBuilder.add("talk", que.talk);
-            formBuilder.add("statement", que.statement);
-            formBuilder.add("key12", que.key12);
-            post2GSheet(formBuilder);
-            sheetQues.remove(0);
-            if (!sheetQues.isEmpty())
-                uploadStock();
-//        });
-//        thread.start();
 
+    public void uploadStock() {
+
+        SheetQue que = sheetQues.get(0);
+        FormBody.Builder formBuilder = new FormBody.Builder();
+        formBuilder.add("action", que.action);
+        formBuilder.add("group", que.group);
+        formBuilder.add("timeStamp", que.timeStamp);
+        formBuilder.add("who", que.who);
+        formBuilder.add("percent", que.percent);
+        formBuilder.add("talk", que.talk);
+        formBuilder.add("statement", que.statement);
+        formBuilder.add("key12", que.key12);
+        post2GSheet(formBuilder);
+        sheetQues.remove(0);
+        if (!sheetQues.isEmpty())
+            uploadStock();
     }
 
     public void updateGSheetGroup(SGroup sGroup) {
-        final String GROUP = ")_(";
         String mPercent = gSheet.makePercent(sGroup);
         String mStatement = gSheet.makeStatement(sGroup,",");
         String mTalk = new SimpleDateFormat("yy/MM/dd\nHH:mm", Locale.KOREA).format(new Date());
-        sheetQues.add(new SheetQue("group", GROUP,  mTalk, sGroup.grpF, mPercent, mTalk, mStatement, "key12"));
+        sheetQues.add(new SheetQue("group", sGroup.grp,  mTalk, sGroup.grpF, mPercent, mTalk, mStatement, "key12"));
         uploadStock();
     }
 
     public void deleteGSheetGroup(SGroup sGroup) {
-        final String GROUP = ")_(";
         String time = new SimpleDateFormat(".MM/dd HH:mm", Locale.KOREA).format(new Date());
         String mWho = "\n삭제됨\n" + sGroup.grpF + "\n" + time;
         String mPercent = "\n삭제됨\n" +gSheet.makePercent(sGroup) + "\n" + time;
         String mStatement = gSheet.makeStatement(sGroup,",");
-        sheetQues.add(new SheetQue("group", GROUP, time, mWho, mPercent, time, mStatement, "key12"));
+        sheetQues.add(new SheetQue("group", sGroup.grp, time, mWho, mPercent, time, mStatement, "key12"));
         uploadStock();
     }
 
@@ -103,8 +97,7 @@ public class GSheet {
                 .url(SPREADSHEET_ID)
                 .post(requestBody)
                 .build();
-//        utils.logW("post2GSheet","uploading "+formBuilder);
-        // Execute request asynchronously
+
         client.newCall(request).enqueue(new Callback() {
 
             @Override
@@ -112,7 +105,6 @@ public class GSheet {
                 String errStr = "stock Upload Fail "+ formBuilder + "\n"+e;
                 utils.logE("gSheet",errStr);
             }
-
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (!response.isSuccessful()){

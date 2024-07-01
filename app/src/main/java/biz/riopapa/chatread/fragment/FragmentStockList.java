@@ -109,10 +109,10 @@ public class FragmentStockList extends Fragment {
                 }
                 sGroups.set(g, sGroup);
             }
-            stockGetPut.put("All save");
+            stockGetPut.put("All reset count");
             stockGetPut.get();
         } else if (item.getItemId() == R.id.saveStocks) {
-            stockGetPut.put("All save");
+            stockGetPut.put("All save group");
             stockGetPut.get();
         }
         for (int i = 0; i < sGroups.size(); i++)
