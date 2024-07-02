@@ -107,10 +107,10 @@ public class MainActivity extends AppCompatActivity {
 
     public static String mTableName;
 
-    public static int replGroupCnt = 0;
-    public static String [] replGroup;
-    public static String [][] replLong;
-    public static String [][] replShort;
+//    public static int replGroupCnt = 0;
+//    public static String [] replGroup;
+//    public static String [][] replLong;
+//    public static String [][] replShort;
 
     public static String logQue = "", logStock = "", logSave = "", logWork = "";
 
