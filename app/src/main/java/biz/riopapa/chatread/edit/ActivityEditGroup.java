@@ -3,7 +3,7 @@ package biz.riopapa.chatread.edit;
 import static biz.riopapa.chatread.MainActivity.gIDX;
 import static biz.riopapa.chatread.MainActivity.gSheet;
 import static biz.riopapa.chatread.MainActivity.groupWhoAdapter;
-import static biz.riopapa.chatread.MainActivity.groupsAdapter;
+import static biz.riopapa.chatread.MainActivity.groupAdapter;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.nowSGroup;
 import static biz.riopapa.chatread.MainActivity.sGroups;
@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,10 +35,8 @@ public class ActivityEditGroup extends AppCompatActivity {
     EditText eGroup, eGroupM, eGroupF, eSkip1, eSkip2, eSkip3, eRepl;
     TextView tTelKa;
     SwitchCompat sIgnore;
-    String mPercent, mStatement, mTalk;
     View deleteMenu;
     RecyclerView recyclerView;
-    final String GROUP = ")_(";
     final String NOTHING = "_n_";
     SGroup newGroup;
 
@@ -45,14 +44,6 @@ public class ActivityEditGroup extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_group);
-//        Toolbar toolbar = findViewById(R.id.toolbar_edit_group);
-//        if (toolbar != null) {
-////            setSupportActionBar(toolbar);
-//            toolbar.setTitleTextColor(0xFF44FF33);
-//            toolbar.setSubtitleTextColor(0xFF000000);
-//            toolbar.setSubtitle("Group Edit");
-//        }
-
     }
 
     @Override
@@ -60,6 +51,11 @@ public class ActivityEditGroup extends AppCompatActivity {
         super.onResume();
 
         nowSGroup = sGroups.get(gIDX);
+        ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setTitle("Group Edit");
+        actionBar.setSubtitle(nowSGroup.grp+":"+nowSGroup.grpF);
+
         try {
             newGroup = (SGroup) sGroups.get(gIDX).clone();
         } catch (CloneNotSupportedException e) {
@@ -131,7 +127,8 @@ public class ActivityEditGroup extends AppCompatActivity {
         gSheet.deleteGSheetGroup(nowSGroup);
         sGroups.remove(gIDX);
         stockGetPut.put( nowSGroup.grp+" Deleted "+ nowSGroup.grpM);
-        groupsAdapter.notifyDataSetChanged();
+        for (int i = 0; i < sGroups.size(); i++)
+            groupAdapter.notifyItemChanged(i);
         finish();
     }
 
@@ -170,7 +167,8 @@ public class ActivityEditGroup extends AppCompatActivity {
         nowSGroup = sGroups.get(gIDX);
         stockGetPut.put("group dup");
         stockGetPut.get();
-        groupsAdapter.notifyDataSetChanged();
+        for (int i = 0; i < sGroups.size(); i++)
+            groupAdapter.notifyItemChanged(i);
         gSheet.updateGSheetGroup(newGroup);
         finish();
     }
@@ -211,7 +209,7 @@ public class ActivityEditGroup extends AppCompatActivity {
 
         Toast.makeText(mContext,"Saving "+ newGroup.grp+" / " + newGroup.grpM, Toast.LENGTH_SHORT).show();
         for (int i = 0; i < sGroups.size(); i++)
-            groupsAdapter.notifyItemChanged(i);
+            groupAdapter.notifyItemChanged(i);
         gSheet.updateGSheetGroup(newGroup);
         finish();
     }

@@ -31,10 +31,8 @@ import static biz.riopapa.chatread.MainActivity.sbnGroup;
 import static biz.riopapa.chatread.MainActivity.sbnText;
 import static biz.riopapa.chatread.MainActivity.sbnWho;
 import static biz.riopapa.chatread.MainActivity.smsNoNumbers;
-import static biz.riopapa.chatread.MainActivity.smsReplFrom;
-import static biz.riopapa.chatread.MainActivity.smsReplTo;
+import static biz.riopapa.chatread.MainActivity.smsStrRepl;
 import static biz.riopapa.chatread.MainActivity.smsTxtIgnores;
-import static biz.riopapa.chatread.MainActivity.smsWho;
 import static biz.riopapa.chatread.MainActivity.smsWhoIgnores;
 import static biz.riopapa.chatread.MainActivity.sounds;
 import static biz.riopapa.chatread.MainActivity.stockCheck;
@@ -44,7 +42,7 @@ import static biz.riopapa.chatread.MainActivity.stockSMSGroupMatchIdx;
 import static biz.riopapa.chatread.MainActivity.stockSMSGroupMatchTbl;
 import static biz.riopapa.chatread.MainActivity.stockTelGroupMatchIdx;
 import static biz.riopapa.chatread.MainActivity.stockTelGroupMatchTbl;
-import static biz.riopapa.chatread.MainActivity.strReplSet;
+import static biz.riopapa.chatread.MainActivity.strReplace;
 import static biz.riopapa.chatread.MainActivity.strUtil;
 import static biz.riopapa.chatread.MainActivity.teleApp;
 import static biz.riopapa.chatread.MainActivity.timeBegin;
@@ -119,7 +117,7 @@ public class NotificationListener extends NotificationListenerService {
                     if (kvKakao.isDup(sbnWho, sbnText))
                         return;
 
-                    sbnText = strReplSet.repl(ktStrRepl, "grp", sbnText);
+                    sbnText = strReplace.repl(ktStrRepl, sbnWho, sbnText);
                     notificationBar.update("카톡!" + sbnWho, sbnText, true);
                     head = "{카톡!" + sbnWho + "} ";
                     logUpdate.addLog(head, sbnText);
@@ -140,7 +138,7 @@ public class NotificationListener extends NotificationListenerService {
                         return;
                     int g = isStockKaGroup(sbnGroup);
                     if (g < 0) {
-                        sbnText = strReplSet.repl(ktStrRepl, sbnGroup, sbnText);
+                        sbnText = strReplace.repl(ktStrRepl, sbnGroup, sbnText);
                         notificationBar.update("카톡!" + sbnGroup + "." + sbnWho, sbnText, true);
                         head = "{카톡!" + sbnGroup + "." + sbnWho + "} ";
                         logUpdate.addLog(head, sbnText);
@@ -149,8 +147,8 @@ public class NotificationListener extends NotificationListenerService {
                         sounds.speakKakao(" 카톡 왔음 " + sbnGroup + " 의 " + sbnWho + " 님이 " +
                                 strUtil.replaceKKHH(strUtil.makeEtc(sbnText, isWorking() ? 20 : 150)));
                         return;
-                    }
-                    sayKaStock(g);
+                    } else
+                        sayKaStock(g);
                     return;
                 }
                 break;
@@ -179,7 +177,7 @@ public class NotificationListener extends NotificationListenerService {
                         sbnGroup = "_새_";
                     head = "[텔레 <" + sbnGroup + "><" + sbnWho + ">]";
                     // todo : ktStrRepl 교체 필요
-                    sbnText = strReplSet.repl(ktStrRepl, sbnGroup, strUtil.text2OneLine(sbnText));
+                    sbnText = strReplace.repl(ktStrRepl, sbnGroup, strUtil.text2OneLine(sbnText));
                     logUpdate.addLog(head, sbnText);
                     notificationBar.update(sbnGroup + "|" + sbnWho, sbnText, true);
                     sbnText = head + ", " + sbnText;
@@ -473,16 +471,9 @@ public class NotificationListener extends NotificationListenerService {
 
     private void saySMSNormal() {
         String head = "[sms."+ sbnWho + "] ";
-        sbnText = strUtil.strShorten("sms", sbnText);
+        sbnText = strReplace.repl(smsStrRepl, sbnWho, sbnText);
         notificationBar.update(head, sbnText, true);
         logUpdate.addLog(head, sbnText);
-        if (utils == null)
-            utils = new Utils();
-        for (int i = 0; i < smsWho.length; i++) {
-            if (sbnWho.equals(smsWho[i])) {
-                sbnText = sbnText.replace(smsReplFrom[i], smsReplTo[i]);
-            }
-        }
         if (IgnoreNumber.in(smsNoNumbers, sbnWho))
             sbnText = strUtil.removeDigit(sbnText);
         sounds.speakAfterBeep(head + strUtil.makeEtc(sbnText, isWorking()? 20: 120));
@@ -548,7 +539,8 @@ public class NotificationListener extends NotificationListenerService {
         Bundle extras = sbn.getNotification().extras;
         // get eText //
         try {
-            sbnText = "" + extras.getString(Notification.EXTRA_TEXT,"");
+            sbnText =extras.getCharSequence(Notification.EXTRA_TEXT, "").toString();
+//            sbnText = "" + extras.getString(Notification.EXTRA_TEXT,"");
         } catch (Exception e) {
             utils.logW("sbnText", "sbnText Exception "+ sbnAppName +" "+sbnText);
             return true;
@@ -558,7 +550,7 @@ public class NotificationListener extends NotificationListenerService {
 
         // get eWho //
         try {
-            sbnWho = "" + extras.getString(Notification.EXTRA_TITLE,"");
+            sbnWho = extras.getString(Notification.EXTRA_TITLE,"");
         } catch (Exception e) {
             new Utils().logW("sbn WHO Error", "no SWho "+ sbnAppName +" "+sbnText);
             return true;

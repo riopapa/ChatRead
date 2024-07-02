@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 import biz.riopapa.chatread.models.StrRepl;
 
-public class StrReplSet {
+public class StrReplace {
 
     public ArrayList<StrRepl> get(String str_replFile) {
         if (tableFolder == null) {

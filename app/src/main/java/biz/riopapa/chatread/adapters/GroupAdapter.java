@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import biz.riopapa.chatread.R;
@@ -102,9 +103,8 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
         holder.tTelegram.setText(sgrp.telKa);
         holder.tIgnore.setText((sgrp.ignore) ? "무시" : "  ");
         holder.tInfo.setText(grpBuilder);
-        holder.tLine.setBackgroundColor(mContext.getResources().getColor(
+        holder.tLine.setBackgroundColor(ContextCompat.getColor(mContext,
                 (gIDX == position)? R.color.line_now : R.color.line_default));
-
         holder.tLine.setOnClickListener(v -> {
             gIDX = holder.getAdapterPosition();
             nowSGroup = sGroups.get(gIDX);

@@ -38,7 +38,7 @@ import biz.riopapa.chatread.adapters.GroupAdapter;
 import biz.riopapa.chatread.adapters.GroupWhoAdapter;
 import biz.riopapa.chatread.adapters.GroupWhoStockAdapter;
 import biz.riopapa.chatread.fragment.FragmentKaTalk;
-import biz.riopapa.chatread.func.StrReplSet;
+import biz.riopapa.chatread.func.StrReplace;
 import biz.riopapa.chatread.models.SGroup;
 import biz.riopapa.chatread.models.SStock;
 import biz.riopapa.chatread.models.SWho;
@@ -101,9 +101,6 @@ public class MainActivity extends AppCompatActivity {
     public static String[] smsWhoIgnores = null;
     public static String[] smsTxtIgnores = null;
     public static String[] smsNoNumbers = null;
-    public static String[] smsWho = null;
-    public static String[] smsReplFrom = null;
-    public static String[] smsReplTo = null;
 
     public static String[] ktNoNumbers = null;
     public static String[] ktTxtIgnores = null;
@@ -114,9 +111,11 @@ public class MainActivity extends AppCompatActivity {
     public static String [] replGroup;
     public static String [][] replLong;
     public static String [][] replShort;
+
     public static String logQue = "", logStock = "", logSave = "", logWork = "";
 
     public static ArrayList<StrRepl> ktStrRepl = null;
+    public static ArrayList<StrRepl> smsStrRepl = null;
 
     public static SharedPreferences sharePref;
     public static SharedPreferences.Editor sharedEditor;
@@ -138,11 +137,10 @@ public class MainActivity extends AppCompatActivity {
     public static boolean isPhoneBusy = false;
 
     /* Stock variables */
-    public static GroupAdapter groupsAdapter = null;
     public static ArrayList<SGroup> sGroups = null;
     public static StockGetPut stockGetPut = null;
     public static StockCheck stockCheck = null;
-    public static StrReplSet strReplSet = null;
+    public static StrReplace strReplace = null;
     public static int gIDX, wIDX, sIDX;
     public static SGroup nowSGroup;
     public static SWho nowSWho;
@@ -185,6 +183,7 @@ public class MainActivity extends AppCompatActivity {
     public static GSheet gSheet = null;
     public static FileIO fileIO;
 
+    public static GroupAdapter groupAdapter = null;
     public static GroupWhoAdapter groupWhoAdapter = null;
     public static GroupWhoStockAdapter groupWhoStockAdapter = null;
 

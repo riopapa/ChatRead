@@ -2,10 +2,7 @@ package biz.riopapa.chatread.func;
 
 import static biz.riopapa.chatread.MainActivity.gSheet;
 import static biz.riopapa.chatread.MainActivity.mContext;
-import static biz.riopapa.chatread.MainActivity.nowSGroup;
 import static biz.riopapa.chatread.MainActivity.utils;
-
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -53,7 +50,7 @@ public class GSheet {
         uploadStock();
     }
 
-    public void uploadStock() {
+    void uploadStock() {
 
         SheetQue que = sheetQues.get(0);
         FormBody.Builder formBuilder = new FormBody.Builder();
@@ -106,9 +103,9 @@ public class GSheet {
                 utils.logE("gSheet",errStr);
             }
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(@NonNull Call call, @NonNull Response response) {
                 if (!response.isSuccessful()){
-                    Log.e("SheetsWriter", "Error writing data: " + response.body());
+                    utils.logW("gSheet", "Error: " + response.body());
                 }
             }
         });

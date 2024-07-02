@@ -9,14 +9,6 @@
     android:background="@color/color_tab_stock_background"
     tools:context=".edit.ActivityEditTable">
 
-<!--    <androidx.appcompat.widget.Toolbar-->
-<!--        android:id="@+id/toolbar_table"-->
-<!--        android:minHeight="?attr/actionBarSize"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:titleTextColor="@android:color/white"-->
-<!--        android:background="?attr/colorPrimary"/>-->
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

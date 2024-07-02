@@ -46,11 +46,6 @@ public class FileIO {
         downloadFolder = new File(Environment.getExternalStorageDirectory(), "download");
         tableFolder = new File(downloadFolder, "_ChatTalk");
     }
-//
-//    public void uploadStockXX(String group, String who, String percent, String talk,
-//                              String text, String key12, String timeStamp) {
-//        gSheetUpload.add2Stock(group, timeStamp, who, percent, talk, text, key12);
-//    }
 
     public void append2Today(String filename, String textLine) {
         if (todayFolder == null) {
@@ -115,7 +110,6 @@ public class FileIO {
             String strLine;
             while ((strLine = br.readLine()) != null) {
                 sb.append(strLine);
-//                myData = myData + strLine;
             }
             in.close();
         } catch (IOException e) {
@@ -126,7 +120,7 @@ public class FileIO {
 
     public String[] readKR(String filename) {
         final int BUFFER_SIZE = 81920;
-        String code = "EUC-KR";
+        final String code = "EUC-KR";
         BufferedReader bufferedReader = null;
         try {
             bufferedReader = new BufferedReader(new InputStreamReader(Files.newInputStream(Paths.get(filename)), code), BUFFER_SIZE);
@@ -151,17 +145,7 @@ public class FileIO {
         }
         return lines.toArray(new String[0]);
     }
-//
-//    public static String readKRFile(String filename) {
-//
-//        String [] lines = readKR(filename);
-//        StringBuilder sb = new StringBuilder();
-//        for (String s: lines) {
-//            sb.append(s);
-//        }
-//        return sb.toString();
-//    }
-//
+
 //    public static void writeKR(File file, String textLine) {
 //        try {
 //            FileOutputStream fileOutputStream = new FileOutputStream(file);

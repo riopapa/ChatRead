@@ -10,15 +10,6 @@
     android:background="@color/color_tab_app_background"
     tools:context=".edit.ActivityEditGroupWho">
 
-<!--    <androidx.appcompat.widget.Toolbar-->
-<!--        android:id="@+id/toolbar_edit_group_who"-->
-<!--        android:minHeight="?attr/actionBarSize"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintBottom_toTopOf="@id/who_first_line"-->
-<!--        />-->
-
     <LinearLayout
         android:id="@+id/who_first_line"
         android:layout_margin="4dp"

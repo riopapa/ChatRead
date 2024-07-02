@@ -13,11 +13,6 @@
                     android:id="@+id/log"
                     />
                 <item
-                    android:title="Stock"
-                    android:icon="@drawable/icon_stock"
-                    android:id="@+id/stock"
-                    />
-                <item
                     android:title="Work"
                     android:icon="@drawable/icon_work"
                     android:id="@+id/work"
@@ -26,6 +21,11 @@
                     android:title="Save"
                     android:icon="@drawable/menu_save"
                     android:id="@+id/save"
+                    />
+                <item
+                    android:title="Stock"
+                    android:icon="@drawable/icon_stock"
+                    android:id="@+id/stock"
                     />
                 <item
                     android:title="Stock Group"

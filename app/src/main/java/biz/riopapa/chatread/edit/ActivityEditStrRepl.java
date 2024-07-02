@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.File;
@@ -40,20 +41,15 @@ public class ActivityEditStrRepl extends AppCompatActivity {
         setContentView(R.layout.activity_edit_table);
         mTableName = "strRepl";
 
-//        Toolbar toolbar = findViewById(R.id.toolbar_table);
-        if (toolbar != null) {
-//            setSupportActionBar(toolbar);
-            toolbar.setTitleTextColor(0xFFFFFF00);
-            toolbar.setSubtitleTextColor(0xFF000000);
-            toolbar.setTitle(mTableName);
-            toolbar.setSubtitle(mTableName);
-        }
+        ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setTitle("String Replace");
+        actionBar.setSubtitle(mTableName);
 
         EditText eTable = findViewById(R.id.text_table);
         File file = new File(tableFolder, mTableName + ".txt");
         String[] lines = tableListFile.readRaw(file);
-        String text;
-        text = insertHeader(lines);
+        String text = insertHeader(lines);
         eTable.setText(text);
         eTable.setFocusable(true);
         eTable.setEnabled(true);
@@ -61,7 +57,7 @@ public class ActivityEditStrRepl extends AppCompatActivity {
         eTable.setFocusableInTouchMode(true);
         eTable.setTextColor(0xFF000000);
         EditText eKey = findViewById(R.id.key_table);
-        eKey.setText(mTableName);
+        eKey.setText("");
         eKey.setTextColor(0xFF000000);
 
         ImageView ivSearch = findViewById(R.id.search_table);
@@ -151,33 +147,20 @@ public class ActivityEditStrRepl extends AppCompatActivity {
             fileIO.writeFile(tableFolder, mTableName +".txt", removeHeader(s));
             new OptionTables();
             finish();
-        } else if (item.getItemId() == R.id.add_alert_line) {
+
+        } else if (item.getItemId() == R.id.del_1_line_table) {
             EditText et = findViewById(R.id.text_table);
-            String strNow = et.getText().toString();
-            StringBuilder sb = new StringBuilder(strNow);
-            int pos = et.getSelectionStart();
-            String s = getClipBoard();
-            sb.insert(pos, s);
-            et.setText(sb.toString());
-            et.setSelection(pos+1);
-        } else if (item.getItemId() == R.id.remove_this_line) {
-            EditText et = findViewById(R.id.text_table);
-            String strNow = et.getText().toString();
+            String logNow = et.getText().toString();
             int lineF = et.getSelectionStart();
-            int lineS = strNow.lastIndexOf("\n", lineF-1);
-            StringBuilder sb = new StringBuilder(strNow);
+            int lineS = logNow.lastIndexOf("\n", lineF-1);
+            if (lineS < 0)
+                lineS = 0;
+            StringBuilder sb = new StringBuilder(logNow);
             sb.replace(lineS, lineF,"");
             et.setText(sb.toString());
             et.setSelection(lineS);
         }
         return false;
-    }
-
-    String getClipBoard() {
-        ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-        ClipData pData = clipboard.getPrimaryClip();
-        ClipData.Item item = pData.getItemAt(0);
-        return "\n ^ 단축 ^ "+item.getText().toString()+"\n";
     }
 
 }

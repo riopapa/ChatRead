@@ -3,6 +3,7 @@ package biz.riopapa.chatread.edit;
 import static biz.riopapa.chatread.MainActivity.fileIO;
 import static biz.riopapa.chatread.MainActivity.menu_selected;
 import static biz.riopapa.chatread.MainActivity.mTableName;
+import static biz.riopapa.chatread.MainActivity.nowSGroup;
 import static biz.riopapa.chatread.MainActivity.tableFolder;
 import static biz.riopapa.chatread.MainActivity.tableListFile;
 import static biz.riopapa.chatread.MainActivity.toolbar;
@@ -18,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -61,13 +63,11 @@ public class ActivityEditTable extends AppCompatActivity {
                     Toast.LENGTH_LONG).show();
             return;
         }
-        if (toolbar == null) {
-            setSupportActionBar(toolbar);
-            toolbar.setTitleTextColor(0xFFFFFF00);
-            toolbar.setSubtitleTextColor(0xFF000000);
-            toolbar.setTitle(mTableName);
-            toolbar.setSubtitle(mTableName);
-        }
+        ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setTitle("Edit Table");
+        actionBar.setSubtitle(mTableName);
+
         EditText eTable = findViewById(R.id.text_table);
         File file = new File(tableFolder, mTableName + ".txt");
         String[] lines = tableListFile.readRaw(file);

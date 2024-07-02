@@ -3,7 +3,7 @@ package biz.riopapa.chatread.fragment;
 import static biz.riopapa.chatread.MainActivity.gIDX;
 import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.stockGetPut;
-import static biz.riopapa.chatread.MainActivity.groupsAdapter;
+import static biz.riopapa.chatread.MainActivity.groupAdapter;
 import static biz.riopapa.chatread.MainActivity.todayFolder;
 import static biz.riopapa.chatread.MainActivity.toolbar;
 
@@ -46,7 +46,7 @@ public class FragmentStockList extends Fragment {
             toolbar.setTitle("StockList");
 //            toolbar.setBackgroundDrawable(ContextCompat.getDrawable(mContext, R.drawable.bar_stock_group));
         }
-        groupsAdapter = new GroupAdapter();
+        groupAdapter = new GroupAdapter();
     }
 
     @Override
@@ -55,7 +55,7 @@ public class FragmentStockList extends Fragment {
 
         View thisView = inflater.inflate(R.layout.fragment_stock_group, container, false);
         recyclerView = thisView.findViewById(R.id.recycle_stock_group);
-        recyclerView.setAdapter(groupsAdapter);
+        recyclerView.setAdapter(groupAdapter);
         if (todayFolder == null)
             new ReadyToday();
         return thisView;
@@ -66,7 +66,7 @@ public class FragmentStockList extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         recyclerView = view.findViewById(R.id.recycle_stock_group);
-        recyclerView.setAdapter(groupsAdapter);
+        recyclerView.setAdapter(groupAdapter);
         if (gIDX > 0) {
             LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView
                     .getLayoutManager();
@@ -116,7 +116,7 @@ public class FragmentStockList extends Fragment {
             stockGetPut.get();
         }
         for (int i = 0; i < sGroups.size(); i++)
-            groupsAdapter.notifyItemChanged(i);
+            groupAdapter.notifyItemChanged(i);
         return super.onOptionsItemSelected(item);
     }
 

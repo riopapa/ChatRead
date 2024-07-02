@@ -8,7 +8,6 @@ import static biz.riopapa.chatread.MainActivity.mMainActivity;
 import static biz.riopapa.chatread.MainActivity.notificationBar;
 import static biz.riopapa.chatread.MainActivity.nowSGroup;
 import static biz.riopapa.chatread.MainActivity.nowSStock;
-import static biz.riopapa.chatread.MainActivity.nowSWho;
 import static biz.riopapa.chatread.MainActivity.phoneVibrate;
 import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.sbnGroup;
@@ -92,7 +91,7 @@ public class StockCheck {
             if (isSilentNow()) {
                 if (phoneVibrate == null)
                     phoneVibrate = new PhoneVibrate();
-                phoneVibrate.vib(1);
+                phoneVibrate.vib(0);
             }
             new Handler(Looper.getMainLooper()).post(() -> {
                 if (isScreenOn(mContext) && mMainActivity != null) {

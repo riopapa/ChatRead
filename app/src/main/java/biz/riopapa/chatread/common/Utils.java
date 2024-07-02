@@ -2,7 +2,6 @@ package biz.riopapa.chatread.common;
 
 import static biz.riopapa.chatread.MainActivity.fileIO;
 import static biz.riopapa.chatread.MainActivity.packageDirectory;
-import static biz.riopapa.chatread.MainActivity.toDay;
 
 import android.util.Log;
 
@@ -56,7 +55,6 @@ public class Utils {
     private String traceClassName(String s) {
         return s.substring(s.lastIndexOf(".")+1);
     }
-
 
     /* delete old packageDirectory / files if storage is less than x days */
     public void deleteOldFiles() {

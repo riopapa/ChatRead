@@ -12,14 +12,12 @@ import static biz.riopapa.chatread.MainActivity.replGroupCnt;
 import static biz.riopapa.chatread.MainActivity.replLong;
 import static biz.riopapa.chatread.MainActivity.replShort;
 import static biz.riopapa.chatread.MainActivity.smsNoNumbers;
-import static biz.riopapa.chatread.MainActivity.smsReplFrom;
-import static biz.riopapa.chatread.MainActivity.smsReplTo;
+import static biz.riopapa.chatread.MainActivity.smsStrRepl;
 import static biz.riopapa.chatread.MainActivity.smsTxtIgnores;
-import static biz.riopapa.chatread.MainActivity.smsWho;
 import static biz.riopapa.chatread.MainActivity.smsWhoIgnores;
 import static biz.riopapa.chatread.MainActivity.sounds;
 import static biz.riopapa.chatread.MainActivity.stockGetPut;
-import static biz.riopapa.chatread.MainActivity.strReplSet;
+import static biz.riopapa.chatread.MainActivity.strReplace;
 import static biz.riopapa.chatread.MainActivity.tableFolder;
 import static biz.riopapa.chatread.MainActivity.tableListFile;
 import static biz.riopapa.chatread.MainActivity.utils;
@@ -56,7 +54,7 @@ public class OptionTables {
             utils.logW("readAll",s);
         }
         readStrReplFile();
-        ktStrRepl = strReplSet.get("ktRepl");
+        ktStrRepl = strReplace.get("ktRepl");
         new AppsTable().get();
         stockGetPut.get();
 
@@ -66,41 +64,8 @@ public class OptionTables {
         smsWhoIgnores =  tableListFile.read("smsWhoIg");
         smsTxtIgnores =  tableListFile.read("smsTxtIg");
         smsNoNumbers = tableListFile.read("smsNoNum");
-        /*
-         * 0   ^  1  ^ 2
-         * Who ^ 짧은 ^ 아주 긴 문장 ; comment
-         */
-        String[] lines = tableListFile.read("smsRepl");
-        ArrayList<String> sWho = new ArrayList<>();
-        ArrayList<String> sShort = new ArrayList<>();
-        ArrayList<String> sLong = new ArrayList<>();
-        for (String oneLine : lines) {
-            if (!oneLine.isEmpty()) {
-                String[] ones = oneLine.split("\\^");
-                if (ones.length != 3) {
-                    if (sounds == null)
-                        sounds = new Sounds();
-                    sounds.beepOnce(MainActivity.soundType.ERR.ordinal());
-                    String s = "SMS Repl ^^ Error : " + oneLine;
-                    Toast.makeText(mContext, s, Toast.LENGTH_LONG).show();
-                    utils.logW("readSMS", s);
-                } else {
-                    sWho.add(ones[0].trim());
-                    sShort.add(ones[1].trim());
-                    sLong.add(ones[2].trim());
-                }
-            }
-        }
-        if (!sShort.isEmpty()) {
-            smsWho = new String[sShort.size()];
-            smsReplFrom = new String[sShort.size()];
-            smsReplTo = new String[sShort.size()];
-            for (int i = 0; i < sShort.size(); i++) {
-                smsWho[i] = sWho.get(i);
-                smsReplFrom[i] = sLong.get(i);
-                smsReplTo[i] = sShort.get(i);
-            }
-        }
+        smsStrRepl = strReplace.get("smsRepl");
+
     }
 
     void readStrReplFile() {

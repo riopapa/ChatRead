@@ -17,7 +17,7 @@ public class PhoneVibrate {
             {0, 20, 200, 300, 300, 400, 0, 20, 200, 300, 300, 400}
     };
 
-    public void vib(int type) {
+    public void vib(int type) { // 0: short, 1: long
         if (vibManager == null) {
             vibManager =
                     (VibratorManager) mContext.getSystemService(Context.VIBRATOR_MANAGER_SERVICE);

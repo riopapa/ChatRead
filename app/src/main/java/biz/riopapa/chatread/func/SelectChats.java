@@ -2,8 +2,10 @@ package biz.riopapa.chatread.func;
 
 import static android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE;
 import static biz.riopapa.chatread.MainActivity.gSheet;
+import static biz.riopapa.chatread.MainActivity.ktStrRepl;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.sGroups;
+import static biz.riopapa.chatread.MainActivity.strReplace;
 import static biz.riopapa.chatread.MainActivity.strUtil;
 import static biz.riopapa.chatread.MainActivity.tableListFile;
 
@@ -16,6 +18,7 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 
 import biz.riopapa.chatread.R;
@@ -30,12 +33,15 @@ public class SelectChats {
     String[] keywords, keyword1, keyword2, prevs, nexts;
     boolean upload;
     ArrayList<String> msgLines;
+    ArrayList<String> ignores;
     SGroup sGroup = null;
     SWho sWho = null;
 
     public KakaoLog generate(File chatFile, boolean upload) {
         KakaoLog kalog = new KakaoLog();
         kalog.idx = -1;   // not found group
+        ignores = new ArrayList<>(Arrays.asList("http", "항셍", "나스닥", "무료",
+                "반갑", "발동", "사진", "상담", "입장", "파생", "프로필"));
 
         this.upload = upload;
         String[] chatLines = tableListFile.readRaw(chatFile);
@@ -75,6 +81,14 @@ public class SelectChats {
             headStr.append(sGroup.replT.get(i)).append(" < ")
                     .append(sGroup.replF.get(i)).append("\n");
         }
+        headStr.append("\n\n\n");
+        SpannableString headSS = new SpannableString(headStr.toString());
+        headSS.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.keyTextFore, null)),
+                0, headSS.length()-1, SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        ignores.add(sGroup.skip1);
+        ignores.add(sGroup.skip2);
+        ignores.add(sGroup.skip3);
 
         msgLines = new ArrayList<>();     // message lines chosen
         StringBuilder mSb = new StringBuilder();
@@ -138,7 +152,6 @@ public class SelectChats {
                 for (int i = 0; i < sGroup.replF.size(); i++) {
                     thisLine = thisLine.replace(sGroup.replF.get(i), sGroup.replT.get(i));
                 }
-                thisLine = cutTail(strUtil.removeSpecialChars(thisLine));
                 SpannableString ssLine = key2Matched(time, sWho.who, thisLine, upload);
                 if (ssLine.length() > 10) {
                     matchedSS = concatSS(matchedSS, ssLine);
@@ -150,14 +163,13 @@ public class SelectChats {
                 selectedSS = concatSS(selectedSS, new SpannableString("▣ "+time+" , "+kWhoF
                         +" , "+ cutTail(thisLine)+"\n\n"));
             } else if (hasKeywords(txt)) {
-                selectedSS = concatSS(selectedSS, checkKeywords(time+", "+kWhoF+" , "+thisLine));
+                selectedSS = concatSS(selectedSS, checkKeywords(time+", "+kWhoF+" , "+cutTail(thisLine)));
             }
         }
         if (upload)
             Toast.makeText(mContext, " Uploaded to google", Toast.LENGTH_SHORT).show();
 
-        kalog.ss =  new SpannableString(TextUtils.concat(new SpannableString(headStr+"\n"),
-                matchedSS, selectedSS));
+        kalog.ss =  new SpannableString(TextUtils.concat(headSS, matchedSS, selectedSS));
         return kalog;
     }
     private String cutTail(String txt) {
@@ -166,12 +178,10 @@ public class SelectChats {
         return txt;
     }
 
-    final String [] chatIgnores = {"http", "항셍", "나스닥", "무료", "반갑", "발동", "사진", "상담",
-            "입장", "파생", "프로필" };
 
     boolean canIgnore(String mergedLine) {
-        for (String igWord : chatIgnores) {
-            if (mergedLine.contains(igWord))
+        for (String skip: ignores) {
+            if (mergedLine.contains(skip))
                 return true;
         }
         return false;
@@ -212,7 +222,6 @@ public class SelectChats {
             if (p1 >= 0) {
                 p2 = thisLine.indexOf(keyword2[k], p1+1);
                 if (p2 >= 0) {      // both matched
-                    thisLine = strUtil.strShorten(sGroup.grp, thisLine);
                     String [] sNames = new StockName().get(prevs[k], nexts[k], thisLine);
                     String keys = "<"+keyword1[k]+"~"+keyword2[k]+">";
                     String str = sNames[0]+" "+ time+", "+who+" , "+ sNames[1] + " " + keys;
@@ -220,16 +229,8 @@ public class SelectChats {
                     s.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.keyTextFore, null)), 0, s.length()-1, SPAN_EXCLUSIVE_EXCLUSIVE);
                     s.setSpan(new BackgroundColorSpan(mContext.getResources().getColor(R.color.keyMatchedBack, null)), 0, s.length()-1, SPAN_EXCLUSIVE_EXCLUSIVE);
                     s.setSpan(new BackgroundColorSpan(mContext.getResources().getColor(R.color.tabBackSelected, null)), 0, sNames[0].length(), SPAN_EXCLUSIVE_EXCLUSIVE);
-                    if (str.contains(whoFs[k]))
-                        s.setSpan(new UnderlineSpan(), 0, s.length()-1, SPAN_EXCLUSIVE_EXCLUSIVE);
-                    p1 = str.indexOf(prevs[k]);
-                    if (p1 >= 0) {
-                        s.setSpan(new BackgroundColorSpan(mContext.getResources().getColor(R.color.keyMatchedWord, null)), p1, p1 + prevs[k].length(), SPAN_EXCLUSIVE_EXCLUSIVE);
-                    }
-                    p2 = str.indexOf(nexts[k], p1+1);
-                    if (p2 >= 0) {
-                        s.setSpan(new BackgroundColorSpan(mContext.getResources().getColor(R.color.keyMatchedWord, null)), p2, p2 + nexts[k].length(), SPAN_EXCLUSIVE_EXCLUSIVE);
-                    }
+//                    if (str.contains(whoFs[k]))
+//                        s.setSpan(new UnderlineSpan(), 0, s.length()-1, SPAN_EXCLUSIVE_EXCLUSIVE);
                     if (upload) {
                         String [] strs = new StockName().get(prevs[k], nexts[k], thisLine);
                         gSheet.add2Stock(sGroup.grp, who, "chats", strs[0],

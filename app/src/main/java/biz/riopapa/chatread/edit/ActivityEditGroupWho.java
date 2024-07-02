@@ -4,7 +4,7 @@ import static biz.riopapa.chatread.MainActivity.gIDX;
 import static biz.riopapa.chatread.MainActivity.gSheet;
 import static biz.riopapa.chatread.MainActivity.groupWhoAdapter;
 import static biz.riopapa.chatread.MainActivity.groupWhoStockAdapter;
-import static biz.riopapa.chatread.MainActivity.groupsAdapter;
+import static biz.riopapa.chatread.MainActivity.groupAdapter;
 import static biz.riopapa.chatread.MainActivity.nowSGroup;
 import static biz.riopapa.chatread.MainActivity.nowSWho;
 import static biz.riopapa.chatread.MainActivity.sGroups;
@@ -23,6 +23,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.RecyclerView;
@@ -51,13 +52,19 @@ public class ActivityEditGroupWho extends AppCompatActivity {
         setContentView(R.layout.activity_edit_group_who);
         whoActivity = this;
         whoContext = this;
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+
         nowSWho = nowSGroup.whos.get(wIDX);
+
+        ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setTitle(nowSGroup.grp+":"+nowSGroup.grpF);
+        actionBar.setSubtitle(nowSWho.who+":"+nowSWho.whoF);
+
         try {
             newWho = (SWho) nowSGroup.whos.get(wIDX).clone();
         } catch (CloneNotSupportedException e) {
@@ -114,7 +121,7 @@ public class ActivityEditGroupWho extends AppCompatActivity {
             return;
         }
 
-        gSheet.deleteGSheetGroup(nowSGroup);
+        gSheet.updateGSheetGroup(nowSGroup);
         nowSGroup.whos.remove(wIDX);
         try {
             sGroups.set(gIDX, (SGroup) nowSGroup.clone());
@@ -123,9 +130,17 @@ public class ActivityEditGroupWho extends AppCompatActivity {
         }
         stockGetPut.put( " Deleted "+ nowSWho.who+" / " + nowSWho.whoM);
         stockGetPut.get();
-        groupWhoAdapter.notifyDataSetChanged();
-        groupsAdapter.notifyDataSetChanged();
+        updateAdaptor();
         finish();
+    }
+
+    private static void updateAdaptor() {
+        for (int i = 0; i < nowSWho.stocks.size(); i++)
+            groupWhoStockAdapter.notifyItemChanged(i);
+        for (int i = 0; i < nowSGroup.whos.size(); i++)
+            groupWhoAdapter.notifyItemChanged(i);
+        for (int i = 0; i < sGroups.size(); i++)
+            groupAdapter.notifyItemChanged(i);
     }
 
     @Override
@@ -149,8 +164,7 @@ public class ActivityEditGroupWho extends AppCompatActivity {
         sGroups.set(gIDX, nowSGroup);
         stockGetPut.put("Dup who "+ newWho.who+" / " + newWho.whoM);
         stockGetPut.get();
-        groupWhoAdapter.notifyDataSetChanged();
-        groupsAdapter.notifyDataSetChanged();
+        updateAdaptor();
         finish();
     }
 
@@ -164,9 +178,7 @@ public class ActivityEditGroupWho extends AppCompatActivity {
         sGroups.set(gIDX, nowSGroup);
         stockGetPut.put("Save Who "+ newWho.who+" / " + newWho.whoM);
         stockGetPut.get();
-        groupWhoAdapter.notifyDataSetChanged();
-        groupsAdapter.notifyDataSetChanged();
-
+        updateAdaptor();
         gSheet.updateGSheetGroup(nowSGroup);
         finish();
     }
