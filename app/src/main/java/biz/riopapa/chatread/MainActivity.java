@@ -15,6 +15,7 @@ import android.os.Environment;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
@@ -37,6 +38,7 @@ import biz.riopapa.chatread.adapters.AppsAdapter;
 import biz.riopapa.chatread.adapters.GroupAdapter;
 import biz.riopapa.chatread.adapters.GroupWhoAdapter;
 import biz.riopapa.chatread.adapters.GroupWhoStockAdapter;
+import biz.riopapa.chatread.edit.ActivityEditGroup;
 import biz.riopapa.chatread.fragment.FragmentKaTalk;
 import biz.riopapa.chatread.func.StrReplace;
 import biz.riopapa.chatread.models.SGroup;
@@ -50,7 +52,6 @@ import biz.riopapa.chatread.common.Permission;
 import biz.riopapa.chatread.common.PhoneVibrate;
 import biz.riopapa.chatread.common.Sounds;
 import biz.riopapa.chatread.common.Utils;
-import biz.riopapa.chatread.edit.ActivityEditStrRepl;
 import biz.riopapa.chatread.edit.ActivityEditTable;
 import biz.riopapa.chatread.fragment.FragmentAppsList;
 import biz.riopapa.chatread.fragment.FragmentLogNorm;
@@ -187,6 +188,8 @@ public class MainActivity extends AppCompatActivity {
     public static GroupWhoAdapter groupWhoAdapter = null;
     public static GroupWhoStockAdapter groupWhoStockAdapter = null;
 
+    public static ItemClickListener listener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -223,9 +226,6 @@ public class MainActivity extends AppCompatActivity {
                 fragment = new FragmentStockList();
             } else if (id == R.id.kt_log) {
                 fragment = new FragmentKaTalk();
-            } else if (id == R.id.table_str_repl) {
-                Intent intent = new Intent(mContext, ActivityEditStrRepl.class);
-                startActivity(intent);
             } else {
                 if (id == R.id.table_sms_no_num || id == R.id.table_sms_repl ||
                         id == R.id.table_sms_txt_ig || id == R.id.table_sms_who_ig ||
@@ -300,6 +300,15 @@ public class MainActivity extends AppCompatActivity {
                     new FragmentLogNorm()).commit();
             drawerLayout.closeDrawer(GravityCompat.START);
         });
+
+
+        listener = position -> {
+            gIDX = position;
+            nowSGroup = sGroups.get(gIDX);
+            Intent subActivityIntent = new Intent(this, ActivityEditGroup.class);
+            mMainActivity.startActivityForResult(subActivityIntent, 123);
+        };
+
     }
 
     private boolean isNotificationAllowed(String packageName) {
@@ -311,6 +320,17 @@ public class MainActivity extends AppCompatActivity {
         }
         return false;
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 123) {
+            if (resultCode == RESULT_OK)
+                groupAdapter = new GroupAdapter(listener);
+        }
+    }
+
 
     @Override
     protected void onPause() {

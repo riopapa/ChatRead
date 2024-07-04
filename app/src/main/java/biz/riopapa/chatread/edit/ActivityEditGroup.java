@@ -51,16 +51,16 @@ public class ActivityEditGroup extends AppCompatActivity {
         super.onResume();
 
         nowSGroup = sGroups.get(gIDX);
-        ActionBar actionBar = getSupportActionBar();
-        assert actionBar != null;
-        actionBar.setTitle("Group Edit");
-        actionBar.setSubtitle(nowSGroup.grp+":"+nowSGroup.grpF);
-
         try {
             newGroup = (SGroup) sGroups.get(gIDX).clone();
         } catch (CloneNotSupportedException e) {
             throw new RuntimeException(e);
         }
+
+        ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setTitle("Group Edit");
+        actionBar.setSubtitle(nowSGroup.grp+":"+nowSGroup.grpF);
 
         eGroup = findViewById(R.id.e_group);
         eGroupM = findViewById(R.id.e_group_match);
@@ -205,7 +205,6 @@ public class ActivityEditGroup extends AppCompatActivity {
         sGroups.set(gIDX, newGroup);
         nowSGroup = sGroups.get(gIDX);
         stockGetPut.put("group save");
-        stockGetPut.get();
 
         Toast.makeText(mContext,"Saving "+ newGroup.grp+" / " + newGroup.grpM, Toast.LENGTH_SHORT).show();
         for (int i = 0; i < sGroups.size(); i++)

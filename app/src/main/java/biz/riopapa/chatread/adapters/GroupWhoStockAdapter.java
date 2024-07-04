@@ -4,9 +4,7 @@ import static biz.riopapa.chatread.MainActivity.gIDX;
 import static biz.riopapa.chatread.MainActivity.gSheet;
 import static biz.riopapa.chatread.MainActivity.groupWhoAdapter;
 import static biz.riopapa.chatread.MainActivity.groupWhoStockAdapter;
-import static biz.riopapa.chatread.MainActivity.nowSGroup;
 import static biz.riopapa.chatread.MainActivity.nowSStock;
-import static biz.riopapa.chatread.MainActivity.nowSWho;
 import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.sIDX;
 import static biz.riopapa.chatread.MainActivity.stockGetPut;
@@ -32,7 +30,7 @@ public class GroupWhoStockAdapter extends RecyclerView.Adapter<GroupWhoStockAdap
 
     @Override
     public int getItemCount() {
-        return nowSWho.stocks.size();
+        return sGroups.get(gIDX).whos.get(wIDX).stocks.size();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -63,7 +61,7 @@ public class GroupWhoStockAdapter extends RecyclerView.Adapter<GroupWhoStockAdap
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
 
-        SStock stock = nowSWho.stocks.get(position);
+        SStock stock = sGroups.get(gIDX).whos.get(wIDX).stocks.get(position);
         holder.tKey1.setText(stock.key1);
         holder.tKey2.setText(stock.key2);
         holder.tPrev.setText(stock.prv);
@@ -74,7 +72,7 @@ public class GroupWhoStockAdapter extends RecyclerView.Adapter<GroupWhoStockAdap
 
         holder.tLine.setOnClickListener(v -> {
             sIDX = holder.getAdapterPosition();
-            nowSStock = nowSWho.stocks.get(sIDX);
+            nowSStock = sGroups.get(gIDX).whos.get(wIDX).stocks.get(sIDX);
             try {
                 newStock = (SStock) nowSStock.clone();
             } catch (CloneNotSupportedException e) {
@@ -108,46 +106,27 @@ public class GroupWhoStockAdapter extends RecyclerView.Adapter<GroupWhoStockAdap
         builder.setView(dialogView)
             .setTitle("Edit Stock")
             .setPositiveButton("Updt", (dialog, which) -> {
-                newStock.key1 = eKey1.getText().toString();
-                newStock.key2 = eKey2.getText().toString();
-                newStock.prv = ePrev.getText().toString();
-                newStock.nxt = eNext.getText().toString();
-                newStock.talk = eTalk.getText().toString();
-                newStock.count = Integer.parseInt(eCount.getText().toString());
-                newStock.skip1 = eSkip.getText().toString();
-                nowSWho.stocks.set(sIDX, newStock);
-                nowSStock = nowSWho.stocks.get(sIDX);
-                nowSGroup.whos.set(wIDX, nowSWho);
-                nowSWho = nowSGroup.whos.get(wIDX);
-                sGroups.set(gIDX, nowSGroup);
-                nowSGroup = sGroups.get(gIDX);
+                setNewStockFromActivity(eKey1, eKey2, ePrev, eNext, eTalk, eCount, eSkip);
+                sGroups.get(gIDX).whos.get(wIDX).stocks.set(sIDX, newStock);
+                gSheet.updateGSheetGroup(sGroups.get(gIDX));
                 dataSetChanged();
                 dialog.dismiss();
 
                 // Implement logic for "Apply" button (e.g., get data from EditTexts)
             })
             .setNeutralButton("Dup", (dialog, which) -> {
-                newStock.key1 = eKey1.getText().toString();
-                newStock.key2 = eKey2.getText().toString();
-                newStock.prv = ePrev.getText().toString();
-                newStock.nxt = eNext.getText().toString();
-                newStock.talk = eTalk.getText().toString();
-                newStock.count = Integer.parseInt(eCount.getText().toString());
-                newStock.skip1 = eSkip.getText().toString();
-                nowSWho.stocks.add(newStock);
-                nowSGroup.whos.set(wIDX, nowSWho);
-                sGroups.set(gIDX, nowSGroup);
+                setNewStockFromActivity(eKey1, eKey2, ePrev, eNext, eTalk, eCount, eSkip);
+                sGroups.get(gIDX).whos.get(wIDX).stocks.add(newStock);
+                gSheet.updateGSheetGroup(sGroups.get(gIDX));
                 dataSetChanged();
                 dialog.dismiss();
-                gSheet.updateGSheetGroup(nowSGroup);
             })
             .setNegativeButton("Del", (dialog, which) -> {
-                if (nowSWho.stocks.size() > 1) {
-                    nowSWho.stocks.remove(sIDX);
-                    nowSGroup.whos.set(wIDX, nowSWho);
+                if (sGroups.get(gIDX).whos.get(wIDX).stocks.size() > 1) {
+                    sGroups.get(gIDX).whos.get(wIDX).stocks.remove(sIDX);
+                    gSheet.updateGSheetGroup(sGroups.get(gIDX));
                     dialog.dismiss();
                     dataSetChanged();
-                    gSheet.updateGSheetGroup(nowSGroup);
                 }
             })
             ;
@@ -155,13 +134,19 @@ public class GroupWhoStockAdapter extends RecyclerView.Adapter<GroupWhoStockAdap
         builder.create().show();
     }
 
-    void dataSetChanged() {
-        for (int i = 0; i < nowSWho.stocks.size(); i++)
-            groupWhoStockAdapter.notifyItemChanged(i);
-        for (int i = 0; i < nowSGroup.whos.size(); i++)
-            groupWhoAdapter.notifyItemChanged(i);
+    private void setNewStockFromActivity(EditText eKey1, EditText eKey2, EditText ePrev, EditText eNext, EditText eTalk, EditText eCount, EditText eSkip) {
+        newStock.key1 = eKey1.getText().toString();
+        newStock.key2 = eKey2.getText().toString();
+        newStock.prv = ePrev.getText().toString();
+        newStock.nxt = eNext.getText().toString();
+        newStock.talk = eTalk.getText().toString();
+        newStock.count = Integer.parseInt(eCount.getText().toString());
+        newStock.skip1 = eSkip.getText().toString();
+    }
 
+    void dataSetChanged() {
         stockGetPut.put("stock");
-        stockGetPut.get();
+        groupWhoStockAdapter = new GroupWhoStockAdapter();
+        groupWhoAdapter = new GroupWhoAdapter();
     }
 }

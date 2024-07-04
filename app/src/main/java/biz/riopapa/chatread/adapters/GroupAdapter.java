@@ -1,13 +1,10 @@
 package biz.riopapa.chatread.adapters;
 
 import static biz.riopapa.chatread.MainActivity.gIDX;
-import static biz.riopapa.chatread.MainActivity.mMainActivity;
 import static biz.riopapa.chatread.MainActivity.mContext;
-import static biz.riopapa.chatread.MainActivity.nowSGroup;
 import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.stockGetPut;
 
-import android.content.Intent;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -22,13 +19,19 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import biz.riopapa.chatread.ItemClickListener;
 import biz.riopapa.chatread.R;
-import biz.riopapa.chatread.edit.ActivityEditGroup;
 import biz.riopapa.chatread.models.SStock;
 import biz.riopapa.chatread.models.SWho;
 import biz.riopapa.chatread.models.SGroup;
 
 public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> {
+
+    private final ItemClickListener listener;
+
+    public GroupAdapter(ItemClickListener listener) {
+        this.listener = listener;
+    }
 
     @Override
     public int getItemCount() {
@@ -55,6 +58,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
             tIgnore = itemView.findViewById(R.id.one_group_ignore);
             tTelegram = itemView.findViewById(R.id.one_group_telegram);
             tInfo = itemView.findViewById(R.id.one_group_info);
+
         }
     }
 
@@ -105,10 +109,6 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
         holder.tInfo.setText(grpBuilder);
         holder.tLine.setBackgroundColor(ContextCompat.getColor(mContext,
                 (gIDX == position)? R.color.line_now : R.color.line_default));
-        holder.tLine.setOnClickListener(v -> {
-            gIDX = holder.getAdapterPosition();
-            nowSGroup = sGroups.get(gIDX);
-            mMainActivity.startActivityForResult(new Intent(mContext, ActivityEditGroup.class), 123);
-        });
+        holder.tLine.setOnClickListener(view -> listener.onItemClicked(position));
     }
 }

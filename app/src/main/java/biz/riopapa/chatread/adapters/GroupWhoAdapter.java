@@ -2,8 +2,8 @@ package biz.riopapa.chatread.adapters;
 
 import static biz.riopapa.chatread.MainActivity.mMainActivity;
 import static biz.riopapa.chatread.MainActivity.mContext;
-import static biz.riopapa.chatread.MainActivity.nowSGroup;
-import static biz.riopapa.chatread.MainActivity.nowSWho;
+import static biz.riopapa.chatread.MainActivity.sGroups;
+import static biz.riopapa.chatread.MainActivity.gIDX;
 import static biz.riopapa.chatread.MainActivity.wIDX;
 
 import android.content.Intent;
@@ -24,7 +24,7 @@ public class GroupWhoAdapter extends RecyclerView.Adapter<GroupWhoAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return nowSGroup.whos.size();
+        return sGroups.get(gIDX).whos.size();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -52,7 +52,7 @@ public class GroupWhoAdapter extends RecyclerView.Adapter<GroupWhoAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
 
-        SWho sWho = nowSGroup.whos.get(position);
+        SWho sWho = sGroups.get(gIDX).whos.get(position);
         holder.tWho.setText(sWho.who);
         holder.tWhoM.setText(sWho.whoM);
         holder.tWhoF.setText(sWho.whoF);
@@ -67,7 +67,6 @@ public class GroupWhoAdapter extends RecyclerView.Adapter<GroupWhoAdapter.ViewHo
         holder.tInfo.setText(info.toString());
         holder.tLine.setOnClickListener(v -> {
             wIDX = holder.getAdapterPosition();
-            nowSWho = nowSGroup.whos.get(wIDX);
             Intent intent = new Intent(mContext, ActivityEditGroupWho.class);
             mMainActivity.startActivity(intent);
         });

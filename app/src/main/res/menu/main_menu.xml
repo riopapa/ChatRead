@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:id="@+id/group0">
-        <item android:title="Show / Edit Log"
+        <item android:title="Show Log"
             android:enabled="false"
             android:checkable="false">
             <menu>
@@ -27,11 +27,6 @@
                     android:icon="@drawable/icon_stock"
                     android:id="@+id/stock"
                     />
-                <item
-                    android:title="Stock Group"
-                    android:icon="@drawable/icon_stock"
-                    android:id="@+id/group"
-                    />
 
             </menu>
         </item>
@@ -42,14 +37,14 @@
             android:checkable="false">
             <menu>
                 <item
+                    android:title="Stock Group"
+                    android:icon="@drawable/icon_stock"
+                    android:id="@+id/group"
+                    />
+                <item
                     android:title="Apps"
                     android:icon="@drawable/icon_apps"
                     android:id="@+id/apps"
-                    />
-                <item
-                    android:title="String : Replace"
-                    android:icon="@drawable/icon_str_replace"
-                    android:id="@+id/table_str_repl"
                     />
             </menu>
         </item>

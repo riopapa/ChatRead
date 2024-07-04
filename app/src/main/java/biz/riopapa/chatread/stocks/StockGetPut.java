@@ -44,20 +44,20 @@ public class StockGetPut {
         Type type = new TypeToken<List<SGroup>>() {
         }.getType();
         if (json.isEmpty())
-            getFromFile();
+            getFromSVFile();
         else
             sGroups = gson.fromJson(json, type);
         setStockTelKaCount();
     }
 
-    public void getFromFile() {
+    public void getFromSVFile() {
         if (tableFolder ==  null) {
             downloadFolder = new File(Environment.getExternalStorageDirectory(), "download");
             tableFolder = new File(downloadFolder, "_ChatTalk");
         }
         ArrayList<SGroup> list;
         Gson gson = new Gson();
-        String json = fileIO.readFile(tableFolder, STOCK_TABLE +".xml");
+        String json = fileIO.readFile(tableFolder, STOCK_TABLE +"SV.xml");
         if (json.isEmpty()) {
             list = new ArrayList<>();
         } else {
@@ -110,6 +110,21 @@ public class StockGetPut {
         sort();
         SharedPreferences shareGroup = mContext.getSharedPreferences(STOCK_TABLE, MODE_PRIVATE);
         SharedPreferences.Editor sgEdit = shareGroup.edit();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        String json = gson.toJson(sGroups);
+        sgEdit.putString(STOCK_TABLE, json);
+        sgEdit.apply();
+        if (todayFolder == null)
+            new ReadyToday();
+        fileIO.writeFile(tableFolder, STOCK_TABLE +".xml", json);
+    }
+
+    public void putSV(String msg) {
+        new SnackBar().show(STOCK_TABLE +".json", msg);
+        utils.logW("StockPut", msg);
+        sort();
+        SharedPreferences shareGroup = mContext.getSharedPreferences(STOCK_TABLE, MODE_PRIVATE);
+        SharedPreferences.Editor sgEdit = shareGroup.edit();
         Gson gson = new Gson();
         String json = gson.toJson(sGroups);
         sgEdit.putString(STOCK_TABLE, json);
@@ -118,7 +133,7 @@ public class StockGetPut {
             new ReadyToday();
         Gson gson2 = new GsonBuilder().setPrettyPrinting().create();
         String prettyJson = gson2.toJson(sGroups);
-        fileIO.writeFile(tableFolder, STOCK_TABLE +".xml", prettyJson);
+        fileIO.writeFile(tableFolder, STOCK_TABLE +"SV.xml", prettyJson);
     }
 
     void sort() {
