@@ -20,7 +20,7 @@ import biz.riopapa.chatread.edit.ActivityEditGroupWho;
 import biz.riopapa.chatread.models.SStock;
 import biz.riopapa.chatread.models.SWho;
 
-public class GroupWhoAdapter extends RecyclerView.Adapter<GroupWhoAdapter.ViewHolder> {
+public class WhoAdapter extends RecyclerView.Adapter<WhoAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {

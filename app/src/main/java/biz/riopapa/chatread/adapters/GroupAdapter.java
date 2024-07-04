@@ -58,7 +58,6 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
             tIgnore = itemView.findViewById(R.id.one_group_ignore);
             tTelegram = itemView.findViewById(R.id.one_group_telegram);
             tInfo = itemView.findViewById(R.id.one_group_info);
-
         }
     }
 
@@ -83,18 +82,16 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
             if (grpBuilder.length() > 1)
                 grpBuilder.append("\n");
             SpannableString ssWho = new SpannableString(w.who + " : "+w.whoM + ", "+w.whoF + "\n");
-            ssWho.setSpan(new ForegroundColorSpan(0xFF131455), 0, ssWho.length()
+            ssWho.setSpan(new ForegroundColorSpan(0xFF030415), 0, ssWho.length()
                     , Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             grpBuilder.append(ssWho);
-            SpannableStringBuilder stBuilder = new SpannableStringBuilder();
+            SpannableStringBuilder stBuilder = new SpannableStringBuilder("     ");
             for (SStock s : w.stocks) {
-                if (stBuilder.length() > 1)
-                    stBuilder.append("\n");
-                SpannableString ssStock = new SpannableString(s.key1 + "/" + s.key2 + ", " + s.prv + "/" + s.nxt
-                        + ", " + s.count + ", " + s.talk);
-                ssStock.setSpan(new ForegroundColorSpan(0xFF132518), 0, ssStock.length()
-                        , Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                ssStock.setSpan(new BackgroundColorSpan(0xFFC9AABB), 0, ssStock.length()
+                if (stBuilder.length() > 10)
+                    stBuilder.append("\n     ");
+                SpannableString ssStock = new SpannableString(" " + s.key1 + "/" + s.key2 + ", " + s.prv + "/" + s.nxt
+                        + ", " + s.count + ", " + s.talk+" ");
+                ssStock.setSpan(new ForegroundColorSpan(0xFF0F0F08), 0, ssStock.length()
                         , Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 stBuilder.append(ssStock);
             }

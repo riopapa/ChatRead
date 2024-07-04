@@ -2,8 +2,9 @@ package biz.riopapa.chatread.adapters;
 
 import static biz.riopapa.chatread.MainActivity.gIDX;
 import static biz.riopapa.chatread.MainActivity.gSheet;
-import static biz.riopapa.chatread.MainActivity.groupWhoAdapter;
-import static biz.riopapa.chatread.MainActivity.groupWhoStockAdapter;
+import static biz.riopapa.chatread.MainActivity.stockRecyclerView;
+import static biz.riopapa.chatread.MainActivity.whoAdapter;
+import static biz.riopapa.chatread.MainActivity.stockAdapter;
 import static biz.riopapa.chatread.MainActivity.nowSStock;
 import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.sIDX;
@@ -24,7 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import biz.riopapa.chatread.R;
 import biz.riopapa.chatread.models.SStock;
 
-public class GroupWhoStockAdapter extends RecyclerView.Adapter<GroupWhoStockAdapter.ViewHolder> {
+public class StockAdapter extends RecyclerView.Adapter<StockAdapter.ViewHolder> {
 
     SStock newStock;
 
@@ -146,7 +147,10 @@ public class GroupWhoStockAdapter extends RecyclerView.Adapter<GroupWhoStockAdap
 
     void dataSetChanged() {
         stockGetPut.put("stock");
-        groupWhoStockAdapter = new GroupWhoStockAdapter();
-        groupWhoAdapter = new GroupWhoAdapter();
+        stockAdapter = new StockAdapter();
+        whoAdapter = new WhoAdapter();
+        stockRecyclerView.setAdapter(stockAdapter);
+        for (int i = 0; i < sGroups.get(gIDX).whos.size(); i++)
+            whoAdapter.notifyItemChanged(i);
     }
 }

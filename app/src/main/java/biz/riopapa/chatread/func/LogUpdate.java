@@ -1,14 +1,9 @@
 package biz.riopapa.chatread.func;
 
-import static android.content.Context.MODE_PRIVATE;
 import static biz.riopapa.chatread.MainActivity.logQue;
-import static biz.riopapa.chatread.MainActivity.logSave;
 import static biz.riopapa.chatread.MainActivity.logStock;
 import static biz.riopapa.chatread.MainActivity.logWork;
-import static biz.riopapa.chatread.MainActivity.sharePref;
 import static biz.riopapa.chatread.MainActivity.sharedEditor;
-
-import android.content.Context;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -18,62 +13,23 @@ import java.util.Locale;
 
 public class LogUpdate {
 
-//    public void load(Context context) {
-//        if (sharePref == null) {
-//            sharePref = context.getSharedPreferences("sayText", MODE_PRIVATE);
-//            sharedEditor = sharePref.edit();
-//        }
-//        logQue = sharePref.getString("logQue", "");
-//        logStock = sharePref.getString("logStock", "");
-//        logSave = sharePref.getString("logSave", "");
-//        logWork = sharePref.getString("logWork", "");
-//    }
-
     final SimpleDateFormat TIME_INFO = new SimpleDateFormat("MM-dd HH:mm ", Locale.KOREA);
     public void addLog(String header, String text) {
         logQue += "\n" + TIME_INFO.format(new Date()) + header + "\n" + text+"\n";
-        if (logQue.length() > 24000) {
-            Thread logThread = new Thread(() -> {
-                logQue = squeezeLog(logQue);
-                sharedEditor.putString("logQue", logQue);
-                sharedEditor.apply();
-            });
-            logThread.start();
-        } else {
-            sharedEditor.putString("logQue", logQue);
-            sharedEditor.apply();
-        }
+        sharedEditor.putString("logQue", logQue);
+        sharedEditor.apply();
     }
 
     public void addWork(String header, String text) {
         logWork += "\n" + TIME_INFO.format(new Date()) + header + "\n" + text+"\n";
-        if (logWork.length() > 24000) {
-            Thread logThread = new Thread(() -> {
-                logWork = squeezeLog(logWork);
-                sharedEditor.putString("logWork", logWork);
-                sharedEditor.apply();
-            });
-            logThread.start();
-        } else {
-            sharedEditor.putString("logWork", logWork);
-            sharedEditor.apply();
-        }
+        sharedEditor.putString("logWork", logWork);
+        sharedEditor.apply();
     }
 
     public void addStock(String header, String text) {
-//        new ReadyToday();
         logStock += "\n" + TIME_INFO.format(new Date()) + header + "\n" + text+"\n";
-        if (logStock.length() > 12000) {
-            Thread stockThread = new Thread(() -> {
-                logStock = squeezeLog(logStock);
-                sharedEditor.putString("logStock", logStock);
-                sharedEditor.apply();
-            });
-            stockThread.start();
-        } else {
-            sharedEditor.putString("logStock", logStock);
-            sharedEditor.apply();
-        }
+        sharedEditor.putString("logStock", logStock);
+        sharedEditor.apply();
     }
 
     /*

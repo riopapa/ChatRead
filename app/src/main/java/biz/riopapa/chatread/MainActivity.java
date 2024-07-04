@@ -1,5 +1,7 @@
 package biz.riopapa.chatread;
 
+import static biz.riopapa.chatread.fragment.FragmentStockList.groupRecyclerView;
+
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
@@ -15,7 +17,6 @@ import android.os.Environment;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
@@ -27,6 +28,7 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -36,8 +38,8 @@ import java.util.Set;
 
 import biz.riopapa.chatread.adapters.AppsAdapter;
 import biz.riopapa.chatread.adapters.GroupAdapter;
-import biz.riopapa.chatread.adapters.GroupWhoAdapter;
-import biz.riopapa.chatread.adapters.GroupWhoStockAdapter;
+import biz.riopapa.chatread.adapters.WhoAdapter;
+import biz.riopapa.chatread.adapters.StockAdapter;
 import biz.riopapa.chatread.edit.ActivityEditGroup;
 import biz.riopapa.chatread.fragment.FragmentKaTalk;
 import biz.riopapa.chatread.func.StrReplace;
@@ -185,10 +187,12 @@ public class MainActivity extends AppCompatActivity {
     public static FileIO fileIO;
 
     public static GroupAdapter groupAdapter = null;
-    public static GroupWhoAdapter groupWhoAdapter = null;
-    public static GroupWhoStockAdapter groupWhoStockAdapter = null;
+    public static WhoAdapter whoAdapter = null;
+    public static StockAdapter stockAdapter = null;
+    public static RecyclerView whoRecyclerView;
+    public static RecyclerView stockRecyclerView;
 
-    public static ItemClickListener listener;
+    public static ItemClickListener groupListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -301,8 +305,7 @@ public class MainActivity extends AppCompatActivity {
             drawerLayout.closeDrawer(GravityCompat.START);
         });
 
-
-        listener = position -> {
+        groupListener = position -> {
             gIDX = position;
             nowSGroup = sGroups.get(gIDX);
             Intent subActivityIntent = new Intent(this, ActivityEditGroup.class);
@@ -324,13 +327,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == 123) {
-            if (resultCode == RESULT_OK)
-                groupAdapter = new GroupAdapter(listener);
-        }
+        groupAdapter = new GroupAdapter(groupListener);
+        groupRecyclerView.setAdapter(groupAdapter);
     }
-
 
     @Override
     protected void onPause() {

@@ -1,7 +1,7 @@
 package biz.riopapa.chatread.fragment;
 
 import static biz.riopapa.chatread.MainActivity.gIDX;
-import static biz.riopapa.chatread.MainActivity.listener;
+import static biz.riopapa.chatread.MainActivity.groupListener;
 import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.stockGetPut;
 import static biz.riopapa.chatread.MainActivity.groupAdapter;
@@ -33,8 +33,8 @@ import biz.riopapa.chatread.models.SWho;
 public class FragmentStockList extends Fragment {
 
     Menu mainMenu;
-    RecyclerView recyclerView;
 
+    public static RecyclerView groupRecyclerView;
     public FragmentStockList() {
         // Required empty public constructor
     }
@@ -47,7 +47,8 @@ public class FragmentStockList extends Fragment {
             toolbar.setTitle("StockList");
 //            toolbar.setBackgroundDrawable(ContextCompat.getDrawable(mContext, R.drawable.bar_stock_group));
         }
-        groupAdapter = new GroupAdapter(listener);
+        groupAdapter = new GroupAdapter(groupListener);
+
     }
 
     @Override
@@ -55,10 +56,11 @@ public class FragmentStockList extends Fragment {
                              Bundle savedInstanceState) {
 
         View thisView = inflater.inflate(R.layout.fragment_stock_group, container, false);
-        recyclerView = thisView.findViewById(R.id.recycle_stock_group);
-        recyclerView.setAdapter(groupAdapter);
+        groupRecyclerView = thisView.findViewById(R.id.recycle_stock_group);
+        groupRecyclerView.setAdapter(groupAdapter);
         if (todayFolder == null)
             new ReadyToday();
+        thisView.invalidate();
         return thisView;
     }
 
@@ -66,10 +68,10 @@ public class FragmentStockList extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        recyclerView = view.findViewById(R.id.recycle_stock_group);
-        recyclerView.setAdapter(groupAdapter);
+        groupRecyclerView = view.findViewById(R.id.recycle_stock_group);
+        groupRecyclerView.setAdapter(groupAdapter);
         if (gIDX > 0) {
-            LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView
+            LinearLayoutManager layoutManager = (LinearLayoutManager) groupRecyclerView
                     .getLayoutManager();
             assert layoutManager != null;
             layoutManager.scrollToPositionWithOffset(
@@ -115,10 +117,9 @@ public class FragmentStockList extends Fragment {
         } else if (item.getItemId() == R.id.saveStocks) {
             stockGetPut.putSV("All save group");
         }
-        groupAdapter = new GroupAdapter(listener);
-        recyclerView.setAdapter(groupAdapter);
+        groupAdapter = new GroupAdapter(groupListener);
+        groupRecyclerView.setAdapter(groupAdapter);
         return super.onOptionsItemSelected(item);
     }
-
 
 }

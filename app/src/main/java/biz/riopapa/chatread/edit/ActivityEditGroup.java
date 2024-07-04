@@ -2,12 +2,14 @@ package biz.riopapa.chatread.edit;
 
 import static biz.riopapa.chatread.MainActivity.gIDX;
 import static biz.riopapa.chatread.MainActivity.gSheet;
-import static biz.riopapa.chatread.MainActivity.groupWhoAdapter;
+import static biz.riopapa.chatread.MainActivity.whoAdapter;
 import static biz.riopapa.chatread.MainActivity.groupAdapter;
-import static biz.riopapa.chatread.MainActivity.mContext;
+import static biz.riopapa.chatread.MainActivity.groupListener;
 import static biz.riopapa.chatread.MainActivity.nowSGroup;
 import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.stockGetPut;
+import static biz.riopapa.chatread.MainActivity.whoRecyclerView;
+import static biz.riopapa.chatread.fragment.FragmentStockList.groupRecyclerView;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,17 +19,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
-import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
 import biz.riopapa.chatread.R;
-import biz.riopapa.chatread.adapters.GroupWhoAdapter;
+import biz.riopapa.chatread.adapters.GroupAdapter;
+import biz.riopapa.chatread.adapters.WhoAdapter;
 import biz.riopapa.chatread.models.SGroup;
 
 public class ActivityEditGroup extends AppCompatActivity {
@@ -36,7 +37,6 @@ public class ActivityEditGroup extends AppCompatActivity {
     TextView tTelKa;
     SwitchCompat sIgnore;
     View deleteMenu;
-    RecyclerView recyclerView;
     final String NOTHING = "_n_";
     SGroup newGroup;
 
@@ -89,9 +89,9 @@ public class ActivityEditGroup extends AppCompatActivity {
             eRepl.setText(s);
         } else
             eRepl.setText("");
-        groupWhoAdapter = new GroupWhoAdapter();
-        recyclerView = findViewById(R.id.recycle_whos);
-        recyclerView.setAdapter(groupWhoAdapter);
+        whoAdapter = new WhoAdapter();
+        whoRecyclerView = findViewById(R.id.recycle_whos);
+        whoRecyclerView.setAdapter(whoAdapter);
     }
 
     String nextTelKa(String c) {
@@ -164,13 +164,15 @@ public class ActivityEditGroup extends AppCompatActivity {
         buildRepl(eRepl.getText().toString(), newGroup);
 
         sGroups.add(gIDX, newGroup);
-        nowSGroup = sGroups.get(gIDX);
         stockGetPut.put("group dup");
-        stockGetPut.get();
-        for (int i = 0; i < sGroups.size(); i++)
-            groupAdapter.notifyItemChanged(i);
+        updateAdapter();
         gSheet.updateGSheetGroup(newGroup);
         finish();
+    }
+
+    private void updateAdapter() {
+        groupAdapter = new GroupAdapter(groupListener);
+        groupRecyclerView.setAdapter(groupAdapter);
     }
 
     private void buildRepl(String s, SGroup nGroup) {
@@ -203,14 +205,15 @@ public class ActivityEditGroup extends AppCompatActivity {
             newGroup.skip3 = NOTHING;
         buildRepl(eRepl.getText().toString(), newGroup);
         sGroups.set(gIDX, newGroup);
-        nowSGroup = sGroups.get(gIDX);
-        stockGetPut.put("group save");
-
-        Toast.makeText(mContext,"Saving "+ newGroup.grp+" / " + newGroup.grpM, Toast.LENGTH_SHORT).show();
-        for (int i = 0; i < sGroups.size(); i++)
-            groupAdapter.notifyItemChanged(i);
+        stockGetPut.put("group save "+newGroup.grp+":"+newGroup.grpF);
+        updateAdapter();
         gSheet.updateGSheetGroup(newGroup);
         finish();
     }
 
+    @Override
+    public void onBackPressed() {
+        updateAdapter();
+        super.onBackPressed();
+    }
 }

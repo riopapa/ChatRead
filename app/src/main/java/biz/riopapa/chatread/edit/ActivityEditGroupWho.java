@@ -2,14 +2,15 @@ package biz.riopapa.chatread.edit;
 
 import static biz.riopapa.chatread.MainActivity.gIDX;
 import static biz.riopapa.chatread.MainActivity.gSheet;
-import static biz.riopapa.chatread.MainActivity.groupWhoAdapter;
-import static biz.riopapa.chatread.MainActivity.groupWhoStockAdapter;
-import static biz.riopapa.chatread.MainActivity.groupAdapter;
+import static biz.riopapa.chatread.MainActivity.whoAdapter;
+import static biz.riopapa.chatread.MainActivity.stockAdapter;
 import static biz.riopapa.chatread.MainActivity.nowSGroup;
 import static biz.riopapa.chatread.MainActivity.nowSWho;
 import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.stockGetPut;
+import static biz.riopapa.chatread.MainActivity.stockRecyclerView;
 import static biz.riopapa.chatread.MainActivity.wIDX;
+import static biz.riopapa.chatread.MainActivity.whoRecyclerView;
 
 import android.app.Activity;
 import android.content.Context;
@@ -26,12 +27,10 @@ import android.widget.Toast;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
-import androidx.recyclerview.widget.RecyclerView;
 
 import biz.riopapa.chatread.R;
-import biz.riopapa.chatread.adapters.GroupWhoAdapter;
-import biz.riopapa.chatread.adapters.GroupWhoStockAdapter;
-import biz.riopapa.chatread.models.SGroup;
+import biz.riopapa.chatread.adapters.WhoAdapter;
+import biz.riopapa.chatread.adapters.StockAdapter;
 import biz.riopapa.chatread.models.SWho;
 
 public class ActivityEditGroupWho extends AppCompatActivity {
@@ -41,8 +40,6 @@ public class ActivityEditGroupWho extends AppCompatActivity {
     EditText eWho, eWhoM, eWhoF;
     SwitchCompat sIgnore;
     View deleteMenu;
-    RecyclerView recyclerView;
-    final String GROUP = ")_(";
     public static Activity whoActivity;
     public static Context whoContext;
     SWho newWho;
@@ -59,7 +56,7 @@ public class ActivityEditGroupWho extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        nowSWho = nowSGroup.whos.get(wIDX);
+        nowSWho = sGroups.get(gIDX).whos.get(wIDX);
 
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
@@ -99,9 +96,10 @@ public class ActivityEditGroupWho extends AppCompatActivity {
             throw new RuntimeException(e);
         }
 
-        groupWhoStockAdapter = new GroupWhoStockAdapter();
-        recyclerView = findViewById(R.id.recycle_who_stocks);
-        recyclerView.setAdapter(groupWhoStockAdapter);    }
+        stockAdapter = new StockAdapter();
+        stockRecyclerView = findViewById(R.id.recycle_who_stocks);
+        stockRecyclerView.setAdapter(stockAdapter);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -132,9 +130,11 @@ public class ActivityEditGroupWho extends AppCompatActivity {
         finish();
     }
 
-    private static void updateAdaptor() {
-        groupWhoStockAdapter = new GroupWhoStockAdapter();
-        groupWhoAdapter = new GroupWhoAdapter();
+    private void updateAdaptor() {
+        stockAdapter = new StockAdapter();
+        stockRecyclerView.setAdapter(stockAdapter);
+        whoAdapter = new WhoAdapter();
+        whoRecyclerView.setAdapter(whoAdapter);
     }
 
     @Override
@@ -170,5 +170,11 @@ public class ActivityEditGroupWho extends AppCompatActivity {
         updateAdaptor();
         gSheet.updateGSheetGroup(nowSGroup);
         finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        updateAdaptor();
     }
 }
