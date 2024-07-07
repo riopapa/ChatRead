@@ -173,15 +173,19 @@ public class NotificationListener extends NotificationListenerService {
 
                 int g = isStockTelGroup(sbnWho);
                 if (g < 0) { // not in stock group
-                    if (sbnGroup.contains("새로운 메시지"))
-                        sbnGroup = "_새_";
-                    head = "[텔레 <" + sbnGroup + "><" + sbnWho + ">]";
-                    // todo : ktStrRepl 교체 필요
-                    sbnText = strReplace.repl(ktStrRepl, sbnGroup, strUtil.text2OneLine(sbnText));
-                    logUpdate.addLog(head, sbnText);
-                    notificationBar.update(sbnGroup + "|" + sbnWho, sbnText, true);
+                    if (sbnGroup.isEmpty()) {
+                        head = "[텔레 : " + sbnWho + "]";
+                        logUpdate.addLog(head, sbnText);
+                        notificationBar.update("탤레|" + sbnWho, sbnText, true);
+                    } else {
+                        if (sbnGroup.contains("새로운 메시지"))
+                            sbnGroup = "_새_";
+                        head = "[텔레 <" + sbnGroup + "><" + sbnWho + ">]";
+                        logUpdate.addLog(head, sbnText);
+                        notificationBar.update(sbnGroup + " | " + sbnWho, sbnText, true);
+                    }
                     sbnText = head + ", " + sbnText;
-                    sounds.speakAfterBeep(strUtil.makeEtc(sbnText, isWorking() ? 20 : 150));
+                    sounds.speakAfterBeep(strUtil.makeEtc(sbnText, isWorking() ? 50 : 150));
                     return;
                 }
                 sayTelStock(g);
@@ -296,11 +300,6 @@ public class NotificationListener extends NotificationListenerService {
 
     private void sayKaStock(int g) {
 
-        // longWhoName, shortWhoName [],  <= teleGrp.txt
-        // 텔데봇 ^ DailyBOT
-        // 텔투봄 ^ 투자의 봄
-        // 텔오늘 ^ 오늘의단타 공식채널
-
         if (sbnText.length() < 20)  // for better performance, with logically not true
             return;
        if (timeBegin == 0)
@@ -311,16 +310,6 @@ public class NotificationListener extends NotificationListenerService {
         sbnGroup = sGroups.get(g).grp;  // replace with short group
         if (kvKakao.isDup(sbnGroup, sbnText))
             return;
-        // 'Ai 데일리 봇' 은 group 12메시 있음 : who 형태임
-        // '투자의 봄' 은 group 없이 who 만 존재
-        // 어떤 경우는 이름이 text 맨 앞에
-
-        // {텔천하} 제왕>> 윤 종묵 님이 🔹수익 天下 🔸단타의 제왕 (王) 그룹에 사진을 보냈습니다
-        // {텔천하} [🔹수익 天下 🔸단타의 제왕 (王): 수익 영의정 (正)] #청산하세요
-        // {텔리치} [👑 리치플러스 R (급등일보)👑: 리치플러스] ✅ LS에코에너지 英 사업 부지 협상 돌
-        // {텔소나} [소나무 투자그룹 정보방] 오영석 전문가: 선물투자가  어렵고.복잡하다고
-        // {텔소나} [소나무 투자그룹 정보방] 자연 윤: 🖼 수고하셨습니당!
-        // {텔투봄} [🌸투자의 봄(春)🌸] 🌸투자의 봄(春)🌸: 참여하실 분들은
 
         sbnText = strUtil.text2OneLine(sbnText);
         nowSGroup = sGroups.get(g);
@@ -331,12 +320,10 @@ public class NotificationListener extends NotificationListenerService {
                 nowSWho = nowSGroup.whos.get(w);
                 // if stock Group then check skip keywords and then continue;
                 sbnWho = nowSWho.who;        // replace with short who
-//        utils.logW(sbnGroup, "["+sbnWho + "] " + ((sbnText.length() > 100)? sbnText.substring(0, 100): sbnText));
                 stockCheck.check(g, w, nowSWho.stocks);
                 return;
             }
         }
-//        utils.logW(sbnGroup, "{["+sbnWho + "} " + sbnText);
     }
 
     private void sayTelStock(int g) {
@@ -347,16 +334,6 @@ public class NotificationListener extends NotificationListenerService {
         if (nowTime < timeBegin || nowTime > timeEnd)
             return;
         sbnGroup = sGroups.get(g).grp;  // replace with short group
-        // 'Ai 데일리 봇' 은 group 12메시 있음 : who 형태임
-        // '투자의 봄' 은 group 없이 who 만 존재
-        // 어떤 경우는 이름이 text 맨 앞에
-
-        // {텔천하} 제왕>> 윤 종묵 님이 🔹수익 天下 🔸단타의 제왕 (王) 그룹에 사진을 보냈습니다
-        // {텔천하} [🔹수익 天下 🔸단타의 제왕 (王): 수익 영의정 (正)] #청산하세요
-        // {텔리치} [👑 리치플러스 R (급등일보)👑: 리치플러스] ✅ LS에코에너지 英 사업 부지 협상 돌
-        // {텔소나} [소나무 투자그룹 정보방] 오영석 전문가: 선물투자가  어렵고.복잡하다고
-        // {텔소나} [소나무 투자그룹 정보방] 자연 윤: 🖼 수고하셨습니당!
-        // {텔투봄} [🌸투자의 봄(春)🌸] 🌸투자의 봄(春)🌸: 참여하실 분들은
 
         sbnText = strUtil.text2OneLine(sbnText);
 //        utils.logW(sbnGroup, "["+sbnWho + "] " + ((sbnText.length() > 100)? sbnText.substring(0, 100): sbnText));
@@ -463,7 +440,6 @@ public class NotificationListener extends NotificationListenerService {
                 }
             } catch (Exception e) {
                 logUpdate.addStock("NH투자", "Exception " + sbnText + e);
-//                sounds.speakAfterBeep(mText);
             }
         } else
             saySMSNormal();
@@ -521,7 +497,7 @@ public class NotificationListener extends NotificationListenerService {
             return;
         if (sbnText.contains("연결됨")) {
             long nowTime = System.currentTimeMillis();
-            if ((nowTime - tesla_time) > 70 * 60 * 1000)    // 70 min.
+            if ((nowTime - tesla_time) > 50 * 60 * 1000)    // 70 min.
                 sounds.beepOnce(MainActivity.soundType.HI_TESLA.ordinal());
             tesla_time = nowTime;
             return;

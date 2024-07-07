@@ -22,20 +22,18 @@ public class StrReplace {
         File file = new File(tableFolder, str_replFile + ".txt");
         String[] lines = tableListFile.readRaw(file);
         for (String ln : lines) {
-            if (ln.length() > 5) {
-                String[] arr = ln.split("\\^");
-                strRepls.add(new StrRepl(arr[0].trim(), arr[1].trim(), arr[2].trim()));
-            }
+            String[] arr = ln.split("\\^");
+            strRepls.add(new StrRepl(arr[0].trim(), arr[1].trim(), arr[2].trim()));
         }
         return strRepls;
     }
 
-    public String repl(ArrayList<StrRepl> ktStrRepl, String grp, String txt) {
+    public String repl(ArrayList<StrRepl> replList, String who, String txt) {
         if (txt.length() < 20)
             return txt;
-        for (int i  = 0; i < ktStrRepl.size(); i ++) {
-            if (ktStrRepl.get(i).grp.equals(grp))
-                txt = txt.replace(ktStrRepl.get(i).strL, ktStrRepl.get(i).strS);
+        for (int i  = 0; i < replList.size(); i ++) {
+            if (replList.get(i).grp.equals(who))
+                txt = txt.replace(replList.get(i).strL, replList.get(i).strS);
         }
         return txt;
     }

@@ -43,6 +43,7 @@ public class OptionTables {
         smsTxtIgnores =  tableListFile.read("smsTxtIg");
         smsNoNumbers = tableListFile.read("smsNoNum");
         smsStrRepl = strReplace.get("smsRepl");
+        ktStrRepl = strReplace.get("ktRepl");
 
         if (ktTxtIgnores == null || smsWhoIgnores == null) {
             sounds.beepOnce(MainActivity.soundType.ERR.ordinal());
@@ -50,8 +51,6 @@ public class OptionTables {
             Toast.makeText(mContext, s, Toast.LENGTH_LONG).show();
             utils.logW("readAll",s);
         }
-//        readStrReplFile();
-        ktStrRepl = strReplace.get("ktRepl");
         new AppsTable().get();
         stockGetPut.get();
 
