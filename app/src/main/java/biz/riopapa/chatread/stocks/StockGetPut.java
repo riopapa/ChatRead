@@ -110,18 +110,15 @@ public class StockGetPut {
     }
 
     public void put(String msg) {
+        if (todayFolder == null)
+            new ReadyToday();
         new SnackBar().show(STOCK_TABLE +".json", msg);
         utils.logW("StockPut", msg);
         sort();
-        SharedPreferences shareGroup = mContext.getSharedPreferences(STOCK_TABLE, MODE_PRIVATE);
-        SharedPreferences.Editor sgEdit = shareGroup.edit();
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String json = gson.toJson(sGroups);
-        sgEdit.putString(STOCK_TABLE, json);
-        sgEdit.apply();
-        if (todayFolder == null)
-            new ReadyToday();
         fileIO.writeFile(tableFolder, STOCK_TABLE +".txt", json);
+        get();
     }
 
     public void putSV(String msg) {
@@ -147,10 +144,9 @@ public class StockGetPut {
         for (int g = 0; g < sGroups.size(); g++) {
             SGroup grp = sGroups.get(g);
             for (int w = 0; w < grp.whos.size(); w++) {
-                SWho whos = grp.whos.get(w);
-                whos.stocks.sort(Comparator.comparing(obj -> (-obj.count)));
-                grp.whos.set(w, whos);
+                sGroups.get(g).whos.get(w).stocks.sort(Comparator.comparing(obj -> (-obj.count)));
             }
+            sGroups.get(g).whos.sort(Comparator.comparing(obj -> (obj.who)));
             sGroups.set(g, grp);
         }
         setStockTelKaCount();
