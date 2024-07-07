@@ -51,8 +51,8 @@ public class FragmentLogStock extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        toolbar.setTitle(logName);
-        toolbar.setBackgroundDrawable( ContextCompat.getDrawable(mContext, R.drawable.bar_stock));
+        if (toolbar != null)
+            toolbar.setTitle(logName);
     }
 
     @Override

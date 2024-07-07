@@ -43,12 +43,9 @@ public class FragmentStockList extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        if (toolbar != null) {
+        if (toolbar != null)
             toolbar.setTitle("StockList");
-//            toolbar.setBackgroundDrawable(ContextCompat.getDrawable(mContext, R.drawable.bar_stock_group));
-        }
         groupAdapter = new GroupAdapter(groupListener);
-
     }
 
     @Override

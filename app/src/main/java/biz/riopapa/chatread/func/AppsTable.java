@@ -8,6 +8,7 @@ import static biz.riopapa.chatread.MainActivity.downloadFolder;
 import static biz.riopapa.chatread.MainActivity.fileIO;
 import static biz.riopapa.chatread.MainActivity.kaApp;
 import static biz.riopapa.chatread.MainActivity.kakaoAppIdx;
+import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.smsApp;
 import static biz.riopapa.chatread.MainActivity.smsAppIdx;
 import static biz.riopapa.chatread.MainActivity.tableFolder;
@@ -27,6 +28,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import biz.riopapa.chatread.models.App;
+import biz.riopapa.chatread.models.SGroup;
 
 public class AppsTable {
 
@@ -38,12 +40,29 @@ public class AppsTable {
             tableFolder = new File(downloadFolder, "_ChatTalk");
         }
         Gson gson = new Gson();
-        String json = fileIO.readFile(tableFolder ,"appTable.xml");
-        Type type = new TypeToken<List<App>>() {
-        }.getType();
-        apps = gson.fromJson(json, type);
+        String json = fileIO.readFile(tableFolder ,"appTable.txt");
+        Type type = new TypeToken<List<App>>() {}.getType();
+        if (json.isEmpty())
+            getFromSVFile();
+        else
+            apps = gson.fromJson(json, type);
         makeTable();
     }
+
+    public void getFromSVFile() {
+        ArrayList<App> list;
+        Gson gson = new Gson();
+        String json = fileIO.readFile(tableFolder,  "appTableSV.txt");
+        if (json.isEmpty()) {
+            list = new ArrayList<>();
+        } else {
+            Type type = new TypeToken<List<App>>() {
+            }.getType();
+            list = gson.fromJson(json, type);
+        }
+        apps = list;
+    }
+
 
     public void put() {
         if (tableFolder ==  null) {
@@ -56,7 +75,8 @@ public class AppsTable {
 
         Gson gson2 = new GsonBuilder().setPrettyPrinting().create();
         String prettyJson = gson2.toJson(apps);
-        fileIO.writeFile(tableFolder, "appTable.xml", prettyJson);
+        fileIO.writeFile(tableFolder, "appTable.txt", prettyJson);
+        // manual copy to appTableSv.txt is required for backup
     }
 
     public void makeTable() {

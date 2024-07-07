@@ -30,6 +30,7 @@ import java.util.List;
 
 import biz.riopapa.chatread.common.SnackBar;
 import biz.riopapa.chatread.func.ReadyToday;
+import biz.riopapa.chatread.models.App;
 import biz.riopapa.chatread.models.SGroup;
 import biz.riopapa.chatread.models.SWho;
 
@@ -37,12 +38,16 @@ public class StockGetPut {
 
     final static String STOCK_TABLE = "StockTable";
 
+    /* Stock table is in sdcard/download/_ChatTalk/StockTable.xml */
+
     public void get() {
-        SharedPreferences shareGroup = mContext.getSharedPreferences(STOCK_TABLE, MODE_PRIVATE);
-        String json = shareGroup.getString(STOCK_TABLE, "");    // .xml file
+        if (tableFolder ==  null) {
+            downloadFolder = new File(Environment.getExternalStorageDirectory(), "download");
+            tableFolder = new File(downloadFolder, "_ChatTalk");
+        }
         Gson gson = new Gson();
-        Type type = new TypeToken<List<SGroup>>() {
-        }.getType();
+        String json = fileIO.readFile(tableFolder ,STOCK_TABLE + ".txt");
+        Type type = new TypeToken<List<SGroup>>() {}.getType();
         if (json.isEmpty())
             getFromSVFile();
         else
@@ -57,7 +62,7 @@ public class StockGetPut {
         }
         ArrayList<SGroup> list;
         Gson gson = new Gson();
-        String json = fileIO.readFile(tableFolder, STOCK_TABLE +"SV.xml");
+        String json = fileIO.readFile(tableFolder, STOCK_TABLE +"SV.txt");
         if (json.isEmpty()) {
             list = new ArrayList<>();
         } else {
@@ -116,7 +121,7 @@ public class StockGetPut {
         sgEdit.apply();
         if (todayFolder == null)
             new ReadyToday();
-        fileIO.writeFile(tableFolder, STOCK_TABLE +".xml", json);
+        fileIO.writeFile(tableFolder, STOCK_TABLE +".txt", json);
     }
 
     public void putSV(String msg) {
@@ -133,7 +138,7 @@ public class StockGetPut {
             new ReadyToday();
         Gson gson2 = new GsonBuilder().setPrettyPrinting().create();
         String prettyJson = gson2.toJson(sGroups);
-        fileIO.writeFile(tableFolder, STOCK_TABLE +"SV.xml", prettyJson);
+        fileIO.writeFile(tableFolder, STOCK_TABLE +"SV.txt", prettyJson);
     }
 
     void sort() {
