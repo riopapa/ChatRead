@@ -179,7 +179,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#DDCCB2"
-        android:text="Replace to ^ from"
+        android:textColor="#663333"
+        android:text="Replace fromLong => toShort"
         android:textSize="@dimen/stock_font_size"
         android:gravity="center"
         />

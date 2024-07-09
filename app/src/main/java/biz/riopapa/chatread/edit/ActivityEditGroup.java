@@ -82,7 +82,7 @@ public class ActivityEditGroup extends AppCompatActivity {
         if (sGroups.get(gIDX).replF != null) {
             String s = "";
             for (int i = 0; i < sGroups.get(gIDX).replF.size(); i++) {
-                s += sGroups.get(gIDX).replT.get(i) + " ^ " + sGroups.get(gIDX).replF.get(i) + "\n\n";
+                s += sGroups.get(gIDX).replF.get(i) + " ^ " + sGroups.get(gIDX).replT.get(i) + "\n\n";
             }
             eRepl.setText(s);
         } else
@@ -174,15 +174,15 @@ public class ActivityEditGroup extends AppCompatActivity {
     }
 
     private void buildRepl(String s, SGroup nGroup) {
-        String[] split = s.split("\n");
-        nGroup.replT = new ArrayList<>();
+        String[] sLines = s.split("\n");
         nGroup.replF = new ArrayList<>();
-        for (String sp1 : split) {
-            if (sp1.isEmpty())
+        nGroup.replT = new ArrayList<>();
+        for (String sLine : sLines) {
+            if (sLine.isEmpty())
                 continue;
-            String[] split2 = sp1.split("\\^");
-            nGroup.replT.add(split2[0].trim());
-            nGroup.replF.add(split2[1].trim());
+            String[] sFromTo = sLine.split("\\^");
+            nGroup.replF.add(sFromTo[0].trim());
+            nGroup.replT.add(sFromTo[1].trim());
         }
     }
     private void saveGroup() {

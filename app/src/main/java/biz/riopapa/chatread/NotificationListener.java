@@ -32,6 +32,7 @@ import static biz.riopapa.chatread.MainActivity.smsNoNumbers;
 import static biz.riopapa.chatread.MainActivity.smsStrRepl;
 import static biz.riopapa.chatread.MainActivity.smsTxtIgnores;
 import static biz.riopapa.chatread.MainActivity.smsWhoIgnores;
+import static biz.riopapa.chatread.MainActivity.soundType.HI_TESLA;
 import static biz.riopapa.chatread.MainActivity.sounds;
 import static biz.riopapa.chatread.MainActivity.stockCheck;
 import static biz.riopapa.chatread.MainActivity.stockKaGroupMatchIdx;
@@ -489,11 +490,12 @@ public class NotificationListener extends NotificationListenerService {
         if (kvCommon.isDup(TESRY, sbnText))
             return;
         if (sbnText.contains("연결됨")) {
-            utils.logB("Tesla", sbnText);
+            utils.logB("Tesla", "연결됨? " +sbnText);
             long nowTime = System.currentTimeMillis();
-            if ((nowTime - tesla_time) > 45 * 60 * 1000)    // 70 min.
-                sounds.beepOnce(MainActivity.soundType.HI_TESLA.ordinal());
-            tesla_time = nowTime;
+            if ((nowTime - tesla_time) > 45 * 60 * 1000) {   // nn min.
+                sounds.beepOnce(HI_TESLA.ordinal());
+                tesla_time = nowTime;
+            }
             return;
         }
         logUpdate.addLog("[ 테스리 ]", sbnText);
