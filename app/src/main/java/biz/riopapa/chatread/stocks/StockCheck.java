@@ -6,15 +6,13 @@ import static biz.riopapa.chatread.MainActivity.mAudioManager;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.mMainActivity;
 import static biz.riopapa.chatread.MainActivity.notificationBar;
-import static biz.riopapa.chatread.MainActivity.nowSGroup;
-import static biz.riopapa.chatread.MainActivity.nowSStock;
 import static biz.riopapa.chatread.MainActivity.phoneVibrate;
 import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.sbnGroup;
 import static biz.riopapa.chatread.MainActivity.sbnText;
 import static biz.riopapa.chatread.MainActivity.sbnWho;
 import static biz.riopapa.chatread.MainActivity.sounds;
-import static biz.riopapa.chatread.MainActivity.stockCnt;
+import static biz.riopapa.chatread.MainActivity.stockGetPut;
 import static biz.riopapa.chatread.MainActivity.stockName;
 import static biz.riopapa.chatread.MainActivity.strUtil;
 import static biz.riopapa.chatread.MainActivity.utils;
@@ -45,21 +43,17 @@ public class StockCheck {
     public void check(int g, int w, ArrayList<SStock> stocks) {
 
         for (int s = 0; s < stocks.size() ; s++) {
-            nowSStock = stocks.get(s);
-            if (sbnText.contains(nowSStock.key1) && sbnText.contains(nowSStock.key2)) {
-//                nowSGroup = sGroups.get(g);
-//                nowSWho = nowSGroup.whos.get(w);
-//                nowSStock = nowSWho.stocks.get(s);
-//                nowSStock.count++;
+            if (sbnText.contains(stocks.get(s).key1) && sbnText.contains(stocks.get(s).key2)) {
                 sGroups.get(g).whos.get(w).stocks.get(s).count++;
-                stockCnt++;
-                talkNlog(nowSStock);
+                stockGetPut.save(sGroups.get(g).whos.get(w).whoF+" "+sGroups.get(g).whos.get(w).stocks.get(s).count);
+                talkNlog(g, stocks.get(s));
                 break;
             }
         }
     }
 
-    void talkNlog(SStock stock) {
+    String strHead, strText;
+    void talkNlog(int g, SStock stock) {
         if (utils == null) {
             utils = new Utils();
             utils.logW("talkNlog", "utils null");
@@ -75,18 +69,15 @@ public class StockCheck {
             stockName = new StockName();
         String [] sParse = stockName.get(stock.prv, stock.nxt, sbnText);
         String key12 = " {" + stock.key1 + "." + stock.key2 + "}";
-        String shortText = makeShort(strUtil.removeSpecialChars(sParse[1]), nowSGroup);
+        strHead = sParse[0]+" / " + sbnWho + ":" +sbnGroup;
         if (!stock.talk.isEmpty()) {
             String [] joins;
-            String won = wonValue(shortText);
+            String won = wonValue(sParse[1]);
             joins = new String[]{sbnGroup, sbnWho, sParse[0], stock.talk, won};
             sounds.speakBuyStock(String.join(" , ", joins));
-            String netStr = won + " " + ((shortText.length() > 50) ? shortText.substring(0, 50) : shortText);
-            utils.logW(sbnGroup, netStr);
-            String title = sParse[0]+" / " + sbnWho + ":" +sbnGroup;
-            notificationBar.update(title, netStr, true);
-            logUpdate.addStock(sParse[0] + " ["+sbnGroup+":"+sbnWho+"]", shortText+key12
-                    + " " + stock.count);
+            strText = strUtil.removeSpecialChars(makeShort(sParse[1], sGroups.get(g)));
+            strText = won + " " + ((strText.length() > 70) ? strText.substring(0, 70) : strText);
+            utils.logB(sbnGroup, strText);
             new Copy2Clipboard(sParse[0]);
             if (isSilentNow()) {
                 if (phoneVibrate == null)
@@ -95,21 +86,23 @@ public class StockCheck {
             }
             new Handler(Looper.getMainLooper()).post(() -> {
                 if (isScreenOn(mContext) && mMainActivity != null) {
-                    mMainActivity.runOnUiThread(() -> Toast.makeText(mContext, title, Toast.LENGTH_LONG).show());
+                    mMainActivity.runOnUiThread(() -> Toast.makeText(mContext, strHead, Toast.LENGTH_LONG).show());
                 }
             });
 
         } else {
-            String title = sParse[0]+" | "+sbnGroup+". "+sbnWho;
-            logUpdate.addStock(title, shortText + key12);
+            strText = strUtil.removeSpecialChars(makeShort(sParse[1], sGroups.get(g)));
+            strHead = sParse[0]+" | "+sbnGroup+". "+sbnWho;
             if (!isSilentNow()) {
                 sounds.beepOnce(MainActivity.soundType.ONLY.ordinal());
             }
-            String shortParse1 = (shortText.length() > 50) ? shortText.substring(0, 50) : shortText;
-            notificationBar.update(title, shortParse1, false);
+            utils.logB(sbnGroup, strText);
         }
+        notificationBar.update(strHead, strText, true);
+        logUpdate.addStock(sParse[0] + " ["+sbnGroup+":"+sbnWho+"]", strText
+                + key12 + " " + stock.count);
         String timeStamp = new SimpleDateFormat("yy-MM-dd HH:mm", Locale.KOREA).format(new Date());
-        gSheet.add2Stock(sbnGroup, timeStamp, sbnWho, percent, sParse[0], shortText, key12);
+        gSheet.add2Stock(sbnGroup, timeStamp, sbnWho, percent, sParse[0], strText, key12);
     }
 
     private String wonValue (String shortText) {
@@ -122,7 +115,7 @@ public class StockCheck {
         } else
             return  "";
         int p = ss[1].indexOf("원");
-        return (p > 0) ? ss[1].substring(2,p) :ss[1].substring(0,7);
+        return (p > 0) ? ss[1].substring(2,p) :ss[1].substring(2,8);
     }
 
     boolean isSilentNow() {

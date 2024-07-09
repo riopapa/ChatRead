@@ -1,6 +1,7 @@
 package biz.riopapa.chatread;
 
 import static android.content.Context.MODE_PRIVATE;
+import static biz.riopapa.chatread.MainActivity.deBug;
 import static biz.riopapa.chatread.MainActivity.downloadFolder;
 import static biz.riopapa.chatread.MainActivity.fileIO;
 import static biz.riopapa.chatread.MainActivity.kvCommon;
@@ -89,6 +90,7 @@ public class SetVariables {
         if (todayFolder == null) {
             todayFolder = new File(packageDirectory, toDay);
         }
+        deBug = sharePref.getBoolean("deBug", false);
 
         if (fileIO == null)
             fileIO = new FileIO();

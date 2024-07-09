@@ -110,11 +110,6 @@ public class MainActivity extends AppCompatActivity {
 
     public static String mTableName;
 
-//    public static int replGroupCnt = 0;
-//    public static String [] replGroup;
-//    public static String [][] replLong;
-//    public static String [][] replShort;
-
     public static String logQue = "", logStock = "", logSave = "", logWork = "";
 
     public static ArrayList<StrRepl> ktStrRepl = null;
@@ -145,15 +140,11 @@ public class MainActivity extends AppCompatActivity {
     public static StockCheck stockCheck = null;
     public static StrReplace strReplace = null;
     public static int gIDX, wIDX, sIDX;
-    public static SGroup nowSGroup;
-    public static SWho nowSWho;
-    public static SStock nowSStock;
     public static String [] stockTelGroupMatchTbl, stockKaGroupMatchTbl, stockSMSGroupMatchTbl;
     public static int [] stockTelGroupMatchIdx, stockKaGroupMatchIdx, stockSMSGroupMatchIdx;
     public static ArrayList<App> apps;
     public static AppsAdapter appsAdapter;
     public static App teleApp, kaApp, smsApp;
-    public static int stockCnt = 0;
 
     public static int telegramAppIdx, kakaoAppIdx, smsAppIdx;
 
@@ -193,6 +184,7 @@ public class MainActivity extends AppCompatActivity {
     public static RecyclerView stockRecyclerView;
 
     public static ItemClickListener groupListener;
+    public static boolean deBug = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -307,7 +299,6 @@ public class MainActivity extends AppCompatActivity {
 
         groupListener = position -> {
             gIDX = position;
-            nowSGroup = sGroups.get(gIDX);
             Intent subActivityIntent = new Intent(this, ActivityEditGroup.class);
             mMainActivity.startActivityForResult(subActivityIntent, 123);
         };

@@ -3,10 +3,8 @@ package biz.riopapa.chatread.edit;
 import static biz.riopapa.chatread.MainActivity.fileIO;
 import static biz.riopapa.chatread.MainActivity.menu_selected;
 import static biz.riopapa.chatread.MainActivity.mTableName;
-import static biz.riopapa.chatread.MainActivity.nowSGroup;
 import static biz.riopapa.chatread.MainActivity.tableFolder;
 import static biz.riopapa.chatread.MainActivity.tableListFile;
-import static biz.riopapa.chatread.MainActivity.toolbar;
 
 import android.os.Bundle;
 import android.text.Spannable;

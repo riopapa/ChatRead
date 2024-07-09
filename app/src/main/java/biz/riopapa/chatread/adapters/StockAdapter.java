@@ -5,7 +5,6 @@ import static biz.riopapa.chatread.MainActivity.gSheet;
 import static biz.riopapa.chatread.MainActivity.stockRecyclerView;
 import static biz.riopapa.chatread.MainActivity.whoAdapter;
 import static biz.riopapa.chatread.MainActivity.stockAdapter;
-import static biz.riopapa.chatread.MainActivity.nowSStock;
 import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.sIDX;
 import static biz.riopapa.chatread.MainActivity.stockGetPut;
@@ -73,9 +72,8 @@ public class StockAdapter extends RecyclerView.Adapter<StockAdapter.ViewHolder> 
 
         holder.tLine.setOnClickListener(v -> {
             sIDX = holder.getAdapterPosition();
-            nowSStock = sGroups.get(gIDX).whos.get(wIDX).stocks.get(sIDX);
             try {
-                newStock = (SStock) nowSStock.clone();
+                newStock = (SStock) sGroups.get(gIDX).whos.get(wIDX).stocks.get(sIDX).clone();
             } catch (CloneNotSupportedException e) {
                 throw new RuntimeException(e);
             }
@@ -96,13 +94,13 @@ public class StockAdapter extends RecyclerView.Adapter<StockAdapter.ViewHolder> 
         eCount = dialogView.findViewById(R.id.dlg_count);
         eSkip = dialogView.findViewById(R.id.dlg_skip);
         eTalk = dialogView.findViewById(R.id.dlg_talk);
-        eKey1.setText(nowSStock.key1);
-        eKey2.setText(nowSStock.key2);
-        ePrev.setText(nowSStock.prv);
-        eNext.setText(nowSStock.nxt);
-        eCount.setText(""+nowSStock.count);
-        eSkip.setText(nowSStock.skip1);
-        eTalk.setText(nowSStock.talk);
+        eKey1.setText(sGroups.get(gIDX).whos.get(wIDX).stocks.get(sIDX).key1);
+        eKey2.setText(sGroups.get(gIDX).whos.get(wIDX).stocks.get(sIDX).key2);
+        ePrev.setText(sGroups.get(gIDX).whos.get(wIDX).stocks.get(sIDX).prv);
+        eNext.setText(sGroups.get(gIDX).whos.get(wIDX).stocks.get(sIDX).nxt);
+        eCount.setText(""+sGroups.get(gIDX).whos.get(wIDX).stocks.get(sIDX).count);
+        eSkip.setText(sGroups.get(gIDX).whos.get(wIDX).stocks.get(sIDX).skip1);
+        eTalk.setText(sGroups.get(gIDX).whos.get(wIDX).stocks.get(sIDX).talk);
 
         builder.setView(dialogView)
             .setTitle("Edit Stock")

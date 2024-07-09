@@ -1,7 +1,6 @@
 package biz.riopapa.chatread.notification;
 
 import static biz.riopapa.chatread.MainActivity.HIDE_STOP;
-import static biz.riopapa.chatread.MainActivity.OPERATION;
 import static biz.riopapa.chatread.MainActivity.SHOW_NOTIFICATION_BAR;
 import static biz.riopapa.chatread.MainActivity.RELOAD_APP;
 import static biz.riopapa.chatread.MainActivity.SHOW_MESSAGE;
@@ -11,7 +10,6 @@ import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.sharePref;
 import static biz.riopapa.chatread.MainActivity.sharedEditor;
 import static biz.riopapa.chatread.MainActivity.sounds;
-import static biz.riopapa.chatread.MainActivity.stockCnt;
 import static biz.riopapa.chatread.MainActivity.stockGetPut;
 import static biz.riopapa.chatread.MainActivity.strUtil;
 import static biz.riopapa.chatread.MainActivity.utils;
@@ -78,8 +76,8 @@ public class NotificationService extends Service {
         if (operation == -1) {
             return START_NOT_STICKY;
         }
-        if (operation > 1001)
-            utils.logW("onStartCommand", "operation = "+operation+ " " + OPERATION[operation-1000]);
+//        if (operation > 1001)
+//            utils.logB("onStartCommand", "operation = "+operation+ " " + OPERATION[operation-1000]);
         if (msg1.isEmpty())
             msgGet();
 
@@ -102,9 +100,7 @@ public class NotificationService extends Service {
                 break;
 
             case RELOAD_APP:
-                if (stockCnt > 0 && stockGetPut != null) {
-                    stockGetPut.put("reload stocknt="+stockCnt);
-                }
+
                 reload_App();
                 break;
 
@@ -133,7 +129,7 @@ public class NotificationService extends Service {
             stockGetPut.put("Noty");
         } else
             utils.logW("Noty", "sGroup or stockGetPut is null");
-        Log.w("reload","App reloading");
+
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             mRemoteViews = null;
             Intent intent = new Intent(mContext, MainActivity.class);
@@ -175,28 +171,15 @@ public class NotificationService extends Service {
         PendingIntent pendingMain = PendingIntent.getService(mContext, RELOAD_APP, intMain,
                 PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
         mBuilder.setContentIntent(pendingMain);
+
         mRemoteViews.setOnClickPendingIntent(R.id.line_1,
                 PendingIntent.getActivity(mContext, 0, intMain,
                         PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT));
 
-//        mRemoteViews.setOnClickPendingIntent(R.id.stop_now,
-//                PendingIntent.getActivity(mContext, 0, sIntent,
-//                        PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT));
-
-//        Intent int2 = new Intent(mContext, MainActivity.class);
-//        int2.putExtra("operation", RELOAD_APP);
-//        PendingIntent pending2 = PendingIntent.getService(mContext, RELOAD_APP, intMain,
-//                PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-//        mBuilder.setContentIntent(pending2);
         mRemoteViews.setOnClickPendingIntent(R.id.line_2,
                 PendingIntent.getActivity(mContext, 0, intMain,
                         PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT));
 
-//        Intent int3 = new Intent(mContext, MainActivity.class);
-//        int3.putExtra("operation", RELOAD_APP);
-//        PendingIntent pending3 = PendingIntent.getService(mContext, RELOAD_APP, intMain,
-//                PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-//        mBuilder.setContentIntent(pending3);
         mRemoteViews.setOnClickPendingIntent(R.id.line_3,
                 PendingIntent.getActivity(mContext, 0, intMain,
                         PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT));

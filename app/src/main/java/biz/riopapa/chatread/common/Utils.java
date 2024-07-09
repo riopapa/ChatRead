@@ -1,5 +1,6 @@
 package biz.riopapa.chatread.common;
 
+import static biz.riopapa.chatread.MainActivity.deBug;
 import static biz.riopapa.chatread.MainActivity.fileIO;
 import static biz.riopapa.chatread.MainActivity.packageDirectory;
 
@@ -30,6 +31,11 @@ public class Utils {
                 "#" + traces[3].getLineNumber() + " {"+ tag + "} " + text;
         Log.w(tag, logText);
         fileIO.append2Today("zLog_"+tag+".txt", logText);
+    }
+
+    public void logB(String tag, String text) {
+        if (deBug)
+            logW(tag, text);
     }
 
     public void logE(String tag, String text) {

@@ -1,9 +1,10 @@
 package biz.riopapa.chatread.fragment;
 
-import static biz.riopapa.chatread.MainActivity.logQue;
+import static biz.riopapa.chatread.MainActivity.deBug;
 import static biz.riopapa.chatread.MainActivity.logStock;
 import static biz.riopapa.chatread.MainActivity.logUpdate;
 import static biz.riopapa.chatread.MainActivity.mContext;
+import static biz.riopapa.chatread.MainActivity.sharedEditor;
 import static biz.riopapa.chatread.MainActivity.toolbar;
 
 import android.os.Bundle;
@@ -38,7 +39,7 @@ public class FragmentLogStock extends Fragment {
 
     SpannableString ss;
     EditText etTable, etKeyword;
-    ImageView ivFind, ivClear, ivNext;
+    ImageView ivFind, ivClear, ivNext, ivDebug;
     Menu mainMenu;
     ScrollView scrollView;
     final String logName = "logStock";
@@ -62,23 +63,31 @@ public class FragmentLogStock extends Fragment {
         View thisView = inflater.inflate(R.layout.fragment_stock, container, false);
         etTable = thisView.findViewById(R.id.text_stock);
         etKeyword = thisView.findViewById(R.id.key_stock);
-        ivFind = thisView.findViewById(R.id.find_stock);
-        ivNext = thisView.findViewById(R.id.next_stock);
-        ivClear = thisView.findViewById(R.id.clear_stock);
 
         ss = new LogSpan().make(logStock, this.getContext());
         etTable.setText(ss);
 
-        ivNext.setVisibility(View.GONE);
+        ivFind = thisView.findViewById(R.id.find_stock);
         ivFind.setOnClickListener(v -> {
             new KeyStringFind(etKeyword, etTable, ss, ivNext);
         });
 
+        ivNext = thisView.findViewById(R.id.next_stock);
+        ivNext.setVisibility(View.GONE);
         ivNext.setOnClickListener(v -> {
             new KeyStringNext(etKeyword, etTable);
         });
 
+        ivClear = thisView.findViewById(R.id.clear_stock);
         ivClear.setOnClickListener(v -> new SetFocused(etKeyword));
+
+        ivDebug = thisView.findViewById(R.id.debug_stock);
+        ivDebug.setImageDrawable(ContextCompat.getDrawable(mContext, deBug ? R.drawable.debug_on : R.drawable.debug_off));
+        ivDebug.setOnClickListener(v -> {
+            deBug = !deBug;
+            ivDebug.setImageDrawable(ContextCompat.getDrawable(mContext, deBug ? R.drawable.debug_on : R.drawable.debug_off));
+        });
+
         scrollView = thisView.findViewById(R.id.scroll_stock);
         new Handler(Looper.getMainLooper()).post(() -> scrollView.smoothScrollBy(0, 90000));
         super.onResume();
@@ -121,4 +130,16 @@ public class FragmentLogStock extends Fragment {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        sharedEditor.putBoolean("deBug", deBug);
+        logStock = etTable.getText().toString();
+        sharedEditor.putString(logName, logStock);
+        sharedEditor.apply();
+        // Your fragment is likely hidden (or about to be hidden)
+        // Perform actions when the fragment becomes hidden
+    }
+
 }

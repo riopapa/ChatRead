@@ -4,8 +4,6 @@ import static biz.riopapa.chatread.MainActivity.gIDX;
 import static biz.riopapa.chatread.MainActivity.gSheet;
 import static biz.riopapa.chatread.MainActivity.whoAdapter;
 import static biz.riopapa.chatread.MainActivity.stockAdapter;
-import static biz.riopapa.chatread.MainActivity.nowSGroup;
-import static biz.riopapa.chatread.MainActivity.nowSWho;
 import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.stockGetPut;
 import static biz.riopapa.chatread.MainActivity.stockRecyclerView;
@@ -56,12 +54,11 @@ public class ActivityEditGroupWho extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        nowSWho = sGroups.get(gIDX).whos.get(wIDX);
-
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
-        actionBar.setTitle(nowSGroup.grp+":"+nowSGroup.grpF);
-        actionBar.setSubtitle(nowSWho.who+":"+nowSWho.whoF);
+        actionBar.setTitle(sGroups.get(gIDX).grp+":"+sGroups.get(gIDX).grpF);
+        actionBar.setSubtitle(sGroups.get(gIDX).whos.get(wIDX).who
+                + ":" + sGroups.get(gIDX).whos.get(wIDX).whoF);
 
         tGroup = findViewById(R.id.who_group);
         tGroupM = findViewById(R.id.who_group_match);
@@ -75,23 +72,20 @@ public class ActivityEditGroupWho extends AppCompatActivity {
         eWhoM = findViewById(R.id.who_who_match);
         eWhoF = findViewById(R.id.who_who_full);
 
-        nowSGroup = sGroups.get(gIDX);
-        nowSWho = sGroups.get(gIDX).whos.get(wIDX);
-
-        tGroup.setText(nowSGroup.grp);
-        tGroupM.setText(nowSGroup.grpM);
-        tGroupF.setText(nowSGroup.grpF);
-        tTelKa.setText(nowSGroup.telKa);
-        sIgnore.setChecked(nowSGroup.ignore);
-        tSkip1.setText(nowSGroup.skip1);
-        tSkip2.setText(nowSGroup.skip2);
-        tSkip3.setText(nowSGroup.skip3);
-        eWho.setText(nowSWho.who);
-        eWhoM.setText(nowSWho.whoM);
-        eWhoF.setText(nowSWho.whoF);
+        tGroup.setText(sGroups.get(gIDX).grp);
+        tGroupM.setText(sGroups.get(gIDX).grpM);
+        tGroupF.setText(sGroups.get(gIDX).grpF);
+        tTelKa.setText(sGroups.get(gIDX).telKa);
+        sIgnore.setChecked(sGroups.get(gIDX).ignore);
+        tSkip1.setText(sGroups.get(gIDX).skip1);
+        tSkip2.setText(sGroups.get(gIDX).skip2);
+        tSkip3.setText(sGroups.get(gIDX).skip3);
+        eWho.setText(sGroups.get(gIDX).whos.get(wIDX).who);
+        eWhoM.setText(sGroups.get(gIDX).whos.get(wIDX).whoM);
+        eWhoF.setText(sGroups.get(gIDX).whos.get(wIDX).whoF);
 
         try {
-            newWho = (SWho) nowSGroup.whos.get(wIDX).clone();
+            newWho = (SWho) sGroups.get(gIDX).whos.get(wIDX).clone();
         } catch (CloneNotSupportedException e) {
             throw new RuntimeException(e);
         }
@@ -118,14 +112,15 @@ public class ActivityEditGroupWho extends AppCompatActivity {
     }
 
     void deleteStockWhoGroup() {
-        if (nowSGroup.whos.size() < 2) {
+        if (sGroups.get(gIDX).whos.size() < 2) {
             Toast.makeText(this, "하나 밖에 없어 삭제할 수 없습니다.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        gSheet.updateGSheetGroup(nowSGroup);
+        gSheet.updateGSheetGroup(sGroups.get(gIDX));
         sGroups.get(gIDX).whos.remove(wIDX);
-        stockGetPut.put( " Deleted "+ nowSWho.who+" / " + nowSWho.whoM);
+        stockGetPut.put( " Deleted "+ sGroups.get(gIDX).whos.get(wIDX).who
+                + " / " + sGroups.get(gIDX).whos.get(wIDX).whoM);
         updateAdaptor();
         finish();
     }
@@ -166,9 +161,9 @@ public class ActivityEditGroupWho extends AppCompatActivity {
         newWho.whoM = eWhoM.getText().toString();
         newWho.whoF = eWhoF.getText().toString();
         sGroups.get(gIDX).whos.set(wIDX, newWho);
-        stockGetPut.put("Save Who "+ newWho.who+" / " + newWho.whoM);
+        stockGetPut.save("Save Who "+ newWho.who+" / " + newWho.whoM);
         updateAdaptor();
-        gSheet.updateGSheetGroup(nowSGroup);
+        gSheet.updateGSheetGroup(sGroups.get(gIDX));
         finish();
     }
 

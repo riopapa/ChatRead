@@ -1,9 +1,10 @@
 package biz.riopapa.chatread.fragment;
 
+import static biz.riopapa.chatread.MainActivity.deBug;
 import static biz.riopapa.chatread.MainActivity.logSave;
 import static biz.riopapa.chatread.MainActivity.logUpdate;
-import static biz.riopapa.chatread.MainActivity.logWork;
 import static biz.riopapa.chatread.MainActivity.mContext;
+import static biz.riopapa.chatread.MainActivity.sharedEditor;
 import static biz.riopapa.chatread.MainActivity.toolbar;
 
 import android.os.Bundle;
@@ -37,7 +38,7 @@ public class FragmentSave extends Fragment {
 
     SpannableString ss;
     EditText etTable, etKeyword;
-    ImageView ivFind, ivClear, ivNext;
+    ImageView ivFind, ivClear, ivNext, ivDebug;
     Menu mainMenu;
     ScrollView scrollView;
     final String logName = "logSave";
@@ -78,6 +79,14 @@ public class FragmentSave extends Fragment {
         });
 
         ivClear.setOnClickListener(v -> new SetFocused(etKeyword));
+
+        ivDebug = thisView.findViewById(R.id.debug_save);
+        ivDebug.setImageDrawable(ContextCompat.getDrawable(mContext, deBug ? R.drawable.debug_on : R.drawable.debug_off));
+        ivDebug.setOnClickListener(v -> {
+            deBug = !deBug;
+            ivDebug.setImageDrawable(ContextCompat.getDrawable(mContext, deBug ? R.drawable.debug_on : R.drawable.debug_off));
+        });
+
         scrollView = thisView.findViewById(R.id.scroll_save);
         new Handler(Looper.getMainLooper()).post(() -> scrollView.smoothScrollBy(0, 90000));
         super.onResume();
@@ -111,6 +120,17 @@ public class FragmentSave extends Fragment {
             etTable.requestFocus();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        sharedEditor.putBoolean("deBug", deBug);
+        logSave = etTable.getText().toString();
+        sharedEditor.putString(logName, logSave);
+        sharedEditor.apply();
+        // Your fragment is likely hidden (or about to be hidden)
+        // Perform actions when the fragment becomes hidden
     }
 
 }

@@ -165,10 +165,20 @@
             android:textSize="@dimen/stock_font_size"
             />
     </LinearLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycle_whos"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        >
+    </androidx.recyclerview.widget.RecyclerView>
+
     <TextView
         android:id="@+id/dummy_repl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#DDCCB2"
         android:text="Replace to ^ from"
         android:textSize="@dimen/stock_font_size"
         android:gravity="center"
@@ -185,14 +195,5 @@
         android:autofillHints="replace from ; to"
         android:text=""
         android:textSize="14sp" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycle_whos"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        >
-    </androidx.recyclerview.widget.RecyclerView>
 
 </LinearLayout>

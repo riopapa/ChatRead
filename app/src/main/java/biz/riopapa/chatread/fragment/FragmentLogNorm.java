@@ -1,8 +1,10 @@
 package biz.riopapa.chatread.fragment;
 
+import static biz.riopapa.chatread.MainActivity.deBug;
 import static biz.riopapa.chatread.MainActivity.logQue;
 import static biz.riopapa.chatread.MainActivity.logUpdate;
 import static biz.riopapa.chatread.MainActivity.mContext;
+import static biz.riopapa.chatread.MainActivity.sharedEditor;
 import static biz.riopapa.chatread.MainActivity.toolbar;
 
 import android.os.Bundle;
@@ -10,7 +12,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.Selection;
 import android.text.SpannableString;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -31,7 +32,6 @@ import biz.riopapa.chatread.func.Copy2Save;
 import biz.riopapa.chatread.func.KeyStringFind;
 import biz.riopapa.chatread.func.KeyStringNext;
 import biz.riopapa.chatread.func.LogSpan;
-import biz.riopapa.chatread.func.LogUpdate;
 import biz.riopapa.chatread.func.ScrollUp;
 import biz.riopapa.chatread.func.VolumeIcon;
 
@@ -39,7 +39,7 @@ public class FragmentLogNorm extends Fragment {
 
     SpannableString ss;
     EditText etTable, etKeyword;
-    ImageView ivFind, ivClear, ivNext, ivVolume;
+    ImageView ivFind, ivClear, ivNext, ivDebug;
     Menu mainMenu;
     ScrollView scrollView;
     final String logName = "logQue";
@@ -66,31 +66,36 @@ public class FragmentLogNorm extends Fragment {
         View thisView = inflater.inflate(R.layout.fragment_log, container, false);
         etTable = thisView.findViewById(R.id.text_log);
         etKeyword = thisView.findViewById(R.id.key_log);
+
         ivFind = thisView.findViewById(R.id.find_log);
-        ivNext = thisView.findViewById(R.id.next_log);
-        ivClear = thisView.findViewById(R.id.clear_log);
-        ivVolume = thisView.findViewById(R.id.volumes);
-
-        ivNext.setVisibility(View.GONE);
-
         ivFind.setOnClickListener(v -> {
             new KeyStringFind(etKeyword, etTable, ss, ivNext);
         });
 
+        ivNext = thisView.findViewById(R.id.next_log);
+        ivNext.setVisibility(View.GONE);
         ivNext.setOnClickListener(v -> {
             new KeyStringNext(etKeyword, etTable);
         });
 
+        ivClear = thisView.findViewById(R.id.clear_log);
         ivClear.setOnClickListener(v -> {
             new SetFocused(etKeyword);
         });
+
+        ivDebug = thisView.findViewById(R.id.debug_log);
+        ivDebug.setImageDrawable(ContextCompat.getDrawable(mContext, deBug ? R.drawable.debug_on : R.drawable.debug_off));
+        ivDebug.setOnClickListener(v -> {
+            deBug = !deBug;
+            ivDebug.setImageDrawable(ContextCompat.getDrawable(mContext, deBug ? R.drawable.debug_on : R.drawable.debug_off));
+        });
+
         ss = new LogSpan().make(logQue, this.getContext());
         etTable.setText(ss);
         scrollView = thisView.findViewById(R.id.scroll_log);
         new Handler(Looper.getMainLooper()).post(() -> {
                 scrollView.smoothScrollBy(0, 90000);
         });
-        ivVolume.setImageBitmap(VolumeIcon.draw());
         super.onResume();
         return thisView;
     }
@@ -128,5 +133,22 @@ public class FragmentLogNorm extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        sharedEditor.putBoolean("deBug", deBug);
+        logQue = etTable.getText().toString();
+        sharedEditor.putString(logName, logQue);
+        sharedEditor.apply();
+        // Your fragment is likely hidden (or about to be hidden)
+        // Perform actions when the fragment becomes hidden
+    }
 
+//    @Override
+//    public void onStop() {
+//        super.onStop();
+//        utils.logW("onStop", "onStop "+logName);
+//        // Your fragment is definitely hidden now
+//        // You can perform actions that require the fragment to be completely hidden
+//    }
 }

@@ -5,7 +5,6 @@ import static biz.riopapa.chatread.MainActivity.gSheet;
 import static biz.riopapa.chatread.MainActivity.whoAdapter;
 import static biz.riopapa.chatread.MainActivity.groupAdapter;
 import static biz.riopapa.chatread.MainActivity.groupListener;
-import static biz.riopapa.chatread.MainActivity.nowSGroup;
 import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.stockGetPut;
 import static biz.riopapa.chatread.MainActivity.whoRecyclerView;
@@ -50,7 +49,6 @@ public class ActivityEditGroup extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        nowSGroup = sGroups.get(gIDX);
         try {
             newGroup = (SGroup) sGroups.get(gIDX).clone();
         } catch (CloneNotSupportedException e) {
@@ -60,7 +58,7 @@ public class ActivityEditGroup extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
         actionBar.setTitle("Group Edit");
-        actionBar.setSubtitle(nowSGroup.grp+":"+nowSGroup.grpF);
+        actionBar.setSubtitle(sGroups.get(gIDX).grp+":"+sGroups.get(gIDX).grpF);
 
         eGroup = findViewById(R.id.e_group);
         eGroupM = findViewById(R.id.e_group_match);
@@ -72,19 +70,19 @@ public class ActivityEditGroup extends AppCompatActivity {
         eSkip3 = findViewById(R.id.e_skip3);
         eRepl = findViewById(R.id.e_repl);
 
-        eGroup.setText(nowSGroup.grp);
-        eGroupM.setText(nowSGroup.grpM);
-        eGroupF.setText(nowSGroup.grpF);
-        tTelKa.setText(nowSGroup.telKa);
-        sIgnore.setChecked(nowSGroup.ignore);
-        eSkip1.setText(nowSGroup.skip1);
-        eSkip2.setText(nowSGroup.skip2);
-        eSkip3.setText(nowSGroup.skip3);
+        eGroup.setText(sGroups.get(gIDX).grp);
+        eGroupM.setText(sGroups.get(gIDX).grpM);
+        eGroupF.setText(sGroups.get(gIDX).grpF);
+        tTelKa.setText(sGroups.get(gIDX).telKa);
+        sIgnore.setChecked(sGroups.get(gIDX).ignore);
+        eSkip1.setText(sGroups.get(gIDX).skip1);
+        eSkip2.setText(sGroups.get(gIDX).skip2);
+        eSkip3.setText(sGroups.get(gIDX).skip3);
         tTelKa.setOnClickListener(v -> tTelKa.setText(nextTelKa(tTelKa.getText().toString())));
-        if (nowSGroup.replF != null) {
+        if (sGroups.get(gIDX).replF != null) {
             String s = "";
-            for (int i = 0; i < nowSGroup.replF.size(); i++) {
-                s += nowSGroup.replT.get(i) + " ^ " + nowSGroup.replF.get(i) + "\n\n";
+            for (int i = 0; i < sGroups.get(gIDX).replF.size(); i++) {
+                s += sGroups.get(gIDX).replT.get(i) + " ^ " + sGroups.get(gIDX).replF.get(i) + "\n\n";
             }
             eRepl.setText(s);
         } else
@@ -124,9 +122,9 @@ public class ActivityEditGroup extends AppCompatActivity {
 
     private void deleteStockGroup() {
 
-        gSheet.deleteGSheetGroup(nowSGroup);
+        gSheet.deleteGSheetGroup(sGroups.get(gIDX));
         sGroups.remove(gIDX);
-        stockGetPut.put( nowSGroup.grp+" Deleted "+ nowSGroup.grpM);
+        stockGetPut.put( sGroups.get(gIDX).grp+" Deleted "+ sGroups.get(gIDX).grpM);
         for (int i = 0; i < sGroups.size(); i++)
             groupAdapter.notifyItemChanged(i);
         finish();
@@ -205,7 +203,7 @@ public class ActivityEditGroup extends AppCompatActivity {
             newGroup.skip3 = NOTHING;
         buildRepl(eRepl.getText().toString(), newGroup);
         sGroups.set(gIDX, newGroup);
-        stockGetPut.put("group save "+newGroup.grp+":"+newGroup.grpF);
+        stockGetPut.save("group save "+newGroup.grp+":"+newGroup.grpF);
         updateAdapter();
         gSheet.updateGSheetGroup(newGroup);
         finish();

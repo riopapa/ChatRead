@@ -19,8 +19,6 @@ import static biz.riopapa.chatread.MainActivity.lastChar;
 import static biz.riopapa.chatread.MainActivity.logUpdate;
 import static biz.riopapa.chatread.MainActivity.mAudioManager;
 import static biz.riopapa.chatread.MainActivity.notificationBar;
-import static biz.riopapa.chatread.MainActivity.nowSGroup;
-import static biz.riopapa.chatread.MainActivity.nowSWho;
 import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.sbnApp;
 import static biz.riopapa.chatread.MainActivity.sbnAppIdx;
@@ -173,6 +171,7 @@ public class NotificationListener extends NotificationListenerService {
 
                 int g = isStockTelGroup(sbnWho);
                 if (g < 0) { // not in stock group
+                    sbnText = strUtil.text2OneLine(sbnText);
                     if (sbnGroup.isEmpty()) {
                         head = "[텔레 : " + sbnWho + "]";
                         logUpdate.addLog(head, sbnText);
@@ -223,7 +222,7 @@ public class NotificationListener extends NotificationListenerService {
                 }
 
                 if (sbnApp.nickName.equals("NH나무")) {
-                    utils.logW(sbnApp.nickName,sbnText);
+                    utils.logB(sbnApp.nickName,sbnText);
                     new MsgNamoo().say(strUtil.text2OneLine(sbnText));
                     break;
                 }
@@ -247,7 +246,7 @@ public class NotificationListener extends NotificationListenerService {
                 }
 
                 if (sbnApp.addWho)
-                    sbnText = sbnWho + "※" + sbnText;
+                    sbnText = sbnWho + "👨‍🦱" + sbnText;
 
                 head = sbnAppNick;
                 head += (sbnApp.grp && !sbnGroup.isEmpty()) ? sbnGroup+".": "";
@@ -280,7 +279,6 @@ public class NotificationListener extends NotificationListenerService {
 
     private void sayWork() {
 
-//        utils.logW("work", "grp="+sbnGroup+", who="+sbnWho+", txt="+sbnText);
         if (sbnApp.replF != null) {
             for (int i = 0; i < sbnApp.replF.length; i++) {
                 if ((sbnText).contains(sbnApp.replF[i]))
@@ -312,15 +310,13 @@ public class NotificationListener extends NotificationListenerService {
             return;
 
         sbnText = strUtil.text2OneLine(sbnText);
-        nowSGroup = sGroups.get(g);
-        if (sbnText.contains(nowSGroup.skip1) || sbnText.contains(nowSGroup.skip2))
+        if (sbnText.contains(sGroups.get(g).skip1) || sbnText.contains(sGroups.get(g).skip2))
             return;
-        for (int w = 0; w < nowSGroup.whos.size(); w++) {
-            if (sbnWho.contains(nowSGroup.whos.get(w).whoM)) {
-                nowSWho = nowSGroup.whos.get(w);
+        for (int w = 0; w < sGroups.get(g).whos.size(); w++) {
+            if (sbnWho.contains(sGroups.get(g).whos.get(w).whoM)) {
                 // if stock Group then check skip keywords and then continue;
-                sbnWho = nowSWho.who;        // replace with short who
-                stockCheck.check(g, w, nowSWho.stocks);
+                sbnWho = sGroups.get(g).whos.get(w).who;        // replace with short who
+                stockCheck.check(g, w, sGroups.get(g).whos.get(w).stocks);
                 return;
             }
         }
@@ -336,7 +332,6 @@ public class NotificationListener extends NotificationListenerService {
         sbnGroup = sGroups.get(g).grp;  // replace with short group
 
         sbnText = strUtil.text2OneLine(sbnText);
-//        utils.logW(sbnGroup, "["+sbnWho + "] " + ((sbnText.length() > 100)? sbnText.substring(0, 100): sbnText));
         int p = sbnWho.indexOf(":");
         if (p > 0 && p < 30) {  // 텔소나, 텔리치
             sbnWho = sbnWho.substring(p+1).trim();
@@ -352,15 +347,14 @@ public class NotificationListener extends NotificationListenerService {
         }
         if (kvTelegram.isDup(sbnGroup, sbnText))
             return;
-        nowSGroup = sGroups.get(g);
-        if (sbnText.contains(nowSGroup.skip1) ||
-                sbnText.contains(nowSGroup.skip2))
+        if (sbnText.contains(sGroups.get(g).skip1) ||
+                sbnText.contains(sGroups.get(g).skip2))
             return;
-        for (int w = 0; w < nowSGroup.whos.size(); w++) {
-            if (sbnWho.contains(nowSGroup.whos.get(w).whoM)) {
-                sbnWho = nowSGroup.whos.get(w).who;        // replace with short who
+        for (int w = 0; w < sGroups.get(g).whos.size(); w++) {
+            if (sbnWho.contains(sGroups.get(g).whos.get(w).whoM)) {
+                sbnWho = sGroups.get(g).whos.get(w).who;        // replace with short who
 //                utils.logW(sbnGroup, sbnWho + ">> " + sbnText);
-                stockCheck.check(g, w, nowSGroup.whos.get(w).stocks);
+                stockCheck.check(g, w, sGroups.get(g).whos.get(w).stocks);
                 break;
             }
         }
@@ -391,14 +385,12 @@ public class NotificationListener extends NotificationListenerService {
                         .replaceAll("[\\u200C-\\u206F]", "");
                 saySMSNormal();
             } else {
-                nowSGroup = sGroups.get(g);
-                for (int w = 0; w < nowSGroup.whos.size(); w++) {
-                    if (sbnWho.contains(nowSGroup.whos.get(w).whoM)) {
-                        nowSWho = nowSGroup.whos.get(w);
+                for (int w = 0; w < sGroups.get(g).whos.size(); w++) {
+                    if (sbnWho.contains(sGroups.get(g).whos.get(w).whoM)) {
                         // if stock Group then check skip keywords and then continue;
-                        sbnWho = nowSWho.who;        // replace with short who
-                        utils.logW(sbnGroup, sbnWho + ">> " + sbnText);
-                        stockCheck.check(g, w, nowSWho.stocks);
+                        sbnWho = sGroups.get(g).whos.get(w).who;        // replace with short who
+                        utils.logB(sbnGroup, sbnWho + ">> " + sbnText);
+                        stockCheck.check(g, w, sGroups.get(g).whos.get(w).stocks);
                         break;
                     }
                 }
@@ -493,11 +485,13 @@ public class NotificationListener extends NotificationListenerService {
 
     private void sayTesla() {
 
+        utils.logB("Tesla", "Tesla "+sbnText);
         if (kvCommon.isDup(TESRY, sbnText))
             return;
         if (sbnText.contains("연결됨")) {
+            utils.logB("Tesla", sbnText);
             long nowTime = System.currentTimeMillis();
-            if ((nowTime - tesla_time) > 50 * 60 * 1000)    // 70 min.
+            if ((nowTime - tesla_time) > 45 * 60 * 1000)    // 70 min.
                 sounds.beepOnce(MainActivity.soundType.HI_TESLA.ordinal());
             tesla_time = nowTime;
             return;
