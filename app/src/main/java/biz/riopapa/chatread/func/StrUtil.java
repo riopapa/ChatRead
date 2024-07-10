@@ -5,7 +5,8 @@ public class StrUtil {
     public String removeSpecialChars(String text) {
         return text.replace("──", "").replace("==", "-")
                 .replace("=", "ￚ").replace("--", "-")
-                .replaceAll("[^\\da-zA-Z:|#().@,%/~가-힣\\s\\-+]", "")
+                .replaceAll("[^\\w\\s가-힣]", "")
+//                .replaceAll("[^\\da-zA-Z\\:|#().@,()%/~가-힣\\s\\-+]", "")
 //                .replaceAll("[^\\da-zA-Z:|#().@,%/~ㄱ-ㅎ가-힣\\s\\-+]", "")
                 ;
     }

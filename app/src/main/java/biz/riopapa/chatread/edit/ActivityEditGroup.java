@@ -49,16 +49,16 @@ public class ActivityEditGroup extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+        ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setTitle("Group Edit");
+        actionBar.setSubtitle(sGroups.get(gIDX).grp+":"+sGroups.get(gIDX).grpF);
+
         try {
             newGroup = (SGroup) sGroups.get(gIDX).clone();
         } catch (CloneNotSupportedException e) {
             throw new RuntimeException(e);
         }
-
-        ActionBar actionBar = getSupportActionBar();
-        assert actionBar != null;
-        actionBar.setTitle("Group Edit");
-        actionBar.setSubtitle(sGroups.get(gIDX).grp+":"+sGroups.get(gIDX).grpF);
 
         eGroup = findViewById(R.id.e_group);
         eGroupM = findViewById(R.id.e_group_match);
@@ -203,7 +203,7 @@ public class ActivityEditGroup extends AppCompatActivity {
             newGroup.skip3 = NOTHING;
         buildRepl(eRepl.getText().toString(), newGroup);
         sGroups.set(gIDX, newGroup);
-        stockGetPut.save("group save "+newGroup.grp+":"+newGroup.grpF);
+        stockGetPut.put("group save "+newGroup.grp+":"+newGroup.grpF);
         updateAdapter();
         gSheet.updateGSheetGroup(newGroup);
         finish();

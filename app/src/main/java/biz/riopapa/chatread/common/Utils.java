@@ -3,6 +3,7 @@ package biz.riopapa.chatread.common;
 import static biz.riopapa.chatread.MainActivity.deBug;
 import static biz.riopapa.chatread.MainActivity.fileIO;
 import static biz.riopapa.chatread.MainActivity.packageDirectory;
+import static biz.riopapa.chatread.MainActivity.strUtil;
 
 import android.util.Log;
 
@@ -23,19 +24,19 @@ public class Utils {
         logE writes to download folder, removing by manual operation
      */
     public void logW(String tag, String text) {
+        Log.w(tag, text);
         new ReadyToday();
         StackTraceElement[] traces = Thread.currentThread().getStackTrace();
         String logText  =(traces.length>6) ? excludeName(traces[6].getMethodName()):"";
         logText += excludeName(traces[5].getMethodName()) + excludeName(traces[4].getMethodName()) +
                 excludeName(traceClassName(traces[3].getClassName()))+"> "+traces[3].getMethodName() +
                 "#" + traces[3].getLineNumber() + " {"+ tag + "} " + text;
-        Log.w(tag, logText);
-        fileIO.append2Today("zLog_"+tag+".txt", logText);
+        fileIO.append2Today("zLog "+tag+".txt", logText);
     }
 
     public void logB(String tag, String text) {
         if (deBug)
-            logW(tag, text);
+            logW(tag, strUtil.text2OneLine(text)+"\n");
     }
 
     public void logE(String tag, String text) {

@@ -30,9 +30,7 @@ import java.util.List;
 
 import biz.riopapa.chatread.common.SnackBar;
 import biz.riopapa.chatread.func.ReadyToday;
-import biz.riopapa.chatread.models.App;
 import biz.riopapa.chatread.models.SGroup;
-import biz.riopapa.chatread.models.SWho;
 
 public class StockGetPut {
 
@@ -119,7 +117,7 @@ public class StockGetPut {
             new ReadyToday();
         new SnackBar().show(STOCK_TABLE + ".json", msg);
         utils.logW("StockPut", msg);
-        sort();
+        sortByGroupM();
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String json = gson.toJson(sGroups);
         fileIO.writeFile(tableFolder, STOCK_TABLE + ".txt", json);
@@ -138,7 +136,7 @@ public class StockGetPut {
     public void putSV(String msg) {
         new SnackBar().show(STOCK_TABLE + ".json", msg);
         utils.logW("StockPut", msg);
-        sort();
+        sortByGroupM();
         SharedPreferences shareGroup = mContext.getSharedPreferences(STOCK_TABLE, MODE_PRIVATE);
         SharedPreferences.Editor sgEdit = shareGroup.edit();
         Gson gson = new Gson();
@@ -152,9 +150,9 @@ public class StockGetPut {
         fileIO.writeFile(tableFolder, STOCK_TABLE + "SV.txt", prettyJson);
     }
 
-    void sort() {
+    void sortByGroupM() {
         // 'group' asc, 'who' asc, 'matched count' desc
-        sGroups.sort(Comparator.comparing(obj -> (obj.grp)));
+        sGroups.sort(Comparator.comparing(obj -> (obj.grpM)));
         for (int g = 0; g < sGroups.size(); g++) {
             SGroup grp = sGroups.get(g);
             for (int w = 0; w < grp.whos.size(); w++) {

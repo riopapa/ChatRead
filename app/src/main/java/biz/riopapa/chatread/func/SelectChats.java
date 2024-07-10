@@ -41,7 +41,7 @@ public class SelectChats {
         KakaoLog kalog = new KakaoLog();
         kalog.idx = -1;   // not found group
         ignores = new ArrayList<>(Arrays.asList("http", "항셍", "나스닥", "무료",
-                "반갑", "발동", "사진", "상담", "입장", "파생", "프로필"));
+                "반갑", "발동", "상담", "입장", "파생", "프로필"));
 
         this.upload = upload;
         String[] chatLines = tableListFile.readRaw(chatFile);

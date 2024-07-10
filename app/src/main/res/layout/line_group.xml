@@ -52,11 +52,11 @@
         <TextView
             android:id="@+id/one_group_ignore"
             android:layout_width="0dp"
-            android:layout_weight="3"
+            android:layout_weight="2"
             android:layout_height="match_parent"
             android:gravity="center"
             android:textColor="@color/textFore"
-            android:textSize="@dimen/app_line_font_size"
+            android:textSize="10sp"
             android:text="ignore"
             android:maxLines="1"
             />

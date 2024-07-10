@@ -117,10 +117,12 @@ public class ActivityEditGroupWho extends AppCompatActivity {
             return;
         }
 
-        gSheet.updateGSheetGroup(sGroups.get(gIDX));
-        sGroups.get(gIDX).whos.remove(wIDX);
         stockGetPut.put( " Deleted "+ sGroups.get(gIDX).whos.get(wIDX).who
                 + " / " + sGroups.get(gIDX).whos.get(wIDX).whoM);
+        sGroups.get(gIDX).whos.remove(wIDX);
+        if (wIDX > 0)
+            wIDX--;
+        gSheet.updateGSheetGroup(sGroups.get(gIDX));
         updateAdaptor();
         finish();
     }

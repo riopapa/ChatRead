@@ -4,6 +4,7 @@ import static biz.riopapa.chatread.MainActivity.appFullNames;
 import static biz.riopapa.chatread.MainActivity.appIgnores;
 import static biz.riopapa.chatread.MainActivity.appNameIdx;
 import static biz.riopapa.chatread.MainActivity.apps;
+import static biz.riopapa.chatread.MainActivity.deBug;
 import static biz.riopapa.chatread.MainActivity.gSheet;
 import static biz.riopapa.chatread.MainActivity.kaApp;
 import static biz.riopapa.chatread.MainActivity.ktGroupIgnores;
@@ -169,10 +170,14 @@ public class NotificationListener extends NotificationListenerService {
 
                 if (hasIgnoreStr(teleApp))
                     return;
-
-                int g = isStockTelGroup(sbnWho);
+                int g = isStockTelGroup(sbnWho);    // actual value is group + who
                 if (g < 0) { // not in stock group
                     sbnText = strUtil.text2OneLine(sbnText);
+                    if (deBug) {
+                        String whoStr = sbnWho.length() > 15 ? sbnWho.substring(0, 15) : sbnWho;
+                        whoStr = strUtil.removeSpecialChars(whoStr);
+                        utils.logB("who_" + whoStr, sbnWho + "\n" + sbnText);
+                    }
                     if (sbnGroup.isEmpty()) {
                         head = "[텔레 : " + sbnWho + "]";
                         logUpdate.addLog(head, sbnText);
@@ -448,9 +453,17 @@ public class NotificationListener extends NotificationListenerService {
         sounds.speakAfterBeep(head + strUtil.makeEtc(sbnText, isWorking()? 20: 120));
     }
 
+    //        for (int i = 0; i < replGroupCnt; i++) {
+//        }
+//        return text;
+
     private int isStockTelGroup(String sbnWho) {
         for (int i = 0; i < stockTelGroupMatchTbl.length; i++) {
-            if (sbnWho.contains(stockTelGroupMatchTbl[i]))
+
+            int compared = sbnWho.compareTo(stockTelGroupMatchTbl[i]);
+            if (compared < 0)
+                return -1;
+            if (sbnWho.startsWith(stockTelGroupMatchTbl[i]))
                 return stockTelGroupMatchIdx[i];
         }
         return -1;
