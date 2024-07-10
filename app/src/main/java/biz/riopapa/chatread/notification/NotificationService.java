@@ -189,11 +189,11 @@ public class NotificationService extends Service {
     private void updateRemoteViews() {
 
         mBuilder.setSmallIcon(R.drawable.chat_read_logo);
-        mRemoteViews.setTextViewText(R.id.msg_time1, head1);
+        mRemoteViews.setTextViewText(R.id.msg_head1, head1);
         mRemoteViews.setTextViewText(R.id.msg_text1, msg1);
-        mRemoteViews.setTextViewText(R.id.msg_time2, head2);
+        mRemoteViews.setTextViewText(R.id.msg_head2, head2);
         mRemoteViews.setTextViewText(R.id.msg_text2, msg2);
-        mRemoteViews.setTextViewText(R.id.msg_time3, head3);
+        mRemoteViews.setTextViewText(R.id.msg_head3, head3);
         mRemoteViews.setTextViewText(R.id.msg_text3, msg3);
         mRemoteViews.setViewVisibility(R.id.stop_now, (show_stop)? View.VISIBLE : View.GONE);
         mNotificationManager.notify(100,mBuilder.build());

@@ -112,7 +112,7 @@ public class GSheet {
     }
 
     public String makePercent(SGroup sGroup) {
-        return "Skip (" + sGroup.skip1 + ", " + sGroup.skip1 + ", " + sGroup.skip2 + ", " + sGroup.skip3 + ")" +
+        return "Skip (" + sGroup.skip1 + ", " + sGroup.skip2 + ", " + sGroup.skip3 + ")" +
                 "\nIgnore:" + ((sGroup.ignore) ? "yes" : "no") +
                 " TelKa (" + sGroup.telKa + ")";
     }
@@ -122,7 +122,7 @@ public class GSheet {
         for (SWho who : nGroup.whos) {
             if (sb.length() > 0)
                 sb.append("\n");
-            sb.append(who.who).append(" : ").append(who.whoM);
+            sb.append(who.who).append(" : ").append(who.whoM).append(", ").append(who.whoF);
             for (SStock stock : who.stocks) {
                 sb.append("\n   Key(").append(stock.key1).append(", ").append(stock.key2).append(")");
                 sb.append(",Talk(").append(stock.talk).append(")");

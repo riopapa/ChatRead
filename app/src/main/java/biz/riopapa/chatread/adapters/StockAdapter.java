@@ -1,5 +1,6 @@
 package biz.riopapa.chatread.adapters;
 
+import static androidx.fragment.app.DialogFragment.STYLE_NORMAL;
 import static biz.riopapa.chatread.MainActivity.gIDX;
 import static biz.riopapa.chatread.MainActivity.gSheet;
 import static biz.riopapa.chatread.MainActivity.stockRecyclerView;
@@ -11,6 +12,9 @@ import static biz.riopapa.chatread.MainActivity.stockGetPut;
 import static biz.riopapa.chatread.MainActivity.wIDX;
 import static biz.riopapa.chatread.edit.ActivityEditGroupWho.whoContext;
 
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -110,8 +114,6 @@ public class StockAdapter extends RecyclerView.Adapter<StockAdapter.ViewHolder> 
                 gSheet.updateGSheetGroup(sGroups.get(gIDX));
                 dataSetChanged();
                 dialog.dismiss();
-
-                // Implement logic for "Apply" button (e.g., get data from EditTexts)
             })
             .setNeutralButton("Dup", (dialog, which) -> {
                 setNewStockFromActivity(eKey1, eKey2, ePrev, eNext, eTalk, eCount, eSkip);
@@ -124,7 +126,7 @@ public class StockAdapter extends RecyclerView.Adapter<StockAdapter.ViewHolder> 
                 if (sGroups.get(gIDX).whos.get(wIDX).stocks.size() > 1) {
                     sGroups.get(gIDX).whos.get(wIDX).stocks.remove(sIDX);
                     gSheet.updateGSheetGroup(sGroups.get(gIDX));
-                    dialog.dismiss();
+//                    dialog.dismiss();
                     dataSetChanged();
                 }
             })
@@ -142,6 +144,13 @@ public class StockAdapter extends RecyclerView.Adapter<StockAdapter.ViewHolder> 
         newStock.count = Integer.parseInt(eCount.getText().toString());
         newStock.skip1 = eSkip.getText().toString();
     }
+
+    public static class NoCapsSpan extends StyleSpan {
+        public NoCapsSpan() {
+            super(STYLE_NORMAL);
+        }
+    }
+
 
     void dataSetChanged() {
         stockGetPut.put("stock");

@@ -123,8 +123,9 @@ public class ActivityEditGroup extends AppCompatActivity {
     private void deleteStockGroup() {
 
         gSheet.deleteGSheetGroup(sGroups.get(gIDX));
+        String msg = sGroups.get(gIDX).grp+" Deleted "+ sGroups.get(gIDX).grpM;
         sGroups.remove(gIDX);
-        stockGetPut.put( sGroups.get(gIDX).grp+" Deleted "+ sGroups.get(gIDX).grpM);
+        stockGetPut.put( msg);
         for (int i = 0; i < sGroups.size(); i++)
             groupAdapter.notifyItemChanged(i);
         finish();

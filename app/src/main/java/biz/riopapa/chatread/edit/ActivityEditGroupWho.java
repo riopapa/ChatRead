@@ -116,12 +116,12 @@ public class ActivityEditGroupWho extends AppCompatActivity {
             Toast.makeText(this, "하나 밖에 없어 삭제할 수 없습니다.", Toast.LENGTH_SHORT).show();
             return;
         }
-
-        stockGetPut.put( " Deleted "+ sGroups.get(gIDX).whos.get(wIDX).who
-                + " / " + sGroups.get(gIDX).whos.get(wIDX).whoM);
+        String msg = " Deleted "+ sGroups.get(gIDX).whos.get(wIDX).who
+                + " / " + sGroups.get(gIDX).whos.get(wIDX).whoM;
         sGroups.get(gIDX).whos.remove(wIDX);
         if (wIDX > 0)
             wIDX--;
+        stockGetPut.put(msg);
         gSheet.updateGSheetGroup(sGroups.get(gIDX));
         updateAdaptor();
         finish();

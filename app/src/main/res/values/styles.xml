@@ -18,7 +18,6 @@
         <item name="android:padding">2dp</item>
     </style>
 
-
     <style name="cercleImg">
 
     <item name="cornerSize">50%</item>

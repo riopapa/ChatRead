@@ -36,12 +36,12 @@ import static biz.riopapa.chatread.MainActivity.smsWhoIgnores;
 import static biz.riopapa.chatread.MainActivity.soundType.HI_TESLA;
 import static biz.riopapa.chatread.MainActivity.sounds;
 import static biz.riopapa.chatread.MainActivity.stockCheck;
-import static biz.riopapa.chatread.MainActivity.stockKaGroupMatchIdx;
-import static biz.riopapa.chatread.MainActivity.stockKaGroupMatchTbl;
-import static biz.riopapa.chatread.MainActivity.stockSMSGroupMatchIdx;
-import static biz.riopapa.chatread.MainActivity.stockSMSGroupMatchTbl;
-import static biz.riopapa.chatread.MainActivity.stockTelGroupMatchIdx;
-import static biz.riopapa.chatread.MainActivity.stockTelGroupMatchTbl;
+import static biz.riopapa.chatread.MainActivity.stockKatalkMatchIdx;
+import static biz.riopapa.chatread.MainActivity.stockKatalkMatchTbl;
+import static biz.riopapa.chatread.MainActivity.stockSMSMatchIdx;
+import static biz.riopapa.chatread.MainActivity.stockSMSMatchTbl;
+import static biz.riopapa.chatread.MainActivity.stockTeleMatchIdx;
+import static biz.riopapa.chatread.MainActivity.stockTeleMatchTbl;
 import static biz.riopapa.chatread.MainActivity.strReplace;
 import static biz.riopapa.chatread.MainActivity.strUtil;
 import static biz.riopapa.chatread.MainActivity.teleApp;
@@ -136,7 +136,7 @@ public class NotificationListener extends NotificationListenerService {
                     sbnText = strUtil.text2OneLine(sbnText);
                     if (kvKakao.isDup(sbnGroup, sbnText))
                         return;
-                    int g = isStockKaGroup(sbnGroup);
+                    int g = getStockGroupIdx(sbnGroup, stockKatalkMatchTbl, stockKatalkMatchIdx);
                     if (g < 0) {
                         sbnText = strReplace.repl(ktStrRepl, sbnGroup, sbnText);
                         notificationBar.update("카톡!" + sbnGroup + "." + sbnWho, sbnText, true);
@@ -170,12 +170,12 @@ public class NotificationListener extends NotificationListenerService {
 
                 if (hasIgnoreStr(teleApp))
                     return;
-                int g = isStockTelGroup(sbnWho);    // actual value is group + who
+                int g = getStockGroupIdx(sbnWho, stockTeleMatchTbl, stockTeleMatchIdx);
                 if (g < 0) { // not in stock group
                     sbnText = strUtil.text2OneLine(sbnText);
                     if (deBug) {
                         String whoStr = sbnWho.length() > 15 ? sbnWho.substring(0, 15) : sbnWho;
-                        whoStr = strUtil.removeSpecialChars(whoStr);
+                        whoStr = whoStr.replaceAll("[^\\w\\s가-힣]", "");
                         utils.logB("who_" + whoStr, sbnWho + "\n" + sbnText);
                     }
                     if (sbnGroup.isEmpty()) {
@@ -384,7 +384,7 @@ public class NotificationListener extends NotificationListenerService {
             }
         } else if (sbnWho.contains("찌라")) {
 
-            int g = isStockSMSGroup(sbnWho);
+            int g = getStockGroupIdx(sbnGroup, stockSMSMatchTbl, stockSMSMatchIdx);
             if (g < 0) {
                 sbnWho = sbnWho.replaceAll("[\\u200C-\\u206F]", "");
                 sbnText = sbnText.replace(ctx.getString(R.string.web_sent), "")
@@ -457,30 +457,13 @@ public class NotificationListener extends NotificationListenerService {
 //        }
 //        return text;
 
-    private int isStockTelGroup(String sbnWho) {
-        for (int i = 0; i < stockTelGroupMatchTbl.length; i++) {
-
-            int compared = sbnWho.compareTo(stockTelGroupMatchTbl[i]);
+    private int getStockGroupIdx(String sbnWho, String [] matches, int [] index) {
+        for (int i = 0; i < matches.length; i++) {
+            int compared = sbnWho.compareTo(matches[i]);
             if (compared < 0)
                 return -1;
-            if (sbnWho.startsWith(stockTelGroupMatchTbl[i]))
-                return stockTelGroupMatchIdx[i];
-        }
-        return -1;
-    }
-
-    private int isStockKaGroup(String sbnWho) {
-        for (int i = 0; i < stockKaGroupMatchTbl.length; i++) {
-            if (sbnWho.contains(stockKaGroupMatchTbl[i]))
-                return stockKaGroupMatchIdx[i];
-        }
-        return -1;
-    }
-
-    private int isStockSMSGroup(String sbnWho) {
-        for (int i = 0; i < stockSMSGroupMatchTbl.length; i++) {
-            if (sbnWho.contains(stockSMSGroupMatchTbl[i]))
-                return stockSMSGroupMatchIdx[i];
+            if (sbnWho.startsWith(matches[i]))
+                return index[i];
         }
         return -1;
     }

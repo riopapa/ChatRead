@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <TextView
-                android:id="@+id/msg_time1"
+                android:id="@+id/msg_head1"
                 android:layout_width="0dp"
                 android:layout_weight="3"
                 android:layout_height="match_parent"
@@ -44,7 +44,7 @@
 
         </LinearLayout>
         <LinearLayout
-             android:id="@+id/msg_line1"
+             android:id="@+id/msg_line_text1"
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
              android:orientation="horizontal">
@@ -74,7 +74,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <TextView
-                android:id="@+id/msg_time2"
+                android:id="@+id/msg_head2"
                 android:layout_width="0dp"
                 android:layout_weight="3"
                 android:layout_height="match_parent"
@@ -120,7 +120,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <TextView
-                android:id="@+id/msg_time3"
+                android:id="@+id/msg_head3"
                 android:layout_width="0dp"
                 android:layout_weight="3"
                 android:layout_height="match_parent"
