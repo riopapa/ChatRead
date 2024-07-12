@@ -2,22 +2,30 @@ package biz.riopapa.chatread.edit;
 
 import static biz.riopapa.chatread.MainActivity.apps;
 import static biz.riopapa.chatread.MainActivity.appsAdapter;
+import static biz.riopapa.chatread.MainActivity.gIDX;
 import static biz.riopapa.chatread.MainActivity.mAppsPos;
 import static biz.riopapa.chatread.MainActivity.mContext;
+import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.toolbar;
 import static biz.riopapa.chatread.fragment.FragmentAppsList.appsRecyclerView;
 
+import android.Manifest;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,12 +50,8 @@ public class ActivityEditApp extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_app);
-//        Toolbar toolbar = findViewById(R.id.toolbar_edit_app);
-//        setSupportActionBar(toolbar);
-        toolbar.setTitleTextColor(0xFFFFDD00);
-        toolbar.setTitle("App EDIT");
-        toolbar.setSubtitleTextColor(0xFF667788);
-        toolbar.setSubtitle("App Edit");
+        ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
 
         eFullName = findViewById(R.id.e_app_full_name);
         eNickName = findViewById(R.id.e_nick_name);
@@ -63,7 +67,7 @@ public class ActivityEditApp extends AppCompatActivity {
         replFromTo = findViewById(R.id.repl_from_to);
 
         if (mAppsPos == -1) {
-//            actionBar.setTitle("Add App");
+            actionBar.setTitle("new App");
             app = new App();
             app.nickName = "@";
             app.say = true;
@@ -74,16 +78,21 @@ public class ActivityEditApp extends AppCompatActivity {
             app.num = true;
             app.inform = null;
             app.replF = null;
+            app.replT = null;
+            app.igStr = null;
 
-            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-            ClipData pData = clipboard.getPrimaryClip();
-            if (pData != null) {
-                ClipData.Item item = pData.getItemAt(0);
-                app.fullName = item.getText().toString();
+            ClipboardManager clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+            ClipData clipData = clipboardManager.getPrimaryClip();
+            if (clipData != null && clipData.getItemCount() > 0)
+                Log.e("clip", "cnt+ "+ clipData.getItemCount());
+            if (clipData != null && clipData.getItemCount() > 0 &&
+                    clipData.getItemAt(0).getText() != null) {
+                app.fullName = clipData.getItemAt(0).getText().toString();
             }
         } else {
             app = apps.get(mAppsPos);
-//            actionBar.setTitle("Edit App");
+            actionBar.setTitle("App Edit");
+            actionBar.setSubtitle(app.nickName + " " + app.fullName);
         }
         eFullName.setText(app.fullName);
         eNickName.setText(app.nickName);

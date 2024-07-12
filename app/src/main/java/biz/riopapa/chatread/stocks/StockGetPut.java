@@ -5,12 +5,12 @@ import static biz.riopapa.chatread.MainActivity.downloadFolder;
 import static biz.riopapa.chatread.MainActivity.fileIO;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.sGroups;
-import static biz.riopapa.chatread.MainActivity.stockKatalkMatchIdx;
-import static biz.riopapa.chatread.MainActivity.stockKatalkMatchTbl;
-import static biz.riopapa.chatread.MainActivity.stockSMSMatchIdx;
-import static biz.riopapa.chatread.MainActivity.stockSMSMatchTbl;
-import static biz.riopapa.chatread.MainActivity.stockTeleMatchIdx;
-import static biz.riopapa.chatread.MainActivity.stockTeleMatchTbl;
+import static biz.riopapa.chatread.MainActivity.stockKGroupIdx;
+import static biz.riopapa.chatread.MainActivity.stockKGroupTbl;
+import static biz.riopapa.chatread.MainActivity.stockSGroupIdx;
+import static biz.riopapa.chatread.MainActivity.stockSGroupTbl;
+import static biz.riopapa.chatread.MainActivity.stockTGroupIdx;
+import static biz.riopapa.chatread.MainActivity.stockTGroupTbl;
 import static biz.riopapa.chatread.MainActivity.tableFolder;
 import static biz.riopapa.chatread.MainActivity.todayFolder;
 import static biz.riopapa.chatread.MainActivity.utils;
@@ -100,28 +100,28 @@ public class StockGetPut {
 
         entrys = new ArrayList<>(tMap.entrySet());
         entrys.sort(new StringKeyComparator());
-        stockTeleMatchTbl = new String[entrys.size()];
-        stockTeleMatchIdx = new int[entrys.size()];
+        stockTGroupTbl = new String[entrys.size()];
+        stockTGroupIdx = new int[entrys.size()];
         for (int i = 0; i < entrys.size(); i++) {
-            stockTeleMatchTbl[i] = entrys.get(i).getKey();
-            stockTeleMatchIdx[i] = entrys.get(i).getValue();
+            stockTGroupTbl[i] = entrys.get(i).getKey();
+            stockTGroupIdx[i] = entrys.get(i).getValue();
         }
 
         entrys = new ArrayList<>(kMap.entrySet());
         entrys.sort(new StringKeyComparator());
-        stockKatalkMatchTbl = new String[entrys.size()];
-        stockKatalkMatchIdx = new int[entrys.size()];
+        stockKGroupTbl = new String[entrys.size()];
+        stockKGroupIdx = new int[entrys.size()];
         for (int i = 0; i < entrys.size(); i++) {
-            stockKatalkMatchTbl[i] = entrys.get(i).getKey();
-            stockKatalkMatchIdx[i] = entrys.get(i).getValue();
+            stockKGroupTbl[i] = entrys.get(i).getKey();
+            stockKGroupIdx[i] = entrys.get(i).getValue();
         }
         entrys = new ArrayList<>(sMap.entrySet());
         entrys.sort(new StringKeyComparator());
-        stockSMSMatchTbl = new String[entrys.size()];
-        stockSMSMatchIdx = new int[entrys.size()];
+        stockSGroupTbl = new String[entrys.size()];
+        stockSGroupIdx = new int[entrys.size()];
         for (int i = 0; i < entrys.size(); i++) {
-            stockSMSMatchTbl[i] = entrys.get(i).getKey();
-            stockSMSMatchIdx[i] = entrys.get(i).getValue();
+            stockSGroupTbl[i] = entrys.get(i).getKey();
+            stockSGroupIdx[i] = entrys.get(i).getValue();
         }
 
 //        int telCnt = 0, kaCnt = 0, smsCnt = 0;
@@ -192,20 +192,11 @@ public class StockGetPut {
     }
 
     public void putSV(String msg) {
-        new SnackBar().show(STOCK_TABLE + ".json", msg);
+        new SnackBar().show(STOCK_TABLE + " SV", msg);
         utils.logW("StockPut", msg);
-        sortByGroup();
-        SharedPreferences shareGroup = mContext.getSharedPreferences(STOCK_TABLE, MODE_PRIVATE);
-        SharedPreferences.Editor sgEdit = shareGroup.edit();
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String json = gson.toJson(sGroups);
-        sgEdit.putString(STOCK_TABLE, json);
-        sgEdit.apply();
-        if (todayFolder == null)
-            new ReadyToday();
-        Gson gson2 = new GsonBuilder().setPrettyPrinting().create();
-        String prettyJson = gson2.toJson(sGroups);
-        fileIO.writeFile(tableFolder, STOCK_TABLE + "SV.txt", prettyJson);
+        fileIO.writeFile(tableFolder, STOCK_TABLE + "SV.txt", json);
     }
 
     void sortByGroup() {

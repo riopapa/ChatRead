@@ -36,12 +36,12 @@ import static biz.riopapa.chatread.MainActivity.smsWhoIgnores;
 import static biz.riopapa.chatread.MainActivity.soundType.HI_TESLA;
 import static biz.riopapa.chatread.MainActivity.sounds;
 import static biz.riopapa.chatread.MainActivity.stockCheck;
-import static biz.riopapa.chatread.MainActivity.stockKatalkMatchIdx;
-import static biz.riopapa.chatread.MainActivity.stockKatalkMatchTbl;
-import static biz.riopapa.chatread.MainActivity.stockSMSMatchIdx;
-import static biz.riopapa.chatread.MainActivity.stockSMSMatchTbl;
-import static biz.riopapa.chatread.MainActivity.stockTeleMatchIdx;
-import static biz.riopapa.chatread.MainActivity.stockTeleMatchTbl;
+import static biz.riopapa.chatread.MainActivity.stockKGroupIdx;
+import static biz.riopapa.chatread.MainActivity.stockKGroupTbl;
+import static biz.riopapa.chatread.MainActivity.stockSGroupIdx;
+import static biz.riopapa.chatread.MainActivity.stockSGroupTbl;
+import static biz.riopapa.chatread.MainActivity.stockTGroupIdx;
+import static biz.riopapa.chatread.MainActivity.stockTGroupTbl;
 import static biz.riopapa.chatread.MainActivity.strReplace;
 import static biz.riopapa.chatread.MainActivity.strUtil;
 import static biz.riopapa.chatread.MainActivity.teleApp;
@@ -136,7 +136,7 @@ public class NotificationListener extends NotificationListenerService {
                     sbnText = strUtil.text2OneLine(sbnText);
                     if (kvKakao.isDup(sbnGroup, sbnText))
                         return;
-                    int g = getStockGroupIdx(sbnGroup, stockKatalkMatchTbl, stockKatalkMatchIdx);
+                    int g = getStockGroupIdx(sbnGroup, stockKGroupTbl, stockKGroupIdx);
                     if (g < 0) {
                         sbnText = strReplace.repl(ktStrRepl, sbnGroup, sbnText);
                         notificationBar.update("카톡!" + sbnGroup + "." + sbnWho, sbnText, true);
@@ -170,7 +170,7 @@ public class NotificationListener extends NotificationListenerService {
 
                 if (hasIgnoreStr(teleApp))
                     return;
-                int g = getStockGroupIdx(sbnWho, stockTeleMatchTbl, stockTeleMatchIdx);
+                int g = getStockGroupIdx(sbnWho, stockTGroupTbl, stockTGroupIdx);
                 if (g < 0) { // not in stock group
                     sbnText = strUtil.text2OneLine(sbnText);
                     if (deBug) {
@@ -194,7 +194,6 @@ public class NotificationListener extends NotificationListenerService {
                     return;
                 }
                 sayTelStock(g);
-
                 break;
 
             case APP:
@@ -336,28 +335,30 @@ public class NotificationListener extends NotificationListenerService {
         if (nowTime < timeBegin || nowTime > timeEnd)
             return;
         sbnGroup = sGroups.get(g).grp;  // replace with short group
-
         sbnText = strUtil.text2OneLine(sbnText);
-        int p = sbnWho.indexOf(":");
-        if (p > 0 && p < 30) {  // 텔소나, 텔리치
-            sbnWho = sbnWho.substring(p+1).trim();
-        } else {
-            p = sbnText.indexOf(":");
-            if (p > 0 && p < 60) {  // 텔투봄, 텔천하
-                sbnWho = sbnText.substring(0, p).trim();
-                sbnText = sbnText.substring(p + 1).trim();
-            } else {
-//                utils.logW(sbnGroup, "??" + sbnWho + "?? " + sbnText);
+        String [] grpWho = sbnWho.split(":");
+        if (grpWho.length == 2) {       // 그룹명 : 이름
+            sbnWho = grpWho[1].trim();
+        } else if (grpWho.length == 3) {  // 와룡 : 그룸 이름 : 주식 와룡선생
+            sbnWho = grpWho[2].trim();
+        } else {    // group name only
+            int p = sbnText.indexOf(":");
+            if (p < 0) {
+                utils.logB(sbnGroup, "no Who "+sbnText);
                 return;
             }
+            sbnWho = sbnText.substring(0, p).trim();
+            sbnText = sbnText.substring(p + 1).trim();
         }
-        if (kvTelegram.isDup(sbnGroup, sbnText))
+        if (kvTelegram.isDup(sbnWho, sbnText))
             return;
+
         if (sbnText.contains(sGroups.get(g).skip1) ||
                 sbnText.contains(sGroups.get(g).skip2))
             return;
+
         for (int w = 0; w < sGroups.get(g).whos.size(); w++) {
-            if (sbnWho.contains(sGroups.get(g).whos.get(w).whoM)) {
+            if (sbnWho.startsWith(sGroups.get(g).whos.get(w).whoM)) {
                 sbnWho = sGroups.get(g).whos.get(w).who;        // replace with short who
 //                utils.logW(sbnGroup, sbnWho + ">> " + sbnText);
                 stockCheck.check(g, w, sGroups.get(g).whos.get(w).stocks);
@@ -370,6 +371,7 @@ public class NotificationListener extends NotificationListenerService {
         if (sbnWho.replaceAll(ctx.getString(R.string.regex_number_only), "").length() < 6 &&
                 !sbnText.contains("스마트폰 배우고"))
             return;
+        sbnWho = sbnWho.replaceAll("[\\u200C-\\u206F]", "");
         if (sbnWho.charAt(sbnWho.length() - 1) == '#' ||
             IgnoreThis.contains(sbnWho, smsWhoIgnores) || IgnoreThis.contains(sbnText, smsTxtIgnores))
             return;
@@ -384,7 +386,7 @@ public class NotificationListener extends NotificationListenerService {
             }
         } else if (sbnWho.contains("찌라")) {
 
-            int g = getStockGroupIdx(sbnGroup, stockSMSMatchTbl, stockSMSMatchIdx);
+            int g = getStockGroupIdx(sbnGroup, stockSGroupTbl, stockSGroupIdx);
             if (g < 0) {
                 sbnWho = sbnWho.replaceAll("[\\u200C-\\u206F]", "");
                 sbnText = sbnText.replace(ctx.getString(R.string.web_sent), "")

@@ -3,6 +3,7 @@ package biz.riopapa.chatread.func;
 import static biz.riopapa.chatread.MainActivity.downloadFolder;
 import static biz.riopapa.chatread.MainActivity.tableFolder;
 import static biz.riopapa.chatread.MainActivity.tableListFile;
+import static biz.riopapa.chatread.MainActivity.utils;
 
 import android.os.Environment;
 
@@ -23,7 +24,10 @@ public class StrReplace {
         String[] lines = tableListFile.readRaw(file);
         for (String ln : lines) {
             String[] arr = ln.split("\\^");
-            strRepls.add(new StrRepl(arr[0].trim(), arr[1].trim(), arr[2].trim()));
+            if (arr.length > 2)
+                strRepls.add(new StrRepl(arr[0].trim(), arr[1].trim(), arr[2].trim()));
+            else
+                utils.logW("StrRepl"," ^ missing.. "+ln);
         }
         return strRepls;
     }
@@ -32,7 +36,10 @@ public class StrReplace {
         if (txt.length() < 20)
             return txt;
         for (int i  = 0; i < replList.size(); i ++) {
-            if (replList.get(i).grp.equals(who))
+            int compared = who.compareTo(replList.get(i).grp);
+            if (compared < 0)
+                return txt;
+            if (compared == 0)
                 txt = txt.replace(replList.get(i).strL, replList.get(i).strS);
         }
         return txt;

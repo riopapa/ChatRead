@@ -71,7 +71,7 @@ public class GSheet {
     public void updateGSheetGroup(SGroup sGroup) {
         String mPercent = gSheet.makePercent(sGroup);
         String mStatement = gSheet.makeStatement(sGroup,",");
-        String mTalk = new SimpleDateFormat("yy/MM/dd\nHH:mm", Locale.KOREA).format(new Date());
+        String mTalk = new SimpleDateFormat("yy/MM/dd HH:mm", Locale.KOREA).format(new Date());
         sheetQues.add(new SheetQue("group", sGroup.grp,  mTalk, sGroup.grpF, mPercent, mTalk, mStatement, "key12"));
         uploadStock();
     }

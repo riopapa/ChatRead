@@ -153,7 +153,7 @@ public class FragmentAppsList extends Fragment {
             appsAdapter = new AppsAdapter();
             appsRecyclerView.setAdapter(appsAdapter);
         } else if (item.getItemId() == R.id.save_apps) {
-            appsTable.put();
+            appsTable.putSV();
         } else if (item.getItemId() == R.id.add_apps) {
             mAppsPos = -1;
             Intent intent = new Intent(mContext, ActivityEditApp.class);

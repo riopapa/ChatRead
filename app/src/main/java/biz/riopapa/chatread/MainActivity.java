@@ -138,8 +138,8 @@ public class MainActivity extends AppCompatActivity {
     public static StockCheck stockCheck = null;
     public static StrReplace strReplace = null;
     public static int gIDX, wIDX, sIDX;
-    public static String [] stockTeleMatchTbl, stockKatalkMatchTbl, stockSMSMatchTbl;
-    public static int [] stockTeleMatchIdx, stockKatalkMatchIdx, stockSMSMatchIdx;
+    public static String [] stockTGroupTbl, stockKGroupTbl, stockSGroupTbl;
+    public static int [] stockTGroupIdx, stockKGroupIdx, stockSGroupIdx;
     public static ArrayList<App> apps;
     public static AppsAdapter appsAdapter;
     public static App teleApp, kaApp, smsApp;

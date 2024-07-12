@@ -79,6 +79,12 @@ public class AppsTable {
         // manual copy to appTableSv.txt is required for backup
     }
 
+
+    public void putSV() {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        String json = gson.toJson(apps);
+        fileIO.writeFile(tableFolder, "appTableSV.txt", json);
+    }
     public void makeTable() {
         appFullNames = new ArrayList<>();
         appNameIdx = new ArrayList<>();
