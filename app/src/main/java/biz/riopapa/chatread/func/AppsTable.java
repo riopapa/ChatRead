@@ -7,13 +7,9 @@ import static biz.riopapa.chatread.MainActivity.apps;
 import static biz.riopapa.chatread.MainActivity.downloadFolder;
 import static biz.riopapa.chatread.MainActivity.fileIO;
 import static biz.riopapa.chatread.MainActivity.kaApp;
-import static biz.riopapa.chatread.MainActivity.kakaoAppIdx;
-import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.smsApp;
-import static biz.riopapa.chatread.MainActivity.smsAppIdx;
 import static biz.riopapa.chatread.MainActivity.tableFolder;
 import static biz.riopapa.chatread.MainActivity.teleApp;
-import static biz.riopapa.chatread.MainActivity.telegramAppIdx;
 
 import android.os.Environment;
 
@@ -28,7 +24,6 @@ import java.util.Comparator;
 import java.util.List;
 
 import biz.riopapa.chatread.models.App;
-import biz.riopapa.chatread.models.SGroup;
 
 public class AppsTable {
 
@@ -99,15 +94,12 @@ public class AppsTable {
                 appNameIdx.add(i);
                 switch (app.fullName) {
                     case "org.telegram.messenger":
-                        telegramAppIdx = i;
                         teleApp = app;
                         break;
                     case "com.kakao.talk":
-                        kakaoAppIdx = i;
                         kaApp = app;
                         break;
                     case "com.samsung.android.messaging":
-                        smsAppIdx = i;
                         smsApp = app;
                         break;
                 }

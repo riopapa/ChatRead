@@ -32,7 +32,6 @@ import biz.riopapa.chatread.func.Copy2Save;
 import biz.riopapa.chatread.func.KeyStringFind;
 import biz.riopapa.chatread.func.KeyStringNext;
 import biz.riopapa.chatread.func.LogSpan;
-import biz.riopapa.chatread.func.LogUpdate;
 import biz.riopapa.chatread.func.ScrollUp;
 
 public class FragmentLogStock extends Fragment {

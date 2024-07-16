@@ -33,14 +33,12 @@ public class ActivityEditTable extends AppCompatActivity {
 
     int pos = -1;
     String key, fullText;
-    int [] menuId = { R.id.table_sms_no_num,   R.id.table_sms_repl,     R.id.table_sms_txt_ig,
-                        R.id.table_sms_who_ig,  R.id.table_sys_ig,
+    int [] menuId = { R.id.table_sms_no_num,   R.id.table_sms_repl,     R.id.table_sys_ig,
                         R.id.table_kt_grp_ig,   R.id.table_kt_no_num,   R.id.table_kt_txt_ig,
                         R.id.table_kt_who_ig,   R.id.table_kt_repl
     };
     String [] fileId = {
-                        "smsNoNum",             "smsRepl",              "smsTxtIg",
-                        "smsWhoIg",             "sysIg",
+                        "smsNoNum",             "smsRepl",             "sysIg",
                         "ktGrpIg",              "ktNoNum",              "ktTxtIg",
                         "ktWhoIg",              "ktRepl"
     };

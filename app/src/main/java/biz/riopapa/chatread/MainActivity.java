@@ -99,8 +99,6 @@ public class MainActivity extends AppCompatActivity {
     public static String[] ktGroupIgnores = null;
     public static String[] ktWhoIgnores = null;
 
-    public static String[] smsWhoIgnores = null;
-    public static String[] smsTxtIgnores = null;
     public static String[] smsNoNumbers = null;
 
     public static String[] ktNoNumbers = null;
@@ -144,14 +142,12 @@ public class MainActivity extends AppCompatActivity {
     public static AppsAdapter appsAdapter;
     public static App teleApp, kaApp, smsApp;
 
-    public static int telegramAppIdx, kakaoAppIdx, smsAppIdx;
-
     public static final String lastChar = "힝";
     public static int mAppsPos = -1;  // updated or duplicated recycler position
 
     public enum soundType { PRE, POST, ERR, HI_TESLA, ONLY, STOCK, INFO, KAKAO}
     public static final int[] beepRawIds = { R.raw.pre, R.raw.post, R.raw.err,
-            R.raw.hi_tesla, R.raw.only, R.raw.stock_check, R.raw.inform, R.raw.kakao_talk};
+            R.raw.hello_tesla, R.raw.only, R.raw.stock_check, R.raw.inform, R.raw.kakao_talk};
 
     public static KeyVal kvCommon = null;
     public static KeyVal kvKakao = null;
@@ -222,7 +218,6 @@ public class MainActivity extends AppCompatActivity {
                 fragment = new FragmentKaTalk();
             } else {
                 if (id == R.id.table_sms_no_num || id == R.id.table_sms_repl ||
-                        id == R.id.table_sms_txt_ig || id == R.id.table_sms_who_ig ||
                         id == R.id.table_sys_ig ||
                         id == R.id.table_kt_grp_ig || id == R.id.table_kt_no_num ||
                         id == R.id.table_kt_txt_ig || id == R.id.table_kt_who_ig ||

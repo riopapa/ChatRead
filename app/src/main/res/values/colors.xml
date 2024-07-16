@@ -57,16 +57,16 @@
     <color name="keyMatchedWord">#FF8FB68F</color>
 
     <color name="log_head_f0">#FF611714</color>
-    <color name="log_head_b0">#CCE7F2DB</color>
-    <color name="log_line_f0">#0C1F8A</color>
-    <color name="log_line_b0">#C6C4CA</color>
-    <color name="log_line_x0">#D1CC9C</color>
+    <color name="log_head_b0">#00E7F2DB</color>
+    <color name="log_line_f0">#FF0C1F8A</color>
+    <color name="log_line_b0">#00C6C4CA</color>
+    <color name="log_line_x0">#FFD1CC9C</color>
 
     <color name="log_head_f1">#FF0A09AE</color>
-    <color name="log_head_b1">#C4B997</color>
-    <color name="log_line_f1">#042C29</color>
-    <color name="log_line_b1">#AAD9D5E3</color>
-    <color name="log_line_x1">#B1A268</color>
+    <color name="log_head_b1">#00C4B997</color>
+    <color name="log_line_f1">#FF042C29</color>
+    <color name="log_line_b1">#00D9D5E3</color>
+    <color name="log_line_x1">#FFB1A268</color>
 
     <color name="line_now">#808EB3BF</color>
     <color name="line_default">#9EABAF</color>

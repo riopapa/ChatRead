@@ -29,10 +29,9 @@ import static biz.riopapa.chatread.MainActivity.sbnAppType;
 import static biz.riopapa.chatread.MainActivity.sbnGroup;
 import static biz.riopapa.chatread.MainActivity.sbnText;
 import static biz.riopapa.chatread.MainActivity.sbnWho;
+import static biz.riopapa.chatread.MainActivity.smsApp;
 import static biz.riopapa.chatread.MainActivity.smsNoNumbers;
 import static biz.riopapa.chatread.MainActivity.smsStrRepl;
-import static biz.riopapa.chatread.MainActivity.smsTxtIgnores;
-import static biz.riopapa.chatread.MainActivity.smsWhoIgnores;
 import static biz.riopapa.chatread.MainActivity.soundType.HI_TESLA;
 import static biz.riopapa.chatread.MainActivity.sounds;
 import static biz.riopapa.chatread.MainActivity.stockCheck;
@@ -113,42 +112,9 @@ public class NotificationListener extends NotificationListenerService {
                     if (sbnWho.charAt(sbnWho.length() - 1) == '#' ||
                         IgnoreThis.contains(sbnWho, ktWhoIgnores))
                         return;
-                    sbnText = strUtil.text2OneLine(sbnText);
-                    if (kvKakao.isDup(sbnWho, sbnText))
-                        return;
-
-                    sbnText = strReplace.repl(ktStrRepl, sbnWho, sbnText);
-                    notificationBar.update("카톡!" + sbnWho, sbnText, true);
-                    head = "{카톡!" + sbnWho + "} ";
-                    logUpdate.addLog(head, sbnText);
-                    if (IgnoreNumber.in(ktNoNumbers, sbnWho))
-                        sbnText = strUtil.removeDigit(sbnText);
-                    sounds.speakKakao(" 카톡 왔음 " + sbnWho + " 님이 " +
-                            strUtil.replaceKKHH(strUtil.makeEtc(sbnText, isWorking()? 20 :150)));
+                    sayKatalkNoGroup();
                 } else {    // with group name
-                    if (sbnGroup.charAt(sbnGroup.length() - 1) == '#' ||
-                        IgnoreThis.contains(sbnGroup, ktGroupIgnores))
-                        return;
-                    else if (sbnWho.isEmpty() ||
-                        sbnWho.charAt(sbnWho.length() - 1) == '#' ||
-                        IgnoreThis.contains(sbnWho, ktWhoIgnores))
-                        return;
-                    sbnText = strUtil.text2OneLine(sbnText);
-                    if (kvKakao.isDup(sbnGroup, sbnText))
-                        return;
-                    int g = getStockGroupIdx(sbnGroup, stockKGroupTbl, stockKGroupIdx);
-                    if (g < 0) {
-                        sbnText = strReplace.repl(ktStrRepl, sbnGroup, sbnText);
-                        notificationBar.update("카톡!" + sbnGroup + "." + sbnWho, sbnText, true);
-                        head = "{카톡!" + sbnGroup + "." + sbnWho + "} ";
-                        logUpdate.addLog(head, sbnText);
-                        if (IgnoreNumber.in(ktNoNumbers, sbnGroup))
-                            sbnText = strUtil.removeDigit(sbnText);
-                        sounds.speakKakao(" 카톡 왔음 " + sbnGroup + " 의 " + sbnWho + " 님이 " +
-                                strUtil.replaceKKHH(strUtil.makeEtc(sbnText, isWorking() ? 20 : 150)));
-                        return;
-                    } else
-                        sayKaStock(g);
+                    sayKatalkGroup();
                     return;
                 }
                 break;
@@ -264,6 +230,26 @@ public class NotificationListener extends NotificationListenerService {
 
             case SMS:
 
+        /*
+            ignore : smsApp.ignores
+            no Number : smsNoNumber.txt
+            str Repl : smsRepl.txt
+         */
+
+                if (sbnWho.replaceAll(ctx.getString(R.string.regex_number_only), "").length() < 6 &&
+                        !sbnText.contains("스마트폰 배우고"))
+                    return;
+                if (sbnWho.charAt(sbnWho.length() - 1) == '#')
+                    return;
+                for (int i = 0; i < smsApp.igStr.length; i++) {
+                    if (sbnWho.contains(smsApp.igStr[i]))
+                        return;
+                    if (sbnText.contains(smsApp.igStr[i]))
+                        return;
+                }
+                sbnWho = sbnWho.replaceAll("[\\u200C-\\u206F]", "");
+                if (kvSMS.isDup(sbnWho, sbnText))
+                    return;
                 saySMS();
                 break;
 
@@ -280,6 +266,47 @@ public class NotificationListener extends NotificationListenerService {
                 logUpdate.addLog("[ " + sbnAppName + " ]", sbnText);
                 break;
         }
+    }
+
+    private void sayKatalkGroup() {
+        if (sbnGroup.charAt(sbnGroup.length() - 1) == '#' ||
+            IgnoreThis.contains(sbnGroup, ktGroupIgnores))
+            return;
+        else if (sbnWho.isEmpty() ||
+            sbnWho.charAt(sbnWho.length() - 1) == '#' ||
+            IgnoreThis.contains(sbnWho, ktWhoIgnores))
+            return;
+        sbnText = strUtil.text2OneLine(sbnText);
+        if (kvKakao.isDup(sbnGroup, sbnText))
+            return;
+        int g = getStockGroupIdx(sbnGroup, stockKGroupTbl, stockKGroupIdx);
+        if (g < 0) {
+            sbnText = strReplace.repl(ktStrRepl, sbnGroup, sbnText);
+            notificationBar.update("카톡!" + sbnGroup + "." + sbnWho, sbnText, true);
+            head = "{카톡!" + sbnGroup + "." + sbnWho + "} ";
+            logUpdate.addLog(head, sbnText);
+            if (IgnoreNumber.in(ktNoNumbers, sbnGroup))
+                sbnText = strUtil.removeDigit(sbnText);
+            sounds.speakKakao(" 카톡 왔음 " + sbnGroup + " 의 " + sbnWho + " 님이 " +
+                    strUtil.replaceKKHH(strUtil.makeEtc(sbnText, isWorking() ? 20 : 150)));
+            return;
+        }
+        sayKaStock(g);
+    }
+
+    private void sayKatalkNoGroup() {
+        sbnText = strUtil.text2OneLine(sbnText);
+        if (kvKakao.isDup(sbnWho, sbnText))
+            return;
+
+        sbnText = strReplace.repl(ktStrRepl, sbnWho, sbnText);
+        notificationBar.update("카톡!" + sbnWho, sbnText, true);
+        head = "{카톡!" + sbnWho + "} ";
+        logUpdate.addLog(head, sbnText);
+        if (IgnoreNumber.in(ktNoNumbers, sbnWho))
+            sbnText = strUtil.removeDigit(sbnText);
+        sounds.speakKakao(" 카톡 왔음 " + sbnWho + " 님이 " +
+                strUtil.replaceKKHH(strUtil.makeEtc(sbnText, isWorking()? 20 :150)));
     }
 
     private void sayWork() {
@@ -336,6 +363,7 @@ public class NotificationListener extends NotificationListenerService {
             return;
         sbnGroup = sGroups.get(g).grp;  // replace with short group
         sbnText = strUtil.text2OneLine(sbnText);
+        utils.logB(sbnGroup, sbnWho + "%% "+sbnText);
         String [] grpWho = sbnWho.split(":");
         if (grpWho.length == 2) {       // 그룹명 : 이름
             sbnWho = grpWho[1].trim();
@@ -357,10 +385,11 @@ public class NotificationListener extends NotificationListenerService {
                 sbnText.contains(sGroups.get(g).skip2))
             return;
 
+        utils.logB(sbnGroup, sbnWho + "@@ "+sbnText);
+
         for (int w = 0; w < sGroups.get(g).whos.size(); w++) {
             if (sbnWho.startsWith(sGroups.get(g).whos.get(w).whoM)) {
-                sbnWho = sGroups.get(g).whos.get(w).who;        // replace with short who
-//                utils.logW(sbnGroup, sbnWho + ">> " + sbnText);
+                sbnWho = sGroups.get(g).whos.get(w).who;
                 stockCheck.check(g, w, sGroups.get(g).whos.get(w).stocks);
                 break;
             }
@@ -368,33 +397,18 @@ public class NotificationListener extends NotificationListenerService {
     }
 
     void saySMS() {
-        if (sbnWho.replaceAll(ctx.getString(R.string.regex_number_only), "").length() < 6 &&
-                !sbnText.contains("스마트폰 배우고"))
-            return;
-        sbnWho = sbnWho.replaceAll("[\\u200C-\\u206F]", "");
-        if (sbnWho.charAt(sbnWho.length() - 1) == '#' ||
-            IgnoreThis.contains(sbnWho, smsWhoIgnores) || IgnoreThis.contains(sbnText, smsTxtIgnores))
-            return;
-        sbnText = strUtil.text2OneLine(sbnText);
-        if (kvSMS.isDup(sbnWho, sbnText))
-            return;
-        if (sbnWho.contains("NH투자")) {
-            if (sbnText.contains("체결"))
-                saySMSTrade();
-            else {
-                saySMSNormal();
-            }
-        } else if (sbnWho.contains("찌라")) {
 
+        sbnText = strUtil.text2OneLine(sbnText);
+        if (sbnWho.contains("NH투자") && sbnText.contains("체결")) {
+            saySMSTrade();
+
+        } else if (sbnWho.startsWith("찌라")) {
             int g = getStockGroupIdx(sbnGroup, stockSGroupTbl, stockSGroupIdx);
             if (g < 0) {
-                sbnWho = sbnWho.replaceAll("[\\u200C-\\u206F]", "");
-                sbnText = sbnText.replace(ctx.getString(R.string.web_sent), "")
-                        .replaceAll("[\\u200C-\\u206F]", "");
                 saySMSNormal();
             } else {
                 for (int w = 0; w < sGroups.get(g).whos.size(); w++) {
-                    if (sbnWho.contains(sGroups.get(g).whos.get(w).whoM)) {
+                    if (sbnWho.startsWith(sGroups.get(g).whos.get(w).whoM)) {
                         // if stock Group then check skip keywords and then continue;
                         sbnWho = sGroups.get(g).whos.get(w).who;        // replace with short who
                         utils.logB(sbnGroup, sbnWho + ">> " + sbnText);
@@ -447,6 +461,7 @@ public class NotificationListener extends NotificationListenerService {
 
     private void saySMSNormal() {
         String head = "[sms."+ sbnWho + "] ";
+
         sbnText = strReplace.repl(smsStrRepl, sbnWho, sbnText);
         notificationBar.update(head, sbnText, true);
         logUpdate.addLog(head, sbnText);
@@ -484,13 +499,12 @@ public class NotificationListener extends NotificationListenerService {
 
     private void sayTesla() {
 
-        utils.logB("Tesla", "Tesla "+sbnText);
-        if (kvCommon.isDup(TESRY, sbnText))
-            return;
+//        utils.logB("Tesla", "Tesla "+sbnText);
+//        if (kvCommon.isDup(TESRY, sbnText))
+//            return;
         if (sbnText.contains("연결됨")) {
-            utils.logB("Tesla", "연결됨? " +sbnText);
             long nowTime = System.currentTimeMillis();
-            if ((nowTime - tesla_time) > 45 * 60 * 1000) {   // nn min.
+            if ((nowTime - tesla_time) > 30 * 60 * 1000) {   // nn min.
                 sounds.beepOnce(HI_TESLA.ordinal());
                 tesla_time = nowTime;
             }

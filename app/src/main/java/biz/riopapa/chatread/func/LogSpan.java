@@ -19,15 +19,17 @@ import biz.riopapa.chatread.models.DelItem;
 
 public class LogSpan {
 
-    Typeface font1, font2;
     String dayNow = "x";
     SpannableString ss;
-    boolean fontSwitch = true;
+    Typeface [][] fonts = new Typeface[2][2];
+    int spanIdx;
 
     public SpannableString make(String log, Context context) {
 
-        font1 = Typeface.create(ResourcesCompat.getFont(context, R.font.mayplestory), Typeface.NORMAL);
-        font2 = Typeface.create(ResourcesCompat.getFont(context, R.font.cookie_run), Typeface.NORMAL);
+        fonts[0][0] = Typeface.create(ResourcesCompat.getFont(context, R.font.mayplestory), Typeface.NORMAL);
+        fonts[0][1] = Typeface.create(ResourcesCompat.getFont(context, R.font.cookie_run), Typeface.NORMAL);
+        fonts[1][0] = Typeface.create(ResourcesCompat.getFont(context, R.font.mayplestory), Typeface.NORMAL);
+        fonts[1][1] = Typeface.create(ResourcesCompat.getFont(context, R.font.cookie_run), Typeface.NORMAL);
         int nPos = 0, sLen;
 
         int [][]colors = new int[2][];
@@ -43,39 +45,39 @@ public class LogSpan {
                 context.getColor(R.color.log_line_x1)
         };
 
-        int colorIdx = 0;
+        spanIdx = 0;
         int colorFore, colorBack;
+        Typeface font;
 
-        Typeface font = font1;
-        String tmp = (log+"\n").replace("\n\n\n","\n\n").trim();
+        String tmp = log.replace("\n\n\n","\n\n");
         ss = new SpannableString(tmp);
-        String[] msgLine = tmp.split("\n");
-        for (String s : msgLine) {
+        String[] msgLines = tmp.split("\n");
+        for (String s : msgLines) {
             sLen = s.length();
             if (sLen == 0) {
                 nPos += 1;
                 continue;
-            }
-            if (s.length() < 2) {
-                nPos += s.length() + 1;
+            } else if (sLen < 2) {
+                nPos += sLen + 1;
                 continue;
             }
 
-            if (StringUtils.isNumeric(String.valueOf(s.charAt(0))) && s.length() > 5) {  // timestamp + who
-                if (s.substring(0, 5).equals(dayNow)) {
-                    colorFore = colors[colorIdx][0];
-                    colorBack = colors[colorIdx][1];
-                } else {    // new day
-                    colorIdx = (colorIdx + 1) % 2;
-                    colorFore = colors[colorIdx][0];
-                    colorBack = colors[colorIdx][1];
-                    dayNow = s.substring(0, 5);
-                    font = (fontSwitch) ? font1 : font2;
-                    fontSwitch = !fontSwitch;
-                }
+            /* check new date */
+
+            if (s.length() > 5 && StringUtils.isNumeric(String.valueOf(s.charAt(0))) &&
+                    StringUtils.isNumeric(String.valueOf(s.charAt(1))) &&
+                    !s.substring(0, 5).equals(dayNow)) {
+                spanIdx = (spanIdx + 1) % 2;
+                dayNow = s.substring(0, 5);
+            }
+            if (StringUtils.isNumeric(String.valueOf(s.charAt(0)))) {
+                colorFore = colors[spanIdx][0];
+                colorBack = colors[spanIdx][1];
+                font = fonts[spanIdx][0];
             } else {
-                colorFore = colors[colorIdx][2];
-                colorBack = colors[colorIdx][3];
+                colorFore = colors[spanIdx][2];
+                colorBack = colors[spanIdx][3];
+                font = fonts[spanIdx][1];
             }
 
             int endPos = nPos + sLen;

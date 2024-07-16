@@ -9,8 +9,6 @@ import static biz.riopapa.chatread.MainActivity.ktWhoIgnores;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.smsNoNumbers;
 import static biz.riopapa.chatread.MainActivity.smsStrRepl;
-import static biz.riopapa.chatread.MainActivity.smsTxtIgnores;
-import static biz.riopapa.chatread.MainActivity.smsWhoIgnores;
 import static biz.riopapa.chatread.MainActivity.sounds;
 import static biz.riopapa.chatread.MainActivity.stockGetPut;
 import static biz.riopapa.chatread.MainActivity.strReplace;
@@ -39,15 +37,13 @@ public class OptionTables {
         ktTxtIgnores = tableListFile.read("ktTxtIg");
         ktNoNumbers = tableListFile.read("ktNoNum");
 
-        smsWhoIgnores =  tableListFile.read("smsWhoIg");
-        smsTxtIgnores =  tableListFile.read("smsTxtIg");
         smsNoNumbers = tableListFile.read("smsNoNum");
         smsStrRepl = strReplace.get("smsRepl");
         ktStrRepl = strReplace.get("ktRepl");
 
-        if (ktTxtIgnores == null || smsWhoIgnores == null) {
+        if (ktTxtIgnores == null) {
             sounds.beepOnce(MainActivity.soundType.ERR.ordinal());
-            String s = "ktTxtIgnores || smsWhoIgnores is null";
+            String s = "ktTxtIgnores is null";
             Toast.makeText(mContext, s, Toast.LENGTH_LONG).show();
             utils.logW("readAll",s);
         }

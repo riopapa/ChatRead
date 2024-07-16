@@ -62,16 +62,6 @@
             android:id="@+id/table_sms_repl"
             />
         <item
-            android:title="SMS : Text Ignore"
-            android:icon="@drawable/icon_sms"
-            android:id="@+id/table_sms_txt_ig"
-            />
-        <item
-            android:title="SMS : Who Ignore"
-            android:icon="@drawable/icon_who"
-            android:id="@+id/table_sms_who_ig"
-            />
-        <item
             android:title="System : Ignore"
             android:icon="@drawable/icon_android"
             android:id="@+id/table_sys_ig"
