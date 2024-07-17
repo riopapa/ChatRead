@@ -7,7 +7,6 @@ import static biz.riopapa.chatread.MainActivity.apps;
 import static biz.riopapa.chatread.MainActivity.downloadFolder;
 import static biz.riopapa.chatread.MainActivity.fileIO;
 import static biz.riopapa.chatread.MainActivity.kaApp;
-import static biz.riopapa.chatread.MainActivity.smsApp;
 import static biz.riopapa.chatread.MainActivity.tableFolder;
 import static biz.riopapa.chatread.MainActivity.teleApp;
 
@@ -74,7 +73,6 @@ public class AppsTable {
         // manual copy to appTableSv.txt is required for backup
     }
 
-
     public void putSV() {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String json = gson.toJson(apps);
@@ -98,9 +96,6 @@ public class AppsTable {
                         break;
                     case "com.kakao.talk":
                         kaApp = app;
-                        break;
-                    case "com.samsung.android.messaging":
-                        smsApp = app;
                         break;
                 }
             }

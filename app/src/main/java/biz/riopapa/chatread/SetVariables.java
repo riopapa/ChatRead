@@ -1,9 +1,18 @@
 package biz.riopapa.chatread;
 
 import static android.content.Context.MODE_PRIVATE;
+import static biz.riopapa.chatread.MainActivity.caseAndroid;
+import static biz.riopapa.chatread.MainActivity.caseApp;
+import static biz.riopapa.chatread.MainActivity.caseKaTalk;
+import static biz.riopapa.chatread.MainActivity.caseSMS;
+import static biz.riopapa.chatread.MainActivity.caseTelegram;
+import static biz.riopapa.chatread.MainActivity.caseTesla;
+import static biz.riopapa.chatread.MainActivity.caseWork;
 import static biz.riopapa.chatread.MainActivity.deBug;
 import static biz.riopapa.chatread.MainActivity.downloadFolder;
 import static biz.riopapa.chatread.MainActivity.fileIO;
+import static biz.riopapa.chatread.MainActivity.getStockGroup;
+import static biz.riopapa.chatread.MainActivity.ignoreString;
 import static biz.riopapa.chatread.MainActivity.kvCommon;
 import static biz.riopapa.chatread.MainActivity.kvKakao;
 import static biz.riopapa.chatread.MainActivity.kvSMS;
@@ -46,6 +55,15 @@ import android.util.Log;
 
 import java.io.File;
 
+import biz.riopapa.chatread.cases.CaseAndroid;
+import biz.riopapa.chatread.cases.CaseApp;
+import biz.riopapa.chatread.cases.CaseKaTalk;
+import biz.riopapa.chatread.cases.CaseSMS;
+import biz.riopapa.chatread.cases.CaseTelegram;
+import biz.riopapa.chatread.cases.CaseTesla;
+import biz.riopapa.chatread.cases.CaseWork;
+import biz.riopapa.chatread.func.GetStockGroup;
+import biz.riopapa.chatread.func.IgnoreString;
 import biz.riopapa.chatread.func.StrReplace;
 import biz.riopapa.chatread.stocks.StockCheck;
 import biz.riopapa.chatread.stocks.StockName;
@@ -104,18 +122,31 @@ public class SetVariables {
         if (utils == null) {
             utils = new Utils();
             sounds = new Sounds();
-            utils = new Utils();
+            getStockGroup = new GetStockGroup();
+            gSheet = new GSheet();
             strUtil = new StrUtil();
             logUpdate = new LogUpdate();
             stockName = new StockName();
+            msgNamoo = new MsgNamoo();
+            ignoreString = new IgnoreString();
+            utils = new Utils();
+
+            // cases folder
+            caseAndroid = new CaseAndroid();
+            caseApp = new CaseApp();
+            caseKaTalk = new CaseKaTalk();
+            caseSMS = new CaseSMS();
+            caseTelegram = new CaseTelegram();
+            caseTesla = new CaseTesla();
+            caseWork = new CaseWork();
+
+            // stocks folder
             stockGetPut = new StockGetPut();
             stockCheck = new StockCheck();
             strReplace = new StrReplace();
-            gSheet = new GSheet();
 
             mAudioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
             phoneVibrate = new PhoneVibrate();
-            msgNamoo = new MsgNamoo();
             notificationService = new NotificationService();
             notificationBar = new NotificationBar();
             if (!isServiceRunning(mContext, notificationService.getClass())) {

@@ -40,8 +40,17 @@ import biz.riopapa.chatread.adapters.AppsAdapter;
 import biz.riopapa.chatread.adapters.GroupAdapter;
 import biz.riopapa.chatread.adapters.WhoAdapter;
 import biz.riopapa.chatread.adapters.StockAdapter;
+import biz.riopapa.chatread.cases.CaseKaTalk;
 import biz.riopapa.chatread.edit.ActivityEditGroup;
 import biz.riopapa.chatread.fragment.FragmentKaTalk;
+import biz.riopapa.chatread.cases.CaseAndroid;
+import biz.riopapa.chatread.cases.CaseApp;
+import biz.riopapa.chatread.cases.CaseSMS;
+import biz.riopapa.chatread.cases.CaseTelegram;
+import biz.riopapa.chatread.cases.CaseTesla;
+import biz.riopapa.chatread.cases.CaseWork;
+import biz.riopapa.chatread.func.GetStockGroup;
+import biz.riopapa.chatread.func.IgnoreString;
 import biz.riopapa.chatread.func.StrReplace;
 import biz.riopapa.chatread.models.SGroup;
 import biz.riopapa.chatread.models.StrRepl;
@@ -140,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
     public static int [] stockTGroupIdx, stockKGroupIdx, stockSGroupIdx;
     public static ArrayList<App> apps;
     public static AppsAdapter appsAdapter;
-    public static App teleApp, kaApp, smsApp;
+    public static App teleApp, kaApp;
 
     public static final String lastChar = "힝";
     public static int mAppsPos = -1;  // updated or duplicated recycler position
@@ -156,12 +165,23 @@ public class MainActivity extends AppCompatActivity {
     public static KeyVal kvStock = null;
     public static int menu_selected;
 
+    /** case modules **/
+    public static CaseAndroid caseAndroid = null;
+    public static CaseApp caseApp = null;
+    public static CaseKaTalk caseKaTalk = null;
+    public static CaseSMS caseSMS = null;
+    public static CaseTelegram caseTelegram = null;
+    public static CaseTesla caseTesla = null;
+    public static CaseWork caseWork = null;
+
     /** common modules **/
     public static Sounds sounds = null;
     public static Utils utils = null;
     public static StrUtil strUtil = null;
     public static LogUpdate logUpdate = null;
     public static StockName stockName = null;
+    public static GetStockGroup getStockGroup = null;
+    public static IgnoreString ignoreString = null;
 
     public static AudioManager mAudioManager = null;
     public static PhoneVibrate phoneVibrate = null;

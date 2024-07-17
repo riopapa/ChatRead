@@ -4,23 +4,14 @@ import static biz.riopapa.chatread.MainActivity.appFullNames;
 import static biz.riopapa.chatread.MainActivity.appIgnores;
 import static biz.riopapa.chatread.MainActivity.appNameIdx;
 import static biz.riopapa.chatread.MainActivity.apps;
-import static biz.riopapa.chatread.MainActivity.deBug;
-import static biz.riopapa.chatread.MainActivity.gSheet;
-import static biz.riopapa.chatread.MainActivity.kaApp;
-import static biz.riopapa.chatread.MainActivity.ktGroupIgnores;
-import static biz.riopapa.chatread.MainActivity.ktNoNumbers;
-import static biz.riopapa.chatread.MainActivity.ktStrRepl;
-import static biz.riopapa.chatread.MainActivity.ktTxtIgnores;
-import static biz.riopapa.chatread.MainActivity.ktWhoIgnores;
+import static biz.riopapa.chatread.MainActivity.caseAndroid;
+import static biz.riopapa.chatread.MainActivity.caseApp;
+import static biz.riopapa.chatread.MainActivity.caseKaTalk;
+import static biz.riopapa.chatread.MainActivity.caseTelegram;
 import static biz.riopapa.chatread.MainActivity.kvCommon;
-import static biz.riopapa.chatread.MainActivity.kvKakao;
-import static biz.riopapa.chatread.MainActivity.kvSMS;
-import static biz.riopapa.chatread.MainActivity.kvTelegram;
-import static biz.riopapa.chatread.MainActivity.lastChar;
 import static biz.riopapa.chatread.MainActivity.logUpdate;
 import static biz.riopapa.chatread.MainActivity.mAudioManager;
 import static biz.riopapa.chatread.MainActivity.notificationBar;
-import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.sbnApp;
 import static biz.riopapa.chatread.MainActivity.sbnAppIdx;
 import static biz.riopapa.chatread.MainActivity.sbnAppName;
@@ -29,23 +20,8 @@ import static biz.riopapa.chatread.MainActivity.sbnAppType;
 import static biz.riopapa.chatread.MainActivity.sbnGroup;
 import static biz.riopapa.chatread.MainActivity.sbnText;
 import static biz.riopapa.chatread.MainActivity.sbnWho;
-import static biz.riopapa.chatread.MainActivity.smsApp;
-import static biz.riopapa.chatread.MainActivity.smsNoNumbers;
-import static biz.riopapa.chatread.MainActivity.smsStrRepl;
-import static biz.riopapa.chatread.MainActivity.soundType.HI_TESLA;
 import static biz.riopapa.chatread.MainActivity.sounds;
-import static biz.riopapa.chatread.MainActivity.stockCheck;
-import static biz.riopapa.chatread.MainActivity.stockKGroupIdx;
-import static biz.riopapa.chatread.MainActivity.stockKGroupTbl;
-import static biz.riopapa.chatread.MainActivity.stockSGroupIdx;
-import static biz.riopapa.chatread.MainActivity.stockSGroupTbl;
-import static biz.riopapa.chatread.MainActivity.stockTGroupIdx;
-import static biz.riopapa.chatread.MainActivity.stockTGroupTbl;
-import static biz.riopapa.chatread.MainActivity.strReplace;
 import static biz.riopapa.chatread.MainActivity.strUtil;
-import static biz.riopapa.chatread.MainActivity.teleApp;
-import static biz.riopapa.chatread.MainActivity.timeBegin;
-import static biz.riopapa.chatread.MainActivity.timeEnd;
 import static biz.riopapa.chatread.MainActivity.utils;
 
 import android.app.Notification;
@@ -55,31 +31,17 @@ import android.os.Bundle;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 
-import java.text.SimpleDateFormat;
 import java.util.Collections;
-import java.util.Date;
-import java.util.Locale;
 
 import biz.riopapa.chatread.common.Copy2Clipboard;
-import biz.riopapa.chatread.common.IgnoreNumber;
-import biz.riopapa.chatread.common.IgnoreThis;
 import biz.riopapa.chatread.common.Utils;
-import biz.riopapa.chatread.func.MsgNamoo;
-import biz.riopapa.chatread.func.ReadyToday;
-import biz.riopapa.chatread.models.App;
 
 public class NotificationListener extends NotificationListenerService {
-    final String SMS = "sms";
     final String KK_TALK = "kk";
-    final String TESRY = "테스리";
     final String ANDROID = "an";
     final String TG = "tg";
     final String TELEGRAM = "텔레";
     final String APP = "app";   // general application
-
-    Context ctx;
-    String head;
-    static long tesla_time = 0;
 
     @Override
     public void onCreate() {
@@ -89,168 +51,31 @@ public class NotificationListener extends NotificationListenerService {
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
 
-        ctx = this.getApplicationContext();
-
         if (kvCommon == null)
-            new SetVariables(this, "noty");
+            new SetVariables(this, "<< noty >>");
 
-        if (isSbnNothing(sbn))
+        if (ignoreSbn(sbn))
             return;
 
         switch (sbnAppType) {
 
             case KK_TALK:
-
-                if (IgnoreThis.contains(sbnText, ktTxtIgnores))
-                    return;
-
-                if (hasIgnoreStr(kaApp))
-                    return;
-                if (sbnGroup.isEmpty()) {  // no groupNames
-                    if (sbnWho.isEmpty())  // nothing
-                        return;
-                    if (sbnWho.charAt(sbnWho.length() - 1) == '#' ||
-                        IgnoreThis.contains(sbnWho, ktWhoIgnores))
-                        return;
-                    sayKatalkNoGroup();
-                } else {    // with group name
-                    sayKatalkGroup();
-                    return;
-                }
-                break;
-
-            case ANDROID:
-
-                if (kvCommon.isDup(ANDROID, sbnText))
-                    return;
-                if (hasIgnoreStr(sbnApp))
-                    return;
-                head = "< an > "+sbnWho;
-                logUpdate.addLog(head, sbnWho+" / "+sbnText);
+                caseKaTalk.check();
                 break;
 
             case TG:
 
-                if (sbnText.length() < 20)  // for better performance, with logically not true
-                    return;
+                caseTelegram.check();
+                break;
 
-                if (hasIgnoreStr(teleApp))
-                    return;
-                int g = getStockGroupIdx(sbnWho, stockTGroupTbl, stockTGroupIdx);
-                if (g < 0) { // not in stock group
-                    sbnText = strUtil.text2OneLine(sbnText);
-                    if (deBug) {
-                        String whoStr = sbnWho.length() > 15 ? sbnWho.substring(0, 15) : sbnWho;
-                        whoStr = whoStr.replaceAll("[^\\w\\s가-힣]", "");
-                        utils.logB("who_" + whoStr, sbnWho + "\n" + sbnText);
-                    }
-                    if (sbnGroup.isEmpty()) {
-                        head = "[텔레 : " + sbnWho + "]";
-                        logUpdate.addLog(head, sbnText);
-                        notificationBar.update("탤레|" + sbnWho, sbnText, true);
-                    } else {
-                        if (sbnGroup.contains("새로운 메시지"))
-                            sbnGroup = "_새_";
-                        head = "[텔레 <" + sbnGroup + "><" + sbnWho + ">]";
-                        logUpdate.addLog(head, sbnText);
-                        notificationBar.update(sbnGroup + " | " + sbnWho, sbnText, true);
-                    }
-                    sbnText = head + ", " + sbnText;
-                    sounds.speakAfterBeep(strUtil.makeEtc(sbnText, isWorking() ? 50 : 150));
-                    return;
-                }
-                sayTelStock(g);
+            case ANDROID:
+
+                caseAndroid.check();
                 break;
 
             case APP:
 
-                if (kvCommon.isDup(sbnApp.nickName, sbnText))
-                    return;
-                if (sbnApp.igStr != null && hasIgnoreStr(sbnApp))
-                    return;
-
-                sbnText = strUtil.text2OneLine(sbnText);
-                if (sbnApp.inform != null) {
-                    for (int i = 0; i < sbnApp.inform.length; i++) {
-                        if ((sbnWho).contains(sbnApp.inform[i])) {
-                            sbnWho = sbnAppNick;
-                            sbnText = sbnApp.talk[i];
-                            break;
-                        }
-                        if (sbnText.contains(sbnApp.inform[i])) {
-                            sbnWho = sbnAppNick;
-                            sbnText = sbnApp.talk[i];
-                            break;
-                        }
-                    }
-                }
-                if (sbnApp.replF != null) {
-                    for (int i = 0; i < sbnApp.replF.length; i++) {
-                        if ((sbnText).contains(sbnApp.replF[i])) {
-                            sbnText = sbnText.replace(sbnApp.replF[i],sbnApp.replT[i]);
-                        }
-                    }
-                }
-
-                if (sbnApp.nickName.equals("NH나무")) {
-                    utils.logB(sbnApp.nickName,sbnText);
-                    new MsgNamoo().say(strUtil.text2OneLine(sbnText));
-                    break;
-                }
-
-                if (sbnAppNick.equals("팀즈") || sbnAppNick.equals("아룩")) {
-                    sayWork();
-                    return;
-                }
-                if (sbnAppNick.equals(TESRY)) {
-                    sayTesla();
-                    return;
-                }
-
-                if (sbnApp.say) {
-                    String say = sbnAppNick + " ";
-                    say += (sbnApp.grp) ? sbnGroup+" ": " ";
-                    say += (sbnApp.who) ? sbnWho: "";
-                    say = say + ", ";
-                    say = say + ((sbnApp.num) ? sbnText : strUtil.removeDigit(sbnText));
-                    sounds.speakAfterBeep(strUtil.makeEtc(say, isWorking()? 20: 200));
-                }
-
-                if (sbnApp.addWho)
-                    sbnText = sbnWho + "👨‍🦱" + sbnText;
-
-                head = sbnAppNick;
-                head += (sbnApp.grp && !sbnGroup.isEmpty()) ? sbnGroup+".": "";
-                head += (sbnApp.who)? "@" + sbnWho : "";
-                if (sbnApp.log) {
-                    logUpdate.addLog(head, sbnText);
-                }
-                notificationBar.update(head, sbnText, true);
-                break;
-
-            case SMS:
-
-        /*
-            ignore : smsApp.ignores
-            no Number : smsNoNumber.txt
-            str Repl : smsRepl.txt
-         */
-
-                if (sbnWho.replaceAll(ctx.getString(R.string.regex_number_only), "").length() < 6 &&
-                        !sbnText.contains("스마트폰 배우고"))
-                    return;
-                if (sbnWho.charAt(sbnWho.length() - 1) == '#')
-                    return;
-                for (int i = 0; i < smsApp.igStr.length; i++) {
-                    if (sbnWho.contains(smsApp.igStr[i]))
-                        return;
-                    if (sbnText.contains(smsApp.igStr[i]))
-                        return;
-                }
-                sbnWho = sbnWho.replaceAll("[\\u200C-\\u206F]", "");
-                if (kvSMS.isDup(sbnWho, sbnText))
-                    return;
-                saySMS();
+                caseApp.check();
                 break;
 
             default:
@@ -268,263 +93,15 @@ public class NotificationListener extends NotificationListenerService {
         }
     }
 
-    private void sayKatalkGroup() {
-        if (sbnGroup.charAt(sbnGroup.length() - 1) == '#' ||
-            IgnoreThis.contains(sbnGroup, ktGroupIgnores))
-            return;
-        else if (sbnWho.isEmpty() ||
-            sbnWho.charAt(sbnWho.length() - 1) == '#' ||
-            IgnoreThis.contains(sbnWho, ktWhoIgnores))
-            return;
-        sbnText = strUtil.text2OneLine(sbnText);
-        if (kvKakao.isDup(sbnGroup, sbnText))
-            return;
-        int g = getStockGroupIdx(sbnGroup, stockKGroupTbl, stockKGroupIdx);
-        if (g < 0) {
-            sbnText = strReplace.repl(ktStrRepl, sbnGroup, sbnText);
-            notificationBar.update("카톡!" + sbnGroup + "." + sbnWho, sbnText, true);
-            head = "{카톡!" + sbnGroup + "." + sbnWho + "} ";
-            logUpdate.addLog(head, sbnText);
-            if (IgnoreNumber.in(ktNoNumbers, sbnGroup))
-                sbnText = strUtil.removeDigit(sbnText);
-            sounds.speakKakao(" 카톡 왔음 " + sbnGroup + " 의 " + sbnWho + " 님이 " +
-                    strUtil.replaceKKHH(strUtil.makeEtc(sbnText, isWorking() ? 20 : 150)));
-            return;
-        }
-        sayKaStock(g);
-    }
-
-    private void sayKatalkNoGroup() {
-        sbnText = strUtil.text2OneLine(sbnText);
-        if (kvKakao.isDup(sbnWho, sbnText))
-            return;
-
-        sbnText = strReplace.repl(ktStrRepl, sbnWho, sbnText);
-        notificationBar.update("카톡!" + sbnWho, sbnText, true);
-        head = "{카톡!" + sbnWho + "} ";
-        logUpdate.addLog(head, sbnText);
-        if (IgnoreNumber.in(ktNoNumbers, sbnWho))
-            sbnText = strUtil.removeDigit(sbnText);
-        sounds.speakKakao(" 카톡 왔음 " + sbnWho + " 님이 " +
-                strUtil.replaceKKHH(strUtil.makeEtc(sbnText, isWorking()? 20 :150)));
-    }
-
-    private void sayWork() {
-
-        if (sbnApp.replF != null) {
-            for (int i = 0; i < sbnApp.replF.length; i++) {
-                if ((sbnText).contains(sbnApp.replF[i]))
-                    sbnText = sbnText.replace(sbnApp.replF[i], sbnApp.replT[i]);
-                if ((sbnWho).contains(sbnApp.replF[i]))
-                    sbnWho = sbnWho.replace(sbnApp.replF[i], sbnApp.replT[i]);
-            }
-        }
-
-        head = sbnAppNick + "." + sbnWho;
-        logUpdate.addWork(head, sbnText);
-        notificationBar.update(head, sbnText, true);
-        String say = head + ", " + sbnText;
-        sounds.speakAfterBeep(strUtil.makeEtc(say, 50));
-
-    }
-
-    private void sayKaStock(int g) {
-
-        if (sbnText.length() < 20)  // for better performance, with logically not true
-            return;
-       if (timeBegin == 0)
-            new ReadyToday();
-        long nowTime = System.currentTimeMillis();
-        if (nowTime < timeBegin || nowTime > timeEnd)
-            return;
-        sbnGroup = sGroups.get(g).grp;  // replace with short group
-        if (kvKakao.isDup(sbnGroup, sbnText))
-            return;
-
-        sbnText = strUtil.text2OneLine(sbnText);
-        if (sbnText.contains(sGroups.get(g).skip1) || sbnText.contains(sGroups.get(g).skip2))
-            return;
-        for (int w = 0; w < sGroups.get(g).whos.size(); w++) {
-            if (sbnWho.contains(sGroups.get(g).whos.get(w).whoM)) {
-                // if stock Group then check skip keywords and then continue;
-                sbnWho = sGroups.get(g).whos.get(w).who;        // replace with short who
-                stockCheck.check(g, w, sGroups.get(g).whos.get(w).stocks);
-                return;
-            }
-        }
-    }
-
-    private void sayTelStock(int g) {
-
-        if (timeBegin == 0)
-            new ReadyToday();
-        long nowTime = System.currentTimeMillis();
-        if (nowTime < timeBegin || nowTime > timeEnd)
-            return;
-        sbnGroup = sGroups.get(g).grp;  // replace with short group
-        sbnText = strUtil.text2OneLine(sbnText);
-        utils.logB(sbnGroup, sbnWho + "%% "+sbnText);
-        String [] grpWho = sbnWho.split(":");
-        if (grpWho.length == 2) {       // 그룹명 : 이름
-            sbnWho = grpWho[1].trim();
-        } else if (grpWho.length == 3) {  // 와룡 : 그룸 이름 : 주식 와룡선생
-            sbnWho = grpWho[2].trim();
-        } else {    // group name only
-            int p = sbnText.indexOf(":");
-            if (p < 0) {
-                utils.logB(sbnGroup, "no Who "+sbnText);
-                return;
-            }
-            sbnWho = sbnText.substring(0, p).trim();
-            sbnText = sbnText.substring(p + 1).trim();
-        }
-        if (kvTelegram.isDup(sbnWho, sbnText))
-            return;
-
-        if (sbnText.contains(sGroups.get(g).skip1) ||
-                sbnText.contains(sGroups.get(g).skip2))
-            return;
-
-        utils.logB(sbnGroup, sbnWho + "@@ "+sbnText);
-
-        for (int w = 0; w < sGroups.get(g).whos.size(); w++) {
-            if (sbnWho.startsWith(sGroups.get(g).whos.get(w).whoM)) {
-                sbnWho = sGroups.get(g).whos.get(w).who;
-                stockCheck.check(g, w, sGroups.get(g).whos.get(w).stocks);
-                break;
-            }
-        }
-    }
-
-    void saySMS() {
-
-        sbnText = strUtil.text2OneLine(sbnText);
-        if (sbnWho.contains("NH투자") && sbnText.contains("체결")) {
-            saySMSTrade();
-
-        } else if (sbnWho.startsWith("찌라")) {
-            int g = getStockGroupIdx(sbnGroup, stockSGroupTbl, stockSGroupIdx);
-            if (g < 0) {
-                saySMSNormal();
-            } else {
-                for (int w = 0; w < sGroups.get(g).whos.size(); w++) {
-                    if (sbnWho.startsWith(sGroups.get(g).whos.get(w).whoM)) {
-                        // if stock Group then check skip keywords and then continue;
-                        sbnWho = sGroups.get(g).whos.get(w).who;        // replace with short who
-                        utils.logB(sbnGroup, sbnWho + ">> " + sbnText);
-                        stockCheck.check(g, w, sGroups.get(g).whos.get(w).stocks);
-                        break;
-                    }
-                }
-            }
-
-        } else {
-            saySMSNormal();
-        }
-    }
-
-    private void saySMSTrade() {
-        int pos = sbnText.indexOf("주문");
-        if (pos > 0) {
-            sbnText = sbnText.substring(0, pos);
-            try {
-                String[] words = sbnText.split("\\|");
-                // |[NH투자]|매수 전량체결|KMH    |10주|9,870원|주문 0001026052
-                //   0       1          2       3    4       5
-                if (words.length < 5) {
-                    logUpdate.addStock("SMS NH 증권 에러 " + words.length, sbnText);
-                    sounds.speakAfterBeep(sbnText);
-                } else {
-                    String stockName = words[2].trim();  // 종목명
-                    boolean buySell = words[1].contains("매수");
-                    String samPam = (buySell) ?  " 샀음": " 팔림";
-                    String amount = words[3];
-                    String uPrice = words[4];
-                    String sGroup = lastChar + "체결";
-                    String sayMsg = stockName + " " + amount + " " + uPrice + samPam;
-                    notificationBar.update(samPam +":"+stockName, sayMsg, true);
-                    logUpdate.addStock("sms>NH투자", sayMsg);
-                    gSheet.add2Stock(sGroup, new SimpleDateFormat("yy-MM-dd HH:mm", Locale.KOREA).format(new Date()),sbnWho, samPam, stockName,
-                            sbnText.replace(stockName, new StringBuffer(stockName).insert(1, ".").toString()), samPam
-                            );
-                    sayMsg = stockName + samPam;
-                    if (isWorking())
-                        sayMsg = strUtil.makeEtc(sayMsg, 20);
-                    sounds.speakAfterBeep(strUtil.removeDigit(sayMsg));
-                }
-            } catch (Exception e) {
-                logUpdate.addStock("NH투자", "Exception " + sbnText + e);
-            }
-        } else
-            saySMSNormal();
-    }
-
-    private void saySMSNormal() {
-        String head = "[sms."+ sbnWho + "] ";
-
-        sbnText = strReplace.repl(smsStrRepl, sbnWho, sbnText);
-        notificationBar.update(head, sbnText, true);
-        logUpdate.addLog(head, sbnText);
-        if (IgnoreNumber.in(smsNoNumbers, sbnWho))
-            sbnText = strUtil.removeDigit(sbnText);
-        sounds.speakAfterBeep(head + strUtil.makeEtc(sbnText, isWorking()? 20: 120));
-    }
-
-    //        for (int i = 0; i < replGroupCnt; i++) {
-//        }
-//        return text;
-
-    private int getStockGroupIdx(String sbnWho, String [] matches, int [] index) {
-        for (int i = 0; i < matches.length; i++) {
-            int compared = sbnWho.compareTo(matches[i]);
-            if (compared < 0)
-                return -1;
-            if (sbnWho.startsWith(matches[i]))
-                return index[i];
-        }
-        return -1;
-    }
-
-    private boolean hasIgnoreStr(App app) {
-        for (String t: app.igStr) {
-            if (sbnWho.contains(t))
-                return true;
-        }
-        for (String t: app.igStr) {
-            if (sbnText.contains(t))
-                return true;
-        }
-        return false;
-    }
-
-    private void sayTesla() {
-
-//        utils.logB("Tesla", "Tesla "+sbnText);
-//        if (kvCommon.isDup(TESRY, sbnText))
-//            return;
-        if (sbnText.contains("연결됨")) {
-            long nowTime = System.currentTimeMillis();
-            if ((nowTime - tesla_time) > 30 * 60 * 1000) {   // nn min.
-                sounds.beepOnce(HI_TESLA.ordinal());
-                tesla_time = nowTime;
-            }
-            return;
-        }
-        logUpdate.addLog("[ 테스리 ]", sbnText);
-        notificationBar.update(sbnAppNick, sbnText, true);
-        sounds.speakAfterBeep("테스리, " + sbnText);
-    }
-
-    boolean isSbnNothing(StatusBarNotification sbn) {
+    boolean ignoreSbn(StatusBarNotification sbn) {
 
         sbnAppName = sbn.getPackageName();  // to LowCase
         if (sbnAppName.isEmpty() || Collections.binarySearch(appIgnores, sbnAppName) >= 0)
             return true;
         Bundle extras = sbn.getNotification().extras;
-        // get eText //
+
         try {
             sbnText =extras.getCharSequence(Notification.EXTRA_TEXT, "").toString();
-//            sbnText = "" + extras.getString(Notification.EXTRA_TEXT,"");
         } catch (Exception e) {
             utils.logW("sbnText", "sbnText Exception "+ sbnAppName +" "+sbnText);
             return true;
@@ -542,6 +119,11 @@ public class NotificationListener extends NotificationListenerService {
 
         switch (sbnAppName) {
 
+            case "org.telegram.messenger":
+                sbnAppNick = TELEGRAM;
+                sbnAppType = TG;
+                break;
+
             case "android":
                 sbnApp = apps.get(2);   // FIXED TO 2  0: header, 1: 1time mail
                 sbnAppNick = ANDROID;
@@ -552,16 +134,6 @@ public class NotificationListener extends NotificationListenerService {
                 sbnAppNick = "카톡";
                 sbnAppType = KK_TALK;
                 break;
-
-            case "org.telegram.messenger":
-                sbnAppNick = TELEGRAM;
-                sbnAppType = TG;
-                break;
-
-            case "com.samsung.android.messaging":
-                sbnAppNick = "문자";
-                sbnAppType = SMS;
-                return false;
 
             default:
                 sbnAppIdx = Collections.binarySearch(appFullNames, sbnAppName);
