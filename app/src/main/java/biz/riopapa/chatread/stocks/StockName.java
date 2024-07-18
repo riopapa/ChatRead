@@ -12,7 +12,7 @@ public class StockName {
             String sName;
             if (p2 > 0) {
 //                sName = str.substring(p1, p2).replaceAll(shorten, "").trim();
-                sName = str.substring(p1, p2).replaceAll("[^a-zA-Z0-9가-힝]", "").trim();
+                sName = str.substring(p1, p2).replaceAll("[^a-zA-Z가-힝]", "").trim();
                 if (sName.length() > 8)
                     sName = sName.substring(0,8);
                 str = str.substring(0, p1) + " " +

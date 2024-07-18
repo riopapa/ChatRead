@@ -40,69 +40,68 @@ import biz.riopapa.chatread.models.SStock;
 
 public class StockCheck {
 
+    String strHead, strText;
+
     public void check(int g, int w, ArrayList<SStock> stocks) {
 
         for (int s = 0; s < stocks.size() ; s++) {
             if (sbnText.contains(stocks.get(s).key1) && sbnText.contains(stocks.get(s).key2)) {
                 sGroups.get(g).whos.get(w).stocks.get(s).count++;
                 stockGetPut.save(sGroups.get(g).whos.get(w).whoF+" "+sGroups.get(g).whos.get(w).stocks.get(s).count);
-                talkNlog(g, stocks.get(s));
+
+                SStock stock = stocks.get(s);
+                if (utils == null) {
+                    utils = new Utils();
+                    utils.logW("talkNlog", "utils null");
+                }
+                if (sounds == null) {
+                    sounds = new Sounds();
+                    utils.logW("talkNlog", "sounds null");
+                }
+
+                String percent = (!sbnText.contains("매수") && (sbnText.contains("매도") || sbnText.contains("익절")))?
+                        "1.9" : stock.talk;
+                if (stockName == null)
+                    stockName = new StockName();
+                String [] sParse = stockName.get(stock.prv, stock.nxt, sbnText);
+                String key12 = " {" + stock.key1 + "." + stock.key2 + "}";
+                strHead = sParse[0]+" / " + sbnWho + ":" +sbnGroup;
+                if (!stock.talk.isEmpty()) {
+                    String [] joins;
+                    String won = wonValue(sParse[1]);
+                    joins = new String[]{sbnGroup, sbnWho, sParse[0], stock.talk, won};
+                    sounds.speakBuyStock(String.join(" , ", joins));
+                    strText = makeShort(strUtil.removeSpecialChars(sParse[1]), sGroups.get(g));
+                    strText = won + " " + ((strText.length() > 70) ? strText.substring(0, 70) : strText);
+                    utils.logB(sbnGroup, strText);
+                    new Copy2Clipboard(sParse[0]);
+                    if (isSilentNow()) {
+                        if (phoneVibrate == null)
+                            phoneVibrate = new PhoneVibrate();
+                        phoneVibrate.vib(0);
+                    }
+                    new Handler(Looper.getMainLooper()).post(() -> {
+                        if (isScreenOn(mContext) && mMainActivity != null) {
+                            mMainActivity.runOnUiThread(() -> Toast.makeText(mContext, strHead, Toast.LENGTH_LONG).show());
+                        }
+                    });
+
+                } else {
+                    strText = makeShort(strUtil.removeSpecialChars(sParse[1]), sGroups.get(g));
+                    strHead = sParse[0]+" | "+sbnGroup+". "+sbnWho;
+                    if (!isSilentNow()) {
+                        sounds.beepOnce(MainActivity.soundType.ONLY.ordinal());
+                    }
+                    utils.logB(sbnGroup, strText);
+                }
+                notificationBar.update(strHead, strText, true);
+                logUpdate.addStock(sParse[0] + " ["+sbnGroup+":"+sbnWho+"]", strText
+                        + key12);
+                String timeStamp = new SimpleDateFormat("yy-MM-dd HH:mm", Locale.KOREA).format(new Date());
+                gSheet.add2Stock(sbnGroup, timeStamp, sbnWho, percent, sParse[0], strText, key12);
                 break;
             }
         }
-    }
-
-    String strHead, strText;
-    void talkNlog(int g, SStock stock) {
-        if (utils == null) {
-            utils = new Utils();
-            utils.logW("talkNlog", "utils null");
-        }
-        if (sounds == null) {
-            sounds = new Sounds();
-            utils.logW("talkNlog", "sounds null");
-        }
-
-        String percent = (!sbnText.contains("매수") && (sbnText.contains("매도") || sbnText.contains("익절")))?
-                "1.9" : stock.talk;
-        if (stockName == null)
-            stockName = new StockName();
-        String [] sParse = stockName.get(stock.prv, stock.nxt, sbnText);
-        String key12 = " {" + stock.key1 + "." + stock.key2 + "}";
-        strHead = sParse[0]+" / " + sbnWho + ":" +sbnGroup;
-        if (!stock.talk.isEmpty()) {
-            String [] joins;
-            String won = wonValue(sParse[1]);
-            joins = new String[]{sbnGroup, sbnWho, sParse[0], stock.talk, won};
-            sounds.speakBuyStock(String.join(" , ", joins));
-            strText = strUtil.removeSpecialChars(makeShort(sParse[1], sGroups.get(g)));
-            strText = won + " " + ((strText.length() > 70) ? strText.substring(0, 70) : strText);
-            utils.logB(sbnGroup, strText);
-            new Copy2Clipboard(sParse[0]);
-            if (isSilentNow()) {
-                if (phoneVibrate == null)
-                    phoneVibrate = new PhoneVibrate();
-                phoneVibrate.vib(0);
-            }
-            new Handler(Looper.getMainLooper()).post(() -> {
-                if (isScreenOn(mContext) && mMainActivity != null) {
-                    mMainActivity.runOnUiThread(() -> Toast.makeText(mContext, strHead, Toast.LENGTH_LONG).show());
-                }
-            });
-
-        } else {
-            strText = strUtil.removeSpecialChars(makeShort(sParse[1], sGroups.get(g)));
-            strHead = sParse[0]+" | "+sbnGroup+". "+sbnWho;
-            if (!isSilentNow()) {
-                sounds.beepOnce(MainActivity.soundType.ONLY.ordinal());
-            }
-            utils.logB(sbnGroup, strText);
-        }
-        notificationBar.update(strHead, strText, true);
-        logUpdate.addStock(sParse[0] + " ["+sbnGroup+":"+sbnWho+"]", strText
-                + key12 + " " + stock.count);
-        String timeStamp = new SimpleDateFormat("yy-MM-dd HH:mm", Locale.KOREA).format(new Date());
-        gSheet.add2Stock(sbnGroup, timeStamp, sbnWho, percent, sParse[0], strText, key12);
     }
 
     private String wonValue (String shortText) {
@@ -124,14 +123,13 @@ public class StockCheck {
     }
 
     String makeShort(String text, SGroup sGroup) {
-        if (sGroup.replF != null) {
-            for (int i = 0; i < sGroup.replF.size(); i++) {
-                text = text.replace(sGroup.replF.get(i), sGroup.replT.get(i));
-            }
+        if (sGroup.replF == null)
+            return text;
+        for (int i = 0; i < sGroup.replF.size(); i++) {
+            text = text.replace(sGroup.replF.get(i), sGroup.replT.get(i));
         }
         return text;
     }
-
 
     boolean isScreenOn(Context context) {
         DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);

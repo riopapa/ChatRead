@@ -2,7 +2,6 @@ package biz.riopapa.chatread.cases;
 
 import static biz.riopapa.chatread.MainActivity.getStockGroup;
 import static biz.riopapa.chatread.MainActivity.ignoreString;
-import static biz.riopapa.chatread.MainActivity.kaApp;
 import static biz.riopapa.chatread.MainActivity.ktGroupIgnores;
 import static biz.riopapa.chatread.MainActivity.ktNoNumbers;
 import static biz.riopapa.chatread.MainActivity.ktStrRepl;
@@ -12,6 +11,7 @@ import static biz.riopapa.chatread.MainActivity.kvKakao;
 import static biz.riopapa.chatread.MainActivity.logUpdate;
 import static biz.riopapa.chatread.MainActivity.notificationBar;
 import static biz.riopapa.chatread.MainActivity.sGroups;
+import static biz.riopapa.chatread.MainActivity.sbnApp;
 import static biz.riopapa.chatread.MainActivity.sbnGroup;
 import static biz.riopapa.chatread.MainActivity.sbnText;
 import static biz.riopapa.chatread.MainActivity.sbnWho;
@@ -35,7 +35,7 @@ public class CaseKaTalk {
         if (IgnoreThis.contains(sbnText, ktTxtIgnores))
             return;
 
-        if (ignoreString.check(kaApp))
+        if (ignoreString.check(sbnApp))
             return;
         if (sbnGroup.isEmpty()) {  // no groupNames
             if (sbnWho.isEmpty())  // nothing

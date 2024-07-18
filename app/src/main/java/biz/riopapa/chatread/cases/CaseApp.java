@@ -84,7 +84,7 @@ public class CaseApp {
         if (sbnApp.addWho)
             sbnText = "👨‍🦱" + sbnWho + "👨‍🦱" + sbnText;
 
-        String head = sbnAppNick + "_" + ((sbnApp.grp && !sbnGroup.isEmpty()) ? sbnGroup+".": "")
+        String head = sbnAppNick + ((sbnApp.grp && !sbnGroup.isEmpty()) ? "_" +sbnGroup+".": "")
                 + ((sbnApp.who)? "@" + sbnWho : "");
 
         if (sbnApp.log)

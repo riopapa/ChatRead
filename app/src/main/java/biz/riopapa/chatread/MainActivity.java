@@ -149,7 +149,6 @@ public class MainActivity extends AppCompatActivity {
     public static int [] stockTGroupIdx, stockKGroupIdx, stockSGroupIdx;
     public static ArrayList<App> apps;
     public static AppsAdapter appsAdapter;
-    public static App teleApp, kaApp;
 
     public static final String lastChar = "힝";
     public static int mAppsPos = -1;  // updated or duplicated recycler position

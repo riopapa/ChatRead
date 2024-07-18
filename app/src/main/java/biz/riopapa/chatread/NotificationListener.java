@@ -25,7 +25,6 @@ import static biz.riopapa.chatread.MainActivity.strUtil;
 import static biz.riopapa.chatread.MainActivity.utils;
 
 import android.app.Notification;
-import android.content.Context;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.service.notification.NotificationListenerService;
@@ -40,7 +39,6 @@ public class NotificationListener extends NotificationListenerService {
     final String KK_TALK = "kk";
     final String ANDROID = "an";
     final String TG = "tg";
-    final String TELEGRAM = "텔레";
     final String APP = "app";   // general application
 
     @Override
@@ -64,17 +62,14 @@ public class NotificationListener extends NotificationListenerService {
                 break;
 
             case TG:
-
                 caseTelegram.check();
                 break;
 
             case ANDROID:
-
                 caseAndroid.check();
                 break;
 
             case APP:
-
                 caseApp.check();
                 break;
 
@@ -117,37 +112,28 @@ public class NotificationListener extends NotificationListenerService {
             return true;
         }
 
-        switch (sbnAppName) {
-
-            case "org.telegram.messenger":
-                sbnAppNick = TELEGRAM;
-                sbnAppType = TG;
-                break;
-
-            case "android":
-                sbnApp = apps.get(2);   // FIXED TO 2  0: header, 1: 1time mail
-                sbnAppNick = ANDROID;
-                sbnAppType = ANDROID;
-                return false;
-
-            case "com.kakao.talk":
-                sbnAppNick = "카톡";
-                sbnAppType = KK_TALK;
-                break;
-
-            default:
-                sbnAppIdx = Collections.binarySearch(appFullNames, sbnAppName);
-                if (sbnAppIdx >= 0) {
-                    sbnAppIdx = appNameIdx.get(sbnAppIdx);
-                    sbnApp = apps.get(sbnAppIdx);
-                    sbnAppNick = sbnApp.nickName;
-                    sbnAppType = "app";
-                } else {
-                    sbnAppNick = "None";
-                    sbnAppType = "None";
-                    sbnAppIdx = -1;
-                }
-                break;
+        sbnAppIdx = Collections.binarySearch(appFullNames, sbnAppName);
+        if (sbnAppIdx >= 0) {
+            sbnAppIdx = appNameIdx.get(sbnAppIdx);
+            sbnApp = apps.get(sbnAppIdx);
+            sbnAppNick = sbnApp.nickName;
+            switch (sbnAppNick) {
+                case "텔레":
+                    sbnAppType = TG;
+                    break;
+                case "카톡":
+                    sbnAppType = KK_TALK;
+                    break;
+                case ANDROID:
+                    sbnAppType = ANDROID;
+                    break;
+                default:
+                    sbnAppType = APP;
+                    break;
+            }
+        } else {
+            sbnAppNick = "None";
+            sbnAppType = "None";
         }
 
         try {

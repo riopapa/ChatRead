@@ -6,9 +6,7 @@ import static biz.riopapa.chatread.MainActivity.appNameIdx;
 import static biz.riopapa.chatread.MainActivity.apps;
 import static biz.riopapa.chatread.MainActivity.downloadFolder;
 import static biz.riopapa.chatread.MainActivity.fileIO;
-import static biz.riopapa.chatread.MainActivity.kaApp;
 import static biz.riopapa.chatread.MainActivity.tableFolder;
-import static biz.riopapa.chatread.MainActivity.teleApp;
 
 import android.os.Environment;
 
@@ -90,14 +88,6 @@ public class AppsTable {
             } else {
                 appFullNames.add(app.fullName);
                 appNameIdx.add(i);
-                switch (app.fullName) {
-                    case "org.telegram.messenger":
-                        teleApp = app;
-                        break;
-                    case "com.kakao.talk":
-                        kaApp = app;
-                        break;
-                }
             }
         }
     }
