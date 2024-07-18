@@ -50,24 +50,6 @@ public class GSheet {
         uploadStock();
     }
 
-    void uploadStock() {
-
-        SheetQue que = sheetQues.get(0);
-        FormBody.Builder formBuilder = new FormBody.Builder();
-        formBuilder.add("action", que.action);
-        formBuilder.add("group", que.group);
-        formBuilder.add("timeStamp", que.timeStamp);
-        formBuilder.add("who", que.who);
-        formBuilder.add("percent", que.percent);
-        formBuilder.add("talk", que.talk);
-        formBuilder.add("statement", que.statement);
-        formBuilder.add("key12", que.key12);
-        post2GSheet(formBuilder);
-        sheetQues.remove(0);
-        if (!sheetQues.isEmpty())
-            uploadStock();
-    }
-
     public void updateGSheetGroup(SGroup sGroup) {
         String mPercent = gSheet.makePercent(sGroup);
         String mStatement = gSheet.makeStatement(sGroup,",");
@@ -83,6 +65,24 @@ public class GSheet {
         String mStatement = gSheet.makeStatement(sGroup,",");
         sheetQues.add(new SheetQue("group", sGroup.grp, time, mWho, mPercent, time, mStatement, "key12"));
         uploadStock();
+    }
+
+    void uploadStock() {
+
+        while (!sheetQues.isEmpty()) {
+            SheetQue que = sheetQues.get(0);
+            FormBody.Builder formBuilder = new FormBody.Builder();
+            formBuilder.add("action", que.action);
+            formBuilder.add("group", que.group);
+            formBuilder.add("timeStamp", que.timeStamp);
+            formBuilder.add("who", que.who);
+            formBuilder.add("percent", que.percent);
+            formBuilder.add("talk", que.talk);
+            formBuilder.add("statement", que.statement);
+            formBuilder.add("key12", que.key12);
+            post2GSheet(formBuilder);
+            sheetQues.remove(0);
+        }
     }
 
     void post2GSheet(FormBody.Builder formBuilder) {
@@ -111,7 +111,7 @@ public class GSheet {
         });
     }
 
-    public String makePercent(SGroup sGroup) {
+    String makePercent(SGroup sGroup) {
         return "Skip (" + sGroup.skip1 + ", " + sGroup.skip2 + ", " + sGroup.skip3 + ")" +
                 "\nIgnore:" + ((sGroup.ignore) ? "yes" : "no") +
                 " TelKa (" + sGroup.telKa + ")";
