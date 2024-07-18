@@ -31,7 +31,6 @@ import biz.riopapa.chatread.common.SetFocused;
 import biz.riopapa.chatread.func.KeyStringFind;
 import biz.riopapa.chatread.func.KeyStringNext;
 import biz.riopapa.chatread.func.LogSpan;
-import biz.riopapa.chatread.func.LogUpdate;
 import biz.riopapa.chatread.func.ScrollUp;
 
 public class FragmentSave extends Fragment {
@@ -70,13 +69,9 @@ public class FragmentSave extends Fragment {
         etTable.setText(ss);
 
         ivNext.setVisibility(View.GONE);
-        ivFind.setOnClickListener(v -> {
-            new KeyStringFind(etKeyword, etTable, ss, ivNext);
-        });
+        ivFind.setOnClickListener(v -> new KeyStringFind(etKeyword, etTable, ss, ivNext));
 
-        ivNext.setOnClickListener(v -> {
-            new KeyStringNext(etKeyword, etTable);
-        });
+        ivNext.setOnClickListener(v -> new KeyStringNext(etKeyword, etTable));
 
         ivClear.setOnClickListener(v -> new SetFocused(etKeyword));
 
@@ -129,8 +124,6 @@ public class FragmentSave extends Fragment {
         logSave = etTable.getText().toString();
         sharedEditor.putString(logName, logSave);
         sharedEditor.apply();
-        // Your fragment is likely hidden (or about to be hidden)
-        // Perform actions when the fragment becomes hidden
     }
 
 }

@@ -73,13 +73,13 @@ public class FileIO {
             bw = new BufferedWriter(fw);
             bw.write("\n" + timeInfo + textLine + "\n");
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e("append2File", "catch IOException "+e);
         } finally {
             try {
                 if (bw != null) bw.close();
                 if (fw != null) fw.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.e("append2File", "finally IOException "+e);
             }
         }
     }

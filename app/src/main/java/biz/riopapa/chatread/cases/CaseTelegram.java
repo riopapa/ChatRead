@@ -71,7 +71,7 @@ public class CaseTelegram {
         String [] grpWho = sbnWho.split(":");
         if (grpWho.length == 2) {       // 그룹명 : 이름
             sbnWho = grpWho[1].trim();
-        } else if (grpWho.length == 3) {  // 와룡 : 그룸 이름 : 주식 와룡선생
+        } else if (grpWho.length == 3) {  // 와룡 : 그룹 이름
             sbnWho = grpWho[2].trim();
         } else {    // group name only
             int p = sbnText.indexOf(":");

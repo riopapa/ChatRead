@@ -27,7 +27,7 @@ public class WhoAdapter extends RecyclerView.Adapter<WhoAdapter.ViewHolder> {
         return sGroups.get(gIDX).whos.size();
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView tWho, tWhoM, tWhoF, tInfo;
         View tLine;

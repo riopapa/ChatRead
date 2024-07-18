@@ -21,8 +21,6 @@ import static biz.riopapa.chatread.MainActivity.strUtil;
 import static biz.riopapa.chatread.MainActivity.utils;
 import static biz.riopapa.chatread.NotificationListener.isWorking;
 
-import android.util.Log;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -43,8 +41,14 @@ public class CaseSMS {
         if (sbnWho.charAt(sbnWho.length() - 1) == '#')
             return;
 
-        if (sbnWho.matches("\\d+-?\\d+") && !sbnText.contains("스마트폰 배우고"))
-            return;
+//        utils.logB("smsCase", sbnWho + ">> " + sbnWho.matches("\\d+-?\\d+"));
+//        utils.logB("smsCase", isValidPhoneNumber(sbnWho)+ sbnText);
+
+//        if (sbnWho.matches("\\d+-?\\d+") && !sbnText.contains("스마트폰 배우고"))
+        if (sbnWho.replaceAll("[0-9]","").length() < 3) {
+            if (!sbnText.contains("스마트폰 배우고"))
+                return;
+        }
 
 //
 //        String smsNbr = Pattern.compile("[0-9-]").matcher(sbnWho).replaceAll("");

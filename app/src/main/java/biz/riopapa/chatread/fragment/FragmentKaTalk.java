@@ -1,8 +1,5 @@
 package biz.riopapa.chatread.fragment;
 
-import static biz.riopapa.chatread.MainActivity.logSave;
-import static biz.riopapa.chatread.MainActivity.logUpdate;
-import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.toolbar;
 
 import android.os.Bundle;
@@ -25,7 +22,6 @@ import android.widget.ImageView;
 import android.widget.ScrollView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import java.io.File;
@@ -36,8 +32,6 @@ import biz.riopapa.chatread.common.SetFocused;
 import biz.riopapa.chatread.common.SnackBar;
 import biz.riopapa.chatread.func.KeyStringFind;
 import biz.riopapa.chatread.func.KeyStringNext;
-import biz.riopapa.chatread.func.LogSpan;
-import biz.riopapa.chatread.func.ScrollUp;
 import biz.riopapa.chatread.func.SelectChats;
 import biz.riopapa.chatread.models.KakaoLog;
 
@@ -84,13 +78,9 @@ public class FragmentKaTalk extends Fragment {
         etTable.setText(ss);
 
         ivNext.setVisibility(View.GONE);
-        ivFind.setOnClickListener(v -> {
-            new KeyStringFind(eKey1, etTable, ss, ivNext);
-        });
+        ivFind.setOnClickListener(v -> new KeyStringFind(eKey1, etTable, ss, ivNext));
 
-        ivNext.setOnClickListener(v -> {
-            new KeyStringNext(eKey1, etTable);
-        });
+        ivNext.setOnClickListener(v -> new KeyStringNext(eKey1, etTable));
 
         ivClear.setOnClickListener(v -> new SetFocused(eKey1));
         new Handler(Looper.getMainLooper()).post(() -> scrollView.smoothScrollBy(0, 90000));

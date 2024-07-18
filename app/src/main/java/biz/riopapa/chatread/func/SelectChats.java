@@ -2,18 +2,14 @@ package biz.riopapa.chatread.func;
 
 import static android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE;
 import static biz.riopapa.chatread.MainActivity.gSheet;
-import static biz.riopapa.chatread.MainActivity.ktStrRepl;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.sGroups;
-import static biz.riopapa.chatread.MainActivity.strReplace;
-import static biz.riopapa.chatread.MainActivity.strUtil;
 import static biz.riopapa.chatread.MainActivity.tableListFile;
 
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
-import android.text.style.UnderlineSpan;
 import android.widget.Toast;
 
 import java.io.File;

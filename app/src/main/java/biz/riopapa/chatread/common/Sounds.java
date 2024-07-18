@@ -21,6 +21,7 @@ import java.util.TimerTask;
 
 import biz.riopapa.chatread.MainActivity;
 import biz.riopapa.chatread.MainActivity.soundType;
+import biz.riopapa.chatread.notification.NotificationBar;
 
 public class Sounds {
     public static boolean isTalking = false;
@@ -55,7 +56,7 @@ public class Sounds {
             public void onDone(String utteranceId) {
                 if (mTTS.isSpeaking())
                     return;
-                notificationBar.hideStop();
+                NotificationBar.hideStop();
                 isTalking = false;
                 new Timer().schedule(new TimerTask() {
                     public void run () {

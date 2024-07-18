@@ -12,8 +12,6 @@ import static biz.riopapa.chatread.MainActivity.stockGetPut;
 import static biz.riopapa.chatread.MainActivity.wIDX;
 import static biz.riopapa.chatread.edit.ActivityEditGroupWho.whoContext;
 
-import android.text.SpannableString;
-import android.text.Spanned;
 import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,12 +35,12 @@ public class StockAdapter extends RecyclerView.Adapter<StockAdapter.ViewHolder> 
         return sGroups.get(gIDX).whos.get(wIDX).stocks.size();
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView tKey1, tKey2, tPrev, tNext, tCount, tSkip, tTalk;
         View tLine;
 
-    private   ViewHolder(final View itemView) {
+    private  ViewHolder(final View itemView) {
             super(itemView);
             tLine = itemView.findViewById(R.id.stock_line);
             tKey1 = itemView.findViewById(R.id.stock_key1);

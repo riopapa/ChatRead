@@ -67,15 +67,11 @@ public class FragmentLogStock extends Fragment {
         etTable.setText(ss);
 
         ivFind = thisView.findViewById(R.id.find_stock);
-        ivFind.setOnClickListener(v -> {
-            new KeyStringFind(etKeyword, etTable, ss, ivNext);
-        });
+        ivFind.setOnClickListener(v -> new KeyStringFind(etKeyword, etTable, ss, ivNext));
 
         ivNext = thisView.findViewById(R.id.next_stock);
         ivNext.setVisibility(View.GONE);
-        ivNext.setOnClickListener(v -> {
-            new KeyStringNext(etKeyword, etTable);
-        });
+        ivNext.setOnClickListener(v -> new KeyStringNext(etKeyword, etTable));
 
         ivClear = thisView.findViewById(R.id.clear_stock);
         ivClear.setOnClickListener(v -> new SetFocused(etKeyword));
@@ -137,8 +133,6 @@ public class FragmentLogStock extends Fragment {
         logStock = etTable.getText().toString();
         sharedEditor.putString(logName, logStock);
         sharedEditor.apply();
-        // Your fragment is likely hidden (or about to be hidden)
-        // Perform actions when the fragment becomes hidden
     }
 
 }

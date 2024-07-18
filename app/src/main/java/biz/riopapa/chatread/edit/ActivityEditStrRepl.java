@@ -5,10 +5,6 @@ import static biz.riopapa.chatread.MainActivity.mTableName;
 import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.tableFolder;
 import static biz.riopapa.chatread.MainActivity.tableListFile;
-import static biz.riopapa.chatread.MainActivity.toolbar;
-
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;

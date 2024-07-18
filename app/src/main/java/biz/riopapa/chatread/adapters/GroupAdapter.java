@@ -8,7 +8,6 @@ import static biz.riopapa.chatread.MainActivity.stockGetPut;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
-import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,7 +40,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
         return sGroups.size();
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView tGroup, tGroupM, tGroupF, tSkip1, tSkip2, tSkip3, tIgnore, tTelegram, tInfo;
         View tLine;
@@ -71,14 +70,14 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
 
-        SGroup sgrp = sGroups.get(position);
-        holder.tGroup.setText(sgrp.grp);
-        holder.tGroupM.setText(sgrp.grpM);
-        holder.tGroupF.setText(sgrp.grpF);
+        SGroup sGrp = sGroups.get(position);
+        holder.tGroup.setText(sGrp.grp);
+        holder.tGroupM.setText(sGrp.grpM);
+        holder.tGroupF.setText(sGrp.grpF);
 
         SpannableStringBuilder grpBuilder = new SpannableStringBuilder();
 
-        for (SWho w : sgrp.whos) {
+        for (SWho w : sGrp.whos) {
             if (grpBuilder.length() > 1)
                 grpBuilder.append("\n");
             SpannableString ssWho = new SpannableString(w.who + " : "+w.whoM + ", "+w.whoF + "\n");
@@ -98,11 +97,11 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
             grpBuilder.append(stBuilder);
         }
 
-        holder.tSkip1.setText(sgrp.skip1);
-        holder.tSkip2.setText(sgrp.skip2);
-        holder.tSkip3.setText(sgrp.skip3);
-        holder.tTelegram.setText(sgrp.telKa);
-        holder.tIgnore.setText((sgrp.ignore) ? "무시" : "  ");
+        holder.tSkip1.setText(sGrp.skip1);
+        holder.tSkip2.setText(sGrp.skip2);
+        holder.tSkip3.setText(sGrp.skip3);
+        holder.tTelegram.setText(sGrp.telKa);
+        holder.tIgnore.setText((sGrp.ignore) ? "무시" : "  ");
         holder.tInfo.setText(grpBuilder);
         holder.tLine.setBackgroundColor(ContextCompat.getColor(mContext,
                 (gIDX == position)? R.color.line_now : R.color.line_default));

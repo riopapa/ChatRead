@@ -39,7 +39,7 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.ViewHolder> {
         return apps.size();
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
         Context context;
         View tLine;

@@ -6,25 +6,9 @@ public class StrUtil {
         return text.replace("──", "").replace("==", "-")
                 .replace("=", "ￚ").replace("--", "-")
 //                .replaceAll("[^\\w\\s가-힣]", "")
-                .replaceAll("[^\\da-zA-Z\\:|#().@,()%/~가-힣\\s\\-+]", "")
-//                .replaceAll("[^\\da-zA-Z:|#().@,%/~ㄱ-ㅎ가-힣\\s\\-+]", "")
+                .replaceAll("[^\\da-zA-Z:|#)(.@,%/~가-힣\\s\\-+]", "")
                 ;
     }
-
-//    public String strShorten(String groupOrWho, String text) {
-//        for (int i = 0; i < replGroupCnt; i++) {
-//            int compared = groupOrWho.compareTo(replGroup[i]);
-//            if (compared == 0) {
-//                for (int j = 0; j < replLong[i].length; j++)
-//                    text = text.replace(replLong[i][j], replShort[i][j]);
-//                return text;
-//            }
-//            if (compared < 0) {
-//                return text;
-//            }
-//        }
-//        return text;
-//    }
 
     public String makeEtc (String s, int len) {
         return (s.length() < len)? s : s.substring(0, len) + " 등등";

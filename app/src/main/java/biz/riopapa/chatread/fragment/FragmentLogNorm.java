@@ -33,7 +33,6 @@ import biz.riopapa.chatread.func.KeyStringFind;
 import biz.riopapa.chatread.func.KeyStringNext;
 import biz.riopapa.chatread.func.LogSpan;
 import biz.riopapa.chatread.func.ScrollUp;
-import biz.riopapa.chatread.func.VolumeIcon;
 
 public class FragmentLogNorm extends Fragment {
 
@@ -54,8 +53,6 @@ public class FragmentLogNorm extends Fragment {
         setHasOptionsMenu(true);
         if (toolbar != null) {
             toolbar.setTitle(logName);
-//            toolbar.setBackgroundDrawable(ContextCompat.getDrawable(mContext, R.drawable.bar_log));
-//            toolbar.setContentInsetsRelative(getResources().getDimensionPixelSize(R.dimen.smaller_icon_margin), 0);
         }
     }
 
@@ -68,20 +65,14 @@ public class FragmentLogNorm extends Fragment {
         etKeyword = thisView.findViewById(R.id.key_log);
 
         ivFind = thisView.findViewById(R.id.find_log);
-        ivFind.setOnClickListener(v -> {
-            new KeyStringFind(etKeyword, etTable, ss, ivNext);
-        });
+        ivFind.setOnClickListener(v -> new KeyStringFind(etKeyword, etTable, ss, ivNext));
 
         ivNext = thisView.findViewById(R.id.next_log);
         ivNext.setVisibility(View.GONE);
-        ivNext.setOnClickListener(v -> {
-            new KeyStringNext(etKeyword, etTable);
-        });
+        ivNext.setOnClickListener(v -> new KeyStringNext(etKeyword, etTable));
 
         ivClear = thisView.findViewById(R.id.clear_log);
-        ivClear.setOnClickListener(v -> {
-            new SetFocused(etKeyword);
-        });
+        ivClear.setOnClickListener(v -> new SetFocused(etKeyword));
 
         ivDebug = thisView.findViewById(R.id.debug_log);
         ivDebug.setImageDrawable(ContextCompat.getDrawable(mContext, deBug ? R.drawable.debug_on : R.drawable.debug_off));
@@ -140,15 +131,6 @@ public class FragmentLogNorm extends Fragment {
         logQue = etTable.getText().toString();
         sharedEditor.putString(logName, logQue);
         sharedEditor.apply();
-        // Your fragment is likely hidden (or about to be hidden)
-        // Perform actions when the fragment becomes hidden
     }
 
-//    @Override
-//    public void onStop() {
-//        super.onStop();
-//        utils.logW("onStop", "onStop "+logName);
-//        // Your fragment is definitely hidden now
-//        // You can perform actions that require the fragment to be completely hidden
-//    }
 }
