@@ -37,35 +37,27 @@ public class CaseSMS {
             str Repl : smsRepl.txt
          */
 
+        // remove prefix, suffix special chars from sbnWho
         sbnWho = sbnWho.replaceAll("[\\u200C-\\u206F]", "");
+        // if last char is # then ignore
         if (sbnWho.charAt(sbnWho.length() - 1) == '#')
             return;
-
-//        utils.logB("smsCase", sbnWho + ">> " + sbnWho.matches("\\d+-?\\d+"));
-//        utils.logB("smsCase", isValidPhoneNumber(sbnWho)+ sbnText);
-
-//        if (sbnWho.matches("\\d+-?\\d+") && !sbnText.contains("스마트폰 배우고"))
+        // if numbers only then ignore
         if (sbnWho.replaceAll("[0-9]","").length() < 3) {
-            if (!sbnText.contains("스마트폰 배우고"))
-                return;
-        }
-
-//
-//        String smsNbr = Pattern.compile("[0-9-]").matcher(sbnWho).replaceAll("");
-//        if (smsNbr.length() < 3) {
-//            if (!sbnText.contains("스마트폰 배우고")) {
+            return;
+//            if (!sbnText.contains("스마트폰 배우고"))
 //                return;
-//            }
-//        }
-
+        }
+        // ignore if duplicated
         if (kvSMS.isDup(sbnWho, sbnText))
             return;
 
         sbnText = strUtil.text2OneLine(sbnText);
         if (sbnWho.contains("NH투자") && sbnText.contains("체결")) {
             saySMSTrade();
-
-        } else if (sbnWho.startsWith("찌라")) {
+            return;
+        }
+        if (sbnWho.startsWith("찌라")) {
             int g = getStockGroup.getIdx(sbnGroup, stockSGroupTbl, stockSGroupIdx);
             if (g < 0) {
                 saySMSNormal();
@@ -80,10 +72,9 @@ public class CaseSMS {
                     }
                 }
             }
-
-        } else {
-            saySMSNormal();
+            return;
         }
+        saySMSNormal();
     }
     private void saySMSTrade() {
         int pos = sbnText.indexOf("주문");
@@ -131,11 +122,4 @@ public class CaseSMS {
             sbnText = strUtil.removeDigit(sbnText);
         sounds.speakAfterBeep(head + strUtil.makeEtc(sbnText, isWorking()? 20: 120));
     }
-
-    final Pattern PHONE_NUMBER_PATTERN = Pattern.compile("\\d{2,3}-\\d{3,4}-\\d{4}");
-
-    boolean isValidPhoneNumber(String phoneNumber) {
-        return PHONE_NUMBER_PATTERN.matcher(phoneNumber).matches();
-    }
-
 }

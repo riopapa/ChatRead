@@ -14,6 +14,8 @@ import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
@@ -155,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
 
     public enum soundType { PRE, POST, ERR, HI_TESLA, ONLY, STOCK, INFO, KAKAO}
     public static final int[] beepRawIds = { R.raw.pre, R.raw.post, R.raw.err,
-            R.raw.hello_tesla, R.raw.only, R.raw.stock_check, R.raw.inform, R.raw.kakao_talk};
+            R.raw.hi_tesla, R.raw.only, R.raw.stock_check, R.raw.inform, R.raw.kakao_talk};
 
     public static KeyVal kvCommon = null;
     public static KeyVal kvKakao = null;
@@ -302,19 +304,27 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        View decorView = getWindow().getDecorView();
-        decorView.post(() -> {
-            getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
-                    new FragmentLogNorm()).commit();
-            drawerLayout.closeDrawer(GravityCompat.START);
-        });
+//        View decorView = getWindow().getDecorView();
+//        decorView.post(() -> {
+//            getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
+//                    new FragmentLogNorm()).commit();
+//            drawerLayout.closeDrawer(GravityCompat.START);
+//        });
+
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
+                        new FragmentLogNorm()).commit();
+                drawerLayout.closeDrawer(GravityCompat.START);
+            }
+        }, 30);
 
         groupListener = position -> {
             gIDX = position;
             Intent subActivityIntent = new Intent(this, ActivityEditGroup.class);
             mMainActivity.startActivityForResult(subActivityIntent, 123);
         };
-
     }
 
     private boolean isNotificationAllowed(String packageName) {

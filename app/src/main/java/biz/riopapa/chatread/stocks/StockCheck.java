@@ -1,6 +1,7 @@
 package biz.riopapa.chatread.stocks;
 
 import static biz.riopapa.chatread.MainActivity.gSheet;
+import static biz.riopapa.chatread.MainActivity.kvTelegram;
 import static biz.riopapa.chatread.MainActivity.logUpdate;
 import static biz.riopapa.chatread.MainActivity.mAudioManager;
 import static biz.riopapa.chatread.MainActivity.mContext;
@@ -46,10 +47,15 @@ public class StockCheck {
 
         for (int s = 0; s < stocks.size() ; s++) {
             if (sbnText.contains(stocks.get(s).key1) && sbnText.contains(stocks.get(s).key2)) {
-                sGroups.get(g).whos.get(w).stocks.get(s).count++;
-                stockGetPut.save(sGroups.get(g).whos.get(w).whoF+" "+sGroups.get(g).whos.get(w).stocks.get(s).count);
 
                 SStock stock = stocks.get(s);
+                if (stockName == null)
+                    stockName = new StockName();
+                String [] sParse = stockName.get(stock.prv, stock.nxt, sbnText);
+                if (kvTelegram.isDup(sbnWho+sParse[0], sbnText))    // 같은 주식 내용 반복
+                    return;
+
+                // 안정 되면 아래 null check는 지우는 걸로..
                 if (utils == null) {
                     utils = new Utils();
                     utils.logW("talkNlog", "utils null");
@@ -61,11 +67,9 @@ public class StockCheck {
 
                 String percent = (!sbnText.contains("매수") && (sbnText.contains("매도") || sbnText.contains("익절")))?
                         "1.9" : stock.talk;
-                if (stockName == null)
-                    stockName = new StockName();
-                String [] sParse = stockName.get(stock.prv, stock.nxt, sbnText);
                 String key12 = " {" + stock.key1 + "." + stock.key2 + "}";
                 strHead = sParse[0]+" / " + sbnWho + ":" +sbnGroup;
+
                 if (!stock.talk.isEmpty()) {
                     String [] joins;
                     String won = wonValue(sParse[1]);
@@ -99,6 +103,10 @@ public class StockCheck {
                         + key12);
                 String timeStamp = new SimpleDateFormat("yy-MM-dd HH:mm", Locale.KOREA).format(new Date());
                 gSheet.add2Stock(sbnGroup, timeStamp, sbnWho, percent, sParse[0], strText, key12);
+
+                sGroups.get(g).whos.get(w).stocks.get(s).count++;
+                stockGetPut.save(sGroups.get(g).whos.get(w).whoF+" "+sGroups.get(g).whos.get(w).stocks.get(s).count);
+
                 break;
             }
         }

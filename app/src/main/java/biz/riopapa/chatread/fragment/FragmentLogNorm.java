@@ -84,9 +84,7 @@ public class FragmentLogNorm extends Fragment {
         ss = new LogSpan().make(logQue, this.getContext());
         etTable.setText(ss);
         scrollView = thisView.findViewById(R.id.scroll_log);
-        new Handler(Looper.getMainLooper()).post(() -> {
-                scrollView.smoothScrollBy(0, 90000);
-        });
+        new Handler(Looper.getMainLooper()).post(() -> scrollView.smoothScrollBy(0, 90000));
         super.onResume();
         return thisView;
     }

@@ -65,12 +65,13 @@ public class LogSpan {
             /* check new date */
 
             if (s.length() > 5 && StringUtils.isNumeric(String.valueOf(s.charAt(0))) &&
-                    StringUtils.isNumeric(String.valueOf(s.charAt(1))) &&
+                                    StringUtils.isNumeric(String.valueOf(s.charAt(1))) &&
                     !s.substring(0, 5).equals(dayNow)) {
                 spanIdx = (spanIdx + 1) % 2;
                 dayNow = s.substring(0, 5);
             }
-            if (StringUtils.isNumeric(String.valueOf(s.charAt(0)))) {
+            if (StringUtils.isNumeric(String.valueOf(s.charAt(0))) &&
+                    StringUtils.isNumeric(String.valueOf(s.charAt(1)))) {
                 colorFore = colors[spanIdx][0];
                 colorBack = colors[spanIdx][1];
                 font = fonts[spanIdx][0];
