@@ -27,9 +27,9 @@ public class LogSpan {
     public SpannableString make(String log, Context context) {
 
         fonts[0][0] = Typeface.create(ResourcesCompat.getFont(context, R.font.mayplestory), Typeface.NORMAL);
-        fonts[0][1] = Typeface.create(ResourcesCompat.getFont(context, R.font.cookie_run), Typeface.NORMAL);
-        fonts[1][0] = Typeface.create(ResourcesCompat.getFont(context, R.font.mayplestory), Typeface.NORMAL);
-        fonts[1][1] = Typeface.create(ResourcesCompat.getFont(context, R.font.cookie_run), Typeface.NORMAL);
+        fonts[0][1] = Typeface.create(ResourcesCompat.getFont(context, R.font.malang_malang), Typeface.NORMAL);
+        fonts[1][0] = Typeface.create(ResourcesCompat.getFont(context, R.font.cookie_run), Typeface.NORMAL);
+        fonts[1][1] = Typeface.create(ResourcesCompat.getFont(context, R.font.malang_malang), Typeface.NORMAL);
         int nPos = 0, sLen;
 
         int [][]colors = new int[2][];
