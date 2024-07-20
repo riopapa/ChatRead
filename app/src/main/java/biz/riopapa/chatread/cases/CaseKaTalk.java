@@ -16,7 +16,7 @@ import static biz.riopapa.chatread.MainActivity.sbnGroup;
 import static biz.riopapa.chatread.MainActivity.sbnText;
 import static biz.riopapa.chatread.MainActivity.sbnWho;
 import static biz.riopapa.chatread.MainActivity.sounds;
-import static biz.riopapa.chatread.MainActivity.stockCheck;
+import static biz.riopapa.chatread.MainActivity.stockLine;
 import static biz.riopapa.chatread.MainActivity.stockKGroupIdx;
 import static biz.riopapa.chatread.MainActivity.stockKGroupTbl;
 import static biz.riopapa.chatread.MainActivity.strReplace;
@@ -30,7 +30,7 @@ import biz.riopapa.chatread.common.IgnoreThis;
 import biz.riopapa.chatread.func.ReadyToday;
 
 public class CaseKaTalk {
-    public void check() {
+    public void kaTalk() {
 
         if (IgnoreThis.contains(sbnText, ktTxtIgnores))
             return;
@@ -110,7 +110,7 @@ public class CaseKaTalk {
             if (sbnWho.contains(sGroups.get(g).whos.get(w).whoM)) {
                 // if stock Group then check skip keywords and then continue;
                 sbnWho = sGroups.get(g).whos.get(w).who;        // replace with short who
-                stockCheck.check(g, w, sGroups.get(g).whos.get(w).stocks);
+                stockLine.keyMatch(g, w, sGroups.get(g).whos.get(w).stocks);
                 return;
             }
         }

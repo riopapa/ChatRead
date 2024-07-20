@@ -10,7 +10,7 @@ import static biz.riopapa.chatread.MainActivity.sounds;
 import static biz.riopapa.chatread.MainActivity.strUtil;
 
 public class CaseWork {
-    public void check() {
+    public void work() {
 
         if (sbnApp.replF != null) {
             for (int i = 0; i < sbnApp.replF.length; i++) {
@@ -20,6 +20,7 @@ public class CaseWork {
         }
 
         String head = sbnAppNick + "." + sbnWho;
+        sbnText = strUtil.makeEtc(sbnText, 140);
         logUpdate.addWork(head, sbnText);
         notificationBar.update(head, sbnText, true);
         String say = head + ", " + sbnText;

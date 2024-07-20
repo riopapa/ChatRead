@@ -12,7 +12,7 @@ import static biz.riopapa.chatread.MainActivity.sbnGroup;
 import static biz.riopapa.chatread.MainActivity.sbnText;
 import static biz.riopapa.chatread.MainActivity.sbnWho;
 import static biz.riopapa.chatread.MainActivity.sounds;
-import static biz.riopapa.chatread.MainActivity.stockCheck;
+import static biz.riopapa.chatread.MainActivity.stockLine;
 import static biz.riopapa.chatread.MainActivity.stockTGroupIdx;
 import static biz.riopapa.chatread.MainActivity.stockTGroupTbl;
 import static biz.riopapa.chatread.MainActivity.strUtil;
@@ -24,7 +24,7 @@ import static biz.riopapa.chatread.NotificationListener.isWorking;
 import biz.riopapa.chatread.func.ReadyToday;
 
 public class CaseTelegram {
-    public void check() {
+    public void tel() {
         if (sbnText.length() < 20)  // for better performance, with logically not true
             return;
 
@@ -90,7 +90,7 @@ public class CaseTelegram {
         for (int w = 0; w < sGroups.get(g).whos.size(); w++) {
             if (sbnWho.startsWith(sGroups.get(g).whos.get(w).whoM)) {
                 sbnWho = sGroups.get(g).whos.get(w).who;
-                stockCheck.check(g, w, sGroups.get(g).whos.get(w).stocks);
+                stockLine.keyMatch(g, w, sGroups.get(g).whos.get(w).stocks);
                 break;
             }
         }

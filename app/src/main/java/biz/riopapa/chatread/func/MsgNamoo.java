@@ -15,7 +15,7 @@ public class MsgNamoo {
 
     final String naMoo = "NH나무";
 
-    public void say(String text) {
+    public void namoo(String text) {
         final String[] excludes = {"근접후", "큰 폭", "재실행 하시려면"};
         for (String s : excludes) {
             if (text.contains(s))

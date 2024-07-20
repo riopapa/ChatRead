@@ -8,7 +8,7 @@ import static biz.riopapa.chatread.MainActivity.sbnText;
 import static biz.riopapa.chatread.MainActivity.sbnWho;
 
 public class CaseAndroid {
-    public void check() {
+    public void roid() {
         if (kvCommon.isDup("an", sbnText))
             return;
         if (ignoreString.check(sbnApp))

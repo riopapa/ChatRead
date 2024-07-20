@@ -11,7 +11,7 @@ public class CaseTesla {
 
     static long tesla_time = 0;
 
-    public void check() {
+    public void tesry() {
 
         if (sbnText.contains("연결됨")) {
             long nowTime = System.currentTimeMillis();

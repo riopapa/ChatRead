@@ -13,7 +13,7 @@ import static biz.riopapa.chatread.MainActivity.sbnWho;
 import static biz.riopapa.chatread.MainActivity.smsNoNumbers;
 import static biz.riopapa.chatread.MainActivity.smsStrRepl;
 import static biz.riopapa.chatread.MainActivity.sounds;
-import static biz.riopapa.chatread.MainActivity.stockCheck;
+import static biz.riopapa.chatread.MainActivity.stockLine;
 import static biz.riopapa.chatread.MainActivity.stockSGroupIdx;
 import static biz.riopapa.chatread.MainActivity.stockSGroupTbl;
 import static biz.riopapa.chatread.MainActivity.strReplace;
@@ -24,13 +24,12 @@ import static biz.riopapa.chatread.NotificationListener.isWorking;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.regex.Pattern;
 
 import biz.riopapa.chatread.common.IgnoreNumber;
 
 public class CaseSMS {
 
-    public void check() {
+    public void sms() {
 
         /*
             no Number : smsNoNumber.txt
@@ -67,7 +66,7 @@ public class CaseSMS {
                         // if stock Group then check skip keywords and then continue;
                         sbnWho = sGroups.get(g).whos.get(w).who;        // replace with short who
                         utils.logB(sbnGroup, sbnWho + ">> " + sbnText);
-                        stockCheck.check(g, w, sGroups.get(g).whos.get(w).stocks);
+                        stockLine.keyMatch(g, w, sGroups.get(g).whos.get(w).stocks);
                         break;
                     }
                 }

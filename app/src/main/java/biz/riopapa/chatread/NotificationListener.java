@@ -58,19 +58,19 @@ public class NotificationListener extends NotificationListenerService {
         switch (sbnAppType) {
 
             case KK_TALK:
-                caseKaTalk.check();
+                caseKaTalk.kaTalk();
                 break;
 
             case TG:
-                caseTelegram.check();
+                caseTelegram.tel();
                 break;
 
             case ANDROID:
-                caseAndroid.check();
+                caseAndroid.roid();
                 break;
 
             case APP:
-                caseApp.check();
+                caseApp.app();
                 break;
 
             default:
@@ -106,7 +106,7 @@ public class NotificationListener extends NotificationListenerService {
 
         // get eWho //
         try {
-            sbnWho = extras.getString(Notification.EXTRA_TITLE,"");
+            sbnWho = extras.getCharSequence(Notification.EXTRA_TITLE,"").toString();
         } catch (Exception e) {
             new Utils().logW("sbn WHO Error", "no SWho "+ sbnAppName +" "+sbnText);
             return true;

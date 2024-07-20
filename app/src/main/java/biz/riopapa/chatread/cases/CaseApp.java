@@ -20,7 +20,7 @@ import static biz.riopapa.chatread.NotificationListener.isWorking;
 
 public class CaseApp {
 
-    public void check () {
+    public void app() {
         if (kvCommon.isDup(sbnApp.nickName, sbnText))
             return;
 
@@ -28,7 +28,7 @@ public class CaseApp {
             return;
 
         if (sbnApp.nickName.equals("문자")) {
-            caseSMS.check();
+            caseSMS.sms();
             return;
         }
 
@@ -58,17 +58,17 @@ public class CaseApp {
 
         if (sbnApp.nickName.equals("NH나무")) {
             utils.logB(sbnApp.nickName,sbnText);
-            msgNamoo.say(strUtil.text2OneLine(sbnText));
+            msgNamoo.namoo(strUtil.text2OneLine(sbnText));
             return;
         }
 
         if (sbnAppNick.equals("팀즈") || sbnAppNick.equals("아룩")) {
-            caseWork.check();
+            caseWork.work();
             return;
         }
 
         if (sbnAppNick.equals("테스리")) {
-            caseTesla.check();
+            caseTesla.tesry();
             return;
         }
 

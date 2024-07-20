@@ -18,7 +18,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
@@ -57,7 +56,7 @@ import biz.riopapa.chatread.func.StrReplace;
 import biz.riopapa.chatread.models.SGroup;
 import biz.riopapa.chatread.models.StrRepl;
 import biz.riopapa.chatread.stocks.StockGetPut;
-import biz.riopapa.chatread.stocks.StockCheck;
+import biz.riopapa.chatread.stocks.StockLine;
 import biz.riopapa.chatread.stocks.StockName;
 import biz.riopapa.chatread.common.Permission;
 import biz.riopapa.chatread.common.PhoneVibrate;
@@ -144,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
     /* Stock variables */
     public static ArrayList<SGroup> sGroups = null;
     public static StockGetPut stockGetPut = null;
-    public static StockCheck stockCheck = null;
+    public static StockLine stockLine = null;
     public static StrReplace strReplace = null;
     public static int gIDX, wIDX, sIDX;
     public static String [] stockTGroupTbl, stockKGroupTbl, stockSGroupTbl;
