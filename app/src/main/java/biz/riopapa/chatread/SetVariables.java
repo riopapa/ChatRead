@@ -23,6 +23,10 @@ import static biz.riopapa.chatread.MainActivity.logSave;
 import static biz.riopapa.chatread.MainActivity.logStock;
 import static biz.riopapa.chatread.MainActivity.logUpdate;
 import static biz.riopapa.chatread.MainActivity.logWork;
+import static biz.riopapa.chatread.MainActivity.log_Que;
+import static biz.riopapa.chatread.MainActivity.log_Save;
+import static biz.riopapa.chatread.MainActivity.log_Stock;
+import static biz.riopapa.chatread.MainActivity.log_Work;
 import static biz.riopapa.chatread.MainActivity.mAudioManager;
 import static biz.riopapa.chatread.MainActivity.mBackgroundServiceIntent;
 import static biz.riopapa.chatread.MainActivity.mContext;
@@ -31,6 +35,14 @@ import static biz.riopapa.chatread.MainActivity.notificationBar;
 import static biz.riopapa.chatread.MainActivity.notificationService;
 import static biz.riopapa.chatread.MainActivity.packageDirectory;
 import static biz.riopapa.chatread.MainActivity.phoneVibrate;
+import static biz.riopapa.chatread.MainActivity.prefLog;
+import static biz.riopapa.chatread.MainActivity.prefLogEditor;
+import static biz.riopapa.chatread.MainActivity.prefSave;
+import static biz.riopapa.chatread.MainActivity.prefSaveEditor;
+import static biz.riopapa.chatread.MainActivity.prefStock;
+import static biz.riopapa.chatread.MainActivity.prefStockEditor;
+import static biz.riopapa.chatread.MainActivity.prefWork;
+import static biz.riopapa.chatread.MainActivity.prefWorkEditor;
 import static biz.riopapa.chatread.MainActivity.sharePref;
 import static biz.riopapa.chatread.MainActivity.sharedEditor;
 import static biz.riopapa.chatread.MainActivity.sounds;
@@ -88,16 +100,6 @@ public class SetVariables {
     public SetVariables(Context context, String msg) {
         mContext = context;
         Log.e("SetVariables", "started " + msg);
-        if (sharePref ==  null) {
-            sharePref = context.getSharedPreferences("sayText", MODE_PRIVATE);
-            sharedEditor = sharePref.edit();
-        }
-        if (logQue.isEmpty()) {
-            logQue = sharePref.getString("logQue", "");
-            logStock = sharePref.getString("logStock", "");
-            logSave = sharePref.getString("logSave", "");
-            logWork = sharePref.getString("logWork", "");
-        }
 
         if (packageDirectory == null)
             packageDirectory = new File(Environment.getExternalStorageDirectory(), "_ChatTalkLog");
@@ -108,7 +110,6 @@ public class SetVariables {
         if (todayFolder == null) {
             todayFolder = new File(packageDirectory, toDay);
         }
-        deBug = sharePref.getBoolean("deBug", false);
 
         if (fileIO == null)
             fileIO = new FileIO();
@@ -159,6 +160,30 @@ public class SetVariables {
         new OptionTables();
         new AppsTable().get();
         tableListFile = new TableListFile();
+
+        if (sharePref ==  null) {
+            sharePref = context.getSharedPreferences("sayText", MODE_PRIVATE);
+            sharedEditor = sharePref.edit();
+        }
+        if (logQue.isEmpty()) {
+            prefLog = context.getSharedPreferences(log_Que, MODE_PRIVATE);
+            prefLogEditor = prefLog.edit();
+            logQue = prefLog.getString(log_Que, fileIO.readFile(tableFolder, log_Que+".txt"));
+
+            prefStock = context.getSharedPreferences(log_Stock, MODE_PRIVATE);
+            prefStockEditor = prefStock.edit();
+            logStock = prefStock.getString(log_Stock, fileIO.readFile(tableFolder, log_Stock+".txt"));
+
+            prefSave = context.getSharedPreferences(log_Save, MODE_PRIVATE);
+            prefSaveEditor = prefSave.edit();
+            logSave = prefSave.getString(log_Save, fileIO.readFile(tableFolder, log_Save+".txt"));
+
+            prefWork = context.getSharedPreferences(log_Work, MODE_PRIVATE);
+            prefWorkEditor = prefWork.edit();
+            logWork = prefWork.getString(log_Work, fileIO.readFile(tableFolder, log_Work+".txt"));
+        }
+
+        deBug = sharePref.getBoolean("deBug", false);
 
     }
 

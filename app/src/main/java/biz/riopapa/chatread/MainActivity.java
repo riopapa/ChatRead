@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static Toolbar toolbar = null;
     public static Context mContext;
-    public static Activity mMainActivity;
+    public static Activity mActivity;
 
     private DrawerLayout drawerLayout;
 
@@ -117,13 +117,14 @@ public class MainActivity extends AppCompatActivity {
     public static String mTableName;
 
     public static String logQue = "", logStock = "", logSave = "", logWork = "";
+    public static boolean queFlag = false, stockFlag = false, workFlag = false;
 
     public static ArrayList<StrRepl> ktStrRepl = null;
     public static ArrayList<StrRepl> smsStrRepl = null;
 
-    public static SharedPreferences sharePref;
-    public static SharedPreferences.Editor sharedEditor;
-
+    public static SharedPreferences sharePref, prefLog, prefWork, prefSave, prefStock;
+    public static SharedPreferences.Editor sharedEditor, prefLogEditor, prefWorkEditor, prefSaveEditor, prefStockEditor;
+    public final static String log_Que = "logQue", log_Stock = "logStock", log_Save = "logSave", log_Work = "logWork";
     public static final String [] OPERATION = {"Show Message","show Noty","stop say",
             "reload app","hide_stop"};
     public static final int SHOW_MESSAGE = 1000;
@@ -206,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
         mContext = this;
-        mMainActivity = this;
+        mActivity = this;
         toolbar = findViewById(R.id.myToolBar);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
@@ -322,7 +323,7 @@ public class MainActivity extends AppCompatActivity {
         groupListener = position -> {
             gIDX = position;
             Intent subActivityIntent = new Intent(this, ActivityEditGroup.class);
-            mMainActivity.startActivityForResult(subActivityIntent, 123);
+            mActivity.startActivityForResult(subActivityIntent, 123);
         };
     }
 

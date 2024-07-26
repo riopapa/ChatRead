@@ -3,7 +3,9 @@ package biz.riopapa.chatread.fragment;
 import static biz.riopapa.chatread.MainActivity.deBug;
 import static biz.riopapa.chatread.MainActivity.logQue;
 import static biz.riopapa.chatread.MainActivity.logUpdate;
+import static biz.riopapa.chatread.MainActivity.log_Que;
 import static biz.riopapa.chatread.MainActivity.mContext;
+import static biz.riopapa.chatread.MainActivity.prefLogEditor;
 import static biz.riopapa.chatread.MainActivity.sharedEditor;
 import static biz.riopapa.chatread.MainActivity.toolbar;
 
@@ -41,7 +43,6 @@ public class FragmentLogNorm extends Fragment {
     ImageView ivFind, ivClear, ivNext, ivDebug;
     Menu mainMenu;
     ScrollView scrollView;
-    final String logName = "logQue";
 
     public FragmentLogNorm() {
         // Required empty public constructor
@@ -52,7 +53,7 @@ public class FragmentLogNorm extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         if (toolbar != null) {
-            toolbar.setTitle(logName);
+            toolbar.setTitle(log_Que);
         }
     }
 
@@ -101,7 +102,7 @@ public class FragmentLogNorm extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         if (item.getItemId() == R.id.del_log_one_set) {
-            new ScrollUp(etTable, scrollView, logName,
+            new ScrollUp(etTable, scrollView, log_Que,
                     new LogSpan().delOneSet(etTable.getText().toString(),
                             etTable.getSelectionStart(), mContext));
 
@@ -127,8 +128,8 @@ public class FragmentLogNorm extends Fragment {
         super.onPause();
         sharedEditor.putBoolean("deBug", deBug);
         logQue = etTable.getText().toString();
-        sharedEditor.putString(logName, logQue);
-        sharedEditor.apply();
+        prefLogEditor.putString(log_Que, logQue);
+        prefLogEditor.apply();
     }
 
 }

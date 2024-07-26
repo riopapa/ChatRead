@@ -2,7 +2,7 @@ package biz.riopapa.chatread.common;
 
 import static android.widget.Toast.LENGTH_SHORT;
 import static com.google.android.material.snackbar.Snackbar.make;
-import static biz.riopapa.chatread.MainActivity.mMainActivity;
+import static biz.riopapa.chatread.MainActivity.mActivity;
 
 import android.view.Gravity;
 import android.view.View;
@@ -16,9 +16,9 @@ import biz.riopapa.chatread.R;
 public class SnackBar {
     public void show(String title, String text) {
 
-        View v = mMainActivity.findViewById(R.id.myFrame);
+        View v = mActivity.findViewById(R.id.myFrame);
         Snackbar snackbar = make(v, "", LENGTH_SHORT);
-        View sView = mMainActivity.getLayoutInflater().inflate(R.layout.snack_message, null);
+        View sView = mActivity.getLayoutInflater().inflate(R.layout.snack_message, null);
 
         TextView tv1 = sView.findViewById(R.id.text_header);
         TextView tv2 = sView.findViewById(R.id.text_body);

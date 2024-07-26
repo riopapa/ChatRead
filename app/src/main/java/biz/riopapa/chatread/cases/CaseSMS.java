@@ -94,8 +94,8 @@ public class CaseSMS {
                     String uPrice = words[4];
                     String sGroup = lastChar + "체결";
                     String sayMsg = stockName + " " + amount + " " + uPrice + samPam;
-                    notificationBar.update(samPam +":"+stockName, sayMsg, true);
                     logUpdate.addStock("sms>NH투자", sayMsg);
+                    notificationBar.update(samPam +":"+stockName, sayMsg, true);
                     gSheet.add2Stock(sGroup, new SimpleDateFormat("yy-MM-dd HH:mm", Locale.KOREA).format(new Date()),sbnWho, samPam, stockName,
                             sbnText.replace(stockName, new StringBuffer(stockName).insert(1, ".").toString()), samPam
                     );
@@ -115,8 +115,8 @@ public class CaseSMS {
         String head = "[sms."+ sbnWho + "] ";
 
         sbnText = strReplace.repl(smsStrRepl, sbnWho, sbnText);
-        notificationBar.update(head, sbnText, true);
         logUpdate.addLog(head, sbnText);
+        notificationBar.update(head, sbnText, true);
         if (IgnoreNumber.in(smsNoNumbers, sbnWho))
             sbnText = strUtil.removeDigit(sbnText);
         sounds.speakAfterBeep(head + strUtil.makeEtc(sbnText, isWorking()? 20: 120));

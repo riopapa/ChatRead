@@ -1,9 +1,7 @@
 package biz.riopapa.chatread.stocks;
 
-import static android.content.Context.MODE_PRIVATE;
 import static biz.riopapa.chatread.MainActivity.downloadFolder;
 import static biz.riopapa.chatread.MainActivity.fileIO;
-import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.stockKGroupIdx;
 import static biz.riopapa.chatread.MainActivity.stockKGroupTbl;
@@ -15,7 +13,6 @@ import static biz.riopapa.chatread.MainActivity.tableFolder;
 import static biz.riopapa.chatread.MainActivity.todayFolder;
 import static biz.riopapa.chatread.MainActivity.utils;
 
-import android.content.SharedPreferences;
 import android.os.Environment;
 
 import com.google.gson.Gson;

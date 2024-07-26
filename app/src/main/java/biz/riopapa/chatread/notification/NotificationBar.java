@@ -20,13 +20,13 @@ public class NotificationBar {
 
         final String iMsg = (msg.length() > 250) ? msg.substring(0, 250)+".." : msg;
         Intent intent = new Intent(mContext, NotificationService.class);
+        if (isMyServiceRunning(NotificationService.class))
+            mContext.stopService(intent);
         intent.putExtra("operation", SHOW_MESSAGE);
         intent.putExtra("who", who);
         intent.putExtra("msg", iMsg);
         intent.putExtra("stop", stop_icon && !sounds.isSilent());
         try {
-            if (isMyServiceRunning(NotificationService.class))
-                mContext.stopService(intent);
             mContext.startService(intent);
 //            else
         } catch (Exception e) {
@@ -67,7 +67,6 @@ public class NotificationBar {
         }
     }
 
-
     boolean isMyServiceRunning(Class<?> serviceClass) {
         final String svc = serviceClass.getName();
         ActivityManager manager = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
@@ -78,5 +77,4 @@ public class NotificationBar {
         }
         return false;
     }
-
 }

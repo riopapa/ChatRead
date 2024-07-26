@@ -6,11 +6,9 @@ import static biz.riopapa.chatread.MainActivity.RELOAD_APP;
 import static biz.riopapa.chatread.MainActivity.SHOW_MESSAGE;
 import static biz.riopapa.chatread.MainActivity.STOP_SAY;
 import static biz.riopapa.chatread.MainActivity.mContext;
-import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.sharePref;
 import static biz.riopapa.chatread.MainActivity.sharedEditor;
 import static biz.riopapa.chatread.MainActivity.sounds;
-import static biz.riopapa.chatread.MainActivity.stockGetPut;
 import static biz.riopapa.chatread.MainActivity.strUtil;
 import static biz.riopapa.chatread.MainActivity.utils;
 
@@ -125,10 +123,6 @@ public class NotificationService extends Service {
     }
 
     private void reload_App() {
-        if (sGroups != null && stockGetPut != null) {
-            stockGetPut.put("Noty");
-        } else
-            utils.logW("Noty", "sGroup or stockGetPut is null");
 
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             mRemoteViews = null;
@@ -154,6 +148,8 @@ public class NotificationService extends Service {
                 .setSmallIcon(R.drawable.stock1_icon)
                 .setOnlyAlertOnce(true)
                 .setAutoCancel(false)
+                .setContentTitle("Chat.Read")
+                .setContentText("Chat.Read Text")
                 .setCustomBigContentView(mRemoteViews)
                 .setLargeIcon(null)
 //                .setStyle(new NotificationCompat.BigTextStyle())

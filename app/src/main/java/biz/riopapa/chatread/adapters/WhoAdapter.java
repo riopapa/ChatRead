@@ -1,6 +1,6 @@
 package biz.riopapa.chatread.adapters;
 
-import static biz.riopapa.chatread.MainActivity.mMainActivity;
+import static biz.riopapa.chatread.MainActivity.mActivity;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.gIDX;
@@ -68,7 +68,7 @@ public class WhoAdapter extends RecyclerView.Adapter<WhoAdapter.ViewHolder> {
         holder.tLine.setOnClickListener(v -> {
             wIDX = holder.getAdapterPosition();
             Intent intent = new Intent(mContext, ActivityEditGroupWho.class);
-            mMainActivity.startActivity(intent);
+            mActivity.startActivity(intent);
         });
     }
 

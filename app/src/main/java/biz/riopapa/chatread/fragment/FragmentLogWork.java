@@ -3,7 +3,9 @@ package biz.riopapa.chatread.fragment;
 import static biz.riopapa.chatread.MainActivity.deBug;
 import static biz.riopapa.chatread.MainActivity.logUpdate;
 import static biz.riopapa.chatread.MainActivity.logWork;
+import static biz.riopapa.chatread.MainActivity.log_Work;
 import static biz.riopapa.chatread.MainActivity.mContext;
+import static biz.riopapa.chatread.MainActivity.prefWorkEditor;
 import static biz.riopapa.chatread.MainActivity.sharedEditor;
 import static biz.riopapa.chatread.MainActivity.toolbar;
 
@@ -41,7 +43,6 @@ public class FragmentLogWork extends Fragment {
     ImageView ivFind, ivClear, ivNext, ivDebug;
     Menu mainMenu;
     ScrollView scrollView;
-    final String logName = "logWork";
 
     public FragmentLogWork() {
         // Required empty public constructor
@@ -52,7 +53,7 @@ public class FragmentLogWork extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         if (toolbar != null)
-            toolbar.setTitle(logName);
+            toolbar.setTitle(log_Work);
     }
 
     @Override
@@ -100,7 +101,7 @@ public class FragmentLogWork extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         if (item.getItemId() == R.id.del_work_one_set) {
-            new ScrollUp(etTable, scrollView, logName,
+            new ScrollUp(etTable, scrollView, log_Work,
                     new LogSpan().delOneSet(etTable.getText().toString(),
                             etTable.getSelectionStart(), mContext));
 
@@ -126,8 +127,8 @@ public class FragmentLogWork extends Fragment {
         super.onPause();
         sharedEditor.putBoolean("deBug", deBug);
         logWork = etTable.getText().toString();
-        sharedEditor.putString(logName, logWork);
-        sharedEditor.apply();
+        prefWorkEditor.putString(log_Work, logWork);
+        prefWorkEditor.apply();
     }
 
 }

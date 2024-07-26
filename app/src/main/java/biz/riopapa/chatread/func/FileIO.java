@@ -109,7 +109,7 @@ public class FileIO {
                     new BufferedReader(new InputStreamReader(in));
             String strLine;
             while ((strLine = br.readLine()) != null) {
-                sb.append(strLine);
+                sb.append(strLine).append("\n");
             }
             in.close();
         } catch (IOException e) {

@@ -1,8 +1,9 @@
 package biz.riopapa.chatread.func;
 
 import static biz.riopapa.chatread.MainActivity.logSave;
+import static biz.riopapa.chatread.MainActivity.log_Save;
 import static biz.riopapa.chatread.MainActivity.mContext;
-import static biz.riopapa.chatread.MainActivity.sharedEditor;
+import static biz.riopapa.chatread.MainActivity.prefSaveEditor;
 
 import android.widget.Toast;
 
@@ -23,8 +24,9 @@ public class Copy2Save {
 
         String copied = logNow.substring(ps+1, pf);
         logSave += "\n" + copied;
-        sharedEditor.putString("logSave", logSave);
-        sharedEditor.apply();
+        prefSaveEditor.putString(log_Save, logSave);
+        prefSaveEditor.apply();
+
         copied = copied.replace("\n", " ▶️ ");
         Toast.makeText(mContext, " copied " + copied, Toast.LENGTH_SHORT).show();
     }

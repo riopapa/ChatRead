@@ -5,7 +5,7 @@ import static biz.riopapa.chatread.MainActivity.kvTelegram;
 import static biz.riopapa.chatread.MainActivity.logUpdate;
 import static biz.riopapa.chatread.MainActivity.mAudioManager;
 import static biz.riopapa.chatread.MainActivity.mContext;
-import static biz.riopapa.chatread.MainActivity.mMainActivity;
+import static biz.riopapa.chatread.MainActivity.mActivity;
 import static biz.riopapa.chatread.MainActivity.notificationBar;
 import static biz.riopapa.chatread.MainActivity.phoneVibrate;
 import static biz.riopapa.chatread.MainActivity.sGroups;
@@ -85,8 +85,8 @@ public class StockLine {
                         phoneVibrate.vib(0);
                     }
                     new Handler(Looper.getMainLooper()).post(() -> {
-                        if (isScreenOn(mContext) && mMainActivity != null) {
-                            mMainActivity.runOnUiThread(() -> Toast.makeText(mContext, strHead, Toast.LENGTH_LONG).show());
+                        if (isScreenOn(mContext) && mActivity != null) {
+                            mActivity.runOnUiThread(() -> Toast.makeText(mContext, strHead, Toast.LENGTH_LONG).show());
                         }
                     });
 
@@ -98,9 +98,9 @@ public class StockLine {
                     }
                     utils.logB(sbnGroup, strText);
                 }
-                notificationBar.update(strHead, strText, true);
                 logUpdate.addStock(sParse[0] + " ["+sbnGroup+":"+sbnWho+"]", strText
                         + key12);
+                notificationBar.update(strHead, strText, true);
                 String timeStamp = new SimpleDateFormat("yy-MM-dd HH:mm", Locale.KOREA).format(new Date());
                 gSheet.add2Stock(sbnGroup, timeStamp, sbnWho, percent, sParse[0], strText, key12);
 

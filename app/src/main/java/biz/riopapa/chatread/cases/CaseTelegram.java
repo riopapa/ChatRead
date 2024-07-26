@@ -42,14 +42,14 @@ public class CaseTelegram {
             }
             if (sbnGroup.isEmpty()) {
                 head = "[텔레 : " + sbnWho + "]";
-                logUpdate.addLog(head, sbnText);
                 notificationBar.update("탤레|" + sbnWho, sbnText, true);
+                logUpdate.addLog(head, sbnText);
             } else {
                 if (sbnGroup.contains("새로운 메시지"))
                     sbnGroup = "_새_";
                 head = "[텔레 <" + sbnGroup + "><" + sbnWho + ">]";
-                logUpdate.addLog(head, sbnText);
                 notificationBar.update(sbnGroup + " | " + sbnWho, sbnText, true);
+                logUpdate.addLog(head, sbnText);
             }
             sbnText = head + ", " + sbnText;
             sounds.speakAfterBeep(strUtil.makeEtc(sbnText, isWorking() ? 50 : 150));

@@ -3,7 +3,9 @@ package biz.riopapa.chatread.fragment;
 import static biz.riopapa.chatread.MainActivity.deBug;
 import static biz.riopapa.chatread.MainActivity.logSave;
 import static biz.riopapa.chatread.MainActivity.logUpdate;
+import static biz.riopapa.chatread.MainActivity.log_Save;
 import static biz.riopapa.chatread.MainActivity.mContext;
+import static biz.riopapa.chatread.MainActivity.prefSaveEditor;
 import static biz.riopapa.chatread.MainActivity.sharedEditor;
 import static biz.riopapa.chatread.MainActivity.toolbar;
 
@@ -40,7 +42,6 @@ public class FragmentSave extends Fragment {
     ImageView ivFind, ivClear, ivNext, ivDebug;
     Menu mainMenu;
     ScrollView scrollView;
-    final String logName = "logSave";
 
     public FragmentSave() {
         // Required empty public constructor
@@ -51,7 +52,7 @@ public class FragmentSave extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         if (toolbar != null)
-            toolbar.setTitle(logName);
+            toolbar.setTitle(log_Save);
     }
 
     @Override
@@ -99,7 +100,7 @@ public class FragmentSave extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         if (item.getItemId() == R.id.del_save_one_set) {
-            new ScrollUp(etTable, scrollView, logName,
+            new ScrollUp(etTable, scrollView, log_Save,
                     new LogSpan().delOneSet(etTable.getText().toString(),
                             etTable.getSelectionStart(), mContext));
 
@@ -122,8 +123,8 @@ public class FragmentSave extends Fragment {
         super.onPause();
         sharedEditor.putBoolean("deBug", deBug);
         logSave = etTable.getText().toString();
-        sharedEditor.putString(logName, logSave);
-        sharedEditor.apply();
+        prefSaveEditor.putString(log_Save, logSave);
+        prefSaveEditor.apply();
     }
 
 }

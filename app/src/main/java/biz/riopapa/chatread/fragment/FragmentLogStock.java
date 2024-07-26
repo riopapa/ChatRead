@@ -3,7 +3,9 @@ package biz.riopapa.chatread.fragment;
 import static biz.riopapa.chatread.MainActivity.deBug;
 import static biz.riopapa.chatread.MainActivity.logStock;
 import static biz.riopapa.chatread.MainActivity.logUpdate;
+import static biz.riopapa.chatread.MainActivity.log_Stock;
 import static biz.riopapa.chatread.MainActivity.mContext;
+import static biz.riopapa.chatread.MainActivity.prefStockEditor;
 import static biz.riopapa.chatread.MainActivity.sharedEditor;
 import static biz.riopapa.chatread.MainActivity.toolbar;
 
@@ -41,7 +43,6 @@ public class FragmentLogStock extends Fragment {
     ImageView ivFind, ivClear, ivNext, ivDebug;
     Menu mainMenu;
     ScrollView scrollView;
-    final String logName = "logStock";
 
     public FragmentLogStock() {
         // Required empty public constructor
@@ -52,7 +53,7 @@ public class FragmentLogStock extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         if (toolbar != null)
-            toolbar.setTitle(logName);
+            toolbar.setTitle(log_Stock);
     }
 
     @Override
@@ -100,7 +101,7 @@ public class FragmentLogStock extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         if (item.getItemId() == R.id.del_stock_one_set) {
-            new ScrollUp(etTable, scrollView, logName,
+            new ScrollUp(etTable, scrollView, log_Stock,
                     new LogSpan().delOneSet(etTable.getText().toString(),
                             etTable.getSelectionStart(), mContext));
 
@@ -131,8 +132,8 @@ public class FragmentLogStock extends Fragment {
         super.onPause();
         sharedEditor.putBoolean("deBug", deBug);
         logStock = etTable.getText().toString();
-        sharedEditor.putString(logName, logStock);
-        sharedEditor.apply();
+        prefStockEditor.putString(log_Stock, logStock);
+        prefStockEditor.apply();
     }
 
 }

@@ -63,9 +63,9 @@ public class CaseKaTalk {
         int g = getStockGroup.getIdx(sbnGroup, stockKGroupTbl, stockKGroupIdx);
         if (g < 0) {
             sbnText = strReplace.repl(ktStrRepl, sbnGroup, sbnText);
-            notificationBar.update("카톡!" + sbnGroup + "." + sbnWho, sbnText, true);
             String head = "{카톡!" + sbnGroup + "." + sbnWho + "} ";
             logUpdate.addLog(head, sbnText);
+            notificationBar.update("카톡!" + sbnGroup + "." + sbnWho, sbnText, true);
             if (IgnoreNumber.in(ktNoNumbers, sbnGroup))
                 sbnText = strUtil.removeDigit(sbnText);
             sounds.speakKakao(" 카톡 왔음 " + sbnGroup + " 의 " + sbnWho + " 님이 " +
@@ -81,9 +81,9 @@ public class CaseKaTalk {
             return;
 
         sbnText = strReplace.repl(ktStrRepl, sbnWho, sbnText);
-        notificationBar.update("카톡!" + sbnWho, sbnText, true);
         String head = "{카톡!" + sbnWho + "} ";
         logUpdate.addLog(head, sbnText);
+        notificationBar.update("카톡!" + sbnWho, sbnText, true);
         if (IgnoreNumber.in(ktNoNumbers, sbnWho))
             sbnText = strUtil.removeDigit(sbnText);
         sounds.speakKakao(" 카톡 왔음 " + sbnWho + " 님이 " +

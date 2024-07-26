@@ -1,9 +1,21 @@
 package biz.riopapa.chatread.func;
 
 import static biz.riopapa.chatread.MainActivity.logQue;
+import static biz.riopapa.chatread.MainActivity.logSave;
 import static biz.riopapa.chatread.MainActivity.logStock;
 import static biz.riopapa.chatread.MainActivity.logWork;
+import static biz.riopapa.chatread.MainActivity.log_Que;
+import static biz.riopapa.chatread.MainActivity.log_Save;
+import static biz.riopapa.chatread.MainActivity.log_Stock;
+import static biz.riopapa.chatread.MainActivity.log_Work;
+import static biz.riopapa.chatread.MainActivity.prefLogEditor;
+import static biz.riopapa.chatread.MainActivity.prefSaveEditor;
+import static biz.riopapa.chatread.MainActivity.prefStockEditor;
+import static biz.riopapa.chatread.MainActivity.prefWorkEditor;
+import static biz.riopapa.chatread.MainActivity.queFlag;
 import static biz.riopapa.chatread.MainActivity.sharedEditor;
+import static biz.riopapa.chatread.MainActivity.stockFlag;
+import static biz.riopapa.chatread.MainActivity.workFlag;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -16,20 +28,23 @@ public class LogUpdate {
     final SimpleDateFormat TIME_INFO = new SimpleDateFormat("MM-dd HH:mm ", Locale.KOREA);
     public void addLog(String header, String text) {
         logQue += "\n" + TIME_INFO.format(new Date()) + header + "\n" + text+"\n";
-        sharedEditor.putString("logQue", logQue);
-        sharedEditor.apply();
+//        queFlag = true;
+        prefLogEditor.putString(log_Que, logQue);
+        prefLogEditor.apply();
     }
 
     public void addWork(String header, String text) {
         logWork += "\n" + TIME_INFO.format(new Date()) + header + "\n" + text+"\n";
-        sharedEditor.putString("logWork", logWork);
-        sharedEditor.apply();
+//        workFlag = true;
+        prefWorkEditor.putString(log_Work, logWork);
+        prefWorkEditor.apply();
     }
 
     public void addStock(String header, String text) {
         logStock += "\n" + TIME_INFO.format(new Date()) + header + "\n" + text+"\n";
-        sharedEditor.putString("logStock", logStock);
-        sharedEditor.apply();
+//        stockFlag = true;
+        prefStockEditor.putString(log_Stock, logStock);
+        prefStockEditor.apply();
     }
 
     /*
