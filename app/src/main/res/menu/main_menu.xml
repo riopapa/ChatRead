@@ -8,46 +8,47 @@
             android:checkable="false">
             <menu>
                 <item
-                    android:title="Log"
+                    android:title="Norm Log"
                     android:icon="@drawable/icon_log"
                     android:id="@+id/log"
                     />
                 <item
-                    android:title="Work"
+                    android:title="Work Log"
                     android:icon="@drawable/icon_work"
                     android:id="@+id/work"
                     />
                 <item
-                    android:title="Save"
+                    android:title="Saved Log"
                     android:icon="@drawable/menu_save"
                     android:id="@+id/save"
-                    />
-                <item
-                    android:title="Stock"
-                    android:icon="@drawable/icon_stock"
-                    android:id="@+id/stock"
                     />
 
             </menu>
         </item>
     </group>
+    <group android:id="@+id/group1">
+            <item
+                android:title="Stock Log"
+                android:icon="@drawable/icon_stock"
+                android:id="@+id/stock"
+                />
+            <item
+                android:title="Stock Group"
+                android:icon="@drawable/icon_stock"
+                android:id="@+id/group"
+                />
+    </group>
     <group android:id="@+id/group2">
-        <item android:title="Edit Table Files"
-            android:enabled="false"
-            android:checkable="false">
-            <menu>
-                <item
-                    android:title="Stock Group"
-                    android:icon="@drawable/icon_stock"
-                    android:id="@+id/group"
-                    />
-                <item
-                    android:title="Apps"
-                    android:icon="@drawable/icon_apps"
-                    android:id="@+id/apps"
-                    />
-            </menu>
-        </item>
+        <item
+            android:title="Apps List"
+            android:icon="@drawable/icon_apps"
+            android:id="@+id/apps"
+            />
+        <item
+            android:title="System : Ignore"
+            android:icon="@drawable/icon_android"
+            android:id="@+id/table_sys_ig"
+            />
     </group>
 
     <group>
@@ -60,11 +61,6 @@
             android:title="SMS : Replace"
             android:icon="@drawable/icon_str_replace"
             android:id="@+id/table_sms_repl"
-            />
-        <item
-            android:title="System : Ignore"
-            android:icon="@drawable/icon_android"
-            android:id="@+id/table_sys_ig"
             />
     </group>
 

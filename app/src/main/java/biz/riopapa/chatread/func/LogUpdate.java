@@ -28,21 +28,18 @@ public class LogUpdate {
     final SimpleDateFormat TIME_INFO = new SimpleDateFormat("MM-dd HH:mm ", Locale.KOREA);
     public void addLog(String header, String text) {
         logQue += "\n" + TIME_INFO.format(new Date()) + header + "\n" + text+"\n";
-//        queFlag = true;
         prefLogEditor.putString(log_Que, logQue);
         prefLogEditor.apply();
     }
 
     public void addWork(String header, String text) {
         logWork += "\n" + TIME_INFO.format(new Date()) + header + "\n" + text+"\n";
-//        workFlag = true;
         prefWorkEditor.putString(log_Work, logWork);
         prefWorkEditor.apply();
     }
 
     public void addStock(String header, String text) {
         logStock += "\n" + TIME_INFO.format(new Date()) + header + "\n" + text+"\n";
-//        stockFlag = true;
         prefStockEditor.putString(log_Stock, logStock);
         prefStockEditor.apply();
     }

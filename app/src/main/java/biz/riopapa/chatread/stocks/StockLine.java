@@ -43,7 +43,7 @@ public class StockLine {
 
     String strHead, strText;
 
-    public void keyMatch(int g, int w, ArrayList<SStock> stocks) {
+    public void sayIfMatched(int g, int w, ArrayList<SStock> stocks) {
 
         for (int s = 0; s < stocks.size() ; s++) {
             if (sbnText.contains(stocks.get(s).key1) && sbnText.contains(stocks.get(s).key2)) {
@@ -75,9 +75,11 @@ public class StockLine {
                     String won = wonValue(sParse[1]);
                     joins = new String[]{sbnGroup, sbnWho, sParse[0], stock.talk, won};
                     sounds.speakBuyStock(String.join(" , ", joins));
-                    strText = makeShort(strUtil.removeSpecialChars(sParse[1]), sGroups.get(g));
-                    strText = won + " " + ((strText.length() > 70) ? strText.substring(0, 70) : strText);
-                    utils.logB(sbnGroup, strText);
+                    if (sGroups.get(g).log) {
+                        strText = makeShort(strUtil.removeSpecialChars(sParse[1]), sGroups.get(g));
+                        strText = won + " " + ((strText.length() > 70) ? strText.substring(0, 70) : strText);
+                        utils.logB(sbnGroup, strText);
+                    }
                     new Copy2Clipboard(sParse[0]);
                     if (isSilentNow()) {
                         if (phoneVibrate == null)
@@ -96,7 +98,9 @@ public class StockLine {
                     if (!isSilentNow()) {
                         sounds.beepOnce(MainActivity.soundType.ONLY.ordinal());
                     }
-                    utils.logB(sbnGroup, strText);
+                    if (sGroups.get(g).log) {
+                        utils.logB(sbnGroup, strText);
+                    }
                 }
                 logUpdate.addStock(sParse[0] + " ["+sbnGroup+":"+sbnWho+"]", strText
                         + key12);

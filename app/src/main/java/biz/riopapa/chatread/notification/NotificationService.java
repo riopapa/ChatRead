@@ -1,5 +1,6 @@
 package biz.riopapa.chatread.notification;
 
+import static android.text.TextUtils.replace;
 import static biz.riopapa.chatread.MainActivity.HIDE_STOP;
 import static biz.riopapa.chatread.MainActivity.SHOW_NOTIFICATION_BAR;
 import static biz.riopapa.chatread.MainActivity.RELOAD_APP;
@@ -40,8 +41,9 @@ public class NotificationService extends Service {
     NotificationCompat.Builder mBuilder = null;
     NotificationManager mNotificationManager;
     NotificationChannel mNotificationChannel = null;
+    int currentDndMode;
 
-    private RemoteViews mRemoteViews;
+    private static RemoteViews mRemoteViews;
     static String msg1 = "", head1 = "00:99";
     static String msg2 = "", head2 = "00:99";
     static String msg3 = "", head3 = "00:99";
@@ -54,6 +56,7 @@ public class NotificationService extends Service {
         super.onCreate();
         if (mContext == null)
             mContext = this;
+        Log.w("NotificationService","onCreate");
         mRemoteViews = new RemoteViews(mContext.getPackageName(), R.layout.notification_bar);
     }
 
@@ -88,11 +91,16 @@ public class NotificationService extends Service {
                 msg2 = msg1;
                 head2 = head1;
 
-                msg1 = strUtil.makeEtc(Objects.requireNonNull(intent.getStringExtra("msg")), 100)
-                        .replace(" ", "\u2008"); // Punctuation Space
+//                msg1 = strUtil.makeEtc(Objects.requireNonNull(intent.getStringExtra("msg")), 100)
+//                        .replace(" ", "\u2008"); // Punctuation Space
+//                head1 = new SimpleDateFormat("HH:mm", Locale.KOREA).format(new Date())
+//                        + "\u00A0" + Objects.requireNonNull(intent.getStringExtra("who"))
+//                        .replace(" ", "\u2008");
+
+                msg1 = strUtil.makeEtc(""+intent.getStringExtra("msg"), 100);
                 head1 = new SimpleDateFormat("HH:mm", Locale.KOREA).format(new Date())
-                        + "\u00A0" + Objects.requireNonNull(intent.getStringExtra("who"))
-                        .replace(" ", "\u2008");
+                        + "\u00A0" + intent.getStringExtra("who");
+
                 show_stop = intent.getBooleanExtra("stop", true);
 
                 break;
@@ -137,11 +145,25 @@ public class NotificationService extends Service {
         mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         mNotificationChannel = new NotificationChannel("default","default", NotificationManager.IMPORTANCE_DEFAULT);
         mNotificationManager.createNotificationChannel(mNotificationChannel);
+//        currentDndMode = mNotificationManager.getCurrentInterruptionFilter();
+//
+//        if (currentDndMode == NotificationManager.INTERRUPTION_FILTER_NONE) {
+//            Log.w("currentDndMode", "currentDndMode = NotificationManager.INTERRUPTION_FILTER_NONE");
+//            // Total silence: Suppress notification
+//        } else if (currentDndMode == NotificationManager.INTERRUPTION_FILTER_ALARMS) {
+//            Log.w("currentDndMode", "currentDndMode = NotificationManager.INTERRUPTION_FILTER_ALARMS");
+//            // Alarms only: Deliver only if essential
+//        } else if (currentDndMode == NotificationManager.INTERRUPTION_FILTER_PRIORITY) {
+//            Log.w("currentDndMode", "currentDndMode = NotificationManager.INTERRUPTION_FILTER_PRIORITY");
+//            // Priority only: Check notification importance
+//        } else
+//            Log.w("currentDndMode", "currentDndMode = NotificationManager.INTERRUPTION_FILTER_UNKNOWN "+
+//                    currentDndMode);
 
         if (mRemoteViews == null)
             mRemoteViews = new RemoteViews(mContext.getPackageName(), R.layout.notification_bar);
 
-        mBuilder = new NotificationCompat.Builder(this, "default")
+        mBuilder = new NotificationCompat.Builder(this, mNotificationChannel.getId())
 //                .setBadgeIconType(NotificationCompat.BADGE_ICON_NONE)
 //                .setColor(getApplicationContext().getColor(R.color.barLine1))
                 .setContent(mRemoteViews)

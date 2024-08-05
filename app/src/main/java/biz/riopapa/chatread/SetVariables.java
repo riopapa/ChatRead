@@ -18,6 +18,7 @@ import static biz.riopapa.chatread.MainActivity.kvKakao;
 import static biz.riopapa.chatread.MainActivity.kvSMS;
 import static biz.riopapa.chatread.MainActivity.kvStock;
 import static biz.riopapa.chatread.MainActivity.kvTelegram;
+import static biz.riopapa.chatread.MainActivity.kvWork;
 import static biz.riopapa.chatread.MainActivity.logQue;
 import static biz.riopapa.chatread.MainActivity.logSave;
 import static biz.riopapa.chatread.MainActivity.logStock;
@@ -120,6 +121,7 @@ public class SetVariables {
         kvCommon = new KeyVal();
         kvSMS = new KeyVal();
         kvStock = new KeyVal();
+        kvWork = new KeyVal();
         if (utils == null) {
             utils = new Utils();
             sounds = new Sounds();

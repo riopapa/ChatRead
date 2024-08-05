@@ -1,5 +1,7 @@
 package biz.riopapa.chatread.cases;
 
+import static biz.riopapa.chatread.MainActivity.kvStock;
+import static biz.riopapa.chatread.MainActivity.kvWork;
 import static biz.riopapa.chatread.MainActivity.logUpdate;
 import static biz.riopapa.chatread.MainActivity.notificationBar;
 import static biz.riopapa.chatread.MainActivity.sbnApp;
@@ -11,6 +13,10 @@ import static biz.riopapa.chatread.MainActivity.strUtil;
 
 public class CaseWork {
     public void work() {
+
+
+        if (kvWork.isDup(sbnWho, sbnText))
+            return;
 
         if (sbnApp.replF != null) {
             for (int i = 0; i < sbnApp.replF.length; i++) {

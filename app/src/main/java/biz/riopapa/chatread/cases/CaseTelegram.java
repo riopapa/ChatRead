@@ -35,7 +35,7 @@ public class CaseTelegram {
         if (g < 0) { // not in stock group
             String head;
             sbnText = strUtil.text2OneLine(sbnText);
-            if (deBug) {
+            if (deBug && sGroups.get(g).log) {
                 String whoStr = sbnWho.length() > 15 ? sbnWho.substring(0, 15) : sbnWho;
                 whoStr = whoStr.replaceAll("[^\\w\\s가-힣]", "");
                 utils.logB("who_" + whoStr, sbnWho + "\n" + sbnText);
@@ -69,9 +69,9 @@ public class CaseTelegram {
             return;
 
         String [] grpWho = sbnWho.split(":");
-        if (grpWho.length == 2) {       // 그룹명 : 이름
+        if (grpWho.length == 2) {       // 0)그룹명 : 1)이름
             sbnWho = grpWho[1].trim();
-        } else if (grpWho.length == 3) {  // 와룡 : 그룹 이름
+        } else if (grpWho.length == 3) {  // 0)와룡 : 1)그룹 이름 : 2)이름
             sbnWho = grpWho[2].trim();
         } else {    // group name only
             int p = sbnText.indexOf(":");
@@ -79,18 +79,19 @@ public class CaseTelegram {
                 sbnWho = sbnText.substring(0, p).trim();
                 sbnText = sbnText.substring(p + 1).trim();
             } else
-                sbnWho = sbnText.substring(0,15);
+                sbnWho = sbnText.substring(0,15) + "$";
         }
 
         if (kvTelegram.isDup(sbnWho, sbnText))
             return;
 
-        utils.logB(sbnGroup, sbnWho + "%% "+sbnText);
+        if (deBug && sGroups.get(g).log)
+            utils.logB(sbnGroup, sbnWho + "_% "+sbnText);
 
         for (int w = 0; w < sGroups.get(g).whos.size(); w++) {
             if (sbnWho.startsWith(sGroups.get(g).whos.get(w).whoM)) {
                 sbnWho = sGroups.get(g).whos.get(w).who;
-                stockLine.keyMatch(g, w, sGroups.get(g).whos.get(w).stocks);
+                stockLine.sayIfMatched(g, w, sGroups.get(g).whos.get(w).stocks);
                 break;
             }
         }

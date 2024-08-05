@@ -125,7 +125,18 @@
             android:gravity="center"
             android:textColor="@color/textFore"
             android:textSize="@dimen/app_line_font_size"
-            android:text=" "
+            android:text="k"
+            />
+
+        <TextView
+            android:id="@+id/one_group_log"
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_height="match_parent"
+            android:gravity="right"
+            android:textColor="@color/textFore"
+            android:textSize="12sp"
+            android:text="log"
             />
 
     </LinearLayout>

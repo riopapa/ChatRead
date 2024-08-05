@@ -164,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
     public static KeyVal kvSMS = null;
     public static KeyVal kvTelegram = null;
     public static KeyVal kvStock = null;
+    public static KeyVal kvWork = null;
     public static int menu_selected;
 
     /** case modules **/
@@ -293,15 +294,16 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
             startActivity(intent);
         }
+
         new SetVariables(this,"main");
         notificationBar.startShow();
-        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                // Back is pressed... Ignore backPress
-//                finish();
-            }
-        });
+//        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+//            @Override
+//            public void handleOnBackPressed() {
+//                // Back is pressed... Ignore backPress
+////                finish();
+//            }
+//        });
 
 
 //        View decorView = getWindow().getDecorView();
@@ -344,8 +346,28 @@ public class MainActivity extends AppCompatActivity {
         groupRecyclerView.setAdapter(groupAdapter);
     }
 
+//    @Override
+//    protected void onPause() {
+//        super.onPause();
+//    }
+
     @Override
-    protected void onPause() {
-        super.onPause();
+    public void onBackPressed() {
+        saveLogFile();
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            // Close the drawer when open
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            // Handle other back button actions
+            super.onBackPressed();
+        }
+    }
+
+    private static void saveLogFile() {
+        Log.w("saveLogFile","saveLogFile");
+        fileIO.writeFile(todayFolder, "logStock.txt", logStock);
+        fileIO.writeFile(todayFolder, "logQue.txt", logQue);
+        fileIO.writeFile(todayFolder, "logWork.txt", logWork);
+        fileIO.writeFile(todayFolder, "logSave.txt", logSave);
     }
 }

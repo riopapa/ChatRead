@@ -32,6 +32,7 @@ import java.util.List;
 
 import biz.riopapa.chatread.R;
 import biz.riopapa.chatread.adapters.AppsAdapter;
+import biz.riopapa.chatread.common.ClipboardHelper;
 import biz.riopapa.chatread.func.AppsTable;
 import biz.riopapa.chatread.models.App;
 
@@ -81,14 +82,16 @@ public class ActivityEditApp extends AppCompatActivity {
             app.replT = null;
             app.igStr = null;
 
-            ClipboardManager clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-            ClipData clipData = clipboardManager.getPrimaryClip();
-            if (clipData != null && clipData.getItemCount() > 0)
-                Log.e("clip", "cnt+ "+ clipData.getItemCount());
-            if (clipData != null && clipData.getItemCount() > 0 &&
-                    clipData.getItemAt(0).getText() != null) {
-                app.fullName = clipData.getItemAt(0).getText().toString();
-            }
+//            ClipboardManager clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+//            ClipData clipData = clipboardManager.getPrimaryClip();
+//            if (clipData != null && clipData.getItemCount() > 0)
+//                Log.e("clip", "cnt+ "+ clipData.getItemCount());
+//            if (clipData != null && clipData.getItemCount() > 0 &&
+//                    clipData.getItemAt(0).getText() != null) {
+//                app.fullName = clipData.getItemAt(0).getText().toString();
+//            }
+            String clipboardText = ClipboardHelper.getClipboardText(this);
+            app.fullName = clipboardText;
         } else {
             app = apps.get(mAppsPos);
             actionBar.setTitle("App Edit");

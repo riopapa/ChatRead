@@ -27,7 +27,7 @@ public class Copy2Save {
         prefSaveEditor.putString(log_Save, logSave);
         prefSaveEditor.apply();
 
-        copied = copied.replace("\n", " ▶️ ");
-        Toast.makeText(mContext, " copied " + copied, Toast.LENGTH_SHORT).show();
+        copied = copied.replace("\n", "▶️");
+        Toast.makeText(mContext, copied, Toast.LENGTH_SHORT).show();
     }
 }

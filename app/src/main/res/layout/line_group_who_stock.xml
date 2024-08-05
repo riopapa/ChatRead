@@ -14,17 +14,6 @@
         android:orientation="horizontal">
 
         <TextView
-            android:layout_width="0dp"
-            android:layout_weight="4"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:textColor="@color/textFore"
-            android:textSize="@dimen/app_line_font_size"
-            android:text="Key"
-            android:maxLines="1"
-            />
-
-        <TextView
             android:id="@+id/stock_key1"
             android:layout_width="0dp"
             android:layout_weight="4"
@@ -49,17 +38,6 @@
             />
 
         <TextView
-            android:layout_width="0dp"
-            android:layout_weight="4"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:textColor="@color/textFore"
-            android:textSize="@dimen/app_line_font_size"
-            android:text="Talk"
-            android:maxLines="1"
-            />
-
-        <TextView
             android:id="@+id/stock_talk"
             android:layout_width="0dp"
             android:layout_weight="4"
@@ -77,17 +55,6 @@
         android:layout_width = "match_parent"
         android:layout_height = "wrap_content"
         android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="4"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:textColor="@color/textFore"
-            android:textSize="@dimen/app_line_font_size"
-            android:text="Prv, Nxt"
-            android:maxLines="1"
-            />
 
         <TextView
             android:id="@+id/stock_prv"
@@ -110,17 +77,6 @@
             android:textColor="@color/textFore"
             android:textSize="@dimen/app_line_font_size"
             android:text="Next"
-            android:maxLines="1"
-            />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="3"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:textColor="@color/textFore"
-            android:textSize="@dimen/app_line_font_size"
-            android:text="Cnt"
             android:maxLines="1"
             />
 

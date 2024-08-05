@@ -10,9 +10,14 @@ import static biz.riopapa.chatread.MainActivity.stockGetPut;
 import static biz.riopapa.chatread.MainActivity.whoRecyclerView;
 import static biz.riopapa.chatread.fragment.FragmentStockList.groupRecyclerView;
 
+import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,7 +39,7 @@ public class ActivityEditGroup extends AppCompatActivity {
 
     EditText eGroup, eGroupM, eGroupF, eSkip1, eSkip2, eSkip3, eRepl;
     TextView tTelKa;
-    SwitchCompat sIgnore;
+    SwitchCompat sIgnore, sLog;
     View deleteMenu;
     final String NOTHING = "_n_";
     SGroup newGroup;
@@ -68,6 +73,7 @@ public class ActivityEditGroup extends AppCompatActivity {
         eSkip1 = findViewById(R.id.e_skip1);
         eSkip2 = findViewById(R.id.e_skip2);
         eSkip3 = findViewById(R.id.e_skip3);
+        sLog = findViewById(R.id.s_log);
         eRepl = findViewById(R.id.e_repl);
 
         eGroup.setText(sGroups.get(gIDX).grp);
@@ -78,6 +84,7 @@ public class ActivityEditGroup extends AppCompatActivity {
         eSkip1.setText(sGroups.get(gIDX).skip1);
         eSkip2.setText(sGroups.get(gIDX).skip2);
         eSkip3.setText(sGroups.get(gIDX).skip3);
+        sLog.setChecked(sGroups.get(gIDX).log);
         tTelKa.setOnClickListener(v -> tTelKa.setText(nextTelKa(tTelKa.getText().toString())));
         if (sGroups.get(gIDX).replF != null) {
             String s = "";
@@ -153,6 +160,7 @@ public class ActivityEditGroup extends AppCompatActivity {
         newGroup.skip1 = eSkip1.getText().toString();
         newGroup.skip2 = eSkip2.getText().toString();
         newGroup.skip3 = eSkip3.getText().toString();
+        newGroup.log = sLog.isChecked();
         if (newGroup.skip1.isEmpty())
             newGroup.skip1 = NOTHING;
         if (newGroup.skip2.isEmpty())
@@ -161,7 +169,6 @@ public class ActivityEditGroup extends AppCompatActivity {
             newGroup.skip3 = NOTHING;
 
         buildRepl(eRepl.getText().toString(), newGroup);
-
         sGroups.add(gIDX, newGroup);
         stockGetPut.put("group dup");
         updateAdapter();
@@ -196,6 +203,7 @@ public class ActivityEditGroup extends AppCompatActivity {
         newGroup.skip1 = eSkip1.getText().toString();
         newGroup.skip2 = eSkip2.getText().toString();
         newGroup.skip3 = eSkip3.getText().toString();
+        newGroup.log = sLog.isChecked();
         if (newGroup.skip1.isEmpty())
             newGroup.skip1 = NOTHING;
         if (newGroup.skip2.isEmpty())

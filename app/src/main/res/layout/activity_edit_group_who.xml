@@ -148,13 +148,15 @@
             android:textSize="@dimen/alert_font_size"
             />
         <TextView
-            android:id="@+id/who_dummy"
+            id="@+id/who_log"
             android:layout_width="0dp"
             android:layout_weight="5"
             android:layout_height="wrap_content"
-            android:text=""
+            android:text="Log"
             android:textSize="@dimen/stock_font_size"
+            android:gravity="right"
             />
+
     </LinearLayout>
 
     <LinearLayout

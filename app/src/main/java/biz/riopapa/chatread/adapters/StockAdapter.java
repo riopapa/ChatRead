@@ -64,13 +64,13 @@ public class StockAdapter extends RecyclerView.Adapter<StockAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
 
         SStock stock = sGroups.get(gIDX).whos.get(wIDX).stocks.get(position);
-        holder.tKey1.setText(stock.key1);
-        holder.tKey2.setText(stock.key2);
-        holder.tPrev.setText(stock.prv);
-        holder.tNext.setText(stock.nxt);
-        holder.tCount.setText("" + stock.count);
-        holder.tSkip.setText(stock.skip1);
-        holder.tTalk.setText(stock.talk);
+        holder.tKey1.setText("Key1:"+stock.key1);
+        holder.tKey2.setText("Key2:"+stock.key2);
+        holder.tPrev.setText("Prv:"+stock.prv);
+        holder.tNext.setText("Nxt"+stock.nxt);
+        holder.tCount.setText("Cnt:" + stock.count);
+        holder.tSkip.setText("Skip:"+stock.skip1);
+        holder.tTalk.setText(stock.talk.isEmpty() ? "no talk" : "Talk:"+stock.talk);
 
         holder.tLine.setOnClickListener(v -> {
             sIDX = holder.getAdapterPosition();

@@ -42,7 +42,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tGroup, tGroupM, tGroupF, tSkip1, tSkip2, tSkip3, tIgnore, tTelegram, tInfo;
+        TextView tGroup, tGroupM, tGroupF, tSkip1, tSkip2, tSkip3, tIgnore, tTelegram, tInfo, tLog;
         View tLine;
 
         ViewHolder(final View itemView) {
@@ -57,6 +57,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
             tIgnore = itemView.findViewById(R.id.one_group_ignore);
             tTelegram = itemView.findViewById(R.id.one_group_telegram);
             tInfo = itemView.findViewById(R.id.one_group_info);
+            tLog = itemView.findViewById(R.id.one_group_log);
         }
     }
 
@@ -103,6 +104,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
         holder.tTelegram.setText(sGrp.telKa);
         holder.tIgnore.setText((sGrp.ignore) ? "무시" : "  ");
         holder.tInfo.setText(grpBuilder);
+        holder.tLog.setText((sGrp.log) ? "Log" : "no Log");
         holder.tLine.setBackgroundColor(ContextCompat.getColor(mContext,
                 (gIDX == position)? R.color.line_now : R.color.line_default));
         holder.tLine.setOnClickListener(view -> listener.onItemClicked(position));

@@ -34,7 +34,7 @@ import biz.riopapa.chatread.models.SWho;
 public class ActivityEditGroupWho extends AppCompatActivity {
 
     TextView tGroup, tGroupM, tGroupF, tSkip1, tSkip2, tSkip3;
-    TextView tTelKa;
+    TextView tTelKa, tLog;
     EditText eWho, eWhoM, eWhoF;
     SwitchCompat sIgnore;
     View deleteMenu;
@@ -71,6 +71,7 @@ public class ActivityEditGroupWho extends AppCompatActivity {
         eWho = findViewById(R.id.who_who);
         eWhoM = findViewById(R.id.who_who_match);
         eWhoF = findViewById(R.id.who_who_full);
+        tLog = findViewById(R.id.who_log);
 
         tGroup.setText(sGroups.get(gIDX).grp);
         tGroupM.setText(sGroups.get(gIDX).grpM);
@@ -80,6 +81,7 @@ public class ActivityEditGroupWho extends AppCompatActivity {
         tSkip1.setText(sGroups.get(gIDX).skip1);
         tSkip2.setText(sGroups.get(gIDX).skip2);
         tSkip3.setText(sGroups.get(gIDX).skip3);
+        tLog.setText(sGroups.get(gIDX).log ? "Log" : "no Log");
         eWho.setText(sGroups.get(gIDX).whos.get(wIDX).who);
         eWhoM.setText(sGroups.get(gIDX).whos.get(wIDX).whoM);
         eWhoF.setText(sGroups.get(gIDX).whos.get(wIDX).whoF);
