@@ -31,7 +31,7 @@ public class Utils {
         logText += excludeName(traces[5].getMethodName()) + excludeName(traces[4].getMethodName()) +
                 excludeName(traceClassName(traces[3].getClassName()))+"> "+traces[3].getMethodName() +
                 "#" + traces[3].getLineNumber() + " {"+ tag + "} " + text;
-        fileIO.append2Today("zLog "+tag+".txt", logText);
+        fileIO.append2Today("z "+tag+".txt", logText);
     }
 
     public void logB(String tag, String text) {

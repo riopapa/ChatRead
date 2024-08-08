@@ -26,6 +26,7 @@ import biz.riopapa.chatread.common.Utils;
 import biz.riopapa.chatread.models.KeyVal;
 
 public class ReadyToday {
+
     public ReadyToday() {
 
         String nowDay = new SimpleDateFormat("yy-MM-dd", Locale.KOREA).format(new Date());
@@ -45,10 +46,6 @@ public class ReadyToday {
         if (!todayFolder.exists()) {
             if (todayFolder.mkdirs())
                 new Utils().deleteOldFiles();
-////            sharedEditor.apply();
-//            fileIO.writeFile(todayFolder, "logStock.txt", logStock);
-//            fileIO.writeFile(todayFolder, "logQue.txt", logQue);
-//            fileIO.writeFile(todayFolder, "logWork.txt", logWork);
         }
         kvCommon = new KeyVal();
         kvStock = new KeyVal();

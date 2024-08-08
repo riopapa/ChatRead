@@ -184,8 +184,12 @@ public class SetVariables {
             prefWorkEditor = prefWork.edit();
             logWork = prefWork.getString(log_Work, fileIO.readFile(tableFolder, log_Work+".txt"));
         }
-
         deBug = sharePref.getBoolean("deBug", false);
+        if (deBug) {
+            fileIO.writeFile(todayFolder, "logStock.txt", logStock);
+            fileIO.writeFile(todayFolder, "logQue.txt", logQue);
+            fileIO.writeFile(todayFolder, "logWork.txt", logWork);
+        }
 
     }
 

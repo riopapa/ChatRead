@@ -96,13 +96,13 @@ public class CaseSMS {
                     String sayMsg = stockName + " " + amount + " " + uPrice + samPam;
                     logUpdate.addStock("sms>NH투자", sayMsg);
                     notificationBar.update(samPam +":"+stockName, sayMsg, true);
+                    String talkMsg = stockName + samPam;
+                    if (isWorking())
+                        talkMsg = strUtil.makeEtc(talkMsg, 20);
+                    sounds.speakAfterBeep(strUtil.removeDigit(talkMsg));
                     gSheet.add2Stock(sGroup, new SimpleDateFormat("yy-MM-dd HH:mm", Locale.KOREA).format(new Date()),sbnWho, samPam, stockName,
                             sbnText.replace(stockName, new StringBuffer(stockName).insert(1, ".").toString()), samPam
                     );
-                    sayMsg = stockName + samPam;
-                    if (isWorking())
-                        sayMsg = strUtil.makeEtc(sayMsg, 20);
-                    sounds.speakAfterBeep(strUtil.removeDigit(sayMsg));
                 }
             } catch (Exception e) {
                 logUpdate.addStock("NH투자", "Exception " + sbnText + e);

@@ -40,14 +40,14 @@ public class MsgNamoo {
                         words[1]};
                 sText = String.join(" ", joins);
                 sounds.speakAfterBeep(sText);
+                logUpdate.addStock(naMoo +"."+stkName, sText);
+                String timeStamp = new SimpleDateFormat("yy-MM-dd HH:mm", Locale.KOREA).format(new Date());
+                gSheet.add2Stock("힝체결", timeStamp, naMoo, words[1], stkName, words[5]+" "+words[2], words[4]);
+
             }
 /*            NotificationBar.update(words[3]+"."+words[1], sText, true);
 
  */
-            logUpdate.addStock(naMoo +"."+stkName, sText);
-            String timeStamp = new SimpleDateFormat("yy-MM-dd HH:mm", Locale.KOREA).format(new Date());
-            gSheet.add2Stock("힝체결", timeStamp, naMoo, words[1], stkName, words[5]+" "+words[2], words[4]);
-
         } else {
             logUpdate.addStock("[NH나무App]", text);
             if (isWorking())

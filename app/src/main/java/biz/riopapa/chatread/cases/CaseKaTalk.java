@@ -60,6 +60,7 @@ public class CaseKaTalk {
         sbnText = strUtil.text2OneLine(sbnText);
         if (kvKakao.isDup(sbnGroup, sbnText))
             return;
+
         int g = getStockGroup.getIdx(sbnGroup, stockKGroupTbl, stockKGroupIdx);
         if (g < 0) {
             sbnText = strReplace.repl(ktStrRepl, sbnGroup, sbnText);
@@ -94,11 +95,10 @@ public class CaseKaTalk {
 
         if (sbnText.length() < 20)  // for better performance, with logically not true
             return;
-        if (timeBegin == 0)
-            new ReadyToday();
         long nowTime = System.currentTimeMillis();
         if (nowTime < timeBegin || nowTime > timeEnd)
             return;
+        new ReadyToday();
         sbnGroup = sGroups.get(g).grp;  // replace with short group
         if (kvKakao.isDup(sbnGroup, sbnText))
             return;

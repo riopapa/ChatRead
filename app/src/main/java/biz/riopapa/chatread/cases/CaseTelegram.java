@@ -31,6 +31,9 @@ public class CaseTelegram {
         if (ignoreString.check(sbnApp))
             return;
 
+        if (timeBegin == 0)
+            new ReadyToday();
+
         int g = getStockGroup.getIdx(sbnWho, stockTGroupTbl, stockTGroupIdx);
         if (g < 0) { // not in stock group
             String head;
@@ -56,8 +59,6 @@ public class CaseTelegram {
             return;
         }
 
-        if (timeBegin == 0)
-            new ReadyToday();
         long nowTime = System.currentTimeMillis();
         if (nowTime < timeBegin || nowTime > timeEnd)
             return;

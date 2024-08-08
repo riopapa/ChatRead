@@ -19,12 +19,9 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 import biz.riopapa.chatread.common.Utils;
@@ -47,11 +44,10 @@ public class FileIO {
         tableFolder = new File(downloadFolder, "_ChatTalk");
     }
 
+    final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss", Locale.KOREA);
     public void append2Today(String filename, String textLine) {
-        if (todayFolder == null) {
+        if (todayFolder == null)
             todayFolder = new File(packageDirectory, toDay);
-        }
-        final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss", Locale.KOREA);
         File file = new File(todayFolder, filename);
         String timeInfo = timeFormat.format(new Date()) + " ";
         append2File(file, timeInfo, textLine);
@@ -117,45 +113,4 @@ public class FileIO {
         }
         return sb.toString();
     }
-
-    public String[] readKR(String filename) {
-        final int BUFFER_SIZE = 81920;
-        final String code = "EUC-KR";
-        BufferedReader bufferedReader = null;
-        try {
-            bufferedReader = new BufferedReader(new InputStreamReader(Files.newInputStream(Paths.get(filename)), code), BUFFER_SIZE);
-        } catch (Exception e) {
-            Log.e("readKR","Exception "+e);
-        }
-
-        List<String> lines = new ArrayList<>();
-        String line;
-        while (true) {
-            try {
-                if ((line = bufferedReader.readLine()) == null) break;
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            lines.add(line);
-        }
-        try {
-            bufferedReader.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return lines.toArray(new String[0]);
-    }
-
-//    public static void writeKR(File file, String textLine) {
-//        try {
-//            FileOutputStream fileOutputStream = new FileOutputStream(file);
-//            OutputStreamWriter OutputStreamWriter =
-//                    new OutputStreamWriter(fileOutputStream, "EUC-KR");
-//            BufferedWriter bufferedWriter = new BufferedWriter(OutputStreamWriter);
-//            bufferedWriter.write(textLine);
-//            bufferedWriter.close();
-//        } catch (Exception e) {
-//            Log.e("writeKR","IOException "+e);
-//        }
-//    }
 }
