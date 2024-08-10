@@ -84,10 +84,11 @@ public class StockLine {
                     if (isSilentNow()) {
                         if (phoneVibrate == null)
                             phoneVibrate = new PhoneVibrate();
-                        phoneVibrate.vib(0);
+                        phoneVibrate.go(1);
                     }
                     new Handler(Looper.getMainLooper()).post(() -> {
                         if (isScreenOn(mContext) && mActivity != null) {
+                            mActivity.runOnUiThread(() -> Toast.makeText(mContext, strHead, Toast.LENGTH_LONG).show());
                             mActivity.runOnUiThread(() -> Toast.makeText(mContext, strHead, Toast.LENGTH_LONG).show());
                         }
                     });

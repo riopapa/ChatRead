@@ -90,7 +90,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
                 if (stBuilder.length() > 10)
                     stBuilder.append("\n     ");
                 SpannableString ssStock = new SpannableString(" " + s.key1 + "/" + s.key2 + ", " + s.prv + "/" + s.nxt
-                        + ", " + s.count + ", " + s.talk+" ");
+                        + ", " + s.count + ", " + (s.talk.isEmpty() ? "x.x": s.talk) +" ");
                 ssStock.setSpan(new ForegroundColorSpan(0xFF0F0F08), 0, ssStock.length()
                         , Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 stBuilder.append(ssStock);

@@ -70,7 +70,7 @@ public class StockAdapter extends RecyclerView.Adapter<StockAdapter.ViewHolder> 
         holder.tNext.setText("Nxt"+stock.nxt);
         holder.tCount.setText("Cnt:" + stock.count);
         holder.tSkip.setText("Skip:"+stock.skip1);
-        holder.tTalk.setText(stock.talk.isEmpty() ? "no talk" : "Talk:"+stock.talk);
+        holder.tTalk.setText(stock.talk.isEmpty() ? "x.x" : "Talk:"+stock.talk);
 
         holder.tLine.setOnClickListener(v -> {
             sIDX = holder.getAdapterPosition();
