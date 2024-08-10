@@ -20,7 +20,6 @@ import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -29,6 +28,7 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.navigation.NavigationView;
@@ -295,32 +295,19 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
 
-        new SetVariables(this,"main");
+        new AllVariables().set(this,"main");
         notificationBar.startShow();
-//        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
-//            @Override
-//            public void handleOnBackPressed() {
-//                // Back is pressed... Ignore backPress
-////                finish();
-//            }
-//        });
 
-
-//        View decorView = getWindow().getDecorView();
-//        decorView.post(() -> {
-//            getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
-//                    new FragmentLogNorm()).commit();
-//            drawerLayout.closeDrawer(GravityCompat.START);
-//        });
 
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
-                getSupportFragmentManager().beginTransaction().replace(R.id.myFrame,
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.myFrame,
                         new FragmentLogNorm()).commit();
                 drawerLayout.closeDrawer(GravityCompat.START);
             }
-        }, 30);
+        }, 100);
 
         groupListener = position -> {
             gIDX = position;

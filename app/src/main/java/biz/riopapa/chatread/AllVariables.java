@@ -97,10 +97,10 @@ import biz.riopapa.chatread.models.KeyVal;
 import biz.riopapa.chatread.notification.NotificationBar;
 import biz.riopapa.chatread.notification.NotificationService;
 
-public class SetVariables {
-    public SetVariables(Context context, String msg) {
+public class AllVariables {
+    public void set(Context context, String msg) {
         mContext = context;
-        Log.e("SetVariables", "started " + msg);
+        Log.e("AllVariables", "started " + msg);
 
         if (packageDirectory == null)
             packageDirectory = new File(Environment.getExternalStorageDirectory(), "_ChatTalkLog");
@@ -152,7 +152,7 @@ public class SetVariables {
             phoneVibrate = new PhoneVibrate();
             notificationService = new NotificationService();
             notificationBar = new NotificationBar();
-            if (!isServiceRunning(mContext, notificationService.getClass())) {
+            if (!isServiceRunning(mContext, notificationService.getClass().getName())) {
                 mBackgroundServiceIntent = new Intent(mContext, notificationService.getClass());
 //                mContext.startForegroundService(mBackgroundServiceIntent);
                 mContext.startService(mBackgroundServiceIntent);
@@ -186,17 +186,16 @@ public class SetVariables {
         }
         deBug = sharePref.getBoolean("deBug", false);
         if (deBug) {
-            fileIO.writeFile(todayFolder, "logStock.txt", logStock);
-            fileIO.writeFile(todayFolder, "logQue.txt", logQue);
-            fileIO.writeFile(todayFolder, "logWork.txt", logWork);
+            fileIO.writeFile(todayFolder, "zLogStock.txt", logStock);
+            fileIO.writeFile(todayFolder, "zLogQue.txt", logQue);
+            fileIO.writeFile(todayFolder, "zLogWork.txt", logWork);
         }
-
     }
 
-    boolean isServiceRunning(Context context, Class serviceClass) {
+    public static boolean isServiceRunning(Context context, String svcClassName) {
         ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
+            if (svcClassName.equals(service.service.getClassName())) {
                 return true;
             }
         }

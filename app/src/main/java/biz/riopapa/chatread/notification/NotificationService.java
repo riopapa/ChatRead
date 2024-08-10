@@ -1,6 +1,5 @@
 package biz.riopapa.chatread.notification;
 
-import static android.text.TextUtils.replace;
 import static biz.riopapa.chatread.MainActivity.HIDE_STOP;
 import static biz.riopapa.chatread.MainActivity.SHOW_NOTIFICATION_BAR;
 import static biz.riopapa.chatread.MainActivity.RELOAD_APP;
@@ -30,18 +29,16 @@ import androidx.core.app.NotificationCompat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Objects;
 
+import biz.riopapa.chatread.AllVariables;
 import biz.riopapa.chatread.MainActivity;
 import biz.riopapa.chatread.R;
-import biz.riopapa.chatread.SetVariables;
 
 public class NotificationService extends Service {
 
     NotificationCompat.Builder mBuilder = null;
     NotificationManager mNotificationManager;
     NotificationChannel mNotificationChannel = null;
-    int currentDndMode;
 
     private static RemoteViews mRemoteViews;
     static String msg1 = "", head1 = "00:99";
@@ -90,14 +87,9 @@ public class NotificationService extends Service {
                 head3 = head2;
                 msg2 = msg1;
                 head2 = head1;
-
-//                msg1 = strUtil.makeEtc(Objects.requireNonNull(intent.getStringExtra("msg")), 100)
-//                        .replace(" ", "\u2008"); // Punctuation Space
-//                head1 = new SimpleDateFormat("HH:mm", Locale.KOREA).format(new Date())
-//                        + "\u00A0" + Objects.requireNonNull(intent.getStringExtra("who"))
-//                        .replace(" ", "\u2008");
-
-                msg1 = strUtil.makeEtc(""+intent.getStringExtra("msg"), 100);
+                msg1 = intent.getStringExtra("msg");
+                assert msg1 != null;
+                msg1 = strUtil.makeEtc(msg1, 100);
                 head1 = new SimpleDateFormat("HH:mm", Locale.KOREA).format(new Date())
                         + "\u00A0" + intent.getStringExtra("who");
 
@@ -145,21 +137,6 @@ public class NotificationService extends Service {
         mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         mNotificationChannel = new NotificationChannel("default","default", NotificationManager.IMPORTANCE_DEFAULT);
         mNotificationManager.createNotificationChannel(mNotificationChannel);
-//        currentDndMode = mNotificationManager.getCurrentInterruptionFilter();
-//
-//        if (currentDndMode == NotificationManager.INTERRUPTION_FILTER_NONE) {
-//            Log.w("currentDndMode", "currentDndMode = NotificationManager.INTERRUPTION_FILTER_NONE");
-//            // Total silence: Suppress notification
-//        } else if (currentDndMode == NotificationManager.INTERRUPTION_FILTER_ALARMS) {
-//            Log.w("currentDndMode", "currentDndMode = NotificationManager.INTERRUPTION_FILTER_ALARMS");
-//            // Alarms only: Deliver only if essential
-//        } else if (currentDndMode == NotificationManager.INTERRUPTION_FILTER_PRIORITY) {
-//            Log.w("currentDndMode", "currentDndMode = NotificationManager.INTERRUPTION_FILTER_PRIORITY");
-//            // Priority only: Check notification importance
-//        } else
-//            Log.w("currentDndMode", "currentDndMode = NotificationManager.INTERRUPTION_FILTER_UNKNOWN "+
-//                    currentDndMode);
-
         if (mRemoteViews == null)
             mRemoteViews = new RemoteViews(mContext.getPackageName(), R.layout.notification_bar);
 
@@ -221,7 +198,7 @@ public class NotificationService extends Service {
     public void msgGet() {
 
         if (sharePref == null)
-            new SetVariables(this, "notiSvc");
+            new AllVariables().set(this, "notiSvc");
         msg1 = sharePref.getString("msg1", "None 1");
         msg2 = sharePref.getString("msg2", "None 2");
         msg3 = sharePref.getString("msg3", "None 3");

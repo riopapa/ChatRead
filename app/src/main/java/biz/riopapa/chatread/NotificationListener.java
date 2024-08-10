@@ -50,7 +50,7 @@ public class NotificationListener extends NotificationListenerService {
     public void onNotificationPosted(StatusBarNotification sbn) {
 
         if (kvCommon == null)
-            new SetVariables(this, "<< noty >>");
+            new AllVariables().set(this, "<< noty >>");
 
         if (ignoreSbn(sbn))
             return;

@@ -10,7 +10,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 
-import biz.riopapa.chatread.notification.NotificationService;
+import java.util.Objects;
 
 
 public class BootReceiver extends BroadcastReceiver {
@@ -18,19 +18,17 @@ public class BootReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(final Context context, Intent intent) {
 
-//        if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
-
-            new SetVariables(context, "boot");
+        if (Objects.equals(intent.getAction(), "android.intent.action.BOOT_COMPLETED")) {
+            new AllVariables().set(context, "boot");
             new Handler(Looper.getMainLooper()).postDelayed(() -> {
                 Intent nIntent = new Intent(mContext, MainActivity.class);
                 nIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(nIntent);
             }, 100);
 
-            new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                notificationBar.update("After Boot", "Rebooted", false);
-            }, 5000);
-//        }
+            new Handler(Looper.getMainLooper()).postDelayed(() ->
+                    notificationBar.update("After Boot", "Rebooted", false), 5000);
+        }
     }
 
 }
