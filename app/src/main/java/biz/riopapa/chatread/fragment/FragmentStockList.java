@@ -2,6 +2,7 @@ package biz.riopapa.chatread.fragment;
 
 import static biz.riopapa.chatread.MainActivity.gIDX;
 import static biz.riopapa.chatread.MainActivity.groupListener;
+import static biz.riopapa.chatread.MainActivity.readyToday;
 import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.stockGetPut;
 import static biz.riopapa.chatread.MainActivity.groupAdapter;
@@ -56,7 +57,7 @@ public class FragmentStockList extends Fragment {
         groupRecyclerView = thisView.findViewById(R.id.recycle_stock_group);
         groupRecyclerView.setAdapter(groupAdapter);
         if (todayFolder == null)
-            new ReadyToday();
+            readyToday.check();
         thisView.invalidate();
         return thisView;
     }

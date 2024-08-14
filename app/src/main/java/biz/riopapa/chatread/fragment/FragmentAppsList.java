@@ -5,6 +5,7 @@ import static biz.riopapa.chatread.MainActivity.apps;
 import static biz.riopapa.chatread.MainActivity.appsAdapter;
 import static biz.riopapa.chatread.MainActivity.mAppsPos;
 import static biz.riopapa.chatread.MainActivity.mContext;
+import static biz.riopapa.chatread.MainActivity.readyToday;
 import static biz.riopapa.chatread.MainActivity.todayFolder;
 import static biz.riopapa.chatread.MainActivity.toolbar;
 
@@ -64,7 +65,7 @@ public class FragmentAppsList extends Fragment {
         appsRecyclerView = thisView.findViewById(R.id.recycle_apps);
         appsRecyclerView.setAdapter(appsAdapter);
         if (todayFolder == null)
-            new ReadyToday();
+            readyToday.check();
 
         fnd = new boolean[apps.size()];
         if (appsAdapter == null)

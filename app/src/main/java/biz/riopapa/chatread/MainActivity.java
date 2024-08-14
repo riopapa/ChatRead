@@ -52,6 +52,7 @@ import biz.riopapa.chatread.cases.CaseTesla;
 import biz.riopapa.chatread.cases.CaseWork;
 import biz.riopapa.chatread.func.GetStockGroup;
 import biz.riopapa.chatread.func.IgnoreString;
+import biz.riopapa.chatread.func.ReadyToday;
 import biz.riopapa.chatread.func.StrReplace;
 import biz.riopapa.chatread.models.SGroup;
 import biz.riopapa.chatread.models.StrRepl;
@@ -94,6 +95,8 @@ public class MainActivity extends AppCompatActivity {
     public static File todayFolder = null;
 
     public static String toDay = "To";
+    public static final String monthDay = "MM-dd EEE";
+    public static final String hourMin = " HH:mm";
     public static long timeBegin = 0, timeEnd = 0;
 
     public static ArrayList<String> appIgnores;
@@ -184,6 +187,7 @@ public class MainActivity extends AppCompatActivity {
     public static StockName stockName = null;
     public static GetStockGroup getStockGroup = null;
     public static IgnoreString ignoreString = null;
+    public static ReadyToday readyToday = null;
 
     public static AudioManager mAudioManager = null;
     public static PhoneVibrate phoneVibrate = null;

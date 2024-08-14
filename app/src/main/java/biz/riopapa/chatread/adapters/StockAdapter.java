@@ -1,6 +1,5 @@
 package biz.riopapa.chatread.adapters;
 
-import static androidx.fragment.app.DialogFragment.STYLE_NORMAL;
 import static biz.riopapa.chatread.MainActivity.gIDX;
 import static biz.riopapa.chatread.MainActivity.gSheet;
 import static biz.riopapa.chatread.MainActivity.stockRecyclerView;
@@ -12,7 +11,6 @@ import static biz.riopapa.chatread.MainActivity.stockGetPut;
 import static biz.riopapa.chatread.MainActivity.wIDX;
 import static biz.riopapa.chatread.edit.ActivityEditGroupWho.whoContext;
 
-import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,13 +61,14 @@ public class StockAdapter extends RecyclerView.Adapter<StockAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
 
+        String str;
         SStock stock = sGroups.get(gIDX).whos.get(wIDX).stocks.get(position);
-        holder.tKey1.setText("Key1:"+stock.key1);
-        holder.tKey2.setText("Key2:"+stock.key2);
-        holder.tPrev.setText("Prv:"+stock.prv);
-        holder.tNext.setText("Nxt"+stock.nxt);
-        holder.tCount.setText("Cnt:" + stock.count);
-        holder.tSkip.setText("Skip:"+stock.skip1);
+        str = "Key1:"+stock.key1;       holder.tKey1.setText(str);
+        str = "Key2:"+stock.key2;       holder.tKey2.setText(str);
+        str = "Prv:"+stock.prv;         holder.tPrev.setText(str);
+        str = "Nxt:"+stock.nxt;         holder.tNext.setText(str);
+        str = "Cnt:" + stock.count;     holder.tCount.setText(str);
+        str = "Skip:"+stock.skip1;      holder.tSkip.setText(str);
         holder.tTalk.setText(stock.talk.isEmpty() ? "x.x" : "Talk:"+stock.talk);
 
         holder.tLine.setOnClickListener(v -> {
@@ -142,13 +141,6 @@ public class StockAdapter extends RecyclerView.Adapter<StockAdapter.ViewHolder> 
         newStock.count = Integer.parseInt(eCount.getText().toString());
         newStock.skip1 = eSkip.getText().toString();
     }
-
-    public static class NoCapsSpan extends StyleSpan {
-        public NoCapsSpan() {
-            super(STYLE_NORMAL);
-        }
-    }
-
 
     void dataSetChanged() {
         stockGetPut.put("stock");

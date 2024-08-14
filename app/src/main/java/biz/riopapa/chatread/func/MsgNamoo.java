@@ -2,9 +2,11 @@ package biz.riopapa.chatread.func;
 
 
 import static biz.riopapa.chatread.MainActivity.gSheet;
+import static biz.riopapa.chatread.MainActivity.hourMin;
 import static biz.riopapa.chatread.MainActivity.logUpdate;
 import static biz.riopapa.chatread.MainActivity.sounds;
 import static biz.riopapa.chatread.MainActivity.strUtil;
+import static biz.riopapa.chatread.MainActivity.toDay;
 import static biz.riopapa.chatread.NotificationListener.isWorking;
 
 import java.text.SimpleDateFormat;
@@ -41,7 +43,7 @@ public class MsgNamoo {
                 sText = String.join(" ", joins);
                 sounds.speakAfterBeep(sText);
                 logUpdate.addStock(naMoo +"."+stkName, sText);
-                String timeStamp = new SimpleDateFormat("yy-MM-dd HH:mm", Locale.KOREA).format(new Date());
+                String timeStamp = toDay + new SimpleDateFormat(hourMin, Locale.KOREA).format(new Date());
                 gSheet.add2Stock("힝체결", timeStamp, naMoo, words[1], stkName, words[5]+" "+words[2], words[4]);
 
             }

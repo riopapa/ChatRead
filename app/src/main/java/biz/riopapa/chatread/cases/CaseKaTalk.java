@@ -10,6 +10,7 @@ import static biz.riopapa.chatread.MainActivity.ktWhoIgnores;
 import static biz.riopapa.chatread.MainActivity.kvKakao;
 import static biz.riopapa.chatread.MainActivity.logUpdate;
 import static biz.riopapa.chatread.MainActivity.notificationBar;
+import static biz.riopapa.chatread.MainActivity.readyToday;
 import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.sbnApp;
 import static biz.riopapa.chatread.MainActivity.sbnGroup;
@@ -98,7 +99,7 @@ public class CaseKaTalk {
         long nowTime = System.currentTimeMillis();
         if (nowTime < timeBegin || nowTime > timeEnd)
             return;
-        new ReadyToday();
+        readyToday.check();
         sbnGroup = sGroups.get(g).grp;  // replace with short group
         if (kvKakao.isDup(sbnGroup, sbnText))
             return;

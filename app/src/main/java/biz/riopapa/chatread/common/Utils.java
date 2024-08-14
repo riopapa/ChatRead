@@ -2,7 +2,9 @@ package biz.riopapa.chatread.common;
 
 import static biz.riopapa.chatread.MainActivity.deBug;
 import static biz.riopapa.chatread.MainActivity.fileIO;
+import static biz.riopapa.chatread.MainActivity.monthDay;
 import static biz.riopapa.chatread.MainActivity.packageDirectory;
+import static biz.riopapa.chatread.MainActivity.readyToday;
 import static biz.riopapa.chatread.MainActivity.strUtil;
 
 import android.util.Log;
@@ -25,7 +27,7 @@ public class Utils {
      */
     public void logW(String tag, String text) {
         Log.w(tag, text);
-        new ReadyToday();
+        readyToday.check();
         StackTraceElement[] traces = Thread.currentThread().getStackTrace();
         String logText  =(traces.length>6) ? excludeName(traces[6].getMethodName()):"";
         logText += excludeName(traces[5].getMethodName()) + excludeName(traces[4].getMethodName()) +
@@ -67,7 +69,7 @@ public class Utils {
 
     /* delete old packageDirectory / files if storage is less than x days */
     public void deleteOldFiles() {
-        final SimpleDateFormat dateFormat = new SimpleDateFormat("yy-MM-dd", Locale.KOREA);
+        final SimpleDateFormat dateFormat = new SimpleDateFormat(monthDay, Locale.KOREA);
         String weekAgo = dateFormat.format(System.currentTimeMillis() - 3*24*60*60*1000L);
         File[] files = packageDirectory.listFiles();
         if (files == null)

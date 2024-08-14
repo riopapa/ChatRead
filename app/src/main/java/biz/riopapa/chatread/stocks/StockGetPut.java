@@ -2,6 +2,7 @@ package biz.riopapa.chatread.stocks;
 
 import static biz.riopapa.chatread.MainActivity.downloadFolder;
 import static biz.riopapa.chatread.MainActivity.fileIO;
+import static biz.riopapa.chatread.MainActivity.readyToday;
 import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.stockKGroupIdx;
 import static biz.riopapa.chatread.MainActivity.stockKGroupTbl;
@@ -168,8 +169,6 @@ public class StockGetPut {
     }
 
     public void put(String msg) {
-        if (todayFolder == null)
-            new ReadyToday();
         new SnackBar().show(STOCK_TABLE + ".json", msg);
         utils.logW("StockPut", msg);
         sortByGroup();
@@ -179,9 +178,20 @@ public class StockGetPut {
         get();
     }
 
+    public void putOld(String msg) {
+        if (todayFolder == null)
+            readyToday.check();
+        utils.logW("StockPut", msg);
+        sortByGroup();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        String json = gson.toJson(sGroups);
+        fileIO.writeFile(todayFolder, STOCK_TABLE + ".txt", json);
+        get();
+    }
+
     public void save(String msg) {
         if (todayFolder == null)
-            new ReadyToday();
+            readyToday.check();
         utils.logW("StockPut", msg);
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String json = gson.toJson(sGroups);

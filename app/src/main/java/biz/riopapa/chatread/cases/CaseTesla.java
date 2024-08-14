@@ -23,6 +23,6 @@ public class CaseTesla {
         }
         logUpdate.addLog("[ 테스리 ]", sbnText);
         notificationBar.update(sbnAppNick, sbnText, true);
-        sounds.speakAfterBeep("테스리, " + sbnText);
+        sounds.speakAfterBeep("테스리, 테스리, " + sbnText);
     }
 }

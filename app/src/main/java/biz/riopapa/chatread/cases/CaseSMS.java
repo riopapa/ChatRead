@@ -2,6 +2,7 @@ package biz.riopapa.chatread.cases;
 
 import static biz.riopapa.chatread.MainActivity.gSheet;
 import static biz.riopapa.chatread.MainActivity.getStockGroup;
+import static biz.riopapa.chatread.MainActivity.hourMin;
 import static biz.riopapa.chatread.MainActivity.kvSMS;
 import static biz.riopapa.chatread.MainActivity.lastChar;
 import static biz.riopapa.chatread.MainActivity.logUpdate;
@@ -18,6 +19,7 @@ import static biz.riopapa.chatread.MainActivity.stockSGroupIdx;
 import static biz.riopapa.chatread.MainActivity.stockSGroupTbl;
 import static biz.riopapa.chatread.MainActivity.strReplace;
 import static biz.riopapa.chatread.MainActivity.strUtil;
+import static biz.riopapa.chatread.MainActivity.toDay;
 import static biz.riopapa.chatread.MainActivity.utils;
 import static biz.riopapa.chatread.NotificationListener.isWorking;
 
@@ -100,7 +102,7 @@ public class CaseSMS {
                     if (isWorking())
                         talkMsg = strUtil.makeEtc(talkMsg, 20);
                     sounds.speakAfterBeep(strUtil.removeDigit(talkMsg));
-                    gSheet.add2Stock(sGroup, new SimpleDateFormat("yy-MM-dd HH:mm", Locale.KOREA).format(new Date()),sbnWho, samPam, stockName,
+                    gSheet.add2Stock(sGroup, toDay + new SimpleDateFormat(hourMin, Locale.KOREA).format(new Date()),sbnWho, samPam, stockName,
                             sbnText.replace(stockName, new StringBuffer(stockName).insert(1, ".").toString()), samPam
                     );
                 }

@@ -195,6 +195,8 @@ public class ActivityEditGroup extends AppCompatActivity {
     }
     private void saveGroup() {
 
+        stockGetPut.putOld("group save curr");
+
         newGroup.grp = eGroup.getText().toString();
         newGroup.grpM = eGroupM.getText().toString();
         newGroup.grpF = eGroupF.getText().toString();

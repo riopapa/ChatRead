@@ -1,16 +1,12 @@
 package biz.riopapa.chatread.func;
 
-import static biz.riopapa.chatread.MainActivity.fileIO;
 import static biz.riopapa.chatread.MainActivity.kvCommon;
 import static biz.riopapa.chatread.MainActivity.kvKakao;
 import static biz.riopapa.chatread.MainActivity.kvSMS;
 import static biz.riopapa.chatread.MainActivity.kvStock;
 import static biz.riopapa.chatread.MainActivity.kvTelegram;
-import static biz.riopapa.chatread.MainActivity.logQue;
-import static biz.riopapa.chatread.MainActivity.logStock;
-import static biz.riopapa.chatread.MainActivity.logWork;
+import static biz.riopapa.chatread.MainActivity.monthDay;
 import static biz.riopapa.chatread.MainActivity.packageDirectory;
-import static biz.riopapa.chatread.MainActivity.tableFolder;
 import static biz.riopapa.chatread.MainActivity.timeBegin;
 import static biz.riopapa.chatread.MainActivity.timeEnd;
 import static biz.riopapa.chatread.MainActivity.toDay;
@@ -27,9 +23,9 @@ import biz.riopapa.chatread.models.KeyVal;
 
 public class ReadyToday {
 
-    public ReadyToday() {
+    public void check() {
 
-        String nowDay = new SimpleDateFormat("yy-MM-dd", Locale.KOREA).format(new Date());
+        String nowDay = new SimpleDateFormat(monthDay, Locale.KOREA).format(new Date());
         if (toDay.equals(nowDay))
             return;
         toDay = nowDay;

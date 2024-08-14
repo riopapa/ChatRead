@@ -1,6 +1,7 @@
 package biz.riopapa.chatread.stocks;
 
 import static biz.riopapa.chatread.MainActivity.gSheet;
+import static biz.riopapa.chatread.MainActivity.hourMin;
 import static biz.riopapa.chatread.MainActivity.kvTelegram;
 import static biz.riopapa.chatread.MainActivity.logUpdate;
 import static biz.riopapa.chatread.MainActivity.mAudioManager;
@@ -16,6 +17,7 @@ import static biz.riopapa.chatread.MainActivity.sounds;
 import static biz.riopapa.chatread.MainActivity.stockGetPut;
 import static biz.riopapa.chatread.MainActivity.stockName;
 import static biz.riopapa.chatread.MainActivity.strUtil;
+import static biz.riopapa.chatread.MainActivity.toDay;
 import static biz.riopapa.chatread.MainActivity.utils;
 
 import android.content.Context;
@@ -49,21 +51,9 @@ public class StockLine {
             if (sbnText.contains(stocks.get(s).key1) && sbnText.contains(stocks.get(s).key2)) {
 
                 SStock stock = stocks.get(s);
-                if (stockName == null)
-                    stockName = new StockName();
                 String [] sParse = stockName.get(stock.prv, stock.nxt, sbnText);
                 if (kvTelegram.isDup(sbnWho+sParse[0], sbnText))    // 같은 주식 내용 반복
                     return;
-
-                // 안정 되면 아래 null check는 지우는 걸로..
-                if (utils == null) {
-                    utils = new Utils();
-                    utils.logW("talkNlog", "utils null");
-                }
-                if (sounds == null) {
-                    sounds = new Sounds();
-                    utils.logW("talkNlog", "sounds null");
-                }
 
                 String percent = (!sbnText.contains("매수") && (sbnText.contains("매도") || sbnText.contains("익절")))?
                         "1.9" : stock.talk;
@@ -106,7 +96,7 @@ public class StockLine {
                 logUpdate.addStock(sParse[0] + " ["+sbnGroup+":"+sbnWho+"]", strText
                         + key12);
                 notificationBar.update(strHead, strText, true);
-                String timeStamp = new SimpleDateFormat("yy-MM-dd HH:mm", Locale.KOREA).format(new Date());
+                String timeStamp = toDay + new SimpleDateFormat(hourMin, Locale.KOREA).format(new Date());
                 gSheet.add2Stock(sbnGroup, timeStamp, sbnWho, percent, sParse[0], strText, key12);
 
                 sGroups.get(g).whos.get(w).stocks.get(s).count++;

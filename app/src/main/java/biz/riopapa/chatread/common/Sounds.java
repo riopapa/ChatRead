@@ -2,16 +2,18 @@ package biz.riopapa.chatread.common;
 
 import static biz.riopapa.chatread.MainActivity.beepRawIds;
 import static biz.riopapa.chatread.MainActivity.isPhoneBusy;
+import static biz.riopapa.chatread.MainActivity.logUpdate;
 import static biz.riopapa.chatread.MainActivity.mAudioManager;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.mFocusGain;
-import static biz.riopapa.chatread.MainActivity.notificationBar;
+import static biz.riopapa.chatread.MainActivity.phoneVibrate;
 
 import android.content.Context;
 import android.media.AudioDeviceInfo;
 import android.media.AudioFocusRequest;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
 
@@ -26,7 +28,8 @@ import biz.riopapa.chatread.notification.NotificationBar;
 public class Sounds {
     public static boolean isTalking = false;
     static TextToSpeech mTTS = null;
-    static String TTSId = "";
+    static String ttsID = "";
+    static Bundle ttsParams;
 
     public Sounds() {
 
@@ -41,6 +44,9 @@ public class Sounds {
                 initializeTTS();
             }
         });
+        ttsParams = new Bundle();
+        ttsParams.putFloat(TextToSpeech.Engine.KEY_PARAM_VOLUME, 1.0f);
+
     }
 
     private void initializeTTS() {
@@ -48,7 +54,7 @@ public class Sounds {
         mTTS.setOnUtteranceProgressListener(new UtteranceProgressListener() {
             @Override
             public void onStart(String utteranceId) {
-                TTSId = utteranceId;
+                ttsID = utteranceId;
             }
 
             @Override
@@ -67,7 +73,10 @@ public class Sounds {
             }
 
             @Override
-            public void onError(String utteranceId) { }
+            public void onError(String utteranceId) {
+                new Utils().logE("Sound", "TTS Error:" + utteranceId);
+                logUpdate.addLog("TTS Error", utteranceId);
+            }
         });
 
         int result = mTTS.setLanguage(Locale.getDefault());
@@ -103,11 +112,6 @@ public class Sounds {
     }
 
     private void delayedSay(String text2Speak) {
-        long delay = 100;
-//        if (mTTS == null) {
-//            init();
-//            delay = 30;
-//        }
 
         if (isActive()) {
             isTalking = true;
@@ -115,12 +119,12 @@ public class Sounds {
             new Timer().schedule(new TimerTask() {
                 public void run() {
                     try {
-                        mTTS.speak(onlySpeakable(text2Speak), TextToSpeech.QUEUE_ADD, null, TTSId);
+                        mTTS.speak(onlySpeakable(text2Speak), TextToSpeech.QUEUE_ADD, ttsParams, ttsID);
                     } catch (Exception e) {
                         new Utils().logE("Sound", "TTS Error:" + e);
                     }
                 }
-            }, delay);
+            }, 100);
         }
     }
 
@@ -135,8 +139,10 @@ public class Sounds {
 
     public void speakBuyStock(String text) {
 
-        if (!isActive())
+        if (isSilent()) {
+            phoneVibrate.go(1);
             return;
+        }
         beepOnce(soundType.STOCK.ordinal());
         if (isActive()) {
             mAudioManager.requestAudioFocus(mFocusGain);
@@ -144,7 +150,7 @@ public class Sounds {
                 public void run() {
                     try {
                         isTalking = true;
-                        mTTS.speak(text, TextToSpeech.QUEUE_ADD, null, TTSId);
+                        mTTS.speak(text, TextToSpeech.QUEUE_FLUSH, ttsParams, ttsID);
                     } catch (Exception e) {
                         new Utils().logE("Sound", "TTS Error:" + e);
                     }

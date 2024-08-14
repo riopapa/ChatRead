@@ -3,6 +3,7 @@ package biz.riopapa.chatread.func;
 import static biz.riopapa.chatread.MainActivity.downloadFolder;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.packageDirectory;
+import static biz.riopapa.chatread.MainActivity.readyToday;
 import static biz.riopapa.chatread.MainActivity.tableFolder;
 import static biz.riopapa.chatread.MainActivity.toDay;
 import static biz.riopapa.chatread.MainActivity.todayFolder;
@@ -54,7 +55,7 @@ public class FileIO {
     }
 
     public void append2File(File file, String timeInfo, String textLine) {
-        new ReadyToday();
+        readyToday.check();
         BufferedWriter bw = null;
         FileWriter fw = null;
         try {

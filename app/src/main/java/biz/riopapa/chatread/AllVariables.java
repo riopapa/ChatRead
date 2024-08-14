@@ -44,6 +44,7 @@ import static biz.riopapa.chatread.MainActivity.prefStock;
 import static biz.riopapa.chatread.MainActivity.prefStockEditor;
 import static biz.riopapa.chatread.MainActivity.prefWork;
 import static biz.riopapa.chatread.MainActivity.prefWorkEditor;
+import static biz.riopapa.chatread.MainActivity.readyToday;
 import static biz.riopapa.chatread.MainActivity.sharePref;
 import static biz.riopapa.chatread.MainActivity.sharedEditor;
 import static biz.riopapa.chatread.MainActivity.sounds;
@@ -132,6 +133,7 @@ public class AllVariables {
             stockName = new StockName();
             msgNamoo = new MsgNamoo();
             ignoreString = new IgnoreString();
+            readyToday  = new ReadyToday();
             utils = new Utils();
 
             // cases folder
@@ -158,7 +160,7 @@ public class AllVariables {
                 mContext.startService(mBackgroundServiceIntent);
             }
         }
-        new ReadyToday();
+        readyToday.check();
         new OptionTables();
         new AppsTable().get();
         tableListFile = new TableListFile();
