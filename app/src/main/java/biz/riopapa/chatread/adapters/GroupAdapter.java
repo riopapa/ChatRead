@@ -43,11 +43,12 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView tGroup, tGroupM, tGroupF, tSkip1, tSkip2, tSkip3, tIgnore, tTelegram, tInfo, tLog;
-        View tLine;
+        View tLine, tHead;
 
         ViewHolder(final View itemView) {
             super(itemView);
             tLine = itemView.findViewById(R.id.one_line_group);
+            tHead = itemView.findViewById(R.id.one_line_head);
             tGroup = itemView.findViewById(R.id.one_group);
             tGroupM = itemView.findViewById(R.id.one_group_match);
             tGroupF = itemView.findViewById(R.id.one_group_full);
@@ -75,6 +76,13 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
         holder.tGroup.setText(sGrp.grp);
         holder.tGroupM.setText(sGrp.grpM);
         holder.tGroupF.setText(sGrp.grpF);
+        int gColor = (sGrp.ignore) ? 0xFF666666 : 0xFF000000;
+        holder.tGroup.setTextColor(gColor);
+        holder.tGroupM.setTextColor(gColor);
+        holder.tGroupF.setTextColor(gColor);
+
+        gColor = (sGrp.ignore) ? 0xFF99AABB : 0xFFBBCCFF;
+        holder.tHead.setBackgroundColor(gColor);
 
         SpannableStringBuilder grpBuilder = new SpannableStringBuilder();
 

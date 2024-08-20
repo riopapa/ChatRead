@@ -94,32 +94,32 @@ public class StockGetPut {
             }
         }
 
-        List<Map.Entry<String, Integer>> entrys;
+        List<Map.Entry<String, Integer>> tempList;
 
-        entrys = new ArrayList<>(tMap.entrySet());
-        entrys.sort(new StringKeyComparator());
-        stockTGroupTbl = new String[entrys.size()];
-        stockTGroupIdx = new int[entrys.size()];
-        for (int i = 0; i < entrys.size(); i++) {
-            stockTGroupTbl[i] = entrys.get(i).getKey();
-            stockTGroupIdx[i] = entrys.get(i).getValue();
+        tempList = new ArrayList<>(tMap.entrySet());
+        tempList.sort(new StringKeyComparator());
+        stockTGroupTbl = new String[tempList.size()];
+        stockTGroupIdx = new int[tempList.size()];
+        for (int i = 0; i < tempList.size(); i++) {
+            stockTGroupTbl[i] = tempList.get(i).getKey();
+            stockTGroupIdx[i] = tempList.get(i).getValue();
         }
 
-        entrys = new ArrayList<>(kMap.entrySet());
-        entrys.sort(new StringKeyComparator());
-        stockKGroupTbl = new String[entrys.size()];
-        stockKGroupIdx = new int[entrys.size()];
-        for (int i = 0; i < entrys.size(); i++) {
-            stockKGroupTbl[i] = entrys.get(i).getKey();
-            stockKGroupIdx[i] = entrys.get(i).getValue();
+        tempList = new ArrayList<>(kMap.entrySet());
+        tempList.sort(new StringKeyComparator());
+        stockKGroupTbl = new String[tempList.size()];
+        stockKGroupIdx = new int[tempList.size()];
+        for (int i = 0; i < tempList.size(); i++) {
+            stockKGroupTbl[i] = tempList.get(i).getKey();
+            stockKGroupIdx[i] = tempList.get(i).getValue();
         }
-        entrys = new ArrayList<>(sMap.entrySet());
-        entrys.sort(new StringKeyComparator());
-        stockSGroupTbl = new String[entrys.size()];
-        stockSGroupIdx = new int[entrys.size()];
-        for (int i = 0; i < entrys.size(); i++) {
-            stockSGroupTbl[i] = entrys.get(i).getKey();
-            stockSGroupIdx[i] = entrys.get(i).getValue();
+        tempList = new ArrayList<>(sMap.entrySet());
+        tempList.sort(new StringKeyComparator());
+        stockSGroupTbl = new String[tempList.size()];
+        stockSGroupIdx = new int[tempList.size()];
+        for (int i = 0; i < tempList.size(); i++) {
+            stockSGroupTbl[i] = tempList.get(i).getKey();
+            stockSGroupIdx[i] = tempList.get(i).getValue();
         }
 
 //        int telCnt = 0, kaCnt = 0, smsCnt = 0;

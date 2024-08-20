@@ -92,7 +92,7 @@
             android:inputType="text|textMultiLine"
             android:scrollbars="vertical"
             android:text="x"
-            android:textSize="14sp" />
+            android:textSize="15sp" />
     </ScrollView>
 </LinearLayout>
 </FrameLayout>

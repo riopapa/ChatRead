@@ -9,6 +9,7 @@
     android:padding="1dp" >
 
     <LinearLayout
+        android:id="@+id/one_line_head"
         android:layout_width = "match_parent"
         android:layout_height = "wrap_content"
         android:layout_margin="1dp"
@@ -56,7 +57,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:textColor="@color/textFore"
-            android:textSize="10sp"
+            android:textSize="@dimen/app_line_font_size"
             android:text="ignore"
             android:maxLines="1"
             />

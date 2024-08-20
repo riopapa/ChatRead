@@ -22,10 +22,13 @@ import static biz.riopapa.chatread.MainActivity.timeEnd;
 import static biz.riopapa.chatread.MainActivity.utils;
 import static biz.riopapa.chatread.NotificationListener.isWorking;
 
+import android.util.Log;
+
 import biz.riopapa.chatread.func.ReadyToday;
 
 public class CaseTelegram {
     public void tel() {
+
         if (sbnText.length() < 25)  // for better performance, with logically not true
             return;
 
