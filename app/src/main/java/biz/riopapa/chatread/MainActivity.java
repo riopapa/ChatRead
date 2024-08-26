@@ -102,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
     public static ArrayList<String> appIgnores;
     public static ArrayList<String> appFullNames;
     public static ArrayList<Integer> appNameIdx;
+    public static ArrayList<String> appTypes;
     public static String sbnGroup, sbnWho, sbnText, sbnAppName, sbnAppType, sbnAppNick;
     public static int sbnAppIdx;
 
@@ -120,7 +121,6 @@ public class MainActivity extends AppCompatActivity {
     public static String mTableName;
 
     public static String logQue = "", logStock = "", logSave = "", logWork = "";
-    public static boolean queFlag = false, stockFlag = false, workFlag = false;
 
     public static ArrayList<StrRepl> ktStrRepl = null;
     public static ArrayList<StrRepl> smsStrRepl = null;
@@ -303,14 +303,11 @@ public class MainActivity extends AppCompatActivity {
         notificationBar.startShow();
 
 
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.myFrame,
-                        new FragmentLogNorm()).commit();
-                drawerLayout.closeDrawer(GravityCompat.START);
-            }
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.myFrame,
+                    new FragmentLogNorm()).commit();
+            drawerLayout.closeDrawer(GravityCompat.START);
         }, 100);
 
         groupListener = position -> {
@@ -336,11 +333,6 @@ public class MainActivity extends AppCompatActivity {
         groupAdapter = new GroupAdapter(groupListener);
         groupRecyclerView.setAdapter(groupAdapter);
     }
-
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-//    }
 
     @Override
     public void onBackPressed() {

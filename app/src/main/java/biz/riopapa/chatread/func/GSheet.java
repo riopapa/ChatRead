@@ -23,6 +23,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 public class GSheet {
 
@@ -102,10 +103,21 @@ public class GSheet {
                 String errStr = "stock Upload Fail "+ formBuilder + "\n"+e;
                 utils.logE("gSheet",errStr);
             }
+//            @Override
+//            public void onResponse(@NonNull Call call, @NonNull Response response) {
+//                if (!response.isSuccessful()){
+//                    utils.logW("gSheet", "Error: " + response.body());
+//                }
+//            }
             @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) {
-                if (!response.isSuccessful()){
-                    utils.logW("gSheet", "Error: " + response.body());
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                try (ResponseBody responseBody = response.body()) { // Try-with-resources here
+                    if (!response.isSuccessful()) {
+                        utils.logE("gSheet", "Error Replied : " + responseBody.string()); // Consume body if needed
+                    } else {
+                        utils.logW("gSheet", "Success Replied : " + responseBody.string());
+                        // Process successful response here, consuming responseBody if needed
+                    }
                 }
             }
         });
@@ -113,7 +125,7 @@ public class GSheet {
 
     String makePercent(SGroup sGroup) {
         return "Skip (" + sGroup.skip1 + ", " + sGroup.skip2 + ", " + sGroup.skip3 + ")" +
-                "\nIgnore:" + ((sGroup.ignore) ? "yes" : "no") +
+                "\nActive:" + ((sGroup.active) ? "yes" : "no") +
                 " TelKa (" + sGroup.telKa + ")";
     }
 

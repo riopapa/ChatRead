@@ -10,14 +10,9 @@ import static biz.riopapa.chatread.MainActivity.stockGetPut;
 import static biz.riopapa.chatread.MainActivity.whoRecyclerView;
 import static biz.riopapa.chatread.fragment.FragmentStockList.groupRecyclerView;
 
-import android.content.Context;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.provider.DocumentsContract;
-import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,7 +34,7 @@ public class ActivityEditGroup extends AppCompatActivity {
 
     EditText eGroup, eGroupM, eGroupF, eSkip1, eSkip2, eSkip3, eRepl;
     TextView tTelKa;
-    SwitchCompat sIgnore, sLog;
+    SwitchCompat sActive, sLog;
     View deleteMenu;
     final String NOTHING = "_n_";
     SGroup newGroup;
@@ -69,7 +64,7 @@ public class ActivityEditGroup extends AppCompatActivity {
         eGroupM = findViewById(R.id.e_group_match);
         eGroupF = findViewById(R.id.e_group_full);
         tTelKa = findViewById(R.id.e_telka);
-        sIgnore = findViewById(R.id.s_ignore);
+        sActive = findViewById(R.id.s_active);
         eSkip1 = findViewById(R.id.e_skip1);
         eSkip2 = findViewById(R.id.e_skip2);
         eSkip3 = findViewById(R.id.e_skip3);
@@ -80,18 +75,19 @@ public class ActivityEditGroup extends AppCompatActivity {
         eGroupM.setText(sGroups.get(gIDX).grpM);
         eGroupF.setText(sGroups.get(gIDX).grpF);
         tTelKa.setText(sGroups.get(gIDX).telKa);
-        sIgnore.setChecked(sGroups.get(gIDX).ignore);
+        sActive.setChecked(sGroups.get(gIDX).active);
         eSkip1.setText(sGroups.get(gIDX).skip1);
         eSkip2.setText(sGroups.get(gIDX).skip2);
         eSkip3.setText(sGroups.get(gIDX).skip3);
         sLog.setChecked(sGroups.get(gIDX).log);
         tTelKa.setOnClickListener(v -> tTelKa.setText(nextTelKa(tTelKa.getText().toString())));
         if (sGroups.get(gIDX).replF != null) {
-            String s = "";
+            StringBuilder sb = new StringBuilder();
             for (int i = 0; i < sGroups.get(gIDX).replF.size(); i++) {
-                s += sGroups.get(gIDX).replF.get(i) + " ^ " + sGroups.get(gIDX).replT.get(i) + "\n\n";
+                sb.append(sGroups.get(gIDX).replF.get(i)).append(" ^ ")
+                    .append(sGroups.get(gIDX).replT.get(i)).append("\n\n");
             }
-            eRepl.setText(s);
+            eRepl.setText(sb);
         } else
             eRepl.setText("");
         whoAdapter = new WhoAdapter();
@@ -156,7 +152,7 @@ public class ActivityEditGroup extends AppCompatActivity {
         newGroup.grpM = eGroupM.getText().toString();
         newGroup.grpF = eGroupF.getText().toString();
         newGroup.telKa = tTelKa.getText().toString();
-        newGroup.ignore = sIgnore.isChecked();
+        newGroup.active = sActive.isChecked();
         newGroup.skip1 = eSkip1.getText().toString();
         newGroup.skip2 = eSkip2.getText().toString();
         newGroup.skip3 = eSkip3.getText().toString();
@@ -201,7 +197,7 @@ public class ActivityEditGroup extends AppCompatActivity {
         newGroup.grpM = eGroupM.getText().toString();
         newGroup.grpF = eGroupF.getText().toString();
         newGroup.telKa = tTelKa.getText().toString();
-        newGroup.ignore = sIgnore.isChecked();
+        newGroup.active = sActive.isChecked();
         newGroup.skip1 = eSkip1.getText().toString();
         newGroup.skip2 = eSkip2.getText().toString();
         newGroup.skip3 = eSkip3.getText().toString();

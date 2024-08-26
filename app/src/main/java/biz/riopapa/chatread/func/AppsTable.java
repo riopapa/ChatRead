@@ -3,9 +3,11 @@ package biz.riopapa.chatread.func;
 import static biz.riopapa.chatread.MainActivity.appFullNames;
 import static biz.riopapa.chatread.MainActivity.appIgnores;
 import static biz.riopapa.chatread.MainActivity.appNameIdx;
+import static biz.riopapa.chatread.MainActivity.appTypes;
 import static biz.riopapa.chatread.MainActivity.apps;
 import static biz.riopapa.chatread.MainActivity.downloadFolder;
 import static biz.riopapa.chatread.MainActivity.fileIO;
+import static biz.riopapa.chatread.MainActivity.sbnAppType;
 import static biz.riopapa.chatread.MainActivity.tableFolder;
 
 import android.os.Environment;
@@ -80,6 +82,7 @@ public class AppsTable {
         appFullNames = new ArrayList<>();
         appNameIdx = new ArrayList<>();
         appIgnores = new ArrayList<>();
+        appTypes = new ArrayList<>();
 
         for (int i = 0; i < apps.size(); i++) {
             App app = apps.get(i);
@@ -88,6 +91,22 @@ public class AppsTable {
             } else {
                 appFullNames.add(app.fullName);
                 appNameIdx.add(i);
+                String appType;
+                switch (app.nickName) {
+                    case "텔레":
+                        appType = "t";
+                        break;
+                    case "카톡":
+                        appType = "k";
+                        break;
+                    case "a":
+                        appType = "a";
+                        break;
+                    default:
+                        appType = "d";
+                        break;
+                }
+                appTypes.add(appType);
             }
         }
     }

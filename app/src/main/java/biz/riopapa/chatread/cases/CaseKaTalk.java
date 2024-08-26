@@ -28,7 +28,6 @@ import static biz.riopapa.chatread.NotificationListener.isWorking;
 
 import biz.riopapa.chatread.common.IgnoreNumber;
 import biz.riopapa.chatread.common.IgnoreThis;
-import biz.riopapa.chatread.func.ReadyToday;
 
 public class CaseKaTalk {
     public void kaTalk() {
@@ -44,7 +43,7 @@ public class CaseKaTalk {
             if (sbnWho.charAt(sbnWho.length() - 1) == '#' ||
                     IgnoreThis.contains(sbnWho, ktWhoIgnores))
                 return;
-            sayKaTalkNoGroup();
+            sayKaTalkIndividual();
         } else {
             sayKaTalkGroup();
         }
@@ -58,31 +57,32 @@ public class CaseKaTalk {
                 sbnWho.charAt(sbnWho.length() - 1) == '#' ||
                 IgnoreThis.contains(sbnWho, ktWhoIgnores))
             return;
-        sbnText = strUtil.text2OneLine(sbnText);
         if (kvKakao.isDup(sbnGroup, sbnText))
             return;
+        sbnText = strUtil.text2OneLine(sbnText);
 
         int g = getStockGroup.getIdx(sbnGroup, stockKGroupTbl, stockKGroupIdx);
-        if (g < 0) {
-            sbnText = strReplace.repl(ktStrRepl, sbnGroup, sbnText);
-            String head = "{카톡!" + sbnGroup + "." + sbnWho + "} ";
-            logUpdate.addLog(head, sbnText);
-            notificationBar.update("카톡!" + sbnGroup + "." + sbnWho, sbnText, true);
-            if (IgnoreNumber.in(ktNoNumbers, sbnGroup))
-                sbnText = strUtil.removeDigit(sbnText);
-            sounds.speakKakao(" 카톡 왔음 " + sbnGroup + " 의 " + sbnWho + " 님이 " +
-                    strUtil.replaceKKHH(strUtil.makeEtc(sbnText, isWorking() ? 20 : 150)));
-            return;
-        }
-        sayKaStock(g);
+        if (g < 0)
+            sayNormalGroup();
+        else
+            sayKaStock(g);
     }
 
-    private void sayKaTalkNoGroup() {
-        sbnText = strUtil.text2OneLine(sbnText);
+    private void sayNormalGroup() {
+        sbnText = strReplace.repl(ktStrRepl, sbnGroup, sbnText);
+        String head = "{카톡!" + sbnGroup + "." + sbnWho + "} ";
+        logUpdate.addLog(head, sbnText);
+        notificationBar.update("카톡!" + sbnGroup + "." + sbnWho, sbnText, true);
+        if (IgnoreNumber.in(ktNoNumbers, sbnGroup))
+            sbnText = strUtil.removeDigit(sbnText);
+        sounds.speakKakao(" 카톡 왔음 " + sbnGroup + " 의 " + sbnWho + " 님이 " +
+                strUtil.replaceKKHH(strUtil.makeEtc(sbnText, isWorking() ? 20 : 150)));
+    }
+
+    private void sayKaTalkIndividual() {
         if (kvKakao.isDup(sbnWho, sbnText))
             return;
-
-        sbnText = strReplace.repl(ktStrRepl, sbnWho, sbnText);
+        sbnText = strReplace.repl(ktStrRepl, sbnWho, strUtil.text2OneLine(sbnText));
         String head = "{카톡!" + sbnWho + "} ";
         logUpdate.addLog(head, sbnText);
         notificationBar.update("카톡!" + sbnWho, sbnText, true);
@@ -96,10 +96,10 @@ public class CaseKaTalk {
 
         if (sbnText.length() < 20)  // for better performance, with logically not true
             return;
+        readyToday.check();
         long nowTime = System.currentTimeMillis();
         if (nowTime < timeBegin || nowTime > timeEnd)
             return;
-        readyToday.check();
         sbnGroup = sGroups.get(g).grp;  // replace with short group
         if (kvKakao.isDup(sbnGroup, sbnText))
             return;

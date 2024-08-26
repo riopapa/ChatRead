@@ -36,9 +36,9 @@ public class ActivityEditGroupWho extends AppCompatActivity {
     TextView tGroup, tGroupM, tGroupF, tSkip1, tSkip2, tSkip3;
     TextView tTelKa, tLog;
     EditText eWho, eWhoM, eWhoF;
-    SwitchCompat sIgnore;
+    SwitchCompat sActive;
     View deleteMenu;
-    public static Activity whoActivity;
+//    public static Activity whoActivity;
     public static Context whoContext;
     SWho newWho;
 
@@ -46,7 +46,7 @@ public class ActivityEditGroupWho extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_group_who);
-        whoActivity = this;
+//        whoActivity = this;
         whoContext = this;
     }
 
@@ -64,7 +64,7 @@ public class ActivityEditGroupWho extends AppCompatActivity {
         tGroupM = findViewById(R.id.who_group_match);
         tGroupF = findViewById(R.id.who_group_full);
         tTelKa = findViewById(R.id.who_telka);
-        sIgnore = findViewById(R.id.who_ignore);
+        sActive = findViewById(R.id.who_active);
         tSkip1 = findViewById(R.id.who_skip1);
         tSkip2 = findViewById(R.id.who_skip2);
         tSkip3 = findViewById(R.id.who_skip3);
@@ -77,7 +77,7 @@ public class ActivityEditGroupWho extends AppCompatActivity {
         tGroupM.setText(sGroups.get(gIDX).grpM);
         tGroupF.setText(sGroups.get(gIDX).grpF);
         tTelKa.setText(sGroups.get(gIDX).telKa);
-        sIgnore.setChecked(sGroups.get(gIDX).ignore);
+        sActive.setChecked(sGroups.get(gIDX).active);
         tSkip1.setText(sGroups.get(gIDX).skip1);
         tSkip2.setText(sGroups.get(gIDX).skip2);
         tSkip3.setText(sGroups.get(gIDX).skip3);

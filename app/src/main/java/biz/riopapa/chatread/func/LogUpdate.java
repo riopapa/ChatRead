@@ -10,6 +10,7 @@ import static biz.riopapa.chatread.MainActivity.log_Work;
 import static biz.riopapa.chatread.MainActivity.prefLogEditor;
 import static biz.riopapa.chatread.MainActivity.prefStockEditor;
 import static biz.riopapa.chatread.MainActivity.prefWorkEditor;
+import static biz.riopapa.chatread.MainActivity.readyToday;
 import static biz.riopapa.chatread.MainActivity.toDay;
 
 import org.apache.commons.lang3.StringUtils;
@@ -22,18 +23,21 @@ public class LogUpdate {
 
     final SimpleDateFormat TIME_INFO = new SimpleDateFormat(hourMin, Locale.KOREA);
     public void addLog(String header, String text) {
+        readyToday.check();
         logQue += "\n" + toDay + TIME_INFO.format(new Date()) + " " + header + "\n" + text+"\n";
         prefLogEditor.putString(log_Que, logQue);
         prefLogEditor.apply();
     }
 
     public void addWork(String header, String text) {
+        readyToday.check();
         logWork += "\n" + toDay + " " + TIME_INFO.format(new Date()) + " " + header + "\n" + text+"\n";
         prefWorkEditor.putString(log_Work, logWork);
         prefWorkEditor.apply();
     }
 
     public void addStock(String header, String text) {
+        readyToday.check();
         logStock += "\n" + toDay + " "  + TIME_INFO.format(new Date()) + " "  + header + "\n" + text+"\n";
         prefStockEditor.putString(log_Stock, logStock);
         prefStockEditor.apply();

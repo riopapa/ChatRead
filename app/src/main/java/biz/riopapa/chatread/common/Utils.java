@@ -6,6 +6,7 @@ import static biz.riopapa.chatread.MainActivity.monthDay;
 import static biz.riopapa.chatread.MainActivity.packageDirectory;
 import static biz.riopapa.chatread.MainActivity.readyToday;
 import static biz.riopapa.chatread.MainActivity.strUtil;
+import static biz.riopapa.chatread.MainActivity.utils;
 
 import android.util.Log;
 
@@ -14,8 +15,6 @@ import java.io.IOException;
 import java.text.Collator;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
-
-import biz.riopapa.chatread.func.ReadyToday;
 
 public class Utils {
 
@@ -77,6 +76,7 @@ public class Utils {
         Collator myCollator = Collator.getInstance();
         for (File file : files) {
             String shortFileName = file.getName();
+            Log.w("del Old "+weekAgo, shortFileName);
             if (myCollator.compare(shortFileName, weekAgo) < 0) {
                 deleteFolder(file);
             }
@@ -84,12 +84,27 @@ public class Utils {
     }
 
     public void deleteFolder(File file) {
-        String deleteCmd = "rm -r " + file.toString();
-        Runtime runtime = Runtime.getRuntime();
+
+        ProcessBuilder processBuilder = new ProcessBuilder("rm", "-rf", file.toString());
+        Process process = null;
         try {
-            runtime.exec(deleteCmd);
+            process = processBuilder.start();
         } catch (IOException e) {
-            //
+            utils.logB("deleteFolder", "deleteFolder: IOException");
         }
+        try {
+            process.waitFor();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+//        String deleteCmd = "rmdir /s /q " + file.toString();
+
+//        Runtime runtime = Runtime.getRuntime();
+//        try {
+//            runtime.exec(deleteCmd);
+//        } catch (IOException e) {
+//            utils.logB("deleteFolder", "deleteFolder: IOException");
+//            //
+//        }
     }
 }

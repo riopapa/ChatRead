@@ -29,14 +29,13 @@ import java.util.List;
 import java.util.Map;
 
 import biz.riopapa.chatread.common.SnackBar;
-import biz.riopapa.chatread.func.ReadyToday;
 import biz.riopapa.chatread.models.SGroup;
 
 public class StockGetPut {
 
     final static String STOCK_TABLE = "StockTable";
 
-    /* Stock table is in sdcard/download/_ChatTalk/StockTable.xml */
+    /* Stock table is in sdcard/download/_ChatTalk/StockTable.txt */
 
     public void get() {
         if (tableFolder == null) {
@@ -79,7 +78,7 @@ public class StockGetPut {
         Map<String, Integer> sMap = new HashMap<>();
         for (int g = 0; g < sGroups.size(); g++) {
             SGroup grp = sGroups.get(g);
-            if (!grp.ignore) {
+            if (grp.active) {
                 switch (grp.telKa) {
                     case "t":
                         tMap.put(grp.grpM, g);

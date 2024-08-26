@@ -42,7 +42,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tGroup, tGroupM, tGroupF, tSkip1, tSkip2, tSkip3, tIgnore, tTelegram, tInfo, tLog;
+        TextView tGroup, tGroupM, tGroupF, tSkip1, tSkip2, tSkip3, tActive, tTelegram, tInfo, tLog;
         View tLine, tHead;
 
         ViewHolder(final View itemView) {
@@ -55,7 +55,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
             tSkip1  = itemView.findViewById(R.id.one_group_skip1);
             tSkip2  = itemView.findViewById(R.id.one_group_skip2);
             tSkip3  = itemView.findViewById(R.id.one_group_skip3);
-            tIgnore = itemView.findViewById(R.id.one_group_ignore);
+            tActive = itemView.findViewById(R.id.one_group_active);
             tTelegram = itemView.findViewById(R.id.one_group_telegram);
             tInfo = itemView.findViewById(R.id.one_group_info);
             tLog = itemView.findViewById(R.id.one_group_log);
@@ -76,12 +76,12 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
         holder.tGroup.setText(sGrp.grp);
         holder.tGroupM.setText(sGrp.grpM);
         holder.tGroupF.setText(sGrp.grpF);
-        int gColor = (sGrp.ignore) ? 0xFF666666 : 0xFF000000;
+        int gColor = (sGrp.active) ? 0xFF000000 : 0xFF666666;
         holder.tGroup.setTextColor(gColor);
         holder.tGroupM.setTextColor(gColor);
         holder.tGroupF.setTextColor(gColor);
 
-        gColor = (sGrp.ignore) ? 0xFF99AABB : 0xFFBBCCFF;
+        gColor = (sGrp.active) ? 0xFFBBCCFF : 0xFF99AABB;
         holder.tHead.setBackgroundColor(gColor);
 
         SpannableStringBuilder grpBuilder = new SpannableStringBuilder();
@@ -110,7 +110,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
         holder.tSkip2.setText(sGrp.skip2);
         holder.tSkip3.setText(sGrp.skip3);
         holder.tTelegram.setText(sGrp.telKa);
-        holder.tIgnore.setText((sGrp.ignore) ? "무시" : "  ");
+        holder.tActive.setText((sGrp.active) ? "활성" : "조용");
         holder.tInfo.setText(grpBuilder);
         holder.tLog.setText((sGrp.log) ? "Log" : "no Log");
         holder.tLine.setBackgroundColor(ContextCompat.getColor(mContext,

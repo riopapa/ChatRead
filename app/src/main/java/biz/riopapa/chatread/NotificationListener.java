@@ -3,6 +3,7 @@ package biz.riopapa.chatread;
 import static biz.riopapa.chatread.MainActivity.appFullNames;
 import static biz.riopapa.chatread.MainActivity.appIgnores;
 import static biz.riopapa.chatread.MainActivity.appNameIdx;
+import static biz.riopapa.chatread.MainActivity.appTypes;
 import static biz.riopapa.chatread.MainActivity.apps;
 import static biz.riopapa.chatread.MainActivity.caseAndroid;
 import static biz.riopapa.chatread.MainActivity.caseApp;
@@ -36,10 +37,6 @@ import biz.riopapa.chatread.common.Copy2Clipboard;
 import biz.riopapa.chatread.common.Utils;
 
 public class NotificationListener extends NotificationListenerService {
-    final String KK_TALK = "kk";
-    final String ANDROID = "an";
-    final String TG = "tg";
-    final String APP = "app";   // general application
 
     @Override
     public void onCreate() {
@@ -57,19 +54,19 @@ public class NotificationListener extends NotificationListenerService {
 
         switch (sbnAppType) {
 
-            case KK_TALK:
-                caseKaTalk.kaTalk();
-                break;
-
-            case TG:
+            case "t":
                 caseTelegram.tel();
                 break;
 
-            case ANDROID:
+            case "a":
                 caseAndroid.roid();
                 break;
 
-            case APP:
+            case "k":
+                caseKaTalk.kaTalk();
+                break;
+
+            case "d":
                 caseApp.app();
                 break;
 
@@ -79,8 +76,8 @@ public class NotificationListener extends NotificationListenerService {
                     return;
                 sbnText = strUtil.text2OneLine(sbnText);
                 sounds.speakAfterBeep("새 앱 설치됨 " + sbnText);
-                sbnText = "새로운 앱이 설치됨,  group : " + sbnGroup + ", who : " + sbnWho +
-                        ", text : " + sbnText;
+                sbnText = "새로운 앱이 설치됨,  group : [" + sbnGroup + "], who : [" + sbnWho +
+                        "], text : " + sbnText;
                 notificationBar.update(sbnAppName, sbnText, true);
                 new Copy2Clipboard(sbnAppName);
                 logUpdate.addLog("[ " + sbnAppName + " ]", sbnText);
@@ -117,23 +114,10 @@ public class NotificationListener extends NotificationListenerService {
             sbnAppIdx = appNameIdx.get(sbnAppIdx);
             sbnApp = apps.get(sbnAppIdx);
             sbnAppNick = sbnApp.nickName;
-            switch (sbnAppNick) {
-                case "텔레":
-                    sbnAppType = TG;
-                    break;
-                case "카톡":
-                    sbnAppType = KK_TALK;
-                    break;
-                case ANDROID:
-                    sbnAppType = ANDROID;
-                    break;
-                default:
-                    sbnAppType = APP;
-                    break;
-            }
+            sbnAppType = appTypes.get(sbnAppIdx);
         } else {
-            sbnAppNick = "None";
-            sbnAppType = "None";
+            sbnAppNick = "N";
+            sbnAppType = "N";
         }
 
         try {

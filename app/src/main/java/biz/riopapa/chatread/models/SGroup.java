@@ -10,8 +10,8 @@ public class SGroup implements Cloneable {
     public String grpF; // group full name
     public String skip1, skip2, skip3;  // if contains this string then skip this group
     public String telKa; // 't' for telegram, 'k' for kakaoTalk;
-    public boolean ignore;  // ignore this group for a while
     public boolean log;     // log text if true
+    public boolean active = true;
     public ArrayList<SWho> whos;
     public ArrayList<String> replF = null;  // replace from to
     public ArrayList<String> replT = null;
