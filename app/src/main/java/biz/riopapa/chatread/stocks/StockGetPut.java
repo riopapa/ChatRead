@@ -180,11 +180,12 @@ public class StockGetPut {
     public void putOld(String msg) {
         if (todayFolder == null)
             readyToday.check();
+        new SnackBar().show(STOCK_TABLE + "Old", msg);
         utils.logW("StockPut", msg);
         sortByGroup();
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String json = gson.toJson(sGroups);
-        fileIO.writeFile(todayFolder, STOCK_TABLE + ".txt", json);
+        fileIO.writeFile(todayFolder, STOCK_TABLE + "Old.txt", json);
         get();
     }
 

@@ -156,25 +156,22 @@
             android:gravity="center"
             android:textColor="@color/textFore"
             android:textSize="@dimen/app_line_font_size"
-            android:text=" "
+            android:layout_marginLeft="6dp"
             android:maxLines="1"
             />
 
         <TextView
             android:id="@+id/one_group_info"
             android:layout_width="0dp"
-            android:layout_weight="10"
+            android:layout_weight="20"
             android:layout_height="match_parent"
-            android:gravity="left"
             android:textColor="@color/textFore"
-            android:textSize="12sp"
-            android:text="skip1"
+            android:textSize="@dimen/app_line_font_size"
+            android:text="info"
+            android:layout_marginRight="6dp"
             android:maxLines="10"
             />
 
     </LinearLayout>
 
 </LinearLayout>
-
-<!--    android:maxLines="1"-->
-<!--    android:ellipsize="end"-->

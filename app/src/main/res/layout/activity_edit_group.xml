@@ -190,13 +190,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#D9CFC0"
-            android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
             android:textColor="#000"
             android:inputType="text|textMultiLine"
             android:autofillHints="replace from ; to"
             android:text=""
-            android:textSize="13sp" />
+            android:textSize="14sp" />
     </ScrollView>
 
 </LinearLayout>

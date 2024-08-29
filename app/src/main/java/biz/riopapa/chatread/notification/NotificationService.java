@@ -12,14 +12,18 @@ import static biz.riopapa.chatread.MainActivity.sounds;
 import static biz.riopapa.chatread.MainActivity.strUtil;
 import static biz.riopapa.chatread.MainActivity.utils;
 
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
+import android.service.notification.NotificationListenerService;
+import android.service.notification.StatusBarNotification;
 import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
@@ -34,7 +38,7 @@ import biz.riopapa.chatread.AllVariables;
 import biz.riopapa.chatread.MainActivity;
 import biz.riopapa.chatread.R;
 
-public class NotificationService extends Service {
+public class NotificationService extends NotificationListenerService {
 
     NotificationCompat.Builder mBuilder = null;
     NotificationManager mNotificationManager;
@@ -46,15 +50,48 @@ public class NotificationService extends Service {
     static String msg3 = "", head3 = "00:99";
     static boolean show_stop = false;
 
-    public NotificationService() {}
+    private NotificationPreprocessor preprocessor;
+
+    public NotificationService() {
+        super.onCreate();
+        preprocessor = new NotificationPreprocessor();  // Initialize your preprocessor
+
+    }
+
+    @Override
+    public void onNotificationPosted(StatusBarNotification sbn) {
+        super.onNotificationPosted(sbn);
+
+        Notification notification = sbn.getNotification();
+        if (preprocessor.isSendable(notification)) {
+            // If sendable, handle the notification
+            utils.logW("MyNotificationListener", "Processing notification: " + notification.toString());
+
+            // Your logic to handle the notification
+        } else {
+            // If not sendable, ignore or handle it differently
+            utils.logW("MyNotificationListener", "Notification ignored by preprocessor.");
+        }
+        try {
+            // Your logic for handling the notification
+            utils.logW("MyNotificationListener", "Notification received: " + notification.toString());
+        } catch (Exception e) {
+            Log.e("MyNotificationListener", "Error processing notification: ", e);
+        }
+    }
+
+    @Override
+    public void onNotificationRemoved(StatusBarNotification sbn) {
+        super.onNotificationRemoved(sbn);
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
         if (mContext == null)
             mContext = this;
-        Log.w("NotificationService","onCreate");
         mRemoteViews = new RemoteViews(mContext.getPackageName(), R.layout.notification_bar);
+
     }
 
     @Override
@@ -92,7 +129,6 @@ public class NotificationService extends Service {
                 msg1 = strUtil.makeEtc(msg1, 100);
                 head1 = new SimpleDateFormat("HH:mm", Locale.KOREA).format(new Date())
                         + "\u00A0" + intent.getStringExtra("who");
-
                 show_stop = intent.getBooleanExtra("stop", true);
 
                 break;
@@ -145,6 +181,8 @@ public class NotificationService extends Service {
 //                .setColor(getApplicationContext().getColor(R.color.barLine1))
                 .setContent(mRemoteViews)
                 .setSmallIcon(R.drawable.stock1_icon)
+                .setCategory(Notification.CATEGORY_MESSAGE)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.drawable.stock2_icon))
                 .setOnlyAlertOnce(true)
                 .setAutoCancel(false)
                 .setContentTitle("Chat.Read")
@@ -191,7 +229,7 @@ public class NotificationService extends Service {
         mRemoteViews.setTextViewText(R.id.msg_head3, head3);
         mRemoteViews.setTextViewText(R.id.msg_text3, msg3);
         mRemoteViews.setViewVisibility(R.id.stop_now, (show_stop)? View.VISIBLE : View.GONE);
-        mNotificationManager.notify(100,mBuilder.build());
+        mNotificationManager.notify(0,mBuilder.build());
         msgPut();
     }
 

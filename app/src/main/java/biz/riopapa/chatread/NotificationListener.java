@@ -30,6 +30,7 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
+import android.util.Log;
 
 import java.util.Collections;
 
@@ -41,6 +42,8 @@ public class NotificationListener extends NotificationListenerService {
     @Override
     public void onCreate() {
         super.onCreate();
+        if (kvCommon == null)
+            new AllVariables().set(this, "New NotificationListener");
     }
 
     @Override
@@ -88,10 +91,10 @@ public class NotificationListener extends NotificationListenerService {
     boolean ignoreSbn(StatusBarNotification sbn) {
 
         sbnAppName = sbn.getPackageName();  // to LowCase
+
         if (sbnAppName.isEmpty() || Collections.binarySearch(appIgnores, sbnAppName) >= 0)
             return true;
         Bundle extras = sbn.getNotification().extras;
-
         try {
             sbnText =extras.getCharSequence(Notification.EXTRA_TEXT, "").toString();
         } catch (Exception e) {
@@ -109,12 +112,12 @@ public class NotificationListener extends NotificationListenerService {
             return true;
         }
 
-        sbnAppIdx = Collections.binarySearch(appFullNames, sbnAppName);
-        if (sbnAppIdx >= 0) {
-            sbnAppIdx = appNameIdx.get(sbnAppIdx);
+        int idx = Collections.binarySearch(appFullNames, sbnAppName);
+        if (idx >= 0) {
+            sbnAppType = appTypes.get(idx);
+            sbnAppIdx = appNameIdx.get(idx);
             sbnApp = apps.get(sbnAppIdx);
             sbnAppNick = sbnApp.nickName;
-            sbnAppType = appTypes.get(sbnAppIdx);
         } else {
             sbnAppNick = "N";
             sbnAppType = "N";

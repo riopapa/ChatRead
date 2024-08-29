@@ -11,6 +11,7 @@ import static biz.riopapa.chatread.MainActivity.timeBegin;
 import static biz.riopapa.chatread.MainActivity.timeEnd;
 import static biz.riopapa.chatread.MainActivity.toDay;
 import static biz.riopapa.chatread.MainActivity.todayFolder;
+import static biz.riopapa.chatread.MainActivity.utils;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -41,7 +42,7 @@ public class ReadyToday {
         todayFolder = new File(packageDirectory, toDay);
         if (!todayFolder.exists()) {
             if (todayFolder.mkdirs())
-                new Utils().deleteOldFiles();
+                utils.deleteOldFiles();
         }
         kvCommon = new KeyVal();
         kvStock = new KeyVal();

@@ -114,7 +114,7 @@ public class FragmentKaTalk extends Fragment {
             return;
         }
         etTable.setText(kaLog.ss);
-        etTable.setOnClickListener(v -> {
+        ivFind.setOnClickListener(v -> {
             chatPos = -1;
             String key1 = eKey1.getText().toString();
             String key2 = eKey2.getText().toString();

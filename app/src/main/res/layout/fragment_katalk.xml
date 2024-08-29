@@ -74,25 +74,22 @@
         android:id="@+id/ka_table_scroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:fastScrollEnabled="true"
         android:scrollbars="vertical"
-        android:scrollbarSize="6dp"
+        android:scrollbarSize="12dp"
         style="@style/up_down_scroll_thumb"
         >
         <EditText
             android:id="@+id/ka_table_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="4dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:autofillHints="Table text"
-            android:cursorVisible="true"
-            android:focusable="false"
             android:inputType="text|textMultiLine"
-            android:scrollbars="vertical"
-            android:text="x"
+            android:text="@string/active_say_table_list"
             android:textSize="15sp" />
     </ScrollView>
+
 </LinearLayout>
 </FrameLayout>

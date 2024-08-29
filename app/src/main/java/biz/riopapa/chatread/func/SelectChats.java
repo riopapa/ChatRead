@@ -10,6 +10,7 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.UnderlineSpan;
 import android.widget.Toast;
 
 import java.io.File;
@@ -27,7 +28,7 @@ public class SelectChats {
 
     String[] whos, whoFs;
     String[] keywords, keyword1, keyword2, prevs, nexts;
-    boolean upload;
+    boolean upload, whoFound;
     ArrayList<String> msgLines;
     ArrayList<String> ignores;
     SGroup sGroup = null;
@@ -89,7 +90,7 @@ public class SelectChats {
         msgLines = new ArrayList<>();     // message lines chosen
         StringBuilder mSb = new StringBuilder();
         for (String ln : chatLines) {
-            if (ln.startsWith("202")) {
+            if (ln.startsWith("202") && ln.contains(",")) {
                 String txt = mSb.toString();
                 if (txt.contains(" : ") && txt.length() > 20)
                     msgLines.add(txt.substring(6));
@@ -115,12 +116,12 @@ public class SelectChats {
                 continue;
             String time = txt.substring(0,p);
             String tmp = txt.substring(p+2);
-            p = tmp.indexOf(":")-1;
+            p = tmp.indexOf(":") - 1;
             if (p < 0)
                 continue;
             String kWhoF = tmp.substring(0, p).trim();
             String thisLine = tmp.substring(3+kWhoF.length());
-            boolean whoFound = false;
+            whoFound = false;
             for (String whoF : whoFs) {
                 if (kWhoF.contains(whoF)) {
                     whoFound = true;
@@ -221,22 +222,29 @@ public class SelectChats {
                     String [] sNames = new StockName().get(prevs[k], nexts[k], thisLine);
                     String keys = "<"+keyword1[k]+"~"+keyword2[k]+">";
                     String str = sNames[0]+" "+ time+", "+who+" , "+ sNames[1] + " " + keys;
+                    str = makeShort(str, sGroup);
                     SpannableString s = new SpannableString(str+"\n\n");
-                    s.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.keyTextFore, null)), 0, s.length()-1, SPAN_EXCLUSIVE_EXCLUSIVE);
-                    s.setSpan(new BackgroundColorSpan(mContext.getResources().getColor(R.color.keyMatchedBack, null)), 0, s.length()-1, SPAN_EXCLUSIVE_EXCLUSIVE);
+                    s.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.keyTextFore, null)), 0, str.length()-1, SPAN_EXCLUSIVE_EXCLUSIVE);
+                    s.setSpan(new BackgroundColorSpan(mContext.getResources().getColor(R.color.keyMatchedBack, null)), 0, str.length()-1, SPAN_EXCLUSIVE_EXCLUSIVE);
                     s.setSpan(new BackgroundColorSpan(mContext.getResources().getColor(R.color.tabBackSelected, null)), 0, sNames[0].length(), SPAN_EXCLUSIVE_EXCLUSIVE);
-//                    if (str.contains(whoFs[k]))
-//                        s.setSpan(new UnderlineSpan(), 0, s.length()-1, SPAN_EXCLUSIVE_EXCLUSIVE);
                     if (upload) {
-                        String [] strs = new StockName().get(prevs[k], nexts[k], thisLine);
-                        gSheet.add2Stock(sGroup.grp, who, "chats", strs[0],
-                                strs[1], keys, time);
+                        gSheet.add2Stock(sGroup.grp, time, who, "chats", sNames[0],
+                                sNames[1], keys);
                     }
                     return s;
                 }
             }
         }
         return new SpannableString("");
+    }
+
+    String makeShort(String text, SGroup sGroup) {
+        if (sGroup.replF == null)
+            return text;
+        for (int i = 0; i < sGroup.replF.size(); i++) {
+            text = text.replace(sGroup.replF.get(i), sGroup.replT.get(i));
+        }
+        return text;
     }
 
     SpannableString concatSS(SpannableString s1, SpannableString s2) {

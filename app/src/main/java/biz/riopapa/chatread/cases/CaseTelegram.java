@@ -22,10 +22,6 @@ import static biz.riopapa.chatread.MainActivity.timeEnd;
 import static biz.riopapa.chatread.MainActivity.utils;
 import static biz.riopapa.chatread.NotificationListener.isWorking;
 
-import android.util.Log;
-
-import biz.riopapa.chatread.func.ReadyToday;
-
 public class CaseTelegram {
     public void tel() {
 
@@ -68,13 +64,8 @@ public class CaseTelegram {
                 sbnText.contains(sGroups.get(g).skip2))
             return;
 
-        if (deBug && sGroups.get(g).log) {
-            String whoStr = sbnWho.length() > 16 ? sbnWho.substring(0, 12) : sbnWho;
-            whoStr = whoStr.replaceAll("[^\\w\\s가-힣]", "");
-            utils.logB("who_" + whoStr, sbnWho + "\n" + sbnText);
-        }
-
         String [] grpWho = sbnWho.split(":");
+
         if (grpWho.length == 2) {       // 0)그룹명 : 1)이름
             sbnWho = grpWho[1].trim();
         } else if (grpWho.length == 3) {
@@ -84,16 +75,20 @@ public class CaseTelegram {
             if (p > 0) {
                 sbnWho = sbnText.substring(0, p).trim();
                 sbnText = sbnText.substring(p + 1).trim();
-            } else
-                sbnWho = sbnText.substring(0,15) + "$";
+            } else {
+                sbnWho = sbnText.substring(0, 15) + "$";
+                if (deBug && sGroups.get(g).log) {
+                    String whoStr = sbnWho.replaceAll("[^\\w\\s가-힣]", "");
+                    utils.logB("w_" + sbnGroup + "_" + whoStr, sbnWho + "\n" + sbnText);
+                }
+            }
         }
 
-        if (kvTelegram.isDup(sbnWho, sbnText))
+        if (kvTelegram.isDup(sbnGroup, sbnText))
             return;
 
         if (deBug && sGroups.get(g).log)
-            utils.logB(sbnGroup, "["+sbnWho + "] "+sbnText);
-
+            utils.logB(sbnGroup, "@"+sbnWho + "@ "+sbnText);
         for (int w = 0; w < sGroups.get(g).whos.size(); w++) {
             if (sbnWho.startsWith(sGroups.get(g).whos.get(w).whoM)) {
                 sbnWho = sGroups.get(g).whos.get(w).who;

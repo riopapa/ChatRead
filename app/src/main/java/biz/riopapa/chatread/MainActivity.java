@@ -128,8 +128,8 @@ public class MainActivity extends AppCompatActivity {
     public static SharedPreferences sharePref, prefLog, prefWork, prefSave, prefStock;
     public static SharedPreferences.Editor sharedEditor, prefLogEditor, prefWorkEditor, prefSaveEditor, prefStockEditor;
     public final static String log_Que = "logQue", log_Stock = "logStock", log_Save = "logSave", log_Work = "logWork";
-    public static final String [] OPERATION = {"Show Message","show Noty","stop say",
-            "reload app","hide_stop"};
+//    public static final String [] OPERATION = {"Show Message","show Noty","stop say",
+//            "reload app","hide_stop"};
     public static final int SHOW_MESSAGE = 1000;
     public static final int SHOW_NOTIFICATION_BAR = 1001;
     public static final int STOP_SAY = 1002;

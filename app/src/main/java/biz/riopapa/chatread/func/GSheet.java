@@ -4,6 +4,8 @@ import static biz.riopapa.chatread.MainActivity.gSheet;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.utils;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import java.io.IOException;
@@ -100,22 +102,17 @@ public class GSheet {
 
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                String errStr = "stock Upload Fail "+ formBuilder + "\n"+e;
-                utils.logE("gSheet",errStr);
+                utils.logE("gSheet","stock Upload 에러남 : "+ e);
             }
-//            @Override
-//            public void onResponse(@NonNull Call call, @NonNull Response response) {
-//                if (!response.isSuccessful()){
-//                    utils.logW("gSheet", "Error: " + response.body());
-//                }
-//            }
+
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) { // Try-with-resources here
                     if (!response.isSuccessful()) {
                         utils.logE("gSheet", "Error Replied : " + responseBody.string()); // Consume body if needed
                     } else {
-                        utils.logW("gSheet", "Success Replied : " + responseBody.string());
+                        Log.w("gSheet", "Success Replied");
+//                        utils.logW("gSheet", "Success Replied : " + responseBody.string());
                         // Process successful response here, consuming responseBody if needed
                     }
                 }

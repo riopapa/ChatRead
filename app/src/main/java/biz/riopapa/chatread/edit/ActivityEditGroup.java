@@ -2,12 +2,16 @@ package biz.riopapa.chatread.edit;
 
 import static biz.riopapa.chatread.MainActivity.gIDX;
 import static biz.riopapa.chatread.MainActivity.gSheet;
+import static biz.riopapa.chatread.MainActivity.mContext;
+import static biz.riopapa.chatread.MainActivity.sIDX;
+import static biz.riopapa.chatread.MainActivity.wIDX;
 import static biz.riopapa.chatread.MainActivity.whoAdapter;
 import static biz.riopapa.chatread.MainActivity.groupAdapter;
 import static biz.riopapa.chatread.MainActivity.groupListener;
 import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.stockGetPut;
 import static biz.riopapa.chatread.MainActivity.whoRecyclerView;
+import static biz.riopapa.chatread.edit.ActivityEditGroupWho.whoContext;
 import static biz.riopapa.chatread.fragment.FragmentStockList.groupRecyclerView;
 
 import android.os.Bundle;
@@ -18,8 +22,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 
@@ -149,13 +155,18 @@ public class ActivityEditGroup extends AppCompatActivity {
     private void duplicateGroup() {
 
         newGroup.grp = eGroup.getText().toString();
-        newGroup.grpM = eGroupM.getText().toString();
-        newGroup.grpF = eGroupF.getText().toString();
+        if (newGroup.grp.equals(sGroups.get(gIDX).grp)) {
+            Toast.makeText(mContext, "Group Name Not Changed", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        newGroup.grpM = eGroupM.getText().toString().trim();
+        newGroup.grpF = eGroupF.getText().toString().trim();
         newGroup.telKa = tTelKa.getText().toString();
         newGroup.active = sActive.isChecked();
-        newGroup.skip1 = eSkip1.getText().toString();
-        newGroup.skip2 = eSkip2.getText().toString();
-        newGroup.skip3 = eSkip3.getText().toString();
+        newGroup.skip1 = eSkip1.getText().toString().trim();
+        newGroup.skip2 = eSkip2.getText().toString().trim();
+        newGroup.skip3 = eSkip3.getText().toString().trim();
         newGroup.log = sLog.isChecked();
         if (newGroup.skip1.isEmpty())
             newGroup.skip1 = NOTHING;
@@ -194,6 +205,10 @@ public class ActivityEditGroup extends AppCompatActivity {
         stockGetPut.putOld("group save curr");
 
         newGroup.grp = eGroup.getText().toString();
+        if (!newGroup.grp.equals(sGroups.get(gIDX).grp)) {
+            Toast.makeText(mContext, "Group Name Changed", Toast.LENGTH_LONG).show();
+            return;
+        }
         newGroup.grpM = eGroupM.getText().toString();
         newGroup.grpF = eGroupF.getText().toString();
         newGroup.telKa = tTelKa.getText().toString();

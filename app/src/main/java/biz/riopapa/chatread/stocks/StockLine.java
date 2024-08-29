@@ -101,7 +101,6 @@ public class StockLine {
 
                 sGroups.get(g).whos.get(w).stocks.get(s).count++;
                 stockGetPut.save(sGroups.get(g).whos.get(w).whoF+" "+sGroups.get(g).whos.get(w).stocks.get(s).count);
-
                 break;
             }
         }

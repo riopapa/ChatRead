@@ -38,7 +38,7 @@ public class Utils {
     public void logB(String tag, String text) {
         if (deBug) {
             String str = strUtil.text2OneLine(text);
-            logW(tag,  str.length()> 80? str.substring(0, 80) : str + "\n");
+            logW(tag,  str.length()> 80? str.substring(0, 80) : str);
         }
     }
 
@@ -69,7 +69,7 @@ public class Utils {
     /* delete old packageDirectory / files if storage is less than x days */
     public void deleteOldFiles() {
         final SimpleDateFormat dateFormat = new SimpleDateFormat(monthDay, Locale.KOREA);
-        String weekAgo = dateFormat.format(System.currentTimeMillis() - 3*24*60*60*1000L);
+        String weekAgo = dateFormat.format(System.currentTimeMillis() - 7*24*60*60*1000L);
         File[] files = packageDirectory.listFiles();
         if (files == null)
             return;
