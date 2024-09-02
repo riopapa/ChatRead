@@ -40,8 +40,8 @@ public class StockName {
                     break;
                 }
                 sName = str.substring(p1,p2);
-                String sNameDot = sName;
-                if (sName.length()> 2)
+                String sNameDot = sName + "s";
+                if (sName.length() > 3)
                     sNameDot = new StringBuffer(sName).insert(1, ".").toString();
                 str = str.substring(0, p1) + " " + sNameDot + " " +
                         str.substring(p1+10);

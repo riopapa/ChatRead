@@ -14,12 +14,17 @@ import android.util.Log;
 
 public class NotificationBar {
 
-    public NotificationBar() {}
+    static Intent intent;
+    public NotificationBar() {
+        intent = new Intent(mContext, NotificationService.class);
+    }
 
     public void update(String who, String msg, boolean stop_icon) {
 
-        final String iMsg = (msg.length() > 250) ? msg.substring(0, 250)+".." : msg;
-        Intent intent = new Intent(mContext, NotificationService.class);
+        if (msg == null) {
+            msg = "msg is null, who=" + who;
+        }
+        final String iMsg = (msg.length() > 200) ? msg.substring(0, 200)+".." : msg;
         if (isMyServiceRunning(NotificationService.class))
             mContext.stopService(intent);
         intent.putExtra("operation", SHOW_MESSAGE);

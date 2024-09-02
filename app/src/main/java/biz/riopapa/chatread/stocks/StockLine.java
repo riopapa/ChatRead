@@ -43,7 +43,7 @@ import biz.riopapa.chatread.models.SStock;
 
 public class StockLine {
 
-    String strHead, strText;
+    String strHead;
 
     public void sayIfMatched(int g, int w, ArrayList<SStock> stocks) {
 
@@ -66,7 +66,7 @@ public class StockLine {
                     joins = new String[]{sbnGroup, sbnWho, sParse[0], stock.talk, won};
                     sounds.speakBuyStock(String.join(" , ", joins));
                     if (sGroups.get(g).log) {
-                        strText = makeShort(strUtil.removeSpecialChars(sParse[1]), sGroups.get(g));
+                        String strText = makeShort(strUtil.removeSpecialChars(sParse[1]), sGroups.get(g));
                         strText = won + " " + ((strText.length() > 70) ? strText.substring(0, 70) : strText);
                         utils.logB(sbnGroup, strText);
                     }
@@ -84,7 +84,7 @@ public class StockLine {
                     });
 
                 } else {
-                    strText = makeShort(strUtil.removeSpecialChars(sParse[1]), sGroups.get(g));
+                    String strText = makeShort(strUtil.removeSpecialChars(sParse[1]), sGroups.get(g));
                     strHead = sParse[0]+" | "+sbnGroup+". "+sbnWho;
                     if (!isSilentNow()) {
                         sounds.beepOnce(MainActivity.soundType.ONLY.ordinal());
@@ -93,11 +93,11 @@ public class StockLine {
                         utils.logB(sbnGroup, strText);
                     }
                 }
-                logUpdate.addStock(sParse[0] + " ["+sbnGroup+":"+sbnWho+"]", strText
+                logUpdate.addStock(sParse[0] + " ["+sbnGroup+":"+sbnWho+"]", sParse[1]
                         + key12);
-                notificationBar.update(strHead, strText, true);
+                notificationBar.update(strHead, sParse[1], true);
                 String timeStamp = toDay + new SimpleDateFormat(hourMin, Locale.KOREA).format(new Date());
-                gSheet.add2Stock(sbnGroup, timeStamp, sbnWho, percent, sParse[0], strText, key12);
+                gSheet.add2Stock(sbnGroup, timeStamp, sbnWho, percent, sParse[0], sParse[1], key12);
 
                 sGroups.get(g).whos.get(w).stocks.get(s).count++;
                 stockGetPut.save(sGroups.get(g).whos.get(w).whoF+" "+sGroups.get(g).whos.get(w).stocks.get(s).count);

@@ -169,28 +169,31 @@ public class AllVariables {
             sharePref = context.getSharedPreferences("sayText", MODE_PRIVATE);
             sharedEditor = sharePref.edit();
         }
+        prefLog = context.getSharedPreferences(log_Que, MODE_PRIVATE);
+        prefLogEditor = prefLog.edit();
+        prefStock = context.getSharedPreferences(log_Stock, MODE_PRIVATE);
+        prefStockEditor = prefStock.edit();
+        prefSave = context.getSharedPreferences(log_Save, MODE_PRIVATE);
+        prefSaveEditor = prefSave.edit();
+        prefWork = context.getSharedPreferences(log_Work, MODE_PRIVATE);
+        prefWorkEditor = prefWork.edit();
         if (logQue.isEmpty()) {
-            prefLog = context.getSharedPreferences(log_Que, MODE_PRIVATE);
-            prefLogEditor = prefLog.edit();
-            logQue = prefLog.getString(log_Que, fileIO.readFile(tableFolder, log_Que+".txt"));
-
-            prefStock = context.getSharedPreferences(log_Stock, MODE_PRIVATE);
-            prefStockEditor = prefStock.edit();
-            logStock = prefStock.getString(log_Stock, fileIO.readFile(tableFolder, log_Stock+".txt"));
-
-            prefSave = context.getSharedPreferences(log_Save, MODE_PRIVATE);
-            prefSaveEditor = prefSave.edit();
-            logSave = prefSave.getString(log_Save, fileIO.readFile(tableFolder, log_Save+".txt"));
-
-            prefWork = context.getSharedPreferences(log_Work, MODE_PRIVATE);
-            prefWorkEditor = prefWork.edit();
-            logWork = prefWork.getString(log_Work, fileIO.readFile(tableFolder, log_Work+".txt"));
+            logQue = prefLog.getString(log_Que, fileIO.readFile(tableFolder, "q" + log_Que+".txt"));
+            logStock = prefStock.getString(log_Stock, fileIO.readFile(tableFolder, "q" + log_Stock+".txt"));
+            logSave = prefSave.getString(log_Save, fileIO.readFile(tableFolder, "q" + log_Save+".txt"));
+            logWork = prefWork.getString(log_Work, fileIO.readFile(tableFolder, "q" + log_Work+".txt"));
+        } else {
+            fileIO.writeFile(tableFolder, "q" + log_Que+".txt", logStock);
+            fileIO.writeFile(tableFolder, "q" + log_Stock+".txt", logQue);
+            fileIO.writeFile(tableFolder, "q" + log_Save+".txt", logWork);
+            fileIO.writeFile(tableFolder, "q" + log_Work+".txt", logSave);
         }
         deBug = sharePref.getBoolean("deBug", false);
         if (deBug) {
             fileIO.writeFile(todayFolder, "zLogStock.txt", logStock);
             fileIO.writeFile(todayFolder, "zLogQue.txt", logQue);
             fileIO.writeFile(todayFolder, "zLogWork.txt", logWork);
+            fileIO.writeFile(todayFolder, "zLogSave.txt", logSave);
         }
     }
 
