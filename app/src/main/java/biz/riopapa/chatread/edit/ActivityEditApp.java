@@ -81,17 +81,8 @@ public class ActivityEditApp extends AppCompatActivity {
             app.replF = null;
             app.replT = null;
             app.igStr = null;
+//            app.fullName = ClipboardHelper.getClipboardText(mContext);
 
-//            ClipboardManager clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-//            ClipData clipData = clipboardManager.getPrimaryClip();
-//            if (clipData != null && clipData.getItemCount() > 0)
-//                Log.e("clip", "cnt+ "+ clipData.getItemCount());
-//            if (clipData != null && clipData.getItemCount() > 0 &&
-//                    clipData.getItemAt(0).getText() != null) {
-//                app.fullName = clipData.getItemAt(0).getText().toString();
-//            }
-            String clipboardText = ClipboardHelper.getClipboardText(this);
-            app.fullName = clipboardText;
         } else {
             app = apps.get(mAppsPos);
             actionBar.setTitle("App Edit");
@@ -148,6 +139,13 @@ public class ActivityEditApp extends AppCompatActivity {
         replFromTo.setEnabled(true);
         replFromTo.setClickable(true);
         replFromTo.setFocusableInTouchMode(true);
+
+        if (mAppsPos == -1) {
+            eFullName.post(() -> {
+                String clip = ClipboardHelper.getClipboardText(mContext);
+                eFullName.setText(clip);
+            });
+        }
     }
 
     @Override
@@ -241,16 +239,13 @@ public class ActivityEditApp extends AppCompatActivity {
                 }
             }
         }
-        if (!replF.isEmpty()) {
-            app.replF = replF.toArray(new String[0]);
-            app.replT = replT.toArray(new String[0]);
-        } else
-            app.replF = null;
 
         if (mAppsPos == -1)
             apps.add(app);
         else
             apps.set(mAppsPos, app);
+
+
         AppsTable appsTable = new AppsTable();
         appsTable.put();
         appsTable.makeTable();

@@ -6,6 +6,7 @@ import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.tableListFile;
 
+import android.content.Context;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.BackgroundColorSpan;
@@ -213,29 +214,65 @@ public class SelectChats {
     }
 
     SpannableString key2Matched(String time, String who, String thisLine, boolean upload) {
-        int p1, p2;
-        for (int k = 0; k < keyword1.length; k++) {
-            p1 = thisLine.indexOf(keyword1[k]);
-            if (p1 >= 0) {
-                p2 = thisLine.indexOf(keyword2[k], p1+1);
-                if (p2 >= 0) {      // both matched
-                    String [] sNames = new StockName().get(prevs[k], nexts[k], thisLine);
-                    String keys = "<"+keyword1[k]+"~"+keyword2[k]+">";
-                    String str = sNames[0]+" "+ time+", "+who+" , "+ sNames[1] + " " + keys;
-                    str = makeShort(str, sGroup);
-                    SpannableString s = new SpannableString(str+"\n\n");
-                    s.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.keyTextFore, null)), 0, str.length()-1, SPAN_EXCLUSIVE_EXCLUSIVE);
-                    s.setSpan(new BackgroundColorSpan(mContext.getResources().getColor(R.color.keyMatchedBack, null)), 0, str.length()-1, SPAN_EXCLUSIVE_EXCLUSIVE);
-                    s.setSpan(new BackgroundColorSpan(mContext.getResources().getColor(R.color.tabBackSelected, null)), 0, sNames[0].length(), SPAN_EXCLUSIVE_EXCLUSIVE);
+//        int p1, p2;
+//        for (int k = 0; k < keyword1.length; k++) {
+//            p1 = thisLine.indexOf(keyword1[k]);
+//            if (p1 >= 0) {
+//                p2 = thisLine.indexOf(keyword2[k], p1+1);
+//                if (p2 >= 0) {      // both matched
+//                    String [] sNames = new StockName().get(prevs[k], nexts[k], thisLine);
+//                    String keys = "<"+keyword1[k]+"~"+keyword2[k]+">";
+//                    String str = sNames[0]+" "+ time+", "+who+" , "+ sNames[1] + " " + keys;
+//                    str = makeShort(str, sGroup);
+//                    SpannableString s = new SpannableString(str+"\n\n");
+//                    s.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.keyTextFore, null)), 0, str.length()-1, SPAN_EXCLUSIVE_EXCLUSIVE);
+//                    s.setSpan(new BackgroundColorSpan(mContext.getResources().getColor(R.color.keyMatchedBack, null)), 0, str.length()-1, SPAN_EXCLUSIVE_EXCLUSIVE);
+//                    s.setSpan(new BackgroundColorSpan(mContext.getResources().getColor(R.color.tabBackSelected, null)), 0, sNames[0].length(), SPAN_EXCLUSIVE_EXCLUSIVE);
+//                    if (upload) {
+//                        gSheet.add2Stock(sGroup.grp, time, who, "chats", sNames[0],
+//                                sNames[1], keys);
+//                    }
+//                    return s;
+//                }
+//            }
+//        }
+
+        // 1. Rename variables for clarity
+        int firstKeywordIndex, secondKeywordIndex;
+        for (int keywordIndex = 0; keywordIndex < keyword1.length; keywordIndex++) {
+            firstKeywordIndex = thisLine.indexOf(keyword1[keywordIndex]);
+            if (firstKeywordIndex >= 0) {
+                secondKeywordIndex = thisLine.indexOf(keyword2[keywordIndex], firstKeywordIndex + 1);if (secondKeywordIndex >= 0) {      // both matched
+                    // 2. Extract string building to a separate method for better readability and maintainability
+                    SpannableString result = buildResultString(keyword1[keywordIndex], keyword2[keywordIndex], thisLine, prevs[keywordIndex],
+                            nexts[keywordIndex], time, who, sGroup, mContext);
+                    // 3. Upload data if necessary
                     if (upload) {
-                        gSheet.add2Stock(sGroup.grp, time, who, "chats", sNames[0],
-                                sNames[1], keys);
+                        String[] stockNames = new StockName().get(prevs[keywordIndex], nexts[keywordIndex],thisLine);
+                        String keys = "<" + keyword1[keywordIndex] + "~" + keyword2[keywordIndex] + ">";
+                        gSheet.add2Stock(sGroup.grp, time, who, "chats", stockNames[0],
+                                stockNames[1], keys);
                     }
-                    return s;
+                    return result;
                 }
             }
         }
+
         return new SpannableString("");
+    }
+    // Helper method to build the result string
+    private SpannableString buildResultString(String keyword1, String keyword2, String thisLine,
+                                              String prev, String next, String time, String who,
+                                              SGroup sGroup, Context mContext) {
+        String[] stockNames = new StockName().get(prev, next, thisLine);
+        String keys = "<" + keyword1 + "~" + keyword2 + ">";
+        String str = stockNames[0] + " " + time + ", " + who + " , " + stockNames[1] + " " + keys;
+        str = makeShort(str, sGroup); // Assuming makeShort is a method you have defined elsewhere
+        SpannableString s = new SpannableString(str + "\n\n");
+        s.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.keyTextFore, null)), 0, str.length() - 1, SPAN_EXCLUSIVE_EXCLUSIVE);
+        s.setSpan(new BackgroundColorSpan(mContext.getResources().getColor(R.color.keyMatchedBack, null)), 0, str.length() - 1, SPAN_EXCLUSIVE_EXCLUSIVE);
+        s.setSpan(new BackgroundColorSpan(mContext.getResources().getColor(R.color.tabBackSelected, null)), 0, stockNames[0].length(), SPAN_EXCLUSIVE_EXCLUSIVE);
+        return s;
     }
 
     String makeShort(String text, SGroup sGroup) {

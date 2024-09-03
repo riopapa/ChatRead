@@ -30,6 +30,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import biz.riopapa.chatread.R;
 import biz.riopapa.chatread.adapters.GroupAdapter;
@@ -190,6 +191,7 @@ public class ActivityEditGroup extends AppCompatActivity {
 
     private void buildRepl(String s, SGroup nGroup) {
         String[] sLines = s.split("\n");
+        Arrays.sort(sLines);
         nGroup.replF = new ArrayList<>();
         nGroup.replT = new ArrayList<>();
         for (String sLine : sLines) {

@@ -25,6 +25,7 @@ import android.hardware.display.DisplayManager;
 import android.media.AudioManager;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.Display;
 import android.widget.Toast;
 
@@ -43,67 +44,85 @@ import biz.riopapa.chatread.models.SStock;
 
 public class StockLine {
 
-    String strHead;
+    public void sayIfMatched(int g, int w, ArrayList<SStock> stocks, String sText) {
 
-    public void sayIfMatched(int g, int w, ArrayList<SStock> stocks) {
-
-        for (int s = 0; s < stocks.size() ; s++) {
-            if (sbnText.contains(stocks.get(s).key1) && sbnText.contains(stocks.get(s).key2)) {
-
-                SStock stock = stocks.get(s);
-                String [] sParse = stockName.get(stock.prv, stock.nxt, sbnText);
-                if (kvTelegram.isDup(sbnWho+sParse[0], sbnText))    // 같은 주식 내용 반복
-                    return;
-
-                String percent = (!sbnText.contains("매수") && (sbnText.contains("매도") || sbnText.contains("익절")))?
-                        "1.9" : stock.talk;
-                String key12 = " {" + stock.key1 + "." + stock.key2 + "}";
-                strHead = sParse[0]+" / " + sbnWho + ":" +sbnGroup;
-
-                if (!stock.talk.isEmpty()) {
-                    String [] joins;
-                    String won = wonValue(sParse[1]);
-                    joins = new String[]{sbnGroup, sbnWho, sParse[0], stock.talk, won};
-                    sounds.speakBuyStock(String.join(" , ", joins));
-                    if (sGroups.get(g).log) {
-                        String strText = makeShort(strUtil.removeSpecialChars(sParse[1]), sGroups.get(g));
-                        strText = won + " " + ((strText.length() > 70) ? strText.substring(0, 70) : strText);
-                        utils.logB(sbnGroup, strText);
-                    }
-                    new Copy2Clipboard(sParse[0]);
-                    if (isSilentNow()) {
-                        if (phoneVibrate == null)
-                            phoneVibrate = new PhoneVibrate();
-                        phoneVibrate.go(1);
-                    }
-                    new Handler(Looper.getMainLooper()).post(() -> {
-                        if (isScreenOn(mContext) && mActivity != null) {
-                            mActivity.runOnUiThread(() -> Toast.makeText(mContext, strHead, Toast.LENGTH_LONG).show());
-                            mActivity.runOnUiThread(() -> Toast.makeText(mContext, strHead, Toast.LENGTH_LONG).show());
-                        }
-                    });
-
-                } else {
-                    String strText = makeShort(strUtil.removeSpecialChars(sParse[1]), sGroups.get(g));
-                    strHead = sParse[0]+" | "+sbnGroup+". "+sbnWho;
-                    if (!isSilentNow()) {
-                        sounds.beepOnce(MainActivity.soundType.ONLY.ordinal());
-                    }
-                    if (sGroups.get(g).log) {
-                        utils.logB(sbnGroup, strText);
-                    }
-                }
-                logUpdate.addStock(sParse[0] + " ["+sbnGroup+":"+sbnWho+"]", sParse[1]
-                        + key12);
-                notificationBar.update(strHead, sParse[1], true);
-                String timeStamp = toDay + new SimpleDateFormat(hourMin, Locale.KOREA).format(new Date());
-                gSheet.add2Stock(sbnGroup, timeStamp, sbnWho, percent, sParse[0], sParse[1], key12);
-
-                sGroups.get(g).whos.get(w).stocks.get(s).count++;
-                stockGetPut.save(sGroups.get(g).whos.get(w).whoF+" "+sGroups.get(g).whos.get(w).stocks.get(s).count);
+        for (int s = 0; s < stocks.size(); s++) {
+            SStock stock = stocks.get(s);
+            if (isMatchingStock(stock, sText)) {
+                processStock(stock, s, sText, g, w, sbnGroup, sbnWho);
                 break;
             }
         }
+    }
+
+    private boolean isMatchingStock(SStock stock, String txt) {
+        return txt.contains(stock.key1) && txt.contains(stock.key2);
+    }
+
+    private void processStock(SStock stock, int stockIndex, String stockTxt,
+                      int gCode, int wCode, String grpName, String whoName) {
+        Runnable runnable = () -> {
+            String[] sParse = stockName.get(stock.prv, stock.nxt, stockTxt);
+            String stkName = sParse[0];
+            String stkText = sParse[1];
+
+            if (kvTelegram.isDup(grpName + stkName, stockTxt))
+                return;
+
+            String percent = (!stockTxt.contains("매수") && (stockTxt.contains("매도") || stockTxt.contains("익절"))) ?
+                    "1.9" : stock.talk;
+            String key12 = " {" + stock.key1 + "." + stock.key2 + "}";
+            String strHead = stkName + " / " + whoName + ":" + grpName;
+
+            if (!stock.talk.isEmpty()) {
+                String[] joins;
+                String won = wonValue(stkText);
+                joins = new String[]{grpName, whoName, stkName, stock.talk, won};
+                sounds.speakBuyStock(String.join(" , ", joins));
+
+                if (sGroups.get(gCode).log) {
+                    String strText = makeShort(strUtil.removeSpecialChars(stkText), sGroups.get(gCode));
+                    strText = won + " " + ((strText.length() > 70) ? strText.substring(0, 70) : strText);
+                    utils.logB(grpName+" Log", strText);
+                }
+
+                new Copy2Clipboard(stkName);
+                if (isSilentNow()) {
+                    if (phoneVibrate == null) {
+                        phoneVibrate = new PhoneVibrate();
+                    }
+                    phoneVibrate.go(1);
+                }
+
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    if (isScreenOn(mContext) && mActivity != null) {
+                        String head = stkName + " / " + whoName + ":" + grpName;
+                        mActivity.runOnUiThread(() -> Toast.makeText(mContext, head, Toast.LENGTH_LONG).show());
+                        // Removed duplicate Toast
+                    }
+                });
+            } else {
+                String strText = makeShort(strUtil.removeSpecialChars(stkText), sGroups.get(gCode));
+                strHead = stkName + " | " + grpName + ". " + whoName;
+                if (!isSilentNow()) {
+                    sounds.beepOnce(MainActivity.soundType.ONLY.ordinal());
+                }
+                if (sGroups.get(gCode).log) {
+                    utils.logB(grpName+"x", strText);
+                }
+            }
+
+            logUpdate.addStock(stkName + " [" + grpName + ":" + whoName + "]", stkText + key12);
+            notificationBar.update(strHead, stkText, true);
+
+            String timeStamp = toDay + new SimpleDateFormat(hourMin, Locale.KOREA).format(new Date());
+            gSheet.add2Stock(grpName, timeStamp, whoName, percent, stkName, stkText, key12);
+
+            sGroups.get(gCode).whos.get(wCode).stocks.get(stockIndex).count++;
+            stockGetPut.save(sGroups.get(gCode).whos.get(wCode).whoF + " " + sGroups.get(gCode).whos.get(wCode).stocks.get(stockIndex).count);
+        };
+
+        new Thread(runnable).start();
     }
 
     private String wonValue (String shortText) {

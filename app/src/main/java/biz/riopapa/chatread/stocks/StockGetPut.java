@@ -120,44 +120,6 @@ public class StockGetPut {
             stockSGroupTbl[i] = tempList.get(i).getKey();
             stockSGroupIdx[i] = tempList.get(i).getValue();
         }
-
-//        int telCnt = 0, kaCnt = 0, smsCnt = 0;
-//        for (int g = 0; g < sGroups.size(); g++) {
-//            SGroup grp = sGroups.get(g);
-//            if (!grp.ignore) {
-//                telCnt += grp.telKa.equals("t") ? 1 : 0;
-//                kaCnt += grp.telKa.equals("k") ? 1 : 0;
-//                smsCnt += grp.telKa.equals("s") ? 1 : 0;
-//            }
-//        }
-//        stockTelGroupMatchTbl = new String[telCnt];
-//        stockTelGroupMatchIdx = new int[telCnt];
-//        stockKaGroupMatchTbl = new String[kaCnt];
-//        stockKaGroupMatchIdx = new int[kaCnt];
-//        stockSMSGroupMatchTbl = new String[smsCnt];
-//        stockSMSGroupMatchIdx = new int[smsCnt];
-//        int t = 0, k = 0, s = 0;
-//        for (int g = 0; g < sGroups.size(); g++) {
-//            if (!sGroups.get(g).ignore) {
-//                switch (sGroups.get(g).telKa) {
-//                    case "t":
-//                        stockTelGroupMatchTbl[t] = sGroups.get(g).grpM;
-//                        stockTelGroupMatchIdx[t] = g;
-//                        t++;
-//                        break;
-//                    case "k":
-//                        stockKaGroupMatchTbl[k] = sGroups.get(g).grpM;
-//                        stockKaGroupMatchIdx[k] = g;
-//                        k++;
-//                        break;
-//                    case "s":
-//                        stockSMSGroupMatchTbl[s] = sGroups.get(g).grpM;
-//                        stockSMSGroupMatchIdx[s] = g;
-//                        k++;
-//                        break;
-//                }
-//            }
-//        }
     }
 
     static class StringKeyComparator implements Comparator<Map.Entry<String, Integer>> {

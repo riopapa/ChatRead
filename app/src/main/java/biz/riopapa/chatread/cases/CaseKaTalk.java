@@ -111,9 +111,7 @@ public class CaseKaTalk {
             if (sbnWho.contains(sGroups.get(g).whos.get(w).whoM)) {
                 // if stock Group then check skip keywords and then continue;
                 sbnWho = sGroups.get(g).whos.get(w).who;        // replace with short who
-                stockLine.sayIfMatched(g, w, sGroups.get(g).whos.get(w).stocks);
-qq
-
+                stockLine.sayIfMatched(g, w, sGroups.get(g).whos.get(w).stocks, sbnText);
                 return;
             }
         }

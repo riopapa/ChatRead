@@ -38,7 +38,7 @@ public class Utils {
     public void logB(String tag, String text) {
         if (deBug) {
             String str = strUtil.text2OneLine(text);
-            logW(tag,  str.length()> 80? str.substring(0, 80) : str);
+            logW(tag,  str.length()> 100? str.substring(0, 100) : str);
         }
     }
 

@@ -68,7 +68,7 @@ public class CaseSMS {
                         // if stock Group then check skip keywords and then continue;
                         sbnWho = sGroups.get(g).whos.get(w).who;        // replace with short who
                         utils.logB(sbnGroup, sbnWho + ">> " + sbnText);
-                        stockLine.sayIfMatched(g, w, sGroups.get(g).whos.get(w).stocks);
+                        stockLine.sayIfMatched(g, w, sGroups.get(g).whos.get(w).stocks, sbnText);
                         break;
                     }
                 }

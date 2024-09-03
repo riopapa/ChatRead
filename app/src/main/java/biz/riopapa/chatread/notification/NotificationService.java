@@ -54,36 +54,36 @@ public class NotificationService extends NotificationListenerService {
 
     public NotificationService() {
         super.onCreate();
-        preprocessor = new NotificationPreprocessor();  // Initialize your preprocessor
+//        preprocessor = new NotificationPreprocessor();  // Initialize your preprocessor
 
     }
 
-    @Override
-    public void onNotificationPosted(StatusBarNotification sbn) {
-        super.onNotificationPosted(sbn);
+//    @Override
+//    public void onNotificationPosted(StatusBarNotification sbn) {
+//        super.onNotificationPosted(sbn);
 
-        Notification notification = sbn.getNotification();
-        if (preprocessor.isSendable(notification)) {
-            // If sendable, handle the notification
-            utils.logW("MyNotificationListener", "Processing notification: " + notification.toString());
+//        Notification notification = sbn.getNotification();
+//        if (preprocessor.isSendable(notification)) {
+//            // If sendable, handle the notification
+//            utils.logW("MyNotificationListener", "Processing notification: " + notification.toString());
+//
+//            // Your logic to handle the notification
+//        } else {
+//            // If not sendable, ignore or handle it differently
+//            utils.logW("MyNotificationListener", "Notification ignored by preprocessor.");
+//        }
+//        try {
+//            // Your logic for handling the notification
+//            utils.logW("MyNotificationListener", "Notification received: " + notification.toString());
+//        } catch (Exception e) {
+//            Log.e("MyNotificationListener", "Error processing notification: ", e);
+//        }
+//    }
 
-            // Your logic to handle the notification
-        } else {
-            // If not sendable, ignore or handle it differently
-            utils.logW("MyNotificationListener", "Notification ignored by preprocessor.");
-        }
-        try {
-            // Your logic for handling the notification
-            utils.logW("MyNotificationListener", "Notification received: " + notification.toString());
-        } catch (Exception e) {
-            Log.e("MyNotificationListener", "Error processing notification: ", e);
-        }
-    }
-
-    @Override
-    public void onNotificationRemoved(StatusBarNotification sbn) {
-        super.onNotificationRemoved(sbn);
-    }
+//    @Override
+//    public void onNotificationRemoved(StatusBarNotification sbn) {
+//        super.onNotificationRemoved(sbn);
+//    }
 
     @Override
     public void onCreate() {

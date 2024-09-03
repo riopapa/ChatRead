@@ -353,4 +353,10 @@ public class MainActivity extends AppCompatActivity {
         fileIO.writeFile(todayFolder, "logWork.txt", logWork);
         fileIO.writeFile(todayFolder, "logSave.txt", logSave);
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Release camera, sensors, or other resources here
+    }
 }

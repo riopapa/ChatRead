@@ -93,7 +93,7 @@ public class AppsTable {
                 appNameIdx.add(i);
                 String appType;
                 switch (app.nickName) {
-                    case "텔레":
+                   case "텔레":
                         appType = "t";
                         break;
                     case "카톡":
