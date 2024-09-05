@@ -7,8 +7,8 @@ import static biz.riopapa.chatread.MainActivity.appTypes;
 import static biz.riopapa.chatread.MainActivity.apps;
 import static biz.riopapa.chatread.MainActivity.downloadFolder;
 import static biz.riopapa.chatread.MainActivity.fileIO;
-import static biz.riopapa.chatread.MainActivity.sbnAppType;
 import static biz.riopapa.chatread.MainActivity.tableFolder;
+import static biz.riopapa.chatread.MainActivity.todayFolder;
 
 import android.os.Environment;
 
@@ -70,13 +70,12 @@ public class AppsTable {
         Gson gson2 = new GsonBuilder().setPrettyPrinting().create();
         String prettyJson = gson2.toJson(apps);
         fileIO.writeFile(tableFolder, "appTable.txt", prettyJson);
-        // manual copy to appTableSv.txt is required for backup
     }
 
     public void putSV() {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String json = gson.toJson(apps);
-        fileIO.writeFile(tableFolder, "appTableSV.txt", json);
+        fileIO.writeFile(todayFolder, "appTableSV.txt", json);
     }
     public void makeTable() {
         appFullNames = new ArrayList<>();

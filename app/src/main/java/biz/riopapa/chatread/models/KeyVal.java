@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class KeyVal {
 
-    Map<String, String> maps;
+    static Map<String, String> maps;
     public KeyVal() {
         maps = new HashMap<>();
     }
@@ -30,6 +30,7 @@ public class KeyVal {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
+        sb.append("Size=").append(maps.size()).append("\n");
         if (!maps.isEmpty()) {
             int i = 0;
             for (String key : maps.keySet()) {

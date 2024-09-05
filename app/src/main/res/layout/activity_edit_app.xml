@@ -9,14 +9,6 @@
     android:background="@color/color_tab_app_background"
     tools:context=".edit.ActivityEditApp">
 
-<!--    <androidx.appcompat.widget.Toolbar-->
-<!--        android:id="@+id/toolbar_edit_app"-->
-<!--        android:minHeight="?attr/actionBarSize"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:titleTextColor="@android:color/white"-->
-<!--        />-->
-
     <EditText
         android:id="@+id/e_app_full_name"
         android:layout_width="match_parent"
@@ -59,7 +51,7 @@
             android:layout_weight="7"
             android:layout_height="wrap_content"
             android:text="읽어 줘"
-            android:textSize="12sp"
+            android:textSize="14sp"
             android:textColor="#000"
             android:layout_gravity="center"
             android:gravity="center"
@@ -74,7 +66,7 @@
             android:layout_weight="7"
             android:layout_height="wrap_content"
             android:text="로그 남기기"
-            android:textSize="12sp"
+            android:textSize="14sp"
             android:textColor="#000"
             android:layout_gravity="center"
             android:gravity="center"
@@ -98,7 +90,7 @@
             android:layout_weight="7"
             android:layout_height="wrap_content"
             android:text="그룹있음"
-            android:textSize="12sp"
+            android:textSize="14sp"
             android:textColor="#000"
             android:layout_gravity="center"
             android:gravity="center"
@@ -115,7 +107,7 @@
             android:layout_height="wrap_content"
             android:text="Who 있음"
             android:textColor="#000"
-            android:textSize="12sp"
+            android:textSize="14sp"
             android:layout_gravity="center"
             android:gravity="center"
             />
@@ -139,7 +131,7 @@
             android:layout_height="wrap_content"
             android:text="문장에 Who 포함"
             android:textColor="#000"
-            android:textSize="12sp"
+            android:textSize="14sp"
             android:layout_gravity="center"
             android:gravity="center"
             />
@@ -150,16 +142,10 @@
             />
         <TextView
             android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:text=""
-            />
-        <TextView
-            android:layout_width="0dp"
             android:layout_weight="7"
             android:layout_height="wrap_content"
             android:text="숫자 말하기"
-            android:textSize="12sp"
+            android:textSize="14sp"
             android:textColor="#000"
             android:layout_gravity="center"
             android:gravity="center"
@@ -175,7 +161,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="ignores ^ "
-        android:textSize="13sp"
+        android:textSize="14sp"
         android:textColor="#000"
         android:background="#BCDCBE"
         android:gravity="center"
@@ -188,8 +174,8 @@
         android:focusable="false"
         android:background="#BCDCBE"
         android:textColor="#000"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:inputType="text|textMultiLine"
         android:autofillHints="ignores ^ "
         android:text=""
@@ -197,8 +183,8 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="inform ; talk"
-        android:textSize="13sp"
+        android:text="info From ^ info To"
+        android:textSize="14sp"
         android:textColor="#000"
         android:background="#90DCBADC"
         android:gravity="center"
@@ -210,8 +196,8 @@
         android:background="#90DCBADC"
         android:cursorVisible="true"
         android:focusable="false"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:textColor="#000"
         android:inputType="text|textMultiLine"
         android:autofillHints="inform ; talk"
@@ -220,8 +206,8 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="replace from ; to"
-        android:textSize="13sp"
+        android:text="replace from ^ to"
+        android:textSize="14sp"
         android:textColor="#000"
         android:background="#DDCCB2"
         android:gravity="center"
@@ -230,14 +216,14 @@
         android:id="@+id/repl_from_to"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#DDCCB2"
+        android:background="#EDDCC2"
         android:cursorVisible="true"
         android:focusable="false"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:textColor="#000"
         android:inputType="text|textMultiLine"
-        android:autofillHints="replace from ; to"
+        android:autofillHints="replace from ^ to"
         android:text=""
         android:textSize="14sp" />
 </LinearLayout>

@@ -1,18 +1,15 @@
 package biz.riopapa.chatread.func;
 
-import static biz.riopapa.chatread.MainActivity.sbnText;
-import static biz.riopapa.chatread.MainActivity.sbnWho;
-
-import biz.riopapa.chatread.models.App;
+import biz.riopapa.chatread.models.SBar;
 
 public class IgnoreString {
-    public boolean check(App app) {
-        for (String t: app.igStr) {
-            if (sbnWho.contains(t))
+    public boolean check(SBar sb) {
+        for (String t: sb.app.igStr) {
+            if (sb.who.contains(t))
                 return true;
         }
-        for (String t: app.igStr) {
-            if (sbnText.contains(t))
+        for (String t: sb.app.igStr) {
+            if (sb.text.contains(t))
                 return true;
         }
         return false;

@@ -7,6 +7,7 @@ import static biz.riopapa.chatread.MainActivity.readyToday;
 import static biz.riopapa.chatread.MainActivity.tableFolder;
 import static biz.riopapa.chatread.MainActivity.toDay;
 import static biz.riopapa.chatread.MainActivity.todayFolder;
+import static biz.riopapa.chatread.MainActivity.utils;
 
 import android.os.Environment;
 import android.util.Log;
@@ -62,8 +63,7 @@ public class FileIO {
             if (!file.exists()) {
                 if (!file.createNewFile()) {
                     String s = "create file Error " + file;
-                    Toast.makeText(mContext, s, Toast.LENGTH_SHORT).show();
-                    Log.e("file " + file, s);
+                    utils.logW("append2Filerr", s);
                 }
             }
             fw = new FileWriter(file.getAbsoluteFile(), true);

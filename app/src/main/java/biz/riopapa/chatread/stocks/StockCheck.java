@@ -10,9 +10,6 @@ import static biz.riopapa.chatread.MainActivity.mActivity;
 import static biz.riopapa.chatread.MainActivity.notificationBar;
 import static biz.riopapa.chatread.MainActivity.phoneVibrate;
 import static biz.riopapa.chatread.MainActivity.sGroups;
-import static biz.riopapa.chatread.MainActivity.sbnGroup;
-import static biz.riopapa.chatread.MainActivity.sbnText;
-import static biz.riopapa.chatread.MainActivity.sbnWho;
 import static biz.riopapa.chatread.MainActivity.sounds;
 import static biz.riopapa.chatread.MainActivity.stockGetPut;
 import static biz.riopapa.chatread.MainActivity.stockName;
@@ -25,7 +22,6 @@ import android.hardware.display.DisplayManager;
 import android.media.AudioManager;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.Display;
 import android.widget.Toast;
 
@@ -37,26 +33,21 @@ import java.util.Locale;
 import biz.riopapa.chatread.MainActivity;
 import biz.riopapa.chatread.common.Copy2Clipboard;
 import biz.riopapa.chatread.common.PhoneVibrate;
-import biz.riopapa.chatread.common.Sounds;
-import biz.riopapa.chatread.common.Utils;
 import biz.riopapa.chatread.models.SGroup;
 import biz.riopapa.chatread.models.SStock;
 
-public class StockLine {
+public class StockCheck {
 
-    public void sayIfMatched(int g, int w, ArrayList<SStock> stocks, String sText) {
+    public void sayIfMatched(int g, int w, ArrayList<SStock> stocks,
+                 String gName, String wName, String sText) {
 
         for (int s = 0; s < stocks.size(); s++) {
             SStock stock = stocks.get(s);
-            if (isMatchingStock(stock, sText)) {
-                processStock(stock, s, sText, g, w, sbnGroup, sbnWho);
+            if (sText.contains(stock.key1) && sText.contains(stock.key2)) {
+                processStock(stock, s, sText, g, w, gName, wName);
                 break;
             }
         }
-    }
-
-    private boolean isMatchingStock(SStock stock, String txt) {
-        return txt.contains(stock.key1) && txt.contains(stock.key2);
     }
 
     private void processStock(SStock stock, int stockIndex, String stockTxt,
@@ -64,7 +55,6 @@ public class StockLine {
         Runnable runnable = () -> {
             String[] sParse = stockName.get(stock.prv, stock.nxt, stockTxt);
             String stkName = sParse[0];
-            String stkText = sParse[1];
 
             if (kvTelegram.isDup(grpName + stkName, stockTxt))
                 return;
@@ -72,18 +62,21 @@ public class StockLine {
             String percent = (!stockTxt.contains("매수") && (stockTxt.contains("매도") || stockTxt.contains("익절"))) ?
                     "1.9" : stock.talk;
             String key12 = " {" + stock.key1 + "." + stock.key2 + "}";
-            String strHead = stkName + " / " + whoName + ":" + grpName;
+            String strHead;
+            SGroup sGroup = sGroups.get(gCode);
+            String shortText = makeShort(removeSpecialChars(sParse[1]), sGroup);
 
             if (!stock.talk.isEmpty()) {
+                strHead = stkName + " / " + grpName + "/" + whoName;
                 String[] joins;
-                String won = wonValue(stkText);
-                joins = new String[]{grpName, whoName, stkName, stock.talk, won};
-                sounds.speakBuyStock(String.join(" , ", joins));
+                String won = wonValue(shortText);
 
-                if (sGroups.get(gCode).log) {
-                    String strText = makeShort(strUtil.removeSpecialChars(stkText), sGroups.get(gCode));
-                    strText = won + " " + ((strText.length() > 70) ? strText.substring(0, 70) : strText);
-                    utils.logB(grpName+" Log", strText);
+                joins = new String[]{stock.talk, grpName, whoName, stkName, stkName,
+                        won, won};
+                sounds.speakBuyStock(String.join(" , ", joins));
+                if (sGroup.log) {
+                    utils.logB(grpName+" Log", won + " " +
+                            ((shortText.length() > 90) ? shortText.substring(0, 90) : shortText));
                 }
 
                 new Copy2Clipboard(stkName);
@@ -96,30 +89,26 @@ public class StockLine {
 
                 new Handler(Looper.getMainLooper()).post(() -> {
                     if (isScreenOn(mContext) && mActivity != null) {
-                        String head = stkName + " / " + whoName + ":" + grpName;
+                        String head = stkName + " / " + grpName + " / " + whoName;
                         mActivity.runOnUiThread(() -> Toast.makeText(mContext, head, Toast.LENGTH_LONG).show());
                         // Removed duplicate Toast
                     }
                 });
             } else {
-                String strText = makeShort(strUtil.removeSpecialChars(stkText), sGroups.get(gCode));
-                strHead = stkName + " | " + grpName + ". " + whoName;
+                strHead = stkName + " | " + grpName + " - " + whoName;
                 if (!isSilentNow()) {
                     sounds.beepOnce(MainActivity.soundType.ONLY.ordinal());
                 }
-                if (sGroups.get(gCode).log) {
-                    utils.logB(grpName+"x", strText);
-                }
             }
 
-            logUpdate.addStock(stkName + " [" + grpName + ":" + whoName + "]", stkText + key12);
-            notificationBar.update(strHead, stkText, true);
+            logUpdate.addStock("[" + strHead + "]", shortText + key12);
+            notificationBar.update(strHead, shortText, true);
 
             String timeStamp = toDay + new SimpleDateFormat(hourMin, Locale.KOREA).format(new Date());
-            gSheet.add2Stock(grpName, timeStamp, whoName, percent, stkName, stkText, key12);
+            gSheet.add2Stock(grpName, timeStamp, whoName, percent, stkName, shortText, key12);
 
-            sGroups.get(gCode).whos.get(wCode).stocks.get(stockIndex).count++;
-            stockGetPut.save(sGroups.get(gCode).whos.get(wCode).whoF + " " + sGroups.get(gCode).whos.get(wCode).stocks.get(stockIndex).count);
+            sGroup.whos.get(wCode).stocks.get(stockIndex).count++;
+            stockGetPut.save(grpName+"|"+sGroup.whos.get(wCode).whoF + " " + sGroup.whos.get(wCode).stocks.get(stockIndex).count);
         };
 
         new Thread(runnable).start();
@@ -161,6 +150,14 @@ public class StockLine {
             }
         }
         return screenOn;
+    }
+
+    String removeSpecialChars(String text) {
+        return text.replace("──", "").replace("==", "-")
+                .replace("=", "ￚ").replace("--", "-")
+//                .replaceAll("[^\\w\\s가-힣]", "")
+                .replaceAll("[^\\da-zA-Z:|#)(.@,%/~가-힣\\s\\-+]", "")
+                ;
     }
 
 }

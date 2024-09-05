@@ -2,20 +2,11 @@ package biz.riopapa.chatread.edit;
 
 import static biz.riopapa.chatread.MainActivity.apps;
 import static biz.riopapa.chatread.MainActivity.appsAdapter;
-import static biz.riopapa.chatread.MainActivity.gIDX;
 import static biz.riopapa.chatread.MainActivity.mAppsPos;
 import static biz.riopapa.chatread.MainActivity.mContext;
-import static biz.riopapa.chatread.MainActivity.sGroups;
-import static biz.riopapa.chatread.MainActivity.toolbar;
 import static biz.riopapa.chatread.fragment.FragmentAppsList.appsRecyclerView;
 
-import android.Manifest;
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -24,8 +15,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +66,7 @@ public class ActivityEditApp extends AppCompatActivity {
             app.who = true;
             app.addWho = false;
             app.num = true;
-            app.inform = null;
+            app.infoFrom = null;
             app.replF = null;
             app.replT = null;
             app.igStr = null;
@@ -118,10 +107,10 @@ public class ActivityEditApp extends AppCompatActivity {
         ignores.setClickable(true);
         ignores.setFocusableInTouchMode(true);
 
-        if (app.inform != null) {
+        if (app.infoFrom != null) {
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < app.inform.length; i++)
-                sb.append(app.inform[i]).append(deliStr).append(app.talk[i]).append("\n\n");
+            for (int i = 0; i < app.infoFrom.length; i++)
+                sb.append(app.infoFrom[i]).append(deliStr).append(app.infoTo[i]).append("\n\n");
             infoTalk.setText(sb.toString());
         }
         infoTalk.setFocusable(true);
@@ -177,6 +166,9 @@ public class ActivityEditApp extends AppCompatActivity {
 
     private void saveApp() {
 
+        AppsTable appsTable = new AppsTable();
+        appsTable.putSV();
+
         app.fullName = eFullName.getText().toString();
         app.nickName = eNickName.getText().toString();
         app.memo = eMemo.getText().toString();
@@ -200,44 +192,54 @@ public class ActivityEditApp extends AppCompatActivity {
         }
         app.igStr = (igList.isEmpty()) ? null : igList.toArray(new String[0]);
 
-        String [] infoTalkStr = infoTalk.getText().toString().split("\n");
-        ArrayList<String> infStr = new ArrayList<>();
-        ArrayList<String> talkStr = new ArrayList<>();
-        for (int i = 0; i < infoTalkStr.length; i++) {
-            if (!infoTalkStr[i].isEmpty()) {
-                String[] t = infoTalkStr[i].split(deli);
-                if (t.length == 2) {
-                    infStr.add(t[0].trim());
-                    talkStr.add(t[1].trim());
+        String[] infoTalkLines = infoTalk.getText().toString().split("\n");
+        List<String> infoStrings = new ArrayList<>();
+        List<String> talkStrings = new ArrayList<>();
+        for (String line : infoTalkLines) {
+            if (!line.isEmpty()) {
+                String[] parts = line.split(deli);
+                if (parts.length == 2) {
+                    infoStrings.add(parts[0].trim());
+                    talkStrings.add(parts[1].trim());
                 } else {
-                    Toast.makeText(mContext, "inform data error line=" + i + " =>" + infoTalkStr[i],
-                            Toast.LENGTH_LONG).show();
+                    String errorMessage = "Invalid data format at line "+line;
+                    Toast.makeText(mContext, errorMessage, Toast.LENGTH_LONG).show();
                     return;
                 }
             }
         }
-        if (!infStr.isEmpty()) {
-            app.inform = infStr.toArray(new String[0]);
-            app.talk = talkStr.toArray(new String[0]);
+
+        if (!infoStrings.isEmpty()) {
+            app.infoFrom = infoStrings.toArray(new String[0]);
+            app.infoTo = talkStrings.toArray(new String[0]);
         } else {
-            app.inform = null;
+            app.infoFrom = null;
+            app.infoTo = null;
         }
 
         String [] repl = replFromTo.getText().toString().split("\n");
         ArrayList<String> replF = new ArrayList<>();
         ArrayList<String> replT = new ArrayList<>();
-        for (int i = 0; i < repl.length; i++) {
-            if (!repl[i].isEmpty()) {
-                String[] t = repl[i].split(deli);
+        for (String s : repl) {
+            if (!s.isEmpty()) {
+                String[] t = s.split(deli);
                 if (t.length == 2) {
                     replF.add(t[0].trim());
                     replT.add(t[1].trim());
                 } else {
-                    Toast.makeText(mContext, "replace from to error line=" + i + " =>" + infoTalkStr[i],
+                    Toast.makeText(mContext, "replace from to error line=" + s,
                             Toast.LENGTH_LONG).show();
                     return;
                 }
             }
+        }
+
+        if (repl.length != 0) {
+            app.replF = replF.toArray(new String[0]);
+            app.replT = replT.toArray(new String[0]);
+        } else {
+            app.replF = null;
+            app.replT = null;
         }
 
         if (mAppsPos == -1)
@@ -245,8 +247,6 @@ public class ActivityEditApp extends AppCompatActivity {
         else
             apps.set(mAppsPos, app);
 
-
-        AppsTable appsTable = new AppsTable();
         appsTable.put();
         appsTable.makeTable();
         appsAdapter = new AppsAdapter();

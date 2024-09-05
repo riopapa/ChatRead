@@ -84,7 +84,8 @@ public class GSheet {
             formBuilder.add("statement", que.statement);
             formBuilder.add("key12", que.key12);
             post2GSheet(formBuilder);
-            sheetQues.remove(0);
+            if (!sheetQues.isEmpty())
+                sheetQues.remove(0);
         }
     }
 

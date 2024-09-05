@@ -8,13 +8,10 @@ import static biz.riopapa.chatread.MainActivity.lastChar;
 import static biz.riopapa.chatread.MainActivity.logUpdate;
 import static biz.riopapa.chatread.MainActivity.notificationBar;
 import static biz.riopapa.chatread.MainActivity.sGroups;
-import static biz.riopapa.chatread.MainActivity.sbnGroup;
-import static biz.riopapa.chatread.MainActivity.sbnText;
-import static biz.riopapa.chatread.MainActivity.sbnWho;
 import static biz.riopapa.chatread.MainActivity.smsNoNumbers;
 import static biz.riopapa.chatread.MainActivity.smsStrRepl;
 import static biz.riopapa.chatread.MainActivity.sounds;
-import static biz.riopapa.chatread.MainActivity.stockLine;
+import static biz.riopapa.chatread.MainActivity.stockCheck;
 import static biz.riopapa.chatread.MainActivity.stockSGroupIdx;
 import static biz.riopapa.chatread.MainActivity.stockSGroupTbl;
 import static biz.riopapa.chatread.MainActivity.strReplace;
@@ -28,66 +25,68 @@ import java.util.Date;
 import java.util.Locale;
 
 import biz.riopapa.chatread.common.IgnoreNumber;
+import biz.riopapa.chatread.models.SBar;
 
 public class CaseSMS {
 
-    public void sms() {
+    public void sms(SBar sb) {
 
         /*
             no Number : smsNoNumber.txt
             str Repl : smsRepl.txt
          */
 
-        // remove prefix, suffix special chars from sbnWho
-        sbnWho = sbnWho.replaceAll("[\\u200C-\\u206F]", "");
+        // remove prefix, suffix special chars from sb.who
+        sb.who = sb.who.replaceAll("[\\u200C-\\u206F]", "");
         // if last char is # then ignore
-        if (sbnWho.charAt(sbnWho.length() - 1) == '#')
+        if (sb.who.charAt(sb.who.length() - 1) == '#')
             return;
         // if numbers only then ignore
-        if (sbnWho.replaceAll("[0-9]","").length() < 3) {
+        if (sb.who.replaceAll("[0-9]","").length() < 3) {
             return;
-//            if (!sbnText.contains("스마트폰 배우고"))
+//            if (!sb.text.contains("스마트폰 배우고"))
 //                return;
         }
         // ignore if duplicated
-        if (kvSMS.isDup(sbnWho, sbnText))
+        if (kvSMS.isDup(sb.who, sb.text))
             return;
 
-        sbnText = strUtil.text2OneLine(sbnText);
-        if (sbnWho.contains("NH투자") && sbnText.contains("체결")) {
-            saySMSTrade();
+        sb.text = strUtil.text2OneLine(sb.text);
+        if (sb.who.contains("NH투자") && sb.text.contains("체결")) {
+            saySMSTrade(sb);
             return;
         }
-        if (sbnWho.startsWith("찌라")) {
-            int g = getStockGroup.getIdx(sbnGroup, stockSGroupTbl, stockSGroupIdx);
+        if (sb.who.startsWith("찌라")) {
+            int g = getStockGroup.getIdx(sb.group, stockSGroupTbl, stockSGroupIdx);
             if (g < 0) {
-                saySMSNormal();
+                saySMSNormal(sb);
             } else {
                 for (int w = 0; w < sGroups.get(g).whos.size(); w++) {
-                    if (sbnWho.startsWith(sGroups.get(g).whos.get(w).whoM)) {
+                    if (sb.who.startsWith(sGroups.get(g).whos.get(w).whoM)) {
                         // if stock Group then check skip keywords and then continue;
-                        sbnWho = sGroups.get(g).whos.get(w).who;        // replace with short who
-                        utils.logB(sbnGroup, sbnWho + ">> " + sbnText);
-                        stockLine.sayIfMatched(g, w, sGroups.get(g).whos.get(w).stocks, sbnText);
+                        sb.who = sGroups.get(g).whos.get(w).who;        // replace with short who
+                        utils.logB(sb.group, sb.who + ">> " + sb.text);
+                        stockCheck.sayIfMatched(g, w, sGroups.get(g).whos.get(w).stocks,
+                                sb.group, sb.who, sb.text);
                         break;
                     }
                 }
             }
             return;
         }
-        saySMSNormal();
+        saySMSNormal(sb);
     }
-    private void saySMSTrade() {
-        int pos = sbnText.indexOf("주문");
+    private void saySMSTrade(SBar sb) {
+        int pos = sb.text.indexOf("주문");
         if (pos > 0) {
-            sbnText = sbnText.substring(0, pos);
+            sb.text = sb.text.substring(0, pos);
             try {
-                String[] words = sbnText.split("\\|");
+                String[] words = sb.text.split("\\|");
                 // |[NH투자]|매수 전량체결|KMH    |10주|9,870원|주문 0001026052
                 //   0       1          2       3    4       5
                 if (words.length < 5) {
-                    logUpdate.addStock("SMS NH 증권 에러 " + words.length, sbnText);
-                    sounds.speakAfterBeep(sbnText);
+                    logUpdate.addStock("SMS NH 증권 에러 " + words.length, sb.text);
+                    sounds.speakAfterBeep(sb.text);
                 } else {
                     String stockName = words[2].trim();  // 종목명
                     boolean buySell = words[1].contains("매수");
@@ -102,25 +101,25 @@ public class CaseSMS {
                     if (isWorking())
                         talkMsg = strUtil.makeEtc(talkMsg, 20);
                     sounds.speakAfterBeep(strUtil.removeDigit(talkMsg));
-                    gSheet.add2Stock(sGroup, toDay + new SimpleDateFormat(hourMin, Locale.KOREA).format(new Date()),sbnWho, samPam, stockName,
-                            sbnText.replace(stockName, new StringBuffer(stockName).insert(1, ".").toString()), samPam
+                    gSheet.add2Stock(sGroup, toDay + new SimpleDateFormat(hourMin, Locale.KOREA).format(new Date()),sb.who, samPam, stockName,
+                            sb.text.replace(stockName, new StringBuffer(stockName).insert(1, ".").toString()), samPam
                     );
                 }
             } catch (Exception e) {
-                logUpdate.addStock("NH투자", "Exception " + sbnText + e);
+                logUpdate.addStock("NH투자", "Exception " + sb.text + e);
             }
         } else
-            saySMSNormal();
+            saySMSNormal(sb);
     }
 
-    private void saySMSNormal() {
-        String head = "[sms."+ sbnWho + "] ";
+    private void saySMSNormal(SBar sb) {
+        String head = "[sms."+ sb.who + "] ";
 
-        sbnText = strReplace.repl(smsStrRepl, sbnWho, sbnText);
-        logUpdate.addLog(head, sbnText);
-        notificationBar.update(head, sbnText, true);
-        if (IgnoreNumber.in(smsNoNumbers, sbnWho))
-            sbnText = strUtil.removeDigit(sbnText);
-        sounds.speakAfterBeep(head + strUtil.makeEtc(sbnText, isWorking()? 20: 120));
+        sb.text = strReplace.repl(smsStrRepl, sb.who, sb.text);
+        logUpdate.addLog(head, sb.text);
+        notificationBar.update(head, sb.text, true);
+        if (IgnoreNumber.in(smsNoNumbers, sb.who))
+            sb.text = strUtil.removeDigit(sb.text);
+        sounds.speakAfterBeep(head + strUtil.makeEtc(sb.text, isWorking()? 20: 120));
     }
 }

@@ -3,17 +3,16 @@ package biz.riopapa.chatread.cases;
 import static biz.riopapa.chatread.MainActivity.ignoreString;
 import static biz.riopapa.chatread.MainActivity.kvCommon;
 import static biz.riopapa.chatread.MainActivity.logUpdate;
-import static biz.riopapa.chatread.MainActivity.sbnApp;
-import static biz.riopapa.chatread.MainActivity.sbnText;
-import static biz.riopapa.chatread.MainActivity.sbnWho;
+
+import biz.riopapa.chatread.models.SBar;
 
 public class CaseAndroid {
-    public void roid() {
-        if (kvCommon.isDup("an", sbnText))
+    public void droid(SBar sb) {
+        if (kvCommon.isDup("an", sb.text))
             return;
-        if (ignoreString.check(sbnApp))
+        if (ignoreString.check(sb))
             return;
-        String head = "< an > "+sbnWho;
-        logUpdate.addLog(head, sbnWho+" / "+sbnText);
+        String head = "< an > "+sb.who;
+        logUpdate.addLog(head, sb.who+" / "+sb.text);
     }
 }

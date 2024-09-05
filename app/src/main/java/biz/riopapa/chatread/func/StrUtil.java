@@ -2,13 +2,6 @@ package biz.riopapa.chatread.func;
 
 public class StrUtil {
 
-    public String removeSpecialChars(String text) {
-        return text.replace("──", "").replace("==", "-")
-                .replace("=", "ￚ").replace("--", "-")
-//                .replaceAll("[^\\w\\s가-힣]", "")
-                .replaceAll("[^\\da-zA-Z:|#)(.@,%/~가-힣\\s\\-+]", "")
-                ;
-    }
 
     public String makeEtc (String s, int len) {
         return (s.length() < len)? s : s.substring(0, len) + " 등등";

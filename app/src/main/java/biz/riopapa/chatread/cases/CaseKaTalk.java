@@ -12,12 +12,8 @@ import static biz.riopapa.chatread.MainActivity.logUpdate;
 import static biz.riopapa.chatread.MainActivity.notificationBar;
 import static biz.riopapa.chatread.MainActivity.readyToday;
 import static biz.riopapa.chatread.MainActivity.sGroups;
-import static biz.riopapa.chatread.MainActivity.sbnApp;
-import static biz.riopapa.chatread.MainActivity.sbnGroup;
-import static biz.riopapa.chatread.MainActivity.sbnText;
-import static biz.riopapa.chatread.MainActivity.sbnWho;
 import static biz.riopapa.chatread.MainActivity.sounds;
-import static biz.riopapa.chatread.MainActivity.stockLine;
+import static biz.riopapa.chatread.MainActivity.stockCheck;
 import static biz.riopapa.chatread.MainActivity.stockKGroupIdx;
 import static biz.riopapa.chatread.MainActivity.stockKGroupTbl;
 import static biz.riopapa.chatread.MainActivity.strReplace;
@@ -28,90 +24,92 @@ import static biz.riopapa.chatread.NotificationListener.isWorking;
 
 import biz.riopapa.chatread.common.IgnoreNumber;
 import biz.riopapa.chatread.common.IgnoreThis;
+import biz.riopapa.chatread.models.SBar;
 
 public class CaseKaTalk {
-    public void kaTalk() {
+    public void kaTalk(SBar sb) {
 
-        if (IgnoreThis.contains(sbnText, ktTxtIgnores))
+        if (IgnoreThis.contains(sb.text, ktTxtIgnores))
             return;
 
-        if (ignoreString.check(sbnApp))
+        if (ignoreString.check(sb))
             return;
-        if (sbnGroup.isEmpty()) {  // no groupNames
-            if (sbnWho.isEmpty())  // nothing
+        if (sb.group.isEmpty()) {  // no groupNames
+            if (sb.who.isEmpty())  // nothing
                 return;
-            if (sbnWho.charAt(sbnWho.length() - 1) == '#' ||
-                    IgnoreThis.contains(sbnWho, ktWhoIgnores))
+            if (sb.who.charAt(sb.who.length() - 1) == '#' ||
+                    IgnoreThis.contains(sb.who, ktWhoIgnores))
                 return;
-            sayKaTalkIndividual();
+            sayKaTalkIndividual(sb);
         } else {
-            sayKaTalkGroup();
+            sayKaTalkGroup(sb);
         }
     }
 
-    private void sayKaTalkGroup() {
-        if (sbnGroup.charAt(sbnGroup.length() - 1) == '#' ||
-                IgnoreThis.contains(sbnGroup, ktGroupIgnores))
+    private void sayKaTalkGroup(SBar sb) {
+        if (sb.group.charAt(sb.group.length() - 1) == '#' ||
+                IgnoreThis.contains(sb.group, ktGroupIgnores))
             return;
-        else if (sbnWho.isEmpty() ||
-                sbnWho.charAt(sbnWho.length() - 1) == '#' ||
-                IgnoreThis.contains(sbnWho, ktWhoIgnores))
+        else if (sb.who.isEmpty() ||
+                sb.who.charAt(sb.who.length() - 1) == '#' ||
+                IgnoreThis.contains(sb.who, ktWhoIgnores))
             return;
-        if (kvKakao.isDup(sbnGroup, sbnText))
+        if (kvKakao.isDup(sb.group, sb.text))
             return;
-        sbnText = strUtil.text2OneLine(sbnText);
+        sb.text = strUtil.text2OneLine(sb.text);
 
-        int g = getStockGroup.getIdx(sbnGroup, stockKGroupTbl, stockKGroupIdx);
+        int g = getStockGroup.getIdx(sb.group, stockKGroupTbl, stockKGroupIdx);
         if (g < 0)
-            sayNormalGroup();
+            sayNormalGroup(sb);
         else
-            sayKaStock(g);
+            sayKaStock(sb, g);
     }
 
-    private void sayNormalGroup() {
-        sbnText = strReplace.repl(ktStrRepl, sbnGroup, sbnText);
-        String head = "{카톡!" + sbnGroup + "." + sbnWho + "} ";
-        logUpdate.addLog(head, sbnText);
-        notificationBar.update("카톡!" + sbnGroup + "." + sbnWho, sbnText, true);
-        if (IgnoreNumber.in(ktNoNumbers, sbnGroup))
-            sbnText = strUtil.removeDigit(sbnText);
-        sounds.speakKakao(" 카톡 왔음 " + sbnGroup + " 의 " + sbnWho + " 님이 " +
-                strUtil.replaceKKHH(strUtil.makeEtc(sbnText, isWorking() ? 20 : 150)));
+    private void sayNormalGroup(SBar sb) {
+        sb.text = strReplace.repl(ktStrRepl, sb.group, sb.text);
+        String head = "{카톡!" + sb.group + "." + sb.who + "} ";
+        logUpdate.addLog(head, sb.text);
+        notificationBar.update("카톡!" + sb.group + "." + sb.who, sb.text, true);
+        if (IgnoreNumber.in(ktNoNumbers, sb.group))
+            sb.text = strUtil.removeDigit(sb.text);
+        sounds.speakKakao(" 카톡 왔음 " + sb.group + " 의 " + sb.who + " 님이 " +
+                strUtil.replaceKKHH(strUtil.makeEtc(sb.text, isWorking() ? 20 : 150)));
     }
 
-    private void sayKaTalkIndividual() {
-        if (kvKakao.isDup(sbnWho, sbnText))
+    private void sayKaTalkIndividual(SBar sb) {
+        if (kvKakao.isDup(sb.who, sb.text))
             return;
-        sbnText = strReplace.repl(ktStrRepl, sbnWho, strUtil.text2OneLine(sbnText));
-        String head = "{카톡!" + sbnWho + "} ";
-        logUpdate.addLog(head, sbnText);
-        notificationBar.update("카톡!" + sbnWho, sbnText, true);
-        if (IgnoreNumber.in(ktNoNumbers, sbnWho))
-            sbnText = strUtil.removeDigit(sbnText);
-        sounds.speakKakao(" 카톡 왔음 " + sbnWho + " 님이 " +
-                strUtil.replaceKKHH(strUtil.makeEtc(sbnText, isWorking()? 20 :150)));
+        sb.text = strReplace.repl(ktStrRepl, sb.who, strUtil.text2OneLine(sb.text));
+        String head = "{카톡!" + sb.who + "} ";
+        logUpdate.addLog(head, sb.text);
+        notificationBar.update("카톡!" + sb.who, sb.text, true);
+        if (IgnoreNumber.in(ktNoNumbers, sb.who))
+            sb.text = strUtil.removeDigit(sb.text);
+        sounds.speakKakao(" 카톡 왔음 " + sb.who + " 님이 " +
+                strUtil.replaceKKHH(strUtil.makeEtc(sb.text, isWorking()? 20 :150)));
     }
 
-    private void sayKaStock(int g) {
+    private void sayKaStock(SBar sb,int g) {
 
-        if (sbnText.length() < 20)  // for better performance, with logically not true
+        if (sb.text.length() < 20)  // for better performance, with logically not true
             return;
         readyToday.check();
         long nowTime = System.currentTimeMillis();
         if (nowTime < timeBegin || nowTime > timeEnd)
             return;
-        sbnGroup = sGroups.get(g).grp;  // replace with short group
-        if (kvKakao.isDup(sbnGroup, sbnText))
+        sb.group = sGroups.get(g).grp;  // replace with short group
+        if (kvKakao.isDup(sb.group, sb.text))
             return;
 
-        sbnText = strUtil.text2OneLine(sbnText);
-        if (sbnText.contains(sGroups.get(g).skip1) || sbnText.contains(sGroups.get(g).skip2))
+        sb.text = strUtil.text2OneLine(sb.text);
+        if (sb.text.contains(sGroups.get(g).skip1) || sb.text.contains(sGroups.get(g).skip2))
             return;
         for (int w = 0; w < sGroups.get(g).whos.size(); w++) {
-            if (sbnWho.contains(sGroups.get(g).whos.get(w).whoM)) {
+            if (sb.who.contains(sGroups.get(g).whos.get(w).whoM)) {
                 // if stock Group then check skip keywords and then continue;
-                sbnWho = sGroups.get(g).whos.get(w).who;        // replace with short who
-                stockLine.sayIfMatched(g, w, sGroups.get(g).whos.get(w).stocks, sbnText);
+                sb.who = sGroups.get(g).whos.get(w).who;        // replace with short who
+                stockCheck.sayIfMatched(g, w, sGroups.get(g).whos.get(w).stocks,
+                        sb.group, sb.who, sb.text);
                 return;
             }
         }

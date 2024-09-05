@@ -1,14 +1,18 @@
 package biz.riopapa.chatread.stocks;
 
+import static biz.riopapa.chatread.MainActivity.utils;
+
 public class StockName {
 
     // returns stockname, and dot added iText
-    public String[] get(String prev, String next, String iText) {
+    public String[] get(String prevKey, String nextKey, String iText) {
         String str = iText;
-        int p1 = iText.indexOf(prev);
+        int p1 = iText.indexOf(prevKey);
+//        utils.logB("getStockName", "p1 index="+p1+", ["+prevKey+"/"+nextKey+"], "
+//                +iText);
         if (p1 >= 0) {
-            p1 += prev.length();
-            int p2 = str.indexOf(next, p1);
+            p1 += prevKey.length();
+            int p2 = str.indexOf(nextKey, p1);
             String sName;
             if (p2 > 0) {
 //                sName = str.substring(p1, p2).replaceAll(shorten, "").trim();

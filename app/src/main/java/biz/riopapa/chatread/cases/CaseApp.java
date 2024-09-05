@@ -8,89 +8,84 @@ import static biz.riopapa.chatread.MainActivity.kvCommon;
 import static biz.riopapa.chatread.MainActivity.logUpdate;
 import static biz.riopapa.chatread.MainActivity.msgNamoo;
 import static biz.riopapa.chatread.MainActivity.notificationBar;
-import static biz.riopapa.chatread.MainActivity.sbnApp;
-import static biz.riopapa.chatread.MainActivity.sbnAppNick;
-import static biz.riopapa.chatread.MainActivity.sbnGroup;
-import static biz.riopapa.chatread.MainActivity.sbnText;
-import static biz.riopapa.chatread.MainActivity.sbnWho;
 import static biz.riopapa.chatread.MainActivity.sounds;
 import static biz.riopapa.chatread.MainActivity.strUtil;
 import static biz.riopapa.chatread.MainActivity.utils;
 import static biz.riopapa.chatread.NotificationListener.isWorking;
 
+import biz.riopapa.chatread.models.SBar;
+
 public class CaseApp {
 
-    public void app() {
-        if (kvCommon.isDup(sbnApp.nickName, sbnText))
+    public void app(SBar sb) {
+        if (kvCommon.isDup(sb.app.nickName, sb.text))
             return;
 
-        if (sbnApp.igStr != null && ignoreString.check(sbnApp))
+        if (sb.app.igStr != null && ignoreString.check(sb))
             return;
 
-        if (sbnApp.nickName.equals("문자")) {
-            caseSMS.sms();
+        if (sb.app.nickName.equals("문자")) {
+            caseSMS.sms(sb);
             return;
         }
 
-        sbnText = strUtil.text2OneLine(sbnText);
-        if (sbnApp.inform != null) {
-            for (int i = 0; i < sbnApp.inform.length; i++) {
-                if ((sbnWho).contains(sbnApp.inform[i])) {
-                    sbnWho = sbnAppNick;
-                    sbnText = sbnApp.talk[i];
-                    break;
-                }
-                if (sbnText.contains(sbnApp.inform[i])) {
-                    sbnWho = sbnAppNick;
-                    sbnText = sbnApp.talk[i];
+        sb.text = strUtil.text2OneLine(sb.text);
+        if (sb.app.infoFrom != null) {
+            for (int i = 0; i < sb.app.infoFrom.length; i++) {
+                if (sb.who.contains(sb.app.infoFrom[i]) ||
+                    sb.text.contains(sb.app.infoFrom[i])) {
+                    sb.who = sb.app.nickName;
+                    sb.text = sb.app.infoTo[i];
                     break;
                 }
             }
         }
 
-        if (sbnApp.replF != null) {
-            for (int i = 0; i < sbnApp.replF.length; i++) {
-                if ((sbnText).contains(sbnApp.replF[i])) {
-                    sbnText = sbnText.replace(sbnApp.replF[i],sbnApp.replT[i]);
+        if (sb.app.replF != null) {
+            for (int i = 0; i < sb.app.replF.length; i++) {
+                if ((sb.text).contains(sb.app.replF[i])) {
+                    sb.text = sb.text.replace(sb.app.replF[i],sb.app.replT[i]);
                 }
             }
         }
 
-        if (sbnApp.nickName.equals("NH나무")) {
-            utils.logB(sbnApp.nickName,sbnText);
-            msgNamoo.namoo(strUtil.text2OneLine(sbnText));
+        String nickCode = sb.app.nickName;
+
+        if (nickCode.equals("NH나무")) {
+            utils.logB(nickCode,sb.text);
+            msgNamoo.namoo(strUtil.text2OneLine(sb.text));
             return;
         }
 
-        if (sbnAppNick.equals("팀즈") || sbnAppNick.equals("아룩")) {
-            caseWork.work();
+        if (nickCode.equals("팀즈") || nickCode.equals("아룩")) {
+            caseWork.work(sb);
             return;
         }
 
-        if (sbnAppNick.equals("테스리")) {
-            caseTesla.tesry();
+        if (nickCode.equals("테스리")) {
+            caseTesla.tesla(sb);
             return;
         }
 
-        if (sbnApp.say) {
-            String say = sbnAppNick + " ";
-            say += (sbnApp.grp) ? sbnGroup+" ": " ";
-            say += (sbnApp.who) ? sbnWho: "";
+        if (sb.app.say) {
+            String say = sb.app.nickName + " ";
+            say += (sb.app.grp) ? sb.group+" ": " ";
+            say += (sb.app.who) ? sb.who: "";
             say = say + ", ";
-            say = say + ((sbnApp.num) ? sbnText : strUtil.removeDigit(sbnText));
+            say = say + ((sb.app.num) ? sb.text : strUtil.removeDigit(sb.text));
             sounds.speakAfterBeep(strUtil.makeEtc(say, isWorking()? 20: 200));
         }
 
-        if (sbnApp.addWho)
-            sbnText = "👨‍🦱" + sbnWho + "👨‍🦱" + sbnText;
+        if (sb.app.addWho)
+            sb.text = "👨‍🦱" + sb.who + "👨‍🦱" + sb.text;
 
-        String head = sbnAppNick + ((sbnApp.grp && !sbnGroup.isEmpty()) ? "_" +sbnGroup+".": "")
-                + ((sbnApp.who)? "@" + sbnWho : "");
+        String head = sb.app.nickName + ((sb.app.grp && !sb.group.isEmpty()) ? "_" +sb.group+".": "")
+                + ((sb.app.who)? "@" + sb.who : "");
 
-        if (sbnApp.log)
-            logUpdate.addLog(head, sbnText);
+        if (sb.app.log)
+            logUpdate.addLog(head, sb.text);
 
-        notificationBar.update(head, sbnText, true);
+        notificationBar.update(head, sb.text, true);
     }
 
 }

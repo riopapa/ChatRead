@@ -57,7 +57,7 @@ import biz.riopapa.chatread.func.StrReplace;
 import biz.riopapa.chatread.models.SGroup;
 import biz.riopapa.chatread.models.StrRepl;
 import biz.riopapa.chatread.stocks.StockGetPut;
-import biz.riopapa.chatread.stocks.StockLine;
+import biz.riopapa.chatread.stocks.StockCheck;
 import biz.riopapa.chatread.stocks.StockName;
 import biz.riopapa.chatread.common.Permission;
 import biz.riopapa.chatread.common.PhoneVibrate;
@@ -103,10 +103,6 @@ public class MainActivity extends AppCompatActivity {
     public static ArrayList<String> appFullNames;
     public static ArrayList<Integer> appNameIdx;
     public static ArrayList<String> appTypes;
-    public static String sbnGroup, sbnWho, sbnText, sbnAppName, sbnAppType, sbnAppNick;
-    public static int sbnAppIdx;
-
-    public static App sbnApp;
 
     public static TableListFile tableListFile = null;
 
@@ -147,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
     /* Stock variables */
     public static ArrayList<SGroup> sGroups = null;
     public static StockGetPut stockGetPut = null;
-    public static StockLine stockLine = null;
+    public static StockCheck stockCheck = null;
     public static StrReplace strReplace = null;
     public static int gIDX, wIDX, sIDX;
     public static String [] stockTGroupTbl, stockKGroupTbl, stockSGroupTbl;
@@ -335,28 +331,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
-        saveLogFile();
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            // Close the drawer when open
-            drawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            // Handle other back button actions
-            super.onBackPressed();
-        }
-    }
-
-    private static void saveLogFile() {
-        Log.w("saveLogFile","saveLogFile");
-        fileIO.writeFile(todayFolder, "logStock.txt", logStock);
-        fileIO.writeFile(todayFolder, "logQue.txt", logQue);
-        fileIO.writeFile(todayFolder, "logWork.txt", logWork);
-        fileIO.writeFile(todayFolder, "logSave.txt", logSave);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        // Release camera, sensors, or other resources here
+    protected void onDestroy() {
+        super.onDestroy();
+        utils.logW("On Destroy", "my App destoryed");
     }
 }

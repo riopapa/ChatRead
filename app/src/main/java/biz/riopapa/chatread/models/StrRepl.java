@@ -1,7 +1,5 @@
 package biz.riopapa.chatread.models;
 
-import java.util.ArrayList;
-
 public class StrRepl {
     public String grp;
     public String strL;

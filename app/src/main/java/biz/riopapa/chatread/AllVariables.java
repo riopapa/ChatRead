@@ -48,7 +48,7 @@ import static biz.riopapa.chatread.MainActivity.readyToday;
 import static biz.riopapa.chatread.MainActivity.sharePref;
 import static biz.riopapa.chatread.MainActivity.sharedEditor;
 import static biz.riopapa.chatread.MainActivity.sounds;
-import static biz.riopapa.chatread.MainActivity.stockLine;
+import static biz.riopapa.chatread.MainActivity.stockCheck;
 import static biz.riopapa.chatread.MainActivity.stockName;
 import static biz.riopapa.chatread.MainActivity.stockGetPut;
 import static biz.riopapa.chatread.MainActivity.strReplace;
@@ -79,7 +79,7 @@ import biz.riopapa.chatread.cases.CaseWork;
 import biz.riopapa.chatread.func.GetStockGroup;
 import biz.riopapa.chatread.func.IgnoreString;
 import biz.riopapa.chatread.func.StrReplace;
-import biz.riopapa.chatread.stocks.StockLine;
+import biz.riopapa.chatread.stocks.StockCheck;
 import biz.riopapa.chatread.stocks.StockName;
 import biz.riopapa.chatread.stocks.StockGetPut;
 import biz.riopapa.chatread.common.PhoneVibrate;
@@ -147,7 +147,7 @@ public class AllVariables {
 
             // stocks folder
             stockGetPut = new StockGetPut();
-            stockLine = new StockLine();
+            stockCheck = new StockCheck();
             strReplace = new StrReplace();
 
             mAudioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
