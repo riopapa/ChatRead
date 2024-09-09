@@ -59,7 +59,7 @@ public class ActivityEditApp extends AppCompatActivity {
         if (mAppsPos == -1) {
             actionBar.setTitle("new App");
             app = new App();
-            app.nickName = "@";
+            app.nick = "@";
             app.say = true;
             app.log = true;
             app.grp = true;
@@ -75,10 +75,10 @@ public class ActivityEditApp extends AppCompatActivity {
         } else {
             app = apps.get(mAppsPos);
             actionBar.setTitle("App Edit");
-            actionBar.setSubtitle(app.nickName + " " + app.fullName);
+            actionBar.setSubtitle(app.nick + " " + app.fullName);
         }
         eFullName.setText(app.fullName);
-        eNickName.setText(app.nickName);
+        eNickName.setText(app.nick);
         eMemo.setText(app.memo);
         saySwitch.setChecked(app.say);
         logSwitch.setChecked(app.log);
@@ -170,7 +170,7 @@ public class ActivityEditApp extends AppCompatActivity {
         appsTable.putSV();
 
         app.fullName = eFullName.getText().toString();
-        app.nickName = eNickName.getText().toString();
+        app.nick = eNickName.getText().toString();
         app.memo = eMemo.getText().toString();
 
         app.say = saySwitch.isChecked();

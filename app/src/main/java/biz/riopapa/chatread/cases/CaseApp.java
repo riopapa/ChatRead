@@ -18,13 +18,13 @@ import biz.riopapa.chatread.models.SBar;
 public class CaseApp {
 
     public void app(SBar sb) {
-        if (kvCommon.isDup(sb.app.nickName, sb.text))
+        if (kvCommon.isDup(sb.app.nick, sb.text))
             return;
 
         if (sb.app.igStr != null && ignoreString.check(sb))
             return;
 
-        if (sb.app.nickName.equals("문자")) {
+        if (sb.app.nick.equals("문자")) {
             caseSMS.sms(sb);
             return;
         }
@@ -34,7 +34,7 @@ public class CaseApp {
             for (int i = 0; i < sb.app.infoFrom.length; i++) {
                 if (sb.who.contains(sb.app.infoFrom[i]) ||
                     sb.text.contains(sb.app.infoFrom[i])) {
-                    sb.who = sb.app.nickName;
+                    sb.who = sb.app.nick;
                     sb.text = sb.app.infoTo[i];
                     break;
                 }
@@ -49,7 +49,7 @@ public class CaseApp {
             }
         }
 
-        String nickCode = sb.app.nickName;
+        String nickCode = sb.app.nick;
 
         if (nickCode.equals("NH나무")) {
             utils.logB(nickCode,sb.text);
@@ -68,7 +68,7 @@ public class CaseApp {
         }
 
         if (sb.app.say) {
-            String say = sb.app.nickName + " ";
+            String say = sb.app.nick + " ";
             say += (sb.app.grp) ? sb.group+" ": " ";
             say += (sb.app.who) ? sb.who: "";
             say = say + ", ";
@@ -79,7 +79,7 @@ public class CaseApp {
         if (sb.app.addWho)
             sb.text = "👨‍🦱" + sb.who + "👨‍🦱" + sb.text;
 
-        String head = sb.app.nickName + ((sb.app.grp && !sb.group.isEmpty()) ? "_" +sb.group+".": "")
+        String head = sb.app.nick + ((sb.app.grp && !sb.group.isEmpty()) ? "_" +sb.group+".": "")
                 + ((sb.app.who)? "@" + sb.who : "");
 
         if (sb.app.log)

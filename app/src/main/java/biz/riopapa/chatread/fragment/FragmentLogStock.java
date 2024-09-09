@@ -64,22 +64,22 @@ public class FragmentLogStock extends Fragment {
 
         View thisView = inflater.inflate(R.layout.fragment_stock, container, false);
         etTable = thisView.findViewById(R.id.text_stock);
-        etKeyword = thisView.findViewById(R.id.key_stock);
+        etKeyword = thisView.findViewById(R.id.key_log);
 
         ss = new LogSpan().make(logStock, this.getContext());
         etTable.setText(ss);
 
-        ivFind = thisView.findViewById(R.id.find_stock);
+        ivFind = thisView.findViewById(R.id.find_log);
         ivFind.setOnClickListener(v -> new KeyStringFind(etKeyword, etTable, ss, ivNext));
 
-        ivNext = thisView.findViewById(R.id.next_stock);
+        ivNext = thisView.findViewById(R.id.next_log);
         ivNext.setVisibility(View.GONE);
         ivNext.setOnClickListener(v -> new KeyStringNext(etKeyword, etTable));
 
-        ivClear = thisView.findViewById(R.id.clear_stock);
+        ivClear = thisView.findViewById(R.id.clear_log);
         ivClear.setOnClickListener(v -> new SetFocused(etKeyword));
 
-        ivDebug = thisView.findViewById(R.id.debug_stock);
+        ivDebug = thisView.findViewById(R.id.debug_log);
         ivDebug.setImageDrawable(ContextCompat.getDrawable(mContext, deBug ? R.drawable.debug_on : R.drawable.debug_off));
         ivDebug.setOnClickListener(v -> {
             deBug = !deBug;

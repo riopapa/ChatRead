@@ -31,7 +31,6 @@ import biz.riopapa.chatread.adapters.AppsAdapter;
 import biz.riopapa.chatread.common.SetFocused;
 import biz.riopapa.chatread.edit.ActivityEditApp;
 import biz.riopapa.chatread.func.AppsTable;
-import biz.riopapa.chatread.func.ReadyToday;
 import biz.riopapa.chatread.models.App;
 
 public class FragmentAppsList extends Fragment {
@@ -118,7 +117,7 @@ public class FragmentAppsList extends Fragment {
 //        String result = "";
         for (int i = startPos; i < apps.size(); i++) {
             App app = apps.get(i);
-            if (app.nickName.contains(key) || app.fullName.contains(key) ||
+            if (app.nick.contains(key) || app.fullName.contains(key) ||
                     app.memo.contains(key)) {
                 if (appPos == -1) {
                     appPos = i;

@@ -88,7 +88,7 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.ViewHolder> {
 
         App al = apps.get(mAppsPos);
 
-        holder.tNickName.setText(al.nickName);
+        holder.tNickName.setText(al.nick);
         holder.tNickName.setBackgroundColor((fnd[position]) ? Color.CYAN: Color.LTGRAY);
         holder.tMemo.setText(al.memo);
 

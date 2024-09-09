@@ -61,10 +61,10 @@ public class FragmentSave extends Fragment {
 
         View thisView = inflater.inflate(R.layout.fragment_save, container, false);
         etTable = thisView.findViewById(R.id.text_save);
-        etKeyword = thisView.findViewById(R.id.key_save);
-        ivFind = thisView.findViewById(R.id.find_save);
-        ivNext = thisView.findViewById(R.id.next_save);
-        ivClear = thisView.findViewById(R.id.clear_save);
+        etKeyword = thisView.findViewById(R.id.key_log);
+        ivFind = thisView.findViewById(R.id.find_log);
+        ivNext = thisView.findViewById(R.id.next_log);
+        ivClear = thisView.findViewById(R.id.clear_log);
 
         ss = new LogSpan().make(logSave, this.getContext());
         etTable.setText(ss);
@@ -76,7 +76,7 @@ public class FragmentSave extends Fragment {
 
         ivClear.setOnClickListener(v -> new SetFocused(etKeyword));
 
-        ivDebug = thisView.findViewById(R.id.debug_save);
+        ivDebug = thisView.findViewById(R.id.debug_log);
         ivDebug.setImageDrawable(ContextCompat.getDrawable(mContext, deBug ? R.drawable.debug_on : R.drawable.debug_off));
         ivDebug.setOnClickListener(v -> {
             deBug = !deBug;

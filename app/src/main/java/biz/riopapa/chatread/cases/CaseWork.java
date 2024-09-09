@@ -21,7 +21,7 @@ public class CaseWork {
             }
         }
 
-        String head = sb.app.nickName + "." + sb.who;
+        String head = sb.app.nick + "." + sb.who;
         sb.text = strUtil.makeEtc(sb.text, 140);
         logUpdate.addWork(head, sb.text);
         notificationBar.update(head, sb.text, true);

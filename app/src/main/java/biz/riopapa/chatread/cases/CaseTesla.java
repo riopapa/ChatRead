@@ -22,7 +22,7 @@ public class CaseTesla {
             return;
         }
         logUpdate.addLog("[ 테스리 ]", sb.text);
-        notificationBar.update(sb.app.nickName, sb.text, true);
+        notificationBar.update(sb.app.nick, sb.text, true);
         sounds.speakAfterBeep("테스리, 테스리, " + sb.text);
     }
 }

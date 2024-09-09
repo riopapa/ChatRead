@@ -62,22 +62,22 @@ public class FragmentLogWork extends Fragment {
 
         View thisView = inflater.inflate(R.layout.fragment_work, container, false);
         etTable = thisView.findViewById(R.id.text_work);
-        etKeyword = thisView.findViewById(R.id.key_work);
+        etKeyword = thisView.findViewById(R.id.key_log);
 
         ss = new LogSpan().make(logWork, this.getContext());
         etTable.setText(ss);
 
-        ivFind = thisView.findViewById(R.id.find_work);
+        ivFind = thisView.findViewById(R.id.find_log);
         ivFind.setOnClickListener(v -> new KeyStringFind(etKeyword, etTable, ss, ivNext));
 
-        ivNext = thisView.findViewById(R.id.next_work);
+        ivNext = thisView.findViewById(R.id.next_log);
         ivNext.setVisibility(View.GONE);
         ivNext.setOnClickListener(v -> new KeyStringNext(etKeyword, etTable));
 
-        ivClear = thisView.findViewById(R.id.clear_work);
+        ivClear = thisView.findViewById(R.id.clear_log);
         ivClear.setOnClickListener(v -> new SetFocused(etKeyword));
 
-        ivDebug = thisView.findViewById(R.id.debug_work);
+        ivDebug = thisView.findViewById(R.id.debug_log);
         ivDebug.setImageDrawable(ContextCompat.getDrawable(mContext, deBug ? R.drawable.debug_on : R.drawable.debug_off));
         ivDebug.setOnClickListener(v -> {
             deBug = !deBug;

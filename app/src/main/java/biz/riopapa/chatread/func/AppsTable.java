@@ -85,13 +85,13 @@ public class AppsTable {
 
         for (int i = 0; i < apps.size(); i++) {
             App app = apps.get(i);
-            if (app.nickName.equals("@")) {
+            if (app.nick.equals("@")) {
                 appIgnores.add(app.fullName);
             } else {
                 appFullNames.add(app.fullName);
                 appNameIdx.add(i);
                 String appType;
-                switch (app.nickName) {
+                switch (app.nick) {
                    case "텔레":
                         appType = "t";
                         break;

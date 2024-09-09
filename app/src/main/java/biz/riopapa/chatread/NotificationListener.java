@@ -43,7 +43,7 @@ public class NotificationListener extends NotificationListenerService {
         if (kvCommon == null)
             new AllVariables().set(this, "<< noty >>");
 
-        if (ignoreSbn(sbn))
+        if (!makeSBar(sbn))
             return;
 
         switch (sb.type) {
@@ -70,8 +70,8 @@ public class NotificationListener extends NotificationListenerService {
                     return;
                 sb.text = strUtil.text2OneLine(sb.text);
                 sounds.speakAfterBeep("새 앱 설치됨 " + sb.text);
-                sb.text = "새로운 앱이 설치됨,  group : [" + sb.group + "], who : [" + sb.who +
-                        "], text : " + sb.text;
+                sb.text = "새로운 앱이 설치됨,  group : [" + sb.group + "], who : ["
+                        + sb.who + "], text : " + sb.text;
                 notificationBar.update(sb.appName, sb.text, true);
                 new Copy2Clipboard(sb.appName);
                 logUpdate.addLog("[ " + sb.appName + " ]", sb.text);
@@ -79,24 +79,19 @@ public class NotificationListener extends NotificationListenerService {
         }
     }
 
-    boolean ignoreSbn(StatusBarNotification sbn) {
+    boolean makeSBar(StatusBarNotification sbn) {
 
         String appName = sbn.getPackageName();  // to LowCase
 
         if (appName.isEmpty() || Collections.binarySearch(appIgnores, appName) >= 0)
-            return true;
+            return false;
         Bundle extras = sbn.getNotification().extras;
         String text = extras.getCharSequence(Notification.EXTRA_TEXT, "")
                 .toString();
         if (text.isEmpty())
-            return true;
+            return false;
 
         sb = new SBar();
-
-        sb.who = extras.getCharSequence(Notification.EXTRA_TITLE,"")
-                .toString();
-        sb.text = text;
-
         int idx = Collections.binarySearch(appFullNames, appName);
         if (idx >= 0) {
             sb.type = appTypes.get(idx);
@@ -105,7 +100,6 @@ public class NotificationListener extends NotificationListenerService {
             sb.type = "N";
             sb.appName = appName;
         }
-
         try {
             sb.group = extras.getString(Notification.EXTRA_SUB_TEXT);
             if (sb.group == null || sb.group.equals("null"))
@@ -113,7 +107,10 @@ public class NotificationListener extends NotificationListenerService {
         } catch (Exception e) {
             sb.group = "";
         }
-        return false;
+        sb.who = extras.getCharSequence(Notification.EXTRA_TITLE,"")
+                .toString();
+        sb.text = text;
+        return true;
     }
 
     public static boolean isWorking() {
