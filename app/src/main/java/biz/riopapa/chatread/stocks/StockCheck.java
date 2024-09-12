@@ -100,7 +100,7 @@ public class StockCheck {
                 }
             }
 
-            logUpdate.addStock("[" + strHead + "]", shortText + key12);
+            logUpdate.addStock(strHead, shortText + key12);
             notificationBar.update(strHead, shortText, true);
 
             String timeStamp = toDay + new SimpleDateFormat(hourMin, Locale.KOREA).format(new Date());
