@@ -121,7 +121,7 @@
             android:layout_width="0dp"
             android:layout_weight="3"
             android:layout_height="wrap_content"
-            android:text="Count"
+            android:text="Count/원"
             android:textSize="12sp"
             android:textStyle="bold" />
 
@@ -130,7 +130,6 @@
             android:layout_width="0dp"
             android:layout_weight="5"
             android:layout_height="wrap_content"
-            android:autofillHints="Prev"
             android:hint="Count"
             android:textSize="12sp"
             android:inputType="numberSigned"
@@ -141,10 +140,8 @@
             android:layout_width="0dp"
             android:layout_weight="5"
             android:layout_height="wrap_content"
-            android:autofillHints="Prev"
-            android:hint="원"
+            android:hint=""
             android:textSize="12sp"
-            android:inputType="numberSigned"
             />
 
     </LinearLayout>

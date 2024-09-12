@@ -148,26 +148,15 @@
         android:background="#7EC4E8"
         android:layout_margin="1dp"
         android:orientation="horizontal">
-        <TextView
-            android:id="@+id/two_dummp"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:textColor="@color/textFore"
-            android:textSize="@dimen/app_line_font_size"
-            android:layout_marginLeft="6dp"
-            android:maxLines="1"
-            />
 
         <TextView
             android:id="@+id/one_group_info"
-            android:layout_width="0dp"
-            android:layout_weight="20"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:textColor="@color/textFore"
             android:textSize="@dimen/app_line_font_size"
             android:text="info"
+            android:layout_marginLeft="6dp"
             android:layout_marginRight="6dp"
             android:maxLines="10"
             />

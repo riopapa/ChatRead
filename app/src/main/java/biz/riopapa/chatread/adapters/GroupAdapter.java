@@ -8,6 +8,7 @@ import static biz.riopapa.chatread.MainActivity.stockGetPut;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -89,19 +90,18 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
         for (SWho w : sGrp.whos) {
             if (grpBuilder.length() > 1)
                 grpBuilder.append("\n");
-            SpannableString ssWho = new SpannableString(w.who + " : "+w.whoM + ", "+w.whoF + "\n");
-            ssWho.setSpan(new ForegroundColorSpan(0xFF030415), 0, ssWho.length()
-                    , Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            SpannableString ssWho = new SpannableString(" " + w.who + " : "+w.whoM
+                    + ", "+w.whoF + " \n");
+            ssWho.setSpan(new BackgroundColorSpan(ContextCompat.getColor(mContext,R.color.group_adapter_who_background)),
+                    0, ssWho.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             grpBuilder.append(ssWho);
-            SpannableStringBuilder stBuilder = new SpannableStringBuilder("     ");
+            SpannableStringBuilder stBuilder = new SpannableStringBuilder();
             for (SStock s : w.stocks) {
                 if (stBuilder.length() > 10)
-                    stBuilder.append("\n     ");
+                    stBuilder.append("\n");
                 SpannableString ssStock = new SpannableString(" " + s.key1 + "/" + s.key2 + ", " + s.prv + "/" + s.nxt
-                        + ", " + s.count + ", " + (s.talk.isEmpty() ? "¯-¯": s.talk)
+                        + ", " + s.count + ", " + (s.talk.isEmpty() ? "\uD83E\uDD10": s.talk)
                         + ", " + s.won);
-                ssStock.setSpan(new ForegroundColorSpan(0xFF0F0F08), 0, ssStock.length()
-                        , Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 stBuilder.append(ssStock);
             }
             grpBuilder.append(stBuilder);

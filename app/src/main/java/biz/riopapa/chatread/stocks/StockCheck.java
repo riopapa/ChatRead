@@ -66,17 +66,15 @@ public class StockCheck {
             String shortText = makeShort(removeSpecialChars(sParse[1]), sGroup);
 
             if (!stock.talk.isEmpty()) {
-                strHead = stkName + " / " + grpName + "/" + whoName;
+                strHead = stkName + " / " + grpName + " / " + whoName;
                 String won = wonValue(shortText, stock.won);
                 String[] joins = new String[]{stock.talk, grpName, whoName,
                         stkName, stkName, won, stkName, won};
-                String joined = String.join(" , ", joins);
+                String joined = String.join(" ; ", joins);
                 utils.logB(grpName+"joins", joined);
-                if (sGroup.log) {
-                    utils.logB(grpName+" Log", won + " " +
-                            ((shortText.length() > 100) ? shortText.substring(0, 100) : shortText));
-                }
                 sounds.speakBuyStock(joined);
+                if (sGroup.log)
+                    utils.logB(grpName+" Log", won + " " + shortText);
 
                 new Copy2Clipboard(stkName);
                 if (isSilentNow()) {
@@ -115,6 +113,8 @@ public class StockCheck {
 
     private String wonValue (String shortText, String won) {
         // 매수가, 진입가 가 있으면 금액 말하기
+        if (won.isEmpty())
+            return "";
         String [] ss = shortText.split("매수가");
         if (ss.length < 2) {
             ss = shortText.split("진입가");

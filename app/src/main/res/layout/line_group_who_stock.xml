@@ -28,7 +28,7 @@
         <TextView
             android:id="@+id/stock_key2"
             android:layout_width="0dp"
-            android:layout_weight="4"
+            android:layout_weight="3"
             android:layout_height="match_parent"
             android:gravity="center"
             android:textColor="@color/textFore"
@@ -50,14 +50,14 @@
             />
 
         <TextView
-            android:id="@+id/stock_won"
+            android:id="@+id/stock_count"
             android:layout_width="0dp"
-            android:layout_weight="3"
+            android:layout_weight="4"
             android:layout_height="match_parent"
             android:gravity="center"
             android:textColor="@color/textFore"
             android:textSize="@dimen/app_line_font_size"
-            android:text="Talk"
+            android:text="Count"
             android:maxLines="1"
             />
 
@@ -93,14 +93,14 @@
             />
 
         <TextView
-            android:id="@+id/stock_count"
+            android:id="@+id/stock_won"
             android:layout_width="0dp"
             android:layout_weight="4"
             android:layout_height="match_parent"
             android:gravity="center"
             android:textColor="@color/textFore"
             android:textSize="@dimen/app_line_font_size"
-            android:text="Count"
+            android:text="Won"
             android:maxLines="1"
             />
 

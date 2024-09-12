@@ -71,11 +71,11 @@
         <TextView
             android:id="@+id/who_info"
             android:layout_width="0dp"
-            android:layout_weight="12"
+            android:layout_weight="19"
             android:layout_height="match_parent"
             android:gravity="left"
             android:textColor="@color/textFore"
-            android:textSize="13sp"
+            android:textSize="14sp"
             android:text="Who Full"
             android:maxLines="10"
             />
