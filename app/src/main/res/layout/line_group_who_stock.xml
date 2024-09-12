@@ -49,6 +49,18 @@
             android:maxLines="1"
             />
 
+        <TextView
+            android:id="@+id/stock_won"
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textColor="@color/textFore"
+            android:textSize="@dimen/app_line_font_size"
+            android:text="Talk"
+            android:maxLines="1"
+            />
+
     </LinearLayout>
 
     <LinearLayout

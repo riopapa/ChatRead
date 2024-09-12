@@ -135,13 +135,17 @@
             android:textSize="12sp"
             android:inputType="numberSigned"
             />
-        <TextView
+
+        <EditText
+            android:id="@+id/dlg_won"
             android:layout_width="0dp"
             android:layout_weight="5"
             android:layout_height="wrap_content"
-            android:text=""
+            android:autofillHints="Prev"
+            android:hint="원"
             android:textSize="12sp"
-            android:textStyle="bold" />
+            android:inputType="numberSigned"
+            />
 
     </LinearLayout>
 

@@ -91,6 +91,8 @@ public class CaseTelegram {
                 return;
 
             String [] whoText = getActualWho(stockWho, stockText);
+            if (whoText[0].equals("$"))
+                return;
             stockWho = whoText[0];
             stockText = whoText[1];
 
@@ -126,9 +128,9 @@ public class CaseTelegram {
         } else {    // group name only
             int p = sText.indexOf(":");
             if (p > 0) {
-                return new String [] {sText.substring(0, p).trim(), sText.substring(p+2)};
+                return new String [] {sText.substring(0, p).trim(), sText.substring(p+2).trim()};
             } else {
-                return new String[] {"$" + (sText.length() > 10 ? sText.substring(0, 10) : sText), sText};
+                return new String[] {"$", sText};
             }
         }
     }

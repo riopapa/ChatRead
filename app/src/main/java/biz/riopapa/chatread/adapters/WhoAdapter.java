@@ -62,7 +62,8 @@ public class WhoAdapter extends RecyclerView.Adapter<WhoAdapter.ViewHolder> {
                 info.append("\n");
             info.append(s.key1).append(" / ").append(s.key2).append(", ")
                     .append(s.prv).append(" / ").append(s.nxt).append(", ")
-                    .append(s.count).append(", ").append(s.talk.isEmpty() ? "¯-¯": s.talk);
+                    .append(s.count).append(", ").append(s.talk.isEmpty() ? "¯-¯": s.talk)
+                    .append(", ").append(s.won);
         }
         holder.tInfo.setText(info.toString());
         holder.tLine.setOnClickListener(v -> {

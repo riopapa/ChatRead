@@ -8,7 +8,6 @@ import static biz.riopapa.chatread.MainActivity.lastChar;
 import static biz.riopapa.chatread.MainActivity.logUpdate;
 import static biz.riopapa.chatread.MainActivity.notificationBar;
 import static biz.riopapa.chatread.MainActivity.sGroups;
-import static biz.riopapa.chatread.MainActivity.smsNoNumbers;
 import static biz.riopapa.chatread.MainActivity.smsStrRepl;
 import static biz.riopapa.chatread.MainActivity.sounds;
 import static biz.riopapa.chatread.MainActivity.stockCheck;
@@ -24,7 +23,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import biz.riopapa.chatread.common.IgnoreNumber;
 import biz.riopapa.chatread.models.SBar;
 
 public class CaseSMS {
@@ -114,12 +112,9 @@ public class CaseSMS {
 
     private void saySMSNormal(SBar sb) {
         String head = "[sms."+ sb.who + "] ";
-
         sb.text = strReplace.repl(smsStrRepl, sb.who, sb.text);
         logUpdate.addLog(head, sb.text);
         notificationBar.update(head, sb.text, true);
-        if (IgnoreNumber.in(smsNoNumbers, sb.who))
-            sb.text = strUtil.removeDigit(sb.text);
         sounds.speakAfterBeep(head + strUtil.makeEtc(sb.text, isWorking()? 20: 120));
     }
 }

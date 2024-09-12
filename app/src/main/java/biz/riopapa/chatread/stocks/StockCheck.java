@@ -13,7 +13,6 @@ import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.sounds;
 import static biz.riopapa.chatread.MainActivity.stockGetPut;
 import static biz.riopapa.chatread.MainActivity.stockName;
-import static biz.riopapa.chatread.MainActivity.strUtil;
 import static biz.riopapa.chatread.MainActivity.toDay;
 import static biz.riopapa.chatread.MainActivity.utils;
 
@@ -68,16 +67,16 @@ public class StockCheck {
 
             if (!stock.talk.isEmpty()) {
                 strHead = stkName + " / " + grpName + "/" + whoName;
-                String[] joins;
-                String won = wonValue(shortText);
-
-                joins = new String[]{stock.talk, grpName, whoName, stkName, stkName,
-                        won, won};
-                sounds.speakBuyStock(String.join(" , ", joins));
+                String won = wonValue(shortText, stock.won);
+                String[] joins = new String[]{stock.talk, grpName, whoName,
+                        stkName, stkName, won, stkName, won};
+                String joined = String.join(" , ", joins);
+                utils.logB(grpName+"joins", joined);
                 if (sGroup.log) {
                     utils.logB(grpName+" Log", won + " " +
-                            ((shortText.length() > 90) ? shortText.substring(0, 90) : shortText));
+                            ((shortText.length() > 100) ? shortText.substring(0, 100) : shortText));
                 }
+                sounds.speakBuyStock(joined);
 
                 new Copy2Clipboard(stkName);
                 if (isSilentNow()) {
@@ -114,17 +113,16 @@ public class StockCheck {
         new Thread(runnable).start();
     }
 
-    private String wonValue (String shortText) {
+    private String wonValue (String shortText, String won) {
         // 매수가, 진입가 가 있으면 금액 말하기
         String [] ss = shortText.split("매수가");
         if (ss.length < 2) {
             ss = shortText.split("진입가");
-            if (ss.length < 2)
-                return "";
-        } else
-            return  "";
-        int p = ss[1].indexOf("원");
-        return (p > 0) ? ss[1].substring(2,p) :ss[1].substring(2,8);
+        }
+        if (ss.length < 2)
+            return "원 없음";
+        int p = ss[1].indexOf(won);
+        return ((p > 0) ? ss[1].substring(2, p) : ss[1].substring(2, 7)) + won;
     }
 
     boolean isSilentNow() {

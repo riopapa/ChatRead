@@ -3,7 +3,6 @@ package biz.riopapa.chatread.cases;
 import static biz.riopapa.chatread.MainActivity.getStockGroup;
 import static biz.riopapa.chatread.MainActivity.ignoreString;
 import static biz.riopapa.chatread.MainActivity.ktGroupIgnores;
-import static biz.riopapa.chatread.MainActivity.ktNoNumbers;
 import static biz.riopapa.chatread.MainActivity.ktStrRepl;
 import static biz.riopapa.chatread.MainActivity.ktTxtIgnores;
 import static biz.riopapa.chatread.MainActivity.ktWhoIgnores;
@@ -21,8 +20,6 @@ import static biz.riopapa.chatread.MainActivity.strUtil;
 import static biz.riopapa.chatread.MainActivity.timeBegin;
 import static biz.riopapa.chatread.MainActivity.timeEnd;
 import static biz.riopapa.chatread.NotificationListener.isWorking;
-
-import biz.riopapa.chatread.common.IgnoreNumber;
 import biz.riopapa.chatread.common.IgnoreThis;
 import biz.riopapa.chatread.models.SBar;
 
@@ -70,9 +67,7 @@ public class CaseKaTalk {
         String head = "{카톡!" + sb.group + "." + sb.who + "} ";
         logUpdate.addLog(head, sb.text);
         notificationBar.update("카톡!" + sb.group + "." + sb.who, sb.text, true);
-        if (IgnoreNumber.in(ktNoNumbers, sb.group))
-            sb.text = strUtil.removeDigit(sb.text);
-        sounds.speakKakao(" 카톡 왔음 " + sb.group + " 의 " + sb.who + " 님이 " +
+        sounds.speakKakao(" 카톡 왔음 " + sb.group + " " + sb.who + " 님이 " +
                 strUtil.replaceKKHH(strUtil.makeEtc(sb.text, isWorking() ? 20 : 150)));
     }
 
@@ -83,8 +78,6 @@ public class CaseKaTalk {
         String head = "{카톡!" + sb.who + "} ";
         logUpdate.addLog(head, sb.text);
         notificationBar.update("카톡!" + sb.who, sb.text, true);
-        if (IgnoreNumber.in(ktNoNumbers, sb.who))
-            sb.text = strUtil.removeDigit(sb.text);
         sounds.speakKakao(" 카톡 왔음 " + sb.who + " 님이 " +
                 strUtil.replaceKKHH(strUtil.makeEtc(sb.text, isWorking()? 20 :150)));
     }

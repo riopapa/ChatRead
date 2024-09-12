@@ -2,12 +2,10 @@ package biz.riopapa.chatread.func;
 
 import static biz.riopapa.chatread.MainActivity.fileIO;
 import static biz.riopapa.chatread.MainActivity.ktGroupIgnores;
-import static biz.riopapa.chatread.MainActivity.ktNoNumbers;
 import static biz.riopapa.chatread.MainActivity.ktStrRepl;
 import static biz.riopapa.chatread.MainActivity.ktTxtIgnores;
 import static biz.riopapa.chatread.MainActivity.ktWhoIgnores;
 import static biz.riopapa.chatread.MainActivity.mContext;
-import static biz.riopapa.chatread.MainActivity.smsNoNumbers;
 import static biz.riopapa.chatread.MainActivity.smsStrRepl;
 import static biz.riopapa.chatread.MainActivity.sounds;
 import static biz.riopapa.chatread.MainActivity.stockGetPut;
@@ -35,9 +33,6 @@ public class OptionTables {
         ktGroupIgnores = tableListFile.read("ktGrpIg");
         ktWhoIgnores = tableListFile.read("ktWhoIg");
         ktTxtIgnores = tableListFile.read("ktTxtIg");
-        ktNoNumbers = tableListFile.read("ktNoNum");
-
-        smsNoNumbers = tableListFile.read("smsNoNum");
         smsStrRepl = strReplace.get("smsRepl");
         ktStrRepl = strReplace.get("ktRepl");
 

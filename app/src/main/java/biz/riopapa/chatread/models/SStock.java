@@ -7,6 +7,7 @@ public class SStock implements Cloneable{
     public String prv, nxt;
     public String talk;
     public String skip1;
+    public String won;
     public int count;   // how many matched?
     @NonNull
     @Override

@@ -109,9 +109,6 @@ public class MainActivity extends AppCompatActivity {
     public static String[] ktGroupIgnores = null;
     public static String[] ktWhoIgnores = null;
 
-    public static String[] smsNoNumbers = null;
-
-    public static String[] ktNoNumbers = null;
     public static String[] ktTxtIgnores = null;
 
     public static String mTableName;
