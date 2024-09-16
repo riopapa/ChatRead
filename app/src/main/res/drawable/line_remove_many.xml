@@ -6,9 +6,8 @@
           android:strokeWidth="2"
           android:strokeLineCap="square"
           android:pathData="
-          M3,3H18 M3,7H18 M3,10H10
-          M4,14l5,5 M9,14 l-5,5
-          M12,12l8,8 M20,12 l-8,8
+          M3,3H20 M3,7H20 M3,10H6 M3,14H6
+          M10,10l10,10 M20,10 l-10,10
            "/>
 
 </vector>

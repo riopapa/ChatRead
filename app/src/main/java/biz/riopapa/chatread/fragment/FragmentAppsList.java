@@ -101,9 +101,7 @@ public class FragmentAppsList extends Fragment {
             }
         });
         ImageView iClear = thisView.findViewById(R.id.app_clear);
-        iClear.setOnClickListener(v -> {
-            new SetFocused(sKey);
-        });
+        iClear.setOnClickListener(v -> new SetFocused(sKey));
 
         return thisView;
     }
@@ -131,8 +129,6 @@ public class FragmentAppsList extends Fragment {
             LinearLayoutManager layoutManager = (LinearLayoutManager) appsRecyclerView
                     .getLayoutManager();
             layoutManager.scrollToPositionWithOffset((appPos > 2) ? appPos-2:appPos, 10);
-//            String str = key + " found " + result;
-//            Toast.makeText(mContext, str, Toast.LENGTH_SHORT).show();
         }
     }
 

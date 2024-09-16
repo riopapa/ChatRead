@@ -4,7 +4,6 @@ import static biz.riopapa.chatread.MainActivity.deBug;
 import static biz.riopapa.chatread.MainActivity.logStock;
 import static biz.riopapa.chatread.MainActivity.logUpdate;
 import static biz.riopapa.chatread.MainActivity.log_Stock;
-import static biz.riopapa.chatread.MainActivity.mActivity;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.prefStockEditor;
 import static biz.riopapa.chatread.MainActivity.sharedEditor;
@@ -15,7 +14,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.Selection;
 import android.text.SpannableString;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -54,8 +52,9 @@ public class FragmentLogStock extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        if (toolbar != null)
+        if (toolbar != null) {
             toolbar.setTitle(log_Stock);
+        }
     }
 
     @Override
@@ -89,6 +88,7 @@ public class FragmentLogStock extends Fragment {
         scrollView = thisView.findViewById(R.id.scroll_stock);
         new Handler(Looper.getMainLooper()).post(() -> scrollView.smoothScrollBy(0, 90000));
         super.onResume();
+
         return thisView;
     }
 

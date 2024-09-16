@@ -8,6 +8,6 @@
               android:strokeWidth="2"
               android:strokeLineCap="square"
               android:pathData="
-          M4,5H14 M4,10H14 M4,15H10
-          M18,18V12 M15,15 h6            "/>
+          M4,5H18 M4,10H14 M4,15H10
+          M17,13v7 M14,16 h6            "/>
 </vector>

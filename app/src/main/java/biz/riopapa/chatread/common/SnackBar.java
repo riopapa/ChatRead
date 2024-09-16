@@ -3,6 +3,7 @@ package biz.riopapa.chatread.common;
 import static android.widget.Toast.LENGTH_SHORT;
 import static com.google.android.material.snackbar.Snackbar.make;
 import static biz.riopapa.chatread.MainActivity.mActivity;
+import static biz.riopapa.chatread.MainActivity.mContext;
 
 import android.view.Gravity;
 import android.view.View;
@@ -25,12 +26,15 @@ public class SnackBar {
 
         tv1.setText(title);
         tv2.setText(text);
+        int screenWidth = (mContext.getResources().getDisplayMetrics().widthPixels
+                    * 60) / 100 ;
+
 
         // now change the layout of the ToastText
         Snackbar.SnackbarLayout snackBarLayout = (Snackbar.SnackbarLayout) snackbar.getView();
-        snackBarLayout.setBackgroundColor(0x0033FFFF);  // transparent background
         FrameLayout.LayoutParams params =(FrameLayout.LayoutParams)snackBarLayout.getLayoutParams();
-        params.gravity = Gravity.CENTER_VERTICAL;
+        params.width = screenWidth;
+        params.gravity = Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL;
         sView.setLayoutParams(params);
         snackBarLayout.addView(sView, 0);
         snackbar.show();

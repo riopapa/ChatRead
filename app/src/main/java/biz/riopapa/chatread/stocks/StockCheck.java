@@ -8,6 +8,7 @@ import static biz.riopapa.chatread.MainActivity.mAudioManager;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.mActivity;
 import static biz.riopapa.chatread.MainActivity.notificationBar;
+import static biz.riopapa.chatread.MainActivity.notificationHelper;
 import static biz.riopapa.chatread.MainActivity.phoneVibrate;
 import static biz.riopapa.chatread.MainActivity.sGroups;
 import static biz.riopapa.chatread.MainActivity.sounds;
@@ -30,12 +31,15 @@ import java.util.Date;
 import java.util.Locale;
 
 import biz.riopapa.chatread.MainActivity;
+import biz.riopapa.chatread.R;
 import biz.riopapa.chatread.common.Copy2Clipboard;
 import biz.riopapa.chatread.common.PhoneVibrate;
 import biz.riopapa.chatread.models.SGroup;
 import biz.riopapa.chatread.models.SStock;
 
 public class StockCheck {
+
+    static int stock_icon_switch = 0;
 
     public void sayIfMatched(int g, int w, ArrayList<SStock> stocks,
                  String gName, String wName, String sText) {
@@ -70,7 +74,7 @@ public class StockCheck {
                 String won = wonValue(shortText, stock.won);
                 String[] joins = new String[]{stock.talk, grpName, whoName,
                         stkName, stkName, won, stkName, won};
-                String joined = String.join(" ; ", joins);
+                String joined = String.join(" ! ", joins);
                 utils.logB(grpName+"joins", joined);
                 sounds.speakBuyStock(joined);
                 if (sGroup.log)
@@ -100,7 +104,10 @@ public class StockCheck {
 
             logUpdate.addStock(strHead, shortText + key12);
             notificationBar.update(strHead, shortText, true);
-
+            notificationHelper.sendNotification(
+                    (stock_icon_switch == 0) ? R.drawable.stock1_icon :
+                            R.drawable.stock2_icon, strHead, stock.talk);
+            stock_icon_switch = (stock_icon_switch + 1) % 2;
             String timeStamp = toDay + new SimpleDateFormat(hourMin, Locale.KOREA).format(new Date());
             gSheet.add2Stock(grpName, timeStamp, whoName, percent, stkName, shortText, key12);
 
@@ -122,7 +129,7 @@ public class StockCheck {
         if (ss.length < 2)
             return "원 없음";
         int p = ss[1].indexOf(won);
-        return ((p > 0) ? ss[1].substring(2, p) : ss[1].substring(2, 7)) + won;
+        return "매수! "+((p > 0) ? ss[1].substring(2, p) : ss[1].substring(2, 8)) + won;
     }
 
     boolean isSilentNow() {

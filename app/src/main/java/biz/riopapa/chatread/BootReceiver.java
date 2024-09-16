@@ -19,15 +19,15 @@ public class BootReceiver extends BroadcastReceiver {
     public void onReceive(final Context context, Intent intent) {
 
         if (Objects.equals(intent.getAction(), "android.intent.action.BOOT_COMPLETED")) {
-            new AllVariables().set(context, "boot");
+//            new AllVariables().set(context, "boot");
             new Handler(Looper.getMainLooper()).postDelayed(() -> {
                 Intent nIntent = new Intent(mContext, MainActivity.class);
                 nIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(nIntent);
+                new Handler(Looper.getMainLooper()).postDelayed(() ->
+                        notificationBar.update("After Boot", "Rebooted", false), 5000);
             }, 100);
 
-            new Handler(Looper.getMainLooper()).postDelayed(() ->
-                    notificationBar.update("After Boot", "Rebooted", false), 5000);
         }
     }
 

@@ -2,77 +2,51 @@
 <resources>
 
     <color name="color_tab_log_background">#E4D4D3</color>
-    <color name="color_tab_save_background">#E4ECDA</color>
     <color name="color_tab_stock_background">#C9D6E3</color>
     <color name="color_tab_app_background">#E0DCBD</color>
-    <color name="color_tab_table_background">#C9C6D3</color>
-    <color name="color_tab_chat_background">#CDCFB0</color>
-    <color name="color_tab_work_background">#F3E5C0</color>
 
-    <color name="group_adapter_who_background">#6EA4D8</color>
-
-    <color name="notification_bar">#81375BCF</color>
-
-    <color name="line_1">#E1201C4A</color>
-    <color name="line1back">#E14B43AD</color>
-    <color name="textLine1">#FFFFFF</color>
-
-    <color name="line_2">#0D3633</color>
-    <color name="line2Back">#168279</color>
-    <color name="textLine2">#FFFFFF</color>
-
-    <color name="line_3">#E1201C4A</color>
-    <color name="line3back">#E1443D94</color>
-    <color name="textLine3">#FFFFFF</color>
-
-    <color name="snackBarBack">#AAAAAA</color>
+    <color name="snackBarBack">#1CAA9D</color>
     <color name="snackBarTitle">#FF354DE3</color>
     <color name="snackBarText">#FF770B09</color>
 
-    <color name="headLine">#DCC645</color>
-    <color name="lightLine">#F7E489</color>
     <color name="textFore">#222233</color>
-    <color name="alertBack">#ADDCBB</color>
-    <color name="alertTalk">#7E1E8F</color>
-    <color name="quietTalk">#494207</color>
 
-    <color name="appBack">#CCDFB7</color>
-    <color name="appHint">#139F18</color>
     <color name="appLine0">#C3C7DC</color>
-    <color name="appLine1">#F4E0DE</color>
     <color name="appTrue">#05302C</color>
     <color name="appFalse">#8F453847</color>
 
     <color name="appExist">#022724</color>
     <color name="appNone">#A61546</color>
 
-    <color name="textNormal">#DDDDDD</color>
-    <color name="textEdit">#80C2D59A</color>
-    <color name="tabSelected">#0D2367</color>
-
-    <color name="tabBackText">#FF17335E</color>
     <color name="tabBackSelected">#80566884</color>
-    <color name="tabBackUnselected">#80ACE3BD</color>
 
     <color name="keyMatchedBack">#60CFAE1D</color>
     <color name="keyTextFore">#FF06243C</color>
-    <color name="keyMatchedWord">#FF8FB68F</color>
 
-    <color name="log_head_f0">#FF611714</color>
-    <color name="log_head_b0">#00E7F2DB</color>
-    <color name="log_line_f0">#FF0C1F8A</color>
-    <color name="log_line_b0">#00C6C4CA</color>
-    <color name="log_line_x0">#FFD1CC9C</color>
-
-    <color name="log_head_f1">#FF0A09AE</color>
-    <color name="log_head_b1">#00C4B997</color>
-    <color name="log_line_f1">#FF042C29</color>
-    <color name="log_line_b1">#00D9D5E3</color>
-    <color name="log_line_x1">#FFB1A268</color>
-
-    <color name="line_now">#808EB3BF</color>
-    <color name="line_default">#9EABAF</color>
-
+    <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
+    <color name="grey">#888888</color>
+
+    <color name="brown_50">#fafafa</color>
+    <color name="brown_100">#f5f5f5</color>
+    <color name="brown_200">#e6e6e6</color>
+    <color name="brown_300">#b7b7b7</color>
+    <color name="brown_400">#888888</color>
+    <color name="brown_500">#696969</color>
+    <color name="brown_600">#4d4d4d</color>
+    <color name="brown_700">#333333</color>
+    <color name="brown_800">#1c1c1c</color>
+    <color name="brown_900">#000000</color>
+
+    <color name="teal_50">#fafafa</color>
+    <color name="teal_100">#f5f5f5</color>
+    <color name="teal_200">#e6e6e6</color>
+    <color name="teal_300">#b7b7b7</color>
+    <color name="teal_400">#888888</color>
+    <color name="teal_500">#696969</color>
+    <color name="teal_600">#4d4d4d</color>
+    <color name="teal_700">#333333</color>
+    <color name="teal_800">#1c1c1c</color>
+    <color name="teal_900">#000000</color>
 
 </resources>

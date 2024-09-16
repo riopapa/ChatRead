@@ -18,7 +18,8 @@ public class StrUtil {
     }
 
     public String text2OneLine(String mText) {
-        return mText.replace("\n", "|").replace("\r", "").replace("||", "|").replace("||", "|");
+        return mText.replace("\n", "|").replace("\r", "|")
+                .replace("||", "|").replace("||", "|");
     }
 
     public String removeDigit(String str) {

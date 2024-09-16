@@ -5,12 +5,13 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:layout_marginTop="2dp"
-    android:background="#AABBCC"
+    android:background="@color/teal_400"
     android:padding="2dp" >
 
     <LinearLayout
         android:layout_width = "match_parent"
         android:layout_height = "wrap_content"
+        android:background="@color/teal_300"
         android:orientation="horizontal">
 
         <TextView
@@ -19,7 +20,7 @@
             android:layout_weight="4"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:textColor="@color/textFore"
+            android:textColor="@color/black"
             android:textSize="@dimen/app_line_font_size"
             android:text="Who"
             android:maxLines="1"
@@ -31,7 +32,7 @@
             android:layout_weight="6"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:textColor="@color/textFore"
+            android:textColor="@color/black"
             android:textSize="@dimen/app_line_font_size"
             android:text="Who Match"
             android:maxLines="1"
@@ -43,7 +44,7 @@
             android:layout_weight="12"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:textColor="@color/textFore"
+            android:textColor="@color/black"
             android:textSize="@dimen/app_line_font_size"
             android:text="Who Full"
             android:maxLines="1"
@@ -53,7 +54,7 @@
     <LinearLayout
         android:layout_width = "match_parent"
         android:layout_height = "wrap_content"
-        android:background="#CCDDEE"
+        android:background="@color/teal_200"
         android:orientation="horizontal">
 
         <TextView
@@ -62,7 +63,7 @@
             android:layout_weight="1"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:textColor="@color/textFore"
+            android:textColor="@color/black"
             android:textSize="@dimen/app_line_font_size"
             android:text=""
             android:maxLines="1"
@@ -74,7 +75,7 @@
             android:layout_weight="19"
             android:layout_height="match_parent"
             android:gravity="left"
-            android:textColor="@color/textFore"
+            android:textColor="@color/black"
             android:textSize="14sp"
             android:text="Who Full"
             android:maxLines="10"

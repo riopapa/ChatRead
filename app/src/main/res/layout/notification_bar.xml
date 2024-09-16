@@ -9,7 +9,6 @@
 
     <LinearLayout
         android:id="@+id/line_1"
-        android:background="@color/line_1"
         android:layout_margin="1dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,6 +16,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/teal_700"
             android:orientation="horizontal">
             <TextView
                 android:id="@+id/msg_head1"
@@ -26,10 +26,9 @@
                 android:textSize="13sp"
                 android:layout_marginStart="8dp"
                 android:text="@string/_09_99"
-                android:textColor="@color/textLine1"
+                android:textColor="@color/white"
                 android:layout_margin="3sp"
                 android:layout_gravity="center"
-                android:background="@color/line1back"
                 android:gravity="left"
                 />
 
@@ -44,10 +43,10 @@
 
         </LinearLayout>
         <LinearLayout
-             android:id="@+id/msg_line_text1"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:orientation="horizontal">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/teal_600"
+            android:orientation="horizontal">
             <TextView
                 android:id="@+id/msg_text1"
                 android:layout_width="0dp"
@@ -56,14 +55,13 @@
                 android:textSize="13sp"
                 android:text=""
                 android:layout_margin="3sp"
-                android:textColor="@color/textLine1"
+                android:textColor="@color/white"
                 android:layout_gravity="center"
                 />
         </LinearLayout>
     </LinearLayout>
     <LinearLayout
         android:id="@+id/line_2"
-        android:background="@color/line_2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="1dp"
@@ -72,6 +70,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/teal_700"
             android:orientation="horizontal">
             <TextView
                 android:id="@+id/msg_head2"
@@ -80,16 +79,15 @@
                 android:layout_height="match_parent"
                 android:textSize="13sp"
                 android:text="@string/_09_99"
-                android:textColor="@color/textLine1"
+                android:textColor="@color/white"
                 android:layout_margin="3sp"
                 android:layout_gravity="center"
-                android:background="@color/line2Back"
                 />
         </LinearLayout>
         <LinearLayout
-            android:id="@+id/msg_line2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/teal_600"
             android:orientation="horizontal">
 
             <TextView
@@ -100,7 +98,7 @@
                 android:textSize="13sp"
                 android:text=""
                 android:layout_margin="3sp"
-                android:textColor="@color/textLine2"
+                android:textColor="@color/white"
                 android:layout_gravity="center"
                 />
 
@@ -109,7 +107,6 @@
 
     <LinearLayout
         android:id="@+id/line_3"
-        android:background="@color/line_3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="1dp"
@@ -118,6 +115,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/teal_700"
             android:orientation="horizontal">
             <TextView
                 android:id="@+id/msg_head3"
@@ -126,16 +124,15 @@
                 android:layout_height="match_parent"
                 android:textSize="13sp"
                 android:text="@string/_09_99"
-                android:textColor="@color/textLine3"
+                android:textColor="@color/white"
                 android:layout_margin="3sp"
                 android:layout_gravity="center"
-                android:background="@color/line3back"
                 />
         </LinearLayout>
         <LinearLayout
-            android:id="@+id/msg_line3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/teal_600"
             android:orientation="horizontal">
 
             <TextView
@@ -146,7 +143,7 @@
                 android:textSize="13sp"
                 android:text=""
                 android:layout_margin="3sp"
-                android:textColor="@color/textLine3"
+                android:textColor="@color/white"
                 android:layout_gravity="center"
                 />
 

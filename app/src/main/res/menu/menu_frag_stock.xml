@@ -20,7 +20,7 @@
     <item
         android:id="@+id/del_stock_one_set"
         android:orderInCategory="100"
-        android:icon="@drawable/line_remove3"
+        android:icon="@drawable/line_remove_set"
         app:showAsAction="always"
         android:title="@string/todo" />
 

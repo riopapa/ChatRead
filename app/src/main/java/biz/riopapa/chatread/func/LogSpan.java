@@ -32,17 +32,27 @@ public class LogSpan {
         fonts[1][1] = Typeface.create(ResourcesCompat.getFont(context, R.font.malang_malang), Typeface.NORMAL);
         int nPos = 0, sLen;
 
-        int [][]colors = new int[2][];
-
-        colors[0] = new int[]{
-                context.getColor(R.color.log_head_f0), context.getColor(R.color.log_head_b0),
-                context.getColor(R.color.log_line_f0), context.getColor(R.color.log_line_b0),
-                context.getColor(R.color.log_line_x0)
+//        fColors[0] = new int[]{
+//                context.getColor(R.color.log_head_f0), context.getColor(R.color.log_head_b0),
+//                context.getColor(R.color.log_line_f0), context.getColor(R.color.log_line_b0),
+//                context.getColor(R.color.log_line_x0)
+//        };
+//        fColors[1] = new int[]{
+//                context.getColor(R.color.log_head_f1), context.getColor(R.color.log_head_b1),
+//                context.getColor(R.color.log_line_f1), context.getColor(R.color.log_line_b1),
+//                context.getColor(R.color.log_line_x1)
+//        };
+        int [] headForeColor = new int[]{
+                context.getColor(R.color.brown_800), context.getColor(R.color.brown_900)
         };
-        colors[1] = new int[]{
-                context.getColor(R.color.log_head_f1), context.getColor(R.color.log_head_b1),
-                context.getColor(R.color.log_line_f1), context.getColor(R.color.log_line_b1),
-                context.getColor(R.color.log_line_x1)
+        int [] headBackColor = new int[]{
+                context.getColor(R.color.teal_50), context.getColor(R.color.teal_100)
+        };
+        int [] textForeColor = new int[]{
+                context.getColor(R.color.teal_800), context.getColor(R.color.brown_800)
+        };
+        int [] textBackColor = new int[]{
+                context.getColor(R.color.brown_100), context.getColor(R.color.teal_200)
         };
 
         spanIdx = 0;
@@ -72,12 +82,12 @@ public class LogSpan {
             }
             if (StringUtils.isNumeric(String.valueOf(s.charAt(0))) &&
                     StringUtils.isNumeric(String.valueOf(s.charAt(1)))) {
-                colorFore = colors[spanIdx][0];
-                colorBack = colors[spanIdx][1];
+                colorFore = headForeColor[spanIdx];
+                colorBack = headBackColor[spanIdx];
                 font = fonts[spanIdx][0];
             } else {
-                colorFore = colors[spanIdx][2];
-                colorBack = colors[spanIdx][3];
+                colorFore = textForeColor[spanIdx];
+                colorBack = textBackColor[spanIdx];
                 font = fonts[spanIdx][1];
             }
 

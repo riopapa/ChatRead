@@ -77,13 +77,15 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
         holder.tGroup.setText(sGrp.grp);
         holder.tGroupM.setText(sGrp.grpM);
         holder.tGroupF.setText(sGrp.grpF);
-        int gColor = (sGrp.active) ? 0xFF000000 : 0xFF666666;
-        holder.tGroup.setTextColor(gColor);
-        holder.tGroupM.setTextColor(gColor);
-        holder.tGroupF.setTextColor(gColor);
+        int tColor = (sGrp.active) ? ContextCompat.getColor(mContext,R.color.black):
+                                    ContextCompat.getColor(mContext,R.color.grey);
+        holder.tGroup.setTextColor(tColor);
+        holder.tGroupM.setTextColor(tColor);
+        holder.tGroupF.setTextColor(tColor);
 
-        gColor = (sGrp.active) ? 0xFFBBCCFF : 0xFF99AABB;
-        holder.tHead.setBackgroundColor(gColor);
+        int bColor = (sGrp.active) ? ContextCompat.getColor(mContext,R.color.teal_400):
+                                ContextCompat.getColor(mContext,R.color.teal_200);
+        holder.tHead.setBackgroundColor(bColor);
 
         SpannableStringBuilder grpBuilder = new SpannableStringBuilder();
 
@@ -92,20 +94,27 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
                 grpBuilder.append("\n");
             SpannableString ssWho = new SpannableString(" " + w.who + " : "+w.whoM
                     + ", "+w.whoF + " \n");
-            ssWho.setSpan(new BackgroundColorSpan(ContextCompat.getColor(mContext,R.color.group_adapter_who_background)),
+            ssWho.setSpan(new BackgroundColorSpan(
+                    ContextCompat.getColor(mContext,R.color.teal_300)),
                     0, ssWho.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             grpBuilder.append(ssWho);
             SpannableStringBuilder stBuilder = new SpannableStringBuilder();
             for (SStock s : w.stocks) {
                 if (stBuilder.length() > 10)
                     stBuilder.append("\n");
-                SpannableString ssStock = new SpannableString(" " + s.key1 + "/" + s.key2 + ", " + s.prv + "/" + s.nxt
-                        + ", " + s.count + ", " + (s.talk.isEmpty() ? "\uD83E\uDD10": s.talk)
+                SpannableString ssStock = new SpannableString(
+                        " " + s.key1 + "/" + s.key2 + ", " + s.prv + "/" + s.nxt
+                        + ", " + s.count + ", "
+                        + (s.talk.isEmpty() ? "\uD83E\uDD10": s.talk)
                         + ", " + s.won);
                 stBuilder.append(ssStock);
             }
             grpBuilder.append(stBuilder);
         }
+
+        holder.tSkip1.setTextColor(tColor);
+        holder.tSkip2.setTextColor(tColor);
+        holder.tSkip3.setTextColor(tColor);
 
         holder.tSkip1.setText(sGrp.skip1);
         holder.tSkip2.setText(sGrp.skip2);
@@ -113,9 +122,10 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
         holder.tTelegram.setText(sGrp.telKa);
         holder.tActive.setText((sGrp.active) ? "활성" : "조용");
         holder.tInfo.setText(grpBuilder);
+        holder.tInfo.setTextColor(tColor);
+
         holder.tLog.setText((sGrp.log) ? "Log" : "no Log");
-        holder.tLine.setBackgroundColor(ContextCompat.getColor(mContext,
-                (gIDX == position)? R.color.line_now : R.color.line_default));
+        holder.tLine.setBackgroundColor(ContextCompat.getColor(mContext, R.color.teal_100));
         holder.tLine.setOnClickListener(view -> listener.onItemClicked(position));
     }
 }

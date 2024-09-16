@@ -33,6 +33,7 @@ import static biz.riopapa.chatread.MainActivity.mBackgroundServiceIntent;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.msgNamoo;
 import static biz.riopapa.chatread.MainActivity.notificationBar;
+import static biz.riopapa.chatread.MainActivity.notificationHelper;
 import static biz.riopapa.chatread.MainActivity.notificationService;
 import static biz.riopapa.chatread.MainActivity.packageDirectory;
 import static biz.riopapa.chatread.MainActivity.phoneVibrate;
@@ -79,6 +80,7 @@ import biz.riopapa.chatread.cases.CaseWork;
 import biz.riopapa.chatread.func.GetStockGroup;
 import biz.riopapa.chatread.func.IgnoreString;
 import biz.riopapa.chatread.func.StrReplace;
+import biz.riopapa.chatread.notification.NotificationHelper;
 import biz.riopapa.chatread.stocks.StockCheck;
 import biz.riopapa.chatread.stocks.StockName;
 import biz.riopapa.chatread.stocks.StockGetPut;
@@ -154,9 +156,10 @@ public class AllVariables {
             phoneVibrate = new PhoneVibrate();
             notificationService = new NotificationService();
             notificationBar = new NotificationBar();
+            notificationHelper = new NotificationHelper(mContext);
+
             if (!isServiceRunning(mContext, notificationService.getClass().getName())) {
                 mBackgroundServiceIntent = new Intent(mContext, notificationService.getClass());
-//                mContext.startForegroundService(mBackgroundServiceIntent);
                 mContext.startService(mBackgroundServiceIntent);
             }
         }
@@ -177,16 +180,17 @@ public class AllVariables {
         prefSaveEditor = prefSave.edit();
         prefWork = context.getSharedPreferences(log_Work, MODE_PRIVATE);
         prefWorkEditor = prefWork.edit();
-        if (logQue.isEmpty()) {
+        if (logQue.isEmpty()) {// ... other code ...
+
             logQue = prefLog.getString(log_Que, fileIO.readFile(tableFolder, "q" + log_Que+".txt"));
             logStock = prefStock.getString(log_Stock, fileIO.readFile(tableFolder, "q" + log_Stock+".txt"));
             logSave = prefSave.getString(log_Save, fileIO.readFile(tableFolder, "q" + log_Save+".txt"));
             logWork = prefWork.getString(log_Work, fileIO.readFile(tableFolder, "q" + log_Work+".txt"));
-        } else {
-            fileIO.writeFile(tableFolder, "q" + log_Que+".txt", logStock);
-            fileIO.writeFile(tableFolder, "q" + log_Stock+".txt", logQue);
-            fileIO.writeFile(tableFolder, "q" + log_Save+".txt", logWork);
-            fileIO.writeFile(tableFolder, "q" + log_Work+".txt", logSave);
+//        } else {
+//            fileIO.writeFile(tableFolder, "q" + log_Que+".txt", logStock);
+//            fileIO.writeFile(tableFolder, "q" + log_Stock+".txt", logQue);
+//            fileIO.writeFile(tableFolder, "q" + log_Save+".txt", logWork);
+//            fileIO.writeFile(tableFolder, "q" + log_Work+".txt", logSave);
         }
         deBug = sharePref.getBoolean("deBug", false);
         if (deBug) {

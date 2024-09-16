@@ -19,17 +19,19 @@
             android:layout_height="?attr/actionBarSize"
             app:contentInsetStart="0dp"
             app:contentInsetEnd="0dp"
-            android:background="#BA4DBD"
+            android:background="@color/teal_500"
             android:id="@+id/myToolBar"/>
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/teal_300"
             android:id="@+id/myFrame"/>
     </LinearLayout>
     <com.google.android.material.navigation.NavigationView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/teal_700"
         app:headerLayout="@layout/activity_nav_header"
         app:theme="@style/NavigationDrawerStyle"
         app:menu="@menu/main_menu"

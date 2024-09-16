@@ -56,6 +56,7 @@ import biz.riopapa.chatread.func.ReadyToday;
 import biz.riopapa.chatread.func.StrReplace;
 import biz.riopapa.chatread.models.SGroup;
 import biz.riopapa.chatread.models.StrRepl;
+import biz.riopapa.chatread.notification.NotificationHelper;
 import biz.riopapa.chatread.stocks.StockGetPut;
 import biz.riopapa.chatread.stocks.StockCheck;
 import biz.riopapa.chatread.stocks.StockName;
@@ -133,6 +134,8 @@ public class MainActivity extends AppCompatActivity {
 
     public static NotificationService notificationService;
     public static NotificationBar notificationBar;
+    public static NotificationHelper notificationHelper;
+
     public static Intent mBackgroundServiceIntent;
 
     public static boolean isPhoneBusy = false;

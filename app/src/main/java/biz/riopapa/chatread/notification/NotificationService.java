@@ -5,25 +5,31 @@ import static biz.riopapa.chatread.MainActivity.SHOW_NOTIFICATION_BAR;
 import static biz.riopapa.chatread.MainActivity.RELOAD_APP;
 import static biz.riopapa.chatread.MainActivity.SHOW_MESSAGE;
 import static biz.riopapa.chatread.MainActivity.STOP_SAY;
+import static biz.riopapa.chatread.MainActivity.fileIO;
+import static biz.riopapa.chatread.MainActivity.logQue;
+import static biz.riopapa.chatread.MainActivity.logSave;
+import static biz.riopapa.chatread.MainActivity.logStock;
+import static biz.riopapa.chatread.MainActivity.logWork;
+import static biz.riopapa.chatread.MainActivity.log_Que;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.sharePref;
 import static biz.riopapa.chatread.MainActivity.sharedEditor;
 import static biz.riopapa.chatread.MainActivity.sounds;
 import static biz.riopapa.chatread.MainActivity.strUtil;
+import static biz.riopapa.chatread.MainActivity.tableFolder;
+import static biz.riopapa.chatread.MainActivity.todayFolder;
 import static biz.riopapa.chatread.MainActivity.utils;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.service.notification.NotificationListenerService;
-import android.service.notification.StatusBarNotification;
 import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
@@ -50,40 +56,9 @@ public class NotificationService extends NotificationListenerService {
     static String msg3 = "", head3 = "00:99";
     static boolean show_stop = false;
 
-    private NotificationPreprocessor preprocessor;
-
     public NotificationService() {
         super.onCreate();
-//        preprocessor = new NotificationPreprocessor();  // Initialize your preprocessor
-
     }
-
-//    @Override
-//    public void onNotificationPosted(StatusBarNotification sbn) {
-//        super.onNotificationPosted(sbn);
-
-//        Notification notification = sbn.getNotification();
-//        if (preprocessor.isSendable(notification)) {
-//            // If sendable, handle the notification
-//            utils.logW("MyNotificationListener", "Processing notification: " + notification.toString());
-//
-//            // Your logic to handle the notification
-//        } else {
-//            // If not sendable, ignore or handle it differently
-//            utils.logW("MyNotificationListener", "Notification ignored by preprocessor.");
-//        }
-//        try {
-//            // Your logic for handling the notification
-//            utils.logW("MyNotificationListener", "Notification received: " + notification.toString());
-//        } catch (Exception e) {
-//            Log.e("MyNotificationListener", "Error processing notification: ", e);
-//        }
-//    }
-
-//    @Override
-//    public void onNotificationRemoved(StatusBarNotification sbn) {
-//        super.onNotificationRemoved(sbn);
-//    }
 
     @Override
     public void onCreate() {
@@ -111,8 +86,6 @@ public class NotificationService extends NotificationListenerService {
         if (operation == -1) {
             return START_NOT_STICKY;
         }
-//        if (operation > 1001)
-//            utils.logB("onStartCommand", "operation = "+operation+ " " + OPERATION[operation-1000]);
         if (msg1.isEmpty())
             msgGet();
 
@@ -160,6 +133,12 @@ public class NotificationService extends NotificationListenerService {
 
     private void reload_App() {
 
+        if (tableFolder != null && logQue != null) {
+            fileIO.writeFile(tableFolder, "qLogStock.txt", logStock);
+            fileIO.writeFile(tableFolder, "qLogQue.txt", logQue);
+            fileIO.writeFile(tableFolder, "qLogWork.txt", logWork);
+            fileIO.writeFile(tableFolder, "qLogSave.txt", logSave);
+        }
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             mRemoteViews = null;
             Intent intent = new Intent(mContext, MainActivity.class);
@@ -188,7 +167,7 @@ public class NotificationService extends NotificationListenerService {
                 .setContentTitle("Chat.Read")
                 .setContentText("Chat.Read Text")
                 .setCustomBigContentView(mRemoteViews)
-                .setLargeIcon(null)
+//                .setLargeIcon(R.drawable.stock1_icon)
 //                .setStyle(new NotificationCompat.BigTextStyle())
                 .setOngoing(true);
 
