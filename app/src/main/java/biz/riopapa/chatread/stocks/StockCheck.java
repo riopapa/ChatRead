@@ -40,6 +40,8 @@ import biz.riopapa.chatread.models.SStock;
 public class StockCheck {
 
     static int stock_icon_switch = 0;
+    String won = ".";
+    String noteTitle, noteText;
 
     public void sayIfMatched(int g, int w, ArrayList<SStock> stocks,
                  String gName, String wName, String sText) {
@@ -71,7 +73,7 @@ public class StockCheck {
 
             if (!stock.talk.isEmpty()) {
                 strHead = stkName + " / " + grpName + " / " + whoName;
-                String won = wonValue(shortText, stock.won);
+                won = getWon(shortText, stock.won);
                 String[] joins = new String[]{stock.talk, grpName, whoName,
                         stkName, stkName, won, stkName, won};
                 String joined = String.join(" ! ", joins);
@@ -87,7 +89,8 @@ public class StockCheck {
                     }
                     phoneVibrate.go(1);
                 }
-
+                noteTitle = String.join(",", new String[] {stkName, won, grpName, whoName});
+                noteText = noteTitle + " " + stock.talk;
                 new Handler(Looper.getMainLooper()).post(() -> {
                     if (isScreenOn(mContext) && mActivity != null) {
                         String head = stkName + " / " + grpName + " / " + whoName;
@@ -100,13 +103,16 @@ public class StockCheck {
                 if (!isSilentNow()) {
                     sounds.beepOnce(MainActivity.soundType.ONLY.ordinal());
                 }
+                noteTitle = String.join(",", new String[] {stkName, grpName, whoName});
+                noteText = stkName;
             }
-
             logUpdate.addStock(strHead, shortText + key12);
             notificationBar.update(strHead, shortText, true);
+
             notificationHelper.sendNotification(
                     (stock_icon_switch == 0) ? R.drawable.stock1_icon :
-                            R.drawable.stock2_icon, strHead, stock.talk);
+                    R.drawable.stock2_icon,
+                    noteTitle, noteText);
             stock_icon_switch = (stock_icon_switch + 1) % 2;
             String timeStamp = toDay + new SimpleDateFormat(hourMin, Locale.KOREA).format(new Date());
             gSheet.add2Stock(grpName, timeStamp, whoName, percent, stkName, shortText, key12);
@@ -118,9 +124,9 @@ public class StockCheck {
         new Thread(runnable).start();
     }
 
-    private String wonValue (String shortText, String won) {
+    private String getWon(String shortText, String wonKey) {
         // 매수가, 진입가 가 있으면 금액 말하기
-        if (won.isEmpty())
+        if (wonKey.isEmpty())
             return "";
         String [] ss = shortText.split("매수가");
         if (ss.length < 2) {
@@ -128,8 +134,8 @@ public class StockCheck {
         }
         if (ss.length < 2)
             return "원 없음";
-        int p = ss[1].indexOf(won);
-        return "매수! "+((p > 0) ? ss[1].substring(2, p) : ss[1].substring(2, 8)) + won;
+        int p = ss[1].indexOf(wonKey);
+        return "매수! "+((p > 0) ? ss[1].substring(2, p) : ss[1].substring(2, 9)) + wonKey;
     }
 
     boolean isSilentNow() {

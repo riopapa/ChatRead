@@ -49,4 +49,18 @@
     <color name="teal_800">#1c1c1c</color>
     <color name="teal_900">#000000</color>
 
+    <color name="indigo_100">#C5CAE9</color>
+    <color name="indigo_200">#9FA8DA</color>
+    <color name="indigo_300">#7986CB</color>
+    <color name="indigo_400">#5C6BC0</color>
+    <color name="indigo_500">#4257B2</color>
+    <color name="indigo_600">#36479F</color>
+    <color name="indigo_700">#293879</color>
+    <color name="indigo_800">#1C2B5E</color>
+    <color name="indigo_900">#0F1B47</color>
+    <color name="indigo_a100">#8C9EFF</color>
+    <color name="indigo_a200">#697AFF</color>
+    <color name="indigo_a400">#455FFF</color>
+    <color name="indigo_a700">#263FFF</color>
+
 </resources>

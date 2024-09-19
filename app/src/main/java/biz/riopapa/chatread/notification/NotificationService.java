@@ -10,14 +10,12 @@ import static biz.riopapa.chatread.MainActivity.logQue;
 import static biz.riopapa.chatread.MainActivity.logSave;
 import static biz.riopapa.chatread.MainActivity.logStock;
 import static biz.riopapa.chatread.MainActivity.logWork;
-import static biz.riopapa.chatread.MainActivity.log_Que;
 import static biz.riopapa.chatread.MainActivity.mContext;
 import static biz.riopapa.chatread.MainActivity.sharePref;
 import static biz.riopapa.chatread.MainActivity.sharedEditor;
 import static biz.riopapa.chatread.MainActivity.sounds;
 import static biz.riopapa.chatread.MainActivity.strUtil;
 import static biz.riopapa.chatread.MainActivity.tableFolder;
-import static biz.riopapa.chatread.MainActivity.todayFolder;
 import static biz.riopapa.chatread.MainActivity.utils;
 
 import android.app.Notification;
@@ -121,6 +119,12 @@ public class NotificationService extends NotificationListenerService {
             case SHOW_NOTIFICATION_BAR:
             case HIDE_STOP:
                 show_stop = false;
+                if (tableFolder != null && logQue != null) {
+                    fileIO.writeFile(tableFolder, "qLogStock.txt", logStock);
+                    fileIO.writeFile(tableFolder, "qLogQue.txt", logQue);
+                    fileIO.writeFile(tableFolder, "qLogWork.txt", logWork);
+                    fileIO.writeFile(tableFolder, "qLogSave.txt", logSave);
+                }
                 break;
 
             default:
@@ -133,12 +137,6 @@ public class NotificationService extends NotificationListenerService {
 
     private void reload_App() {
 
-        if (tableFolder != null && logQue != null) {
-            fileIO.writeFile(tableFolder, "qLogStock.txt", logStock);
-            fileIO.writeFile(tableFolder, "qLogQue.txt", logQue);
-            fileIO.writeFile(tableFolder, "qLogWork.txt", logWork);
-            fileIO.writeFile(tableFolder, "qLogSave.txt", logSave);
-        }
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             mRemoteViews = null;
             Intent intent = new Intent(mContext, MainActivity.class);

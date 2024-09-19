@@ -12,7 +12,6 @@ public class StockName {
             int p2 = str.indexOf(nextKey, p1);
             String sName;
             if (p2 > 0) {
-//                sName = str.substring(p1, p2).replaceAll(shorten, "").trim();
                 sName = str.substring(p1, p2).replaceAll("[^a-zA-Z가-힝]", "").trim();
                 if (sName.length() > 8)
                     sName = sName.substring(0,8);

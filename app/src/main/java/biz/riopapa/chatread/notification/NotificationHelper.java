@@ -37,11 +37,10 @@ public class NotificationHelper extends ContextWrapper {
     public void sendNotification(int bellType, String title, String text) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(bellType)
-                .setContentTitle(APP_NAME + title)
+                .setContentTitle(title)
                 .setContentText(text)
                 .setAutoCancel(true)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setDefaults(NotificationCompat.DEFAULT_ALL);
+                ;
 
         NotificationManager notificationManager = getSystemService(NotificationManager.class);
         notificationManager.notify(NOTIFICATION_ID, builder.build());
